@@ -1,0 +1,36 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@ttrpg-ui/features/event-planning/data-access": ["features/event-planning/data-access/src/index.ts"],
+      "@ttrpg-ui/features/event-planning/feature-shell": ["features/event-planning/feature-shell/src/index.ts"],
+      "@ttrpg-ui/features/event-planning/models": ["features/event-planning/models/src/index.ts"],
+      "@ttrpg-ui/features/event-planning/testing": ["features/event-planning/testing/src/index.ts"],
+      "@ttrpg-ui/features/event-planning/ui": ["features/event-planning/ui/src/index.ts"],
+      "@ttrpg-ui/features/event-planning/util": ["features/event-planning/util/src/index.ts"],
+      "@ttrpg-ui/shared-page-not-found": ["shared-page-not-found/src/index.ts"],
+      "@ttrpg-ui/shared/core/data-access": ["shared/core/data-access/src/index.ts"],
+      "@ttrpg-ui/shared/core/models": ["shared/core/models/src/index.ts"],
+      "@ttrpg-ui/shared/local-storage/data-access": ["shared/local-storage/data-access/src/index.ts"],
+      "@ttrpg-ui/shared/local-storage/models": ["shared/local-storage/models/src/index.ts"],
+      "@ttrpg-ui/shared/page-not-found": ["shared/page-not-found/src/index.ts"],
+      "@ttrpg-ui/shared/theme/data-access": ["shared/theme/data-access/src/index.ts"],
+      "@ttrpg-ui/shared/theme/models": ["shared/theme/models/src/index.ts"],
+      "@ttrpg-ui/shared/theme/ui": ["shared/theme/ui/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

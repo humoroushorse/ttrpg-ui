@@ -1,0 +1,35 @@
+<mat-toolbar class="component-toolbar">
+  <div class="flex w-full flex-row items-center gap-4">
+    <button
+      mat-icon-button
+      aria-label="App menu"
+      [matTooltip]="sidenavOpened$() ? 'Open Sidenav' : 'Close Sidenav'"
+      (click)="toggleSidenav()"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>{{ appTitle }}</span>
+    <span class="grow"><!-- spacer --></span>
+    <lib-shared-theme-picker></lib-shared-theme-picker>
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Account user icon">
+      <mat-icon>person</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+
+<router-outlet></router-outlet>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>
+    <mat-icon>dialpad</mat-icon>
+    <span>Redial</span>
+  </button>
+  <button mat-menu-item disabled>
+    <mat-icon>voicemail</mat-icon>
+    <span>Check voice mail</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon>notifications_off</mat-icon>
+    <span>Disable alerts</span>
+  </button>
+</mat-menu>
