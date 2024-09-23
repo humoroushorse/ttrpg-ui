@@ -1,14 +1,15 @@
 <mat-sidenav-container [style.height]="sidnavHeight$$()" autosize>
   <mat-sidenav #drawer mode="side" [opened]="sidenavOpened$()">
     <mat-nav-list aria-label="Main navigation">
-      @for (route of routes; track route.viewValue ) {
-        <a mat-list-item
+      @for (route of routes; track route.viewValue) {
+        <a
+          mat-list-item
           [routerLink]="route.path"
           [routerLinkActiveOptions]="{ exact: true }"
           routerLinkActive="component-selected"
         >
           {{ route.viewValue }}
-      </a>
+        </a>
       }
     </mat-nav-list>
   </mat-sidenav>
@@ -20,5 +21,4 @@
       </div>
     </div>
   </mat-sidenav-content>
-
 </mat-sidenav-container>

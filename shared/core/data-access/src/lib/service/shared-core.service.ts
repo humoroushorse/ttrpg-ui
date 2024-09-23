@@ -2,10 +2,9 @@ import { inject, Injectable, Signal, signal } from '@angular/core';
 import { SharedCoreServiceConfig, SHARED_CORE_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/core/models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SharedCoreService {
-
   private toolbarHeight$ = signal<number>(64);
 
   private sidenavOpened$ = signal<boolean>(false);
@@ -23,6 +22,6 @@ export class SharedCoreService {
   }
 
   toggleSidenav(opened?: boolean): void {
-    this.sidenavOpened$.set(opened ?? !this.sidenavOpened$())
+    this.sidenavOpened$.set(opened ?? !this.sidenavOpened$());
   }
 }

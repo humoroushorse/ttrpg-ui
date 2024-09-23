@@ -1,2 +1,1 @@
-
-export { SharedCoreService } from "./lib/service/shared-core.service";
+export { SharedCoreService } from './lib/service/shared-core.service';

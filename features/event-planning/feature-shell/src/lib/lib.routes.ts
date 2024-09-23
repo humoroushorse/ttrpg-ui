@@ -18,9 +18,9 @@ export const featuresEventPlanningFeatureShellRoutes: Route[] = [
       {
         path: '',
         redirectTo: 'game-event',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
-      { path: '**', component: PageEventPlanningNotFoundComponent }
-    ]
+      { path: '**', component: PageEventPlanningNotFoundComponent },
+    ],
   },
 ];
