@@ -1,0 +1,22 @@
+<button mat-menu-item type="button" [matMenuTriggerFor]="menu" aria-label="Edit column settings">
+  <mat-icon>view_column</mat-icon> Column Settings
+</button>
+
+<mat-menu #menu="matMenu">
+  <div cdkDropList mat-menu-item (cdkDropListDropped)="drop($event)">
+    @for (columnDef of columnDefs(); track columnDef.field) {
+      <div
+        cdkDrag
+        class="example-box flex flex-row items-center p-4"
+        (click)="$event.stopPropagation()"
+        (keydown)="$event.preventDefault(); $event.stopPropagation()"
+        tabindex="0"
+      >
+        <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+        <mat-icon class="cursor-move" cdkDragHandle>drag_indicator</mat-icon>
+        <mat-checkbox [checked]="!columnDef.hide" (change)="onCheckboxClicked(columnDef, $event)"></mat-checkbox>
+        {{ columnDef.headerName }}
+      </div>
+    }
+  </div>
+</mat-menu>
