@@ -1,4 +1,5 @@
 <button
+  type="button"
   class="component-inherit"
   mat-icon-button
   [matMenuTriggerFor]="menu"
@@ -10,7 +11,7 @@
 
 <mat-menu #menu="matMenu">
   @for (theme of themes$(); track theme.viewValue) {
-    <button mat-menu-item (click)="setTheme(theme)">
+    <button mat-menu-item type="button" (click)="setTheme(theme)">
       @if (theme.viewValue === selectedTheme$()?.viewValue) {
         <mat-icon class="component-selected">radio_button_checked</mat-icon>
       } @else {

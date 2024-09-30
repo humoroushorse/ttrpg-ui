@@ -9,6 +9,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { AppTheme, SHARED_THEME_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/theme/models';
 import { SHARED_LOCAL_STORAGE_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/local-storage/models';
 import { SHARED_CORE_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/core/models';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 const themes: AppTheme[] = [
   { viewValue: 'light', path: 'default-theme-light.css', isDark: false },
@@ -32,6 +33,10 @@ export const appConfig: ApplicationConfig = {
     {
       provide: SHARED_CORE_SERVICE_CONFIG_TOKEN,
       useValue: { appTitle: 'TTRPG: Event Planning' },
+    },
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { appearance: 'outline' },
     },
   ],
 };

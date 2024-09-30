@@ -1,0 +1,14 @@
+<button mat-menu-item [matMenuTriggerFor]="menu" aria-label="Save table data">
+  <mat-icon>save</mat-icon> Save Data
+</button>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item type="button" (click)="downloadJson()">
+    <mat-icon>file_download</mat-icon>
+    <span>Download as JSON</span>
+  </button>
+  <button mat-menu-item type="button" (click)="downloadCsv()">
+    <mat-icon>file_download</mat-icon>
+    <span>Download as CSV</span>
+  </button>
+</mat-menu>
