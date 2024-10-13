@@ -12,30 +12,41 @@ import { take } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageEventPlanningGameEventViewComponent {
-
-  private authService = inject(AuthService)
+  private authService = inject(AuthService);
 
   public login() {
-    this.authService.login('ttrpg_admin', 'ttrpg_pass').pipe(take(1)).subscribe(res => {
-      console.log(res)
-    })
+    this.authService
+      .login('ttrpg_admin', 'ttrpg_pass')
+      .pipe(take(1))
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 
   public refresh() {
-    this.authService.refresh().pipe(take(1)).subscribe(res => {
-      console.log(res)
-    })
+    this.authService
+      .refresh()
+      .pipe(take(1))
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 
   public getUser() {
-    this.authService.getUser().pipe(take(1)).subscribe(res => {
-      console.log(res)
-    })
+    this.authService
+      .getUser()
+      .pipe(take(1))
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 
   public logout() {
-    this.authService.logout().pipe(take(1)).subscribe(res => {
-      console.log(res)
-    })
+    this.authService
+      .logout()
+      .pipe(take(1))
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 }

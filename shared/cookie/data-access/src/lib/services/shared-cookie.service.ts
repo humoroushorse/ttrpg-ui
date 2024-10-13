@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { CookieOptions, CookieService } from 'ngx-cookie-service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SharedCookieService {
   private cookieService = inject(CookieService);
@@ -16,7 +16,7 @@ export class SharedCookieService {
       options.domain,
       options.secure,
       options.sameSite,
-      options.partitioned
+      options.partitioned,
     );
   }
 
