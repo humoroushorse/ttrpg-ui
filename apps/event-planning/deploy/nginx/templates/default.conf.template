@@ -1,0 +1,50 @@
+server {
+    listen 80;
+    server_name event-planning.server;  # Replace with domain or IP
+
+    access_log  /var/log/nginx/event-planning.server.access.log    main;
+    error_log   /var/log/nginx/event-planning.server.error.log     warn;
+    root        /usr/share/nginx/html;
+    index index.html;
+
+    # Serve static files directly
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Optional: Caching for static files
+    location ~* \.(?:ico|css|js|gif|jpe?g|png|svg|woff2?|eot|ttf|otf)$ {
+        expires 1y;
+        access_log off;
+        add_header Cache-Control "public";
+    }
+
+    # Redirect HTTP to HTTPS if SSL is enabled
+    # Uncomment this block if you're using SSL
+    # server {
+    #     listen 443 ssl;
+    #     server_name your-domain.com;
+    #     ssl_certificate /path/to/ssl/certificate.crt;
+    #     ssl_certificate_key /path/to/ssl/private.key;
+    #     include ssl_params;
+    # }
+
+    # Handle Angular routing (404 fallback to index.html)
+    error_page 404 /index.html;
+    location = /index.html {
+        allow all;
+    }
+
+    # Forward API requests to the Docker container
+    location ${APP_TTRPG_EVENT_PLANNING__API_BASE_PATH}/ {
+        proxy_pass http://ttrpg-api-event-planning:8002;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        rewrite ^${APP_TTRPG_EVENT_PLANNING__API_BASE_PATH}/?(.*) /$1 break;
+        proxy_redirect off;
+    }
+
+
+}

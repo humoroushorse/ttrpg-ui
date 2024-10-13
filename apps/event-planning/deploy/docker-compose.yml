@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  ttrpg-ui-event-planning:
+    restart: unless-stopped
+    build:
+      context: ../../..
+      dockerfile: apps/event-planning/deploy/Dockerfile
+      args:
+        BUILD_CONFIGURATION: production
+        BUILD_BASE_HREF: /
+
+        APP_TTRPG_EVENT_PLANNING__API_BASE_PATH: /ttrpg-event-planning-api
+    container_name: ttrpg-ui-event-planning
+    ports:
+      # use the nginx port
+      - 4202:80
+    environment:
+      NGINX_PORT: 80
+      APP_TTRPG_EVENT_PLANNING__API_BASE_PATH: '/ttrpg-event-planning-api'
