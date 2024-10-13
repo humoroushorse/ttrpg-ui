@@ -15,6 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@ttrpg-ui/features/auth/data-access": ["features/auth/data-access/src/index.ts"],
+      "@ttrpg-ui/features/auth/models": ["features/auth/models/src/index.ts"],
       "@ttrpg-ui/features/event-planning/data-access": ["features/event-planning/data-access/src/index.ts"],
       "@ttrpg-ui/features/event-planning/feature-shell": ["features/event-planning/feature-shell/src/index.ts"],
       "@ttrpg-ui/features/event-planning/models": ["features/event-planning/models/src/index.ts"],
@@ -22,6 +24,7 @@
       "@ttrpg-ui/features/event-planning/ui": ["features/event-planning/ui/src/index.ts"],
       "@ttrpg-ui/features/event-planning/util": ["features/event-planning/util/src/index.ts"],
       "@ttrpg-ui/shared-page-not-found": ["shared-page-not-found/src/index.ts"],
+      "@ttrpg-ui/shared/cookie/data-access": ["shared/cookie/data-access/src/index.ts"],
       "@ttrpg-ui/shared/core/data-access": ["shared/core/data-access/src/index.ts"],
       "@ttrpg-ui/shared/core/models": ["shared/core/models/src/index.ts"],
       "@ttrpg-ui/shared/download/data-access": ["shared/download/data-access/src/index.ts"],
