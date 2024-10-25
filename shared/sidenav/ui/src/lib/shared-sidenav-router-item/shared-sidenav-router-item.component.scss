@@ -1,0 +1,16 @@
+.component-link-active {
+  color: var(--primary-color) !important;
+  background-color: var(--primary-color) !important;
+}
+
+.component-link-active-color {
+  color: var(--primary-color) !important;
+  fill: var(--primary-color) !important; // target the svg
+}
+
+a,
+a:visited,
+a:hover,
+a:active {
+  color: inherit;
+}

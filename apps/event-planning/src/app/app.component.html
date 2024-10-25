@@ -1,35 +1,56 @@
-<mat-toolbar class="component-toolbar">
+<mat-toolbar class="component-toolbar w-screen" [style.height]="toolbarHeight() + 'px'">
   <div class="flex w-full flex-row items-center gap-4">
     <button
       mat-icon-button
       aria-label="App menu"
       [matTooltip]="sidenavOpened$() ? 'Open Sidenav' : 'Close Sidenav'"
+      [disabled]="!userTokenDecoded()"
       (click)="toggleSidenav()"
     >
       <mat-icon>menu</mat-icon>
     </button>
     <span>{{ appTitle }}</span>
     <span class="grow"><!-- spacer --></span>
-    <lib-shared-theme-picker></lib-shared-theme-picker>
-    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Account user icon">
-      <mat-icon>person</mat-icon>
-    </button>
+
+    @if (userTokenDecoded(); as userTokenDecoded) {
+      <span>{{ userTokenDecoded.name }}</span>
+      <button mat-icon-button [matMenuTriggerFor]="userMenu" aria-label="Account user icon">
+        <mat-icon>person</mat-icon>
+      </button>
+    } @else {
+      <a mat-button type="button" [routerLink]="['/login']">Login</a>
+    }
   </div>
 </mat-toolbar>
 
-<router-outlet></router-outlet>
+<mat-sidenav-container [style.height]="sidnavHeight$$()" autosize>
+  @if (userTokenDecoded()) {
+    <mat-sidenav #drawer [mode]="sidenavMode()" [opened]="sidenavOpened$()" class="w-60 max-w-60" role="navigation">
+      <mat-nav-list aria-label="Main navigation">
+        @for (route of routes; track route.viewValue) {
+          <lib-shared-sidenav-router-item [routerItem]="route" />
+        }
+      </mat-nav-list>
+    </mat-sidenav>
+  }
 
-<mat-menu #menu="matMenu">
-  <button mat-menu-item type="button">
-    <mat-icon>dialpad</mat-icon>
-    <span>Redial</span>
-  </button>
-  <button mat-menu-item disabled type="button">
-    <mat-icon>voicemail</mat-icon>
-    <span>Check voice mail</span>
-  </button>
-  <button mat-menu-item type="button">
-    <mat-icon>notifications_off</mat-icon>
-    <span>Disable alerts</span>
+  <mat-sidenav-content>
+    <div>
+      <div class="p-4">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<mat-menu #userMenu="matMenu">
+  <a mat-menu-item class="w-full" [routerLink]="['user', 'settings']">
+    <mat-icon>settings</mat-icon>
+    User Settings
+  </a>
+  <lib-shared-theme-picker [isMenuItem]="true"></lib-shared-theme-picker>
+  <button mat-menu-item type="button" class="component-error w-full" (click)="logout()">
+    <mat-icon class="component-error">exit_to_app</mat-icon>
+    Logout
   </button>
 </mat-menu>

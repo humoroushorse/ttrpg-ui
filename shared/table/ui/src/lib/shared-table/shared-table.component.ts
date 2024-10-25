@@ -32,6 +32,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'lib-shared-table',
@@ -58,6 +59,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatTooltipModule,
     MatInputModule,
     MatTableModule,
+    MatCheckboxModule,
   ],
   templateUrl: './shared-table.component.html',
   styleUrl: './shared-table.component.scss',
@@ -174,7 +176,6 @@ export class SharedTableComponent<T> implements AfterViewInit, OnDestroy {
   }
 
   onPage(event: PageEvent) {
-    console.log(event);
     this.sharedTableService.setSelectedPageSize(event.pageSize);
   }
 

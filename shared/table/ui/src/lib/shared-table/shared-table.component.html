@@ -93,6 +93,14 @@
             }
           } @else if (column.cellDataType === 'number') {
             {{ element[column.field] | number }}
+          } @else if (column.cellDataType === 'boolean') {
+            <mat-checkbox
+              [checked]="element[column.field]"
+              [indeterminate]="element[column.field] === null"
+              disabled
+            ></mat-checkbox>
+          } @else if (column.cellDataType === 'date') {
+            {{ element[column.field] | date: 'medium' }}
           } @else {
             {{ element[column.field] }}
           }

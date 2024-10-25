@@ -19,7 +19,7 @@ interface ComponentColumnDef extends BaseColumnDef {
 }
 
 interface NonComponentColumnDef extends BaseColumnDef {
-  cellDataType: 'text' | 'number' | 'date';
+  cellDataType: 'text' | 'number' | 'date' | 'boolean';
   component?: never;
 }
 

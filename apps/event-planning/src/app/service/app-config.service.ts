@@ -1,4 +1,4 @@
-import { Injectable, isDevMode, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { AppConfig } from '../models/models';
 import { HttpClient } from '@angular/common/http';
 import { LocationStrategy } from '@angular/common';
@@ -19,9 +19,6 @@ export class AppConfigService {
     return (): Promise<Partial<AppConfig>> =>
       firstValueFrom(
         httpClient.get<Partial<AppConfig>>(`${baseUrl}${assetsUrl}`).pipe(
-          tap((config) => {
-            if (isDevMode()) console.log('AppConfigService.init::', config);
-          }),
           tap((config) => {
             this.appConfig.set(config);
             this.initialized.set(true);

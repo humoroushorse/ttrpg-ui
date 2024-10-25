@@ -19,6 +19,7 @@ $event-planning-theme: mat.define-theme(
       theme-type: light,
       primary: $primary,
       tertiary: $tertiary,
+      // use-system-variables: true
     ),
     density: (
       scale: 0,
@@ -32,7 +33,10 @@ $event-planning-theme: mat.define-theme(
 :root {
   @include mat.all-component-themes($event-planning-theme);
   --primary-color: #{mat.get-theme-color($event-planning-theme, primary, 50)};
-  --primary-on-container: #{mat.get-theme-color($event-planning-theme, on-primary-container)};
+  // --primary-on-container: #{mat.get-theme-color($event-planning-theme, on-primary-container)};
+  --primary-on-container: black;
+  --error-color: #{mat.get-theme-color($event-planning-theme, error, 50)};
+  --error-on-container: #{mat.get-theme-color($event-planning-theme, on-error-container)};
 }
 
 // Comment out the line below if you want to use the pre-defined typography utility classes.

@@ -1,0 +1,103 @@
+@if (entity(); as gameSession) {
+  @if (mode() === 'gallery') {
+    <mat-card
+      appearance="outlined"
+      [ngClass]="{
+        '... row-span-1': !gameSession.image_url,
+        '... row-span-2': gameSession.image_url,
+      }"
+    >
+      <mat-card-header>
+        @if (gameSession.game_master; as gameMaster) {
+          <img
+            mat-card-avatar
+            [src]="gameMaster.profile_picture_url"
+            alt="Photo of {{ gameMaster.username }}"
+            [matTooltip]="gameMaster.username"
+          />
+        }
+        <mat-card-title>{{ gameSession.title }}</mat-card-title>
+        @if (gameSession.game_system; as gameSystem) {
+          <mat-card-subtitle>{{ gameSystem.name }} ({{ gameSystem.version }})</mat-card-subtitle>
+        }
+        <mat-card-subtitle>
+          <div class="flex flex-row items-center gap-4">
+            <mat-icon>calendar_month</mat-icon><span>{{ gameSession.start_date | date: 'medium' }}</span>
+          </div>
+          <div class="flex flex-row items-center gap-4">
+            <mat-icon>calendar_month</mat-icon><span>{{ gameSession.end_date | date: 'medium' }}</span>
+          </div>
+        </mat-card-subtitle>
+      </mat-card-header>
+      @if (gameSession.image_url) {
+        <img
+          mat-card-image
+          class="max-w-full"
+          [src]="gameSession.image_url"
+          [alt]="
+            gameSession.image_url_description ||
+            'Image representing the game session (game master did not add a description)'
+          "
+        />
+      }
+      <mat-card-content>
+        <p>{{ gameSession.description }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <!-- <button mat-button [disabled]="entity()?.max_players <= entity()?.players">JOIN</button> -->
+        <button mat-button type="button" (click)="viewGameSessionClicked.emit(gameSession)">VIEW</button>
+      </mat-card-actions>
+    </mat-card>
+  }
+  @if (mode() === 'list') {
+    <mat-card class="w-full" appearance="outlined">
+      <div class="flex flex-row">
+        <div #cardContent>
+          <mat-card-header>
+            @if (gameSession.game_master; as gameMaster) {
+              <img
+                mat-card-avatar
+                [src]="gameMaster.profile_picture_url"
+                alt="Photo of {{ gameMaster.username }}"
+                [matTooltip]="gameMaster.username"
+              />
+            }
+            <mat-card-title>{{ gameSession.title }}</mat-card-title>
+            @if (gameSession.game_system; as gameSystem) {
+              <mat-card-subtitle>{{ gameSystem.name }} ({{ gameSystem.version }})</mat-card-subtitle>
+            }
+            <mat-card-subtitle>
+              <div class="flex w-full flex-wrap gap-x-4">
+                <div class="flex flex-row items-center gap-4">
+                  <mat-icon>calendar_month</mat-icon><span>{{ gameSession.start_date | date: 'medium' }}</span>
+                </div>
+                <div class="flex flex-row items-center gap-4">
+                  <mat-icon>calendar_month</mat-icon><span>{{ gameSession.end_date | date: 'medium' }}</span>
+                </div>
+              </div>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ gameSession.description }}</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <!-- <button mat-button [disabled]="entity()?.max_players <= entity()?.players">JOIN</button> -->
+            <button mat-button type="button" (click)="viewGameSessionClicked.emit(gameSession)">VIEW</button>
+          </mat-card-actions>
+        </div>
+        <div class="grow"><!--spacer--></div>
+        @if (gameSession.image_url && pageWidth() >= 900) {
+          <img
+            [style.height.px]="cardContentRef()?.nativeElement?.offsetHeight"
+            class="max-w-full rounded-r-xl object-cover"
+            [src]="gameSession.image_url"
+            [alt]="
+              gameSession.image_url_description ||
+              'Image representing the game session (game master did not add a description)'
+            "
+          />
+        }
+      </div>
+    </mat-card>
+  }
+}

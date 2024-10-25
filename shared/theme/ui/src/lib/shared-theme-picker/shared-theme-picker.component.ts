@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -23,6 +23,8 @@ export class SharedThemePickerComponent {
   selectedTheme$ = this.sharedThemeService.getActiveTheme();
 
   themes$ = this.sharedThemeService.getThemes();
+
+  public isMenuItem = input();
 
   setTheme(theme: AppTheme) {
     this.sharedThemeService.setTheme(theme);

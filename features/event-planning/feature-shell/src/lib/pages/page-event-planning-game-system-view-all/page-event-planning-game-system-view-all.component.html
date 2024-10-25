@@ -1,0 +1,45 @@
+<div class="flex flex-row items-center">
+  <h1>Game Systems</h1>
+  <div class="grow"><!-- spacer --></div>
+  <div>
+    <button
+      mat-icon-button
+      matTooltip="Card View"
+      [ngClass]="{ 'primary-color': currentView() === 'card' }"
+      (click)="currentView.set('card')"
+    >
+      <mat-icon>view_module</mat-icon>
+    </button>
+  </div>
+  <div>
+    <button
+      mat-icon-button
+      matTooltip="Table View"
+      [ngClass]="{ 'primary-color': currentView() === 'table' }"
+      (click)="currentView.set('table')"
+    >
+      <mat-icon>view_list</mat-icon>
+    </button>
+  </div>
+</div>
+
+<section class="flex flex-col gap-4">
+  <div class="flex flex-row">
+    <div class="grow"><!-- spacer --></div>
+    <button mat-raised-button type="button" (click)="openCreateGameEventDialog()">Add New</button>
+  </div>
+
+  @if (currentView() === 'table') {
+    <mat-card>
+      <lib-shared-table
+        [tableHeader]="'Game Systems'"
+        [columnDefs]="columnDefs"
+        [data]="(data$ | async) || []"
+        (columnDefsChange)="onColumnDefsChange($event)"
+        (resetColumnDefsClicked)="onResetColumnDefsClicked()"
+      ></lib-shared-table>
+    </mat-card>
+  } @else {
+    TODO: CARD LIST
+  }
+</section>

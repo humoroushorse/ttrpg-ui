@@ -1,13 +1,20 @@
-<button
-  type="button"
-  class="component-inherit"
-  mat-icon-button
-  [matMenuTriggerFor]="menu"
-  aria-label="theme selection"
-  matTooltip="Select a theme"
->
-  <mat-icon>format_color_fill</mat-icon>
-</button>
+@if (isMenuItem()) {
+  <button type="button" class="component-inherit" mat-menu-item [matMenuTriggerFor]="menu" aria-label="theme selection">
+    <mat-icon>format_color_fill</mat-icon>
+    <span>Change Theme</span>
+  </button>
+} @else {
+  <button
+    type="button"
+    class="component-inherit"
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    aria-label="theme selection"
+    matTooltip="Select a theme"
+  >
+    <mat-icon>format_color_fill</mat-icon>
+  </button>
+}
 
 <mat-menu #menu="matMenu">
   @for (theme of themes$(); track theme.viewValue) {

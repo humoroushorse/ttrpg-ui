@@ -1,6 +1,8 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
+@use './other.palette.scss' as other-palette;
+
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -17,7 +19,7 @@ $event-planning-theme: mat.define-theme(
   (
     color: (
       theme-type: dark,
-      primary: mat.$violet-palette,
+      primary: other-palette.$custom-palette,
     ),
     typography: (
       brand-family: 'Comic Sans',
@@ -35,7 +37,10 @@ $event-planning-theme: mat.define-theme(
 :root {
   @include mat.all-component-themes($event-planning-theme);
   --primary-color: #{mat.get-theme-color($event-planning-theme, primary, 50)};
-  --primary-on-container: #{mat.get-theme-color($event-planning-theme, on-primary-container)};
+  // --primary-on-container: #{mat.get-theme-color($event-planning-theme, on-primary-container)};
+  --primary-on-container: white;
+  --error-color: #{mat.get-theme-color($event-planning-theme, error, 50)};
+  --error-on-container: #{mat.get-theme-color($event-planning-theme, on-error-container)};
 }
 
 // Comment out the line below if you want to use the pre-defined typography utility classes.

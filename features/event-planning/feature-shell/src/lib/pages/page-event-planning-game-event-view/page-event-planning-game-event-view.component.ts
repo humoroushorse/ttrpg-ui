@@ -1,52 +1,43 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '@ttrpg-ui/features/auth/data-access';
-import { take } from 'rxjs';
+import { GameSessionCardComponent } from '@ttrpg-ui/features/event-planning/ui';
+import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
+import { ActivatedRoute } from '@angular/router';
+import { EventPlanningApiService } from '@ttrpg-ui/features/event-planning/data-access';
+import { map, Observable, switchMap, tap } from 'rxjs';
+import { Meta, Title } from '@angular/platform-browser';
+import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 
 @Component({
   selector: 'lib-page-event-planning-game-event-view',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, GameSessionCardComponent],
   templateUrl: './page-event-planning-game-event-view.component.html',
   styleUrl: './page-event-planning-game-event-view.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageEventPlanningGameEventViewComponent {
-  private authService = inject(AuthService);
+export class PageEventPlanningGameEventViewComponent implements OnInit {
+  readonly route = inject(ActivatedRoute);
 
-  public login() {
-    this.authService
-      .login('ttrpg_admin', 'ttrpg_pass')
-      .pipe(take(1))
-      .subscribe((res) => {
-        console.log(res);
-      });
+  readonly eventPlanningApiService = inject(EventPlanningApiService);
+
+  readonly meta = inject(Meta);
+
+  readonly title = inject(Title);
+
+  readonly sharedCoreService = inject(SharedCoreService);
+
+  ngOnInit(): void {
+    this.title.setTitle(`Event Planning | View Game Event | ${this.sharedCoreService.appTitle}`);
+    this.meta.updateTag({ name: 'description', content: 'View a single game event.' });
   }
 
-  public refresh() {
-    this.authService
-      .refresh()
-      .pipe(take(1))
-      .subscribe((res) => {
-        console.log(res);
-      });
-  }
+  routeId$: Observable<string | null> = this.route.params.pipe(map((params) => params['id'] || null));
 
-  public getUser() {
-    this.authService
-      .getUser()
-      .pipe(take(1))
-      .subscribe((res) => {
-        console.log(res);
-      });
-  }
-
-  public logout() {
-    this.authService
-      .logout()
-      .pipe(take(1))
-      .subscribe((res) => {
-        console.log(res);
-      });
-  }
+  entity$: Observable<EventPlanningModels.Schemas.GameSessionSchema | null> = this.routeId$.pipe(
+    switchMap((id) => {
+      return this.eventPlanningApiService.getGameSessionById(id);
+    }),
+    tap(console.log),
+  );
 }

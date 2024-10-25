@@ -1,11 +1,65 @@
-<h1>Game Events</h1>
+<div class="flex flex-row items-center">
+  <h1>Game Events</h1>
+  <div class="grow"><!-- spacer --></div>
+  <div>
+    <button
+      mat-icon-button
+      matTooltip="Card View (list)"
+      [ngClass]="{ 'primary-color': currentView() === 'card:list' }"
+      (click)="currentView.set('card:list')"
+    >
+      <mat-icon>view_module</mat-icon>
+    </button>
+  </div>
+  <div>
+    <button
+      mat-icon-button
+      matTooltip="Card View (gallery)"
+      [ngClass]="{ 'primary-color': currentView() === 'card:gallery' }"
+      (click)="currentView.set('card:gallery')"
+    >
+      <mat-icon>view_module</mat-icon>
+    </button>
+  </div>
+  <div>
+    <button
+      mat-icon-button
+      matTooltip="Table View"
+      [ngClass]="{ 'primary-color': currentView() === 'table' }"
+      (click)="currentView.set('table')"
+    >
+      <mat-icon>view_list</mat-icon>
+    </button>
+  </div>
+</div>
 
-<mat-card>
-  <lib-shared-table
-    [tableHeader]="'Game Events'"
-    [columnDefs]="columnDefs"
-    [data]="data"
-    (columnDefsChange)="onColumnDefsChange($event)"
-    (resetColumnDefsClicked)="onResetColumnDefsClicked()"
-  ></lib-shared-table>
-</mat-card>
+<section class="flex flex-col gap-4">
+  <div class="flex flex-row">
+    <div class="grow"><!-- spacer --></div>
+    <button mat-raised-button type="button" (click)="openCreateGameEventDialog()">Add New</button>
+  </div>
+
+  @if (currentView() === 'table') {
+    <mat-card>
+      <lib-shared-table
+        [tableHeader]="'Game Events'"
+        [columnDefs]="columnDefs"
+        [data]="(data$ | async) || []"
+        (columnDefsChange)="onColumnDefsChange($event)"
+        (resetColumnDefsClicked)="onResetColumnDefsClicked()"
+      ></lib-shared-table>
+    </mat-card>
+  } @else if (currentView() === 'card:list') {
+    <lib-game-session-card-list
+      [entities]="(data$ | async) || []"
+      [mode]="'list'"
+      (viewGameSessionClicked)="onViewGameSessionClicked($event)"
+    />
+  } @else {
+    <lib-game-session-card-list
+      [entities]="(data$ | async) || []"
+      [mode]="'gallery'"
+      (viewGameSessionClicked)="onViewGameSessionClicked($event)"
+    />
+  }
+</section>

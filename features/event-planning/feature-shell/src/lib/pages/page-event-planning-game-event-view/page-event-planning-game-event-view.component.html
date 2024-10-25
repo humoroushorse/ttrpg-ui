@@ -1,6 +1,8 @@
-<p>page-event-planning-game-event-view works!</p>
-
-<button (click)="login()">login</button>
-<button (click)="refresh()">refresh</button>
-<button (click)="getUser()">getUser</button>
-<button (click)="logout()">logout</button>
+@if (routeId$ | async; as routeId) {
+  @if (entity$ | async; as gameSession) {
+    <lib-game-session-card [entity]="gameSession" />
+  } @else {
+    <h1>Game Event</h1>
+    Game event with id ({{ routeId }}) not found!
+  }
+}

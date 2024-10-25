@@ -20,6 +20,15 @@ module.exports = [
           ],
         },
       ],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          // allow unused variables starting with "_"
+          'argsIgnorePattern': '^_',
+          'varsIgnorePattern': '^_',
+          'caughtErrorsIgnorePattern': '^_',
+        },
+      ],
     },
   },
   {
