@@ -82,31 +82,42 @@
             </button>
           </div>
         </th>
-        <td mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let rowData">
           @if (column.cellDataType === 'component') {
             <ng-container libSharedTableDynamicHost #dynamicHost="libSharedTableDynamicHost"></ng-container>
             @if (dynamicHost) {
               <!-- Use the service to dynamically load the component -->
               <ng-container
-                *ngComponentOutlet="column.component; injector: createInjector(element, dynamicHost.viewContainerRef)"
+                *ngComponentOutlet="
+                  column.component;
+                  inputs: column.valueGetter ? getValue(column, rowData) : { data: rowData }
+                "
               ></ng-container>
             }
           } @else if (column.cellDataType === 'number') {
-            {{ element[column.field] | number }}
+            {{ getValue(column, rowData) | number }}
           } @else if (column.cellDataType === 'boolean') {
             <mat-checkbox
-              [checked]="element[column.field]"
-              [indeterminate]="element[column.field] === null"
+              [checked]="getValue(column, rowData)"
+              [indeterminate]="getValue(column, rowData) === null"
               disabled
             ></mat-checkbox>
           } @else if (column.cellDataType === 'date') {
-            {{ element[column.field] | date: 'medium' }}
+            {{ getValue(column, rowData) | date: 'medium' }}
           } @else {
-            {{ element[column.field] }}
+            @if (getValue(column, rowData).length > 50) {
+              <div [matTooltip]="getValue(column, rowData)">
+                <span>{{ getValue(column, rowData) | slice: 0 : 50 }}</span>
+                <span>...</span>
+              </div>
+            } @else {
+              {{ getValue(column, rowData) }}
+            }
           }
         </td>
       </ng-container>
     }
+    f
 
     <!-- No data row: filtered -->
     <tr class="mat-row" *matNoDataRow>
@@ -122,6 +133,9 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns()"></tr>
   </table>
 </div>
+@if (loading()) {
+  <mat-progress-bar mode="query"></mat-progress-bar>
+}
 <mat-divider></mat-divider>
 <mat-paginator
   [length]="dataSource.data.length"

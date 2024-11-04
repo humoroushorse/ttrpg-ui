@@ -12,9 +12,13 @@ import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameSessionCardListComponent {
-  viewGameSessionClicked = output<EventPlanningModels.Schemas.GameSessionSchema>();
+  viewGameSessionClicked = output<EventPlanningModels.GameSession.GameSessionSchema>();
 
-  entities = input<EventPlanningModels.Schemas.GameSessionSchema[]>();
+  joinGameSessionClicked = output<EventPlanningModels.GameSession.GameSessionSchema>();
+
+  leaveGameSessionClicked = output<EventPlanningModels.GameSession.GameSessionSchema>();
+
+  entities = input<EventPlanningModels.GameSession.GameSessionSchema[]>();
 
   mode = input<'gallery' | 'list'>('gallery');
 }

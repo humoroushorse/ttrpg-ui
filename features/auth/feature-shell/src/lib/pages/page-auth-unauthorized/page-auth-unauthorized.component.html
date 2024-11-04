@@ -2,11 +2,11 @@
   <h1>Unuthorized</h1>
   @if (unauthorizedRoute !== null) {
     <p>You are not allowed to view the page: {{ unauthorizedRoute }}</p>
-    <p>Perhaps you need to <a [routerLink]="['/login']">login</a> first?</p>
+    <p>Perhaps you need to <a [routerLink]="loginRoute()">login</a> first?</p>
   } @else {
     <p>
       Oops! Looks like you’ve stumbled into a restricted area. This isn’t a VIP lounge, but we can definitely get you a
-      drink... if you <a [routerLink]="['/login']">login</a> first!
+      drink... if you <a [routerLink]="loginRoute()">login</a> first!
     </p>
   }
 </div>

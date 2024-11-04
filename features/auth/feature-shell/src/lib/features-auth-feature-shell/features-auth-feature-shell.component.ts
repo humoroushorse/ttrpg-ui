@@ -12,7 +12,7 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeaturesAuthFeatureShellComponent {
-  private coreService = inject(SharedCoreService);
+  readonly coreService = inject(SharedCoreService);
 
   public toolbarHeight: Signal<number> = this.coreService.getToolbarHeight();
 }

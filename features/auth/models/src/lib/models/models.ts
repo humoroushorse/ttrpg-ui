@@ -1,12 +1,10 @@
-import { InjectionToken } from '@angular/core';
-
-export interface ServiceConfig {
-  APP_TTRPG_EVENT_PLANNING__API_BASE_PATH: string;
-}
+import { InjectionToken, Signal } from '@angular/core';
 
 export interface AuthServiceConfig {
-  APP_TTRPG_EVENT_PLANNING__API_BASE_PATH: string;
-  authGuardRedirectRoute: string[];
+  appConfig: Signal<{
+    APP_TTRPG_EVENT_PLANNING__API_BASE_PATH: string;
+  }>;
+  authGuardAuthAppRouteBase: string[];
   alreadyLoggedInGuardRedirectRoute: string[];
 }
 

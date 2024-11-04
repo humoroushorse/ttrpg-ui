@@ -4,7 +4,6 @@
       mat-icon-button
       aria-label="App menu"
       [matTooltip]="sidenavOpened$() ? 'Open Sidenav' : 'Close Sidenav'"
-      [disabled]="!userTokenDecoded()"
       (click)="toggleSidenav()"
     >
       <mat-icon>menu</mat-icon>
@@ -18,21 +17,21 @@
         <mat-icon>person</mat-icon>
       </button>
     } @else {
-      <a mat-button type="button" [routerLink]="['/login']">Login</a>
+      <a mat-button type="button" [routerLink]="loginRoute()">Login</a>
     }
   </div>
 </mat-toolbar>
 
 <mat-sidenav-container [style.height]="sidnavHeight$$()" autosize>
-  @if (userTokenDecoded()) {
-    <mat-sidenav #drawer [mode]="sidenavMode()" [opened]="sidenavOpened$()" class="w-60 max-w-60" role="navigation">
-      <mat-nav-list aria-label="Main navigation">
-        @for (route of routes; track route.viewValue) {
-          <lib-shared-sidenav-router-item [routerItem]="route" />
-        }
-      </mat-nav-list>
-    </mat-sidenav>
-  }
+  <!-- @if (userTokenDecoded()) { -->
+  <mat-sidenav #drawer [mode]="sidenavMode()" [opened]="sidenavOpened$()" class="w-72 max-w-72" role="navigation">
+    <mat-nav-list aria-label="Main navigation">
+      @for (route of defaultRoutes; track route.viewValue) {
+        <lib-shared-sidenav-router-item [routerItem]="route" />
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+  <!-- } -->
 
   <mat-sidenav-content>
     <div>

@@ -10,6 +10,7 @@ interface BaseColumnDef {
   sortable?: boolean;
   pinned?: SharedTablePinned;
   hide?: boolean;
+  valueGetter?(data: any): any;
 }
 
 interface ComponentColumnDef extends BaseColumnDef {

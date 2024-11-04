@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
+import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 
 @Component({
   selector: 'lib-page-auth-unauthorized',
@@ -13,11 +14,15 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageAuthUnauthorizedComponent implements OnInit {
-  private meta = inject(Meta);
+  readonly meta = inject(Meta);
 
-  private title = inject(Title);
+  readonly title = inject(Title);
 
-  private sharedCoreService = inject(SharedCoreService);
+  readonly authService = inject(AuthService);
+
+  readonly loginRoute = this.authService.authGuardAuthAppLoginRoute;
+
+  readonly sharedCoreService = inject(SharedCoreService);
 
   public unauthorizedRoute: string | null = null;
 

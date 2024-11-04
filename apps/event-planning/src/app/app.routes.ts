@@ -16,7 +16,7 @@ export const appRoutes: Route[] = [
     loadChildren: () => import('@ttrpg-ui/features/user/feature-shell').then((m) => m.featuresUserFeatureShellRoutes),
   },
   {
-    path: '',
+    path: 'auth',
     loadChildren: () => import('@ttrpg-ui/features/auth/feature-shell').then((m) => m.featuresAuthFeatureShellRoutes),
   },
   {

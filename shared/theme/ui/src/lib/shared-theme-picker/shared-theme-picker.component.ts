@@ -18,7 +18,7 @@ import { AppTheme } from '@ttrpg-ui/shared/theme/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedThemePickerComponent {
-  private sharedThemeService = inject(SharedThemeService);
+  readonly sharedThemeService = inject(SharedThemeService);
 
   selectedTheme$ = this.sharedThemeService.getActiveTheme();
 

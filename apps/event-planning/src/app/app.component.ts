@@ -38,9 +38,9 @@ import { SharedSidenavRouterItemComponent, SharedSidenavRouterItem } from '@ttrp
 export class AppComponent {
   public sharedThemeService = inject(SharedThemeService);
 
-  private sharedCoreService = inject(SharedCoreService);
+  readonly sharedCoreService = inject(SharedCoreService);
 
-  private authService = inject(AuthService);
+  readonly authService = inject(AuthService);
 
   public appTitle = this.sharedCoreService.appTitle;
 
@@ -49,7 +49,8 @@ export class AppComponent {
   public sidenavOpened$ = this.sharedCoreService.getSidenavOpened();
 
   sidenavMode = computed<'side' | 'over'>(() => {
-    return this.sharedCoreService.getPageWidth()() > 600 ? 'side' : 'over';
+    // 768 is tailwindcss 'md' screen size
+    return this.sharedCoreService.getPageWidth()() > 768 ? 'side' : 'over';
   });
 
   public toggleSidenav(opened?: boolean) {
@@ -57,6 +58,8 @@ export class AppComponent {
   }
 
   public userTokenDecoded = this.authService.getUserTokenDecoded();
+
+  readonly loginRoute = this.authService.authGuardAuthAppLoginRoute;
 
   logout() {
     this.authService.postSessionLogout();
@@ -68,19 +71,49 @@ export class AppComponent {
     return `calc(100dvh - ${this.toolbarHeight$$()}px)`;
   });
 
-  public routes: SharedSidenavRouterItem[] = [
+  filterRoutes(routes: SharedSidenavRouterItem[]): SharedSidenavRouterItem[] {
+    return routes.reduce<SharedSidenavRouterItem[]>((acc, route) => {
+      let filteredChildren: SharedSidenavRouterItem[] = [];
+      if (route.children) {
+        filteredChildren = this.filterRoutes(route.children);
+      }
+      if (!route.requiresLogin || filteredChildren.length > 0) {
+        acc.push({
+          ...route,
+          children: filteredChildren || undefined,
+        });
+      }
+      return acc;
+    }, []);
+  }
+
+  readonly defaultRoutes = [
     {
       viewValue: 'Event Planning',
       children: [
-        { viewValue: 'Create Game Event', path: ['event-planning', 'game-event', 'create'] },
-        { viewValue: 'View Game Events', path: ['event-planning', 'game-event'] },
-        { viewValue: 'Create Game System', path: ['event-planning', 'game-system', 'create'] },
+        {
+          viewValue: 'Create Game Event',
+          path: ['event-planning', 'game-session', 'create'],
+          icon: 'add',
+          requiresLogin: true,
+        },
+        { viewValue: 'View Game Events', path: ['event-planning', 'game-session'] },
+        {
+          viewValue: 'Create Game System',
+          path: ['event-planning', 'game-system', 'create'],
+          icon: 'add',
+          requiresLogin: true,
+        },
         { viewValue: 'View Game Systems', path: ['event-planning', 'game-system'] },
       ],
     },
     {
       viewValue: 'User',
-      children: [{ viewValue: 'User Settings', path: ['user', 'settings'] }],
+      children: [{ viewValue: 'User Settings', path: ['user', 'settings'], requiresLogin: true }],
     },
   ];
+
+  public routes = computed<SharedSidenavRouterItem[]>(() => {
+    return this.userTokenDecoded() === null ? this.filterRoutes(this.defaultRoutes) : this.defaultRoutes;
+  });
 }

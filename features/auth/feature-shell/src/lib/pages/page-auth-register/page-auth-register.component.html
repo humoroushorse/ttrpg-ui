@@ -6,26 +6,36 @@
         <mat-form-field class="w-60">
           <mat-label>First Name</mat-label>
           <input matInput formControlName="firstName" type="text" />
-          <mat-error *ngIf="registerForm.controls.firstName?.invalid"> First name is required </mat-error>
+          @if (registerForm.controls.firstName.hasError('required')) {
+            <mat-error> First name is required </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field class="w-60">
           <mat-label>Last Name</mat-label>
           <input matInput formControlName="lastName" type="text" />
-          <mat-error *ngIf="registerForm.controls.lastName?.invalid"> Last name is required </mat-error>
+          @if (registerForm.controls.lastName.hasError('required')) {
+            <mat-error> Last name is required </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field class="w-60">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email" type="email" />
-          <mat-error *ngIf="registerForm.controls.email?.hasError('required')"> Email is required </mat-error>
-          <mat-error *ngIf="registerForm.controls.email?.hasError('email')"> Enter a valid email </mat-error>
+          @if (registerForm.controls.email.hasError('required')) {
+            <mat-error> Email is required </mat-error>
+          }
+          @if (registerForm.controls.email.hasError('email')) {
+            <mat-error> Enter a valid email </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field class="w-60">
           <mat-label>Username</mat-label>
           <input matInput formControlName="userName" type="text" />
-          <mat-error *ngIf="registerForm.controls.userName?.invalid"> Username is required </mat-error>
+          @if (registerForm.controls.userName.hasError('required')) {
+            <mat-error> Username is required </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field class="w-60">
@@ -69,7 +79,7 @@
 
         <button mat-flat-button color="primary" type="submit" class="component-gradient w-60">Register</button>
         <br />
-        <div>Already have an account? <a [routerLink]="['/login']">Login</a></div>
+        <div>Already have an account? <a [routerLink]="loginRoute()">Login</a></div>
       </form>
     </mat-card-content>
   </mat-card>

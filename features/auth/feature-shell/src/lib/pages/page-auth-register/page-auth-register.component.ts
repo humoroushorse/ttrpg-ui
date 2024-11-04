@@ -32,13 +32,15 @@ import { RegisterUserInput } from 'features/auth/models/src/lib/models/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageAuthRegisterComponent implements OnInit {
-  private meta = inject(Meta);
+  readonly meta = inject(Meta);
 
-  private title = inject(Title);
+  readonly title = inject(Title);
 
-  private sharedCoreService = inject(SharedCoreService);
+  readonly sharedCoreService = inject(SharedCoreService);
 
-  private authService = inject(AuthService);
+  readonly authService = inject(AuthService);
+
+  readonly loginRoute = this.authService.authGuardAuthAppLoginRoute;
 
   hidePassword = true;
 

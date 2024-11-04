@@ -5,41 +5,85 @@ import {
   AuthResponse,
   UserIdToken,
 } from '@ttrpg-ui/features/auth/models';
-import { SharedCookieService } from '@ttrpg-ui/shared/cookie/data-access';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { interval, map, Observable, startWith, take } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import {
+  BehaviorSubject,
+  catchError,
+  debounceTime,
+  interval,
+  map,
+  Observable,
+  of,
+  startWith,
+  switchMap,
+  take,
+  tap,
+  throwError,
+} from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { RegisterUserInput } from 'features/auth/models/src/lib/models/models';
 import { SharedNotificationService } from '@ttrpg-ui/shared/notification/data-access';
+import { SharedLocalStorageService } from '@ttrpg-ui/shared/local-storage/data-access';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private periodicSessionRefresh() {
+    const tokenTimeRemaining = this.tokenTimeRemaining();
+    if (tokenTimeRemaining.refresh <= 0) {
+      this.deleteAuthInfo(false);
+      // this.sharedNotificationService.openSnackBar("You have been logged out because your token expired!")
+      return;
+    }
+    const timeRemaining =
+      tokenTimeRemaining.auth > this.refreshTokenAtSecondsRemaining
+        ? (tokenTimeRemaining.auth - this.refreshTokenAtSecondsRemaining) * 1000
+        : 0;
+    setTimeout(
+      () => {
+        this.postSessionRefreshTrigger.next(true);
+      },
+      Math.max(timeRemaining, 10000),
+    );
+  }
+
+  public postSessionRefreshTrigger = new BehaviorSubject<boolean>(false);
+
   readonly router = inject(Router);
 
   readonly sharedNotificationService = inject(SharedNotificationService);
 
-  private authServiceConfig: AuthServiceConfig = inject(AUTH_SERVICE_CONFIG_TOKEN);
+  readonly authServiceConfig: AuthServiceConfig = inject(AUTH_SERVICE_CONFIG_TOKEN);
 
-  public authGuardRedirectRoute = signal<string[]>(
-    this.authServiceConfig.authGuardRedirectRoute || ['login'],
+  public authGuardAuthAppBaseRoute = signal<string[]>(
+    this.authServiceConfig.authGuardAuthAppRouteBase ? [...this.authServiceConfig.authGuardAuthAppRouteBase] : ['/'],
   ).asReadonly();
+
+  public authGuardAuthAppLoginRoute = computed<string[]>(() => {
+    return [...this.authGuardAuthAppBaseRoute(), 'login'];
+  });
+
+  public authGuardAuthAppRegisterRoute = computed<string[]>(() => {
+    return [...this.authGuardAuthAppBaseRoute(), 'register'];
+  });
 
   public alreadyLoggedInGuardRedirectRoute = signal<string[]>(
-    this.authServiceConfig.alreadyLoggedInGuardRedirectRoute || ['home'],
+    this.authServiceConfig.alreadyLoggedInGuardRedirectRoute || ['/', 'home'],
   ).asReadonly();
 
-  private apiBaseUrl = computed(() => this.authServiceConfig.APP_TTRPG_EVENT_PLANNING__API_BASE_PATH);
+  private apiBaseUrl = computed(() => this.authServiceConfig.appConfig().APP_TTRPG_EVENT_PLANNING__API_BASE_PATH);
 
   readonly http = inject(HttpClient);
 
-  readonly sharedCookieService = inject(SharedCookieService);
+  readonly sharedLocalStorageService = inject(SharedLocalStorageService);
 
   private userTokenDecoded = signal<UserIdToken | null>(this.getUserToken());
 
-  public readonly refreshTokenAtSecondsRemaining = 150; // 2.5 minutes
+  // public readonly refreshTokenAtSecondsRemaining = 150; // 2.5 minutes
+
+  public readonly refreshTokenAtSecondsRemaining = 30;
 
   // NOTE: this will read from cookies every second (while in use)
   // TODO: maybe store the token end date when we get a new one and diff that instead every second
@@ -50,8 +94,27 @@ export class AuthService {
     }),
   );
 
+  readonly authInfoKey = 'AuthService.userTokenDecoded';
+
   constructor() {
-    this.periodicSessionRefresh();
+    // this.startTimer()
+    this.userTokenDecoded.set(this.getUserToken());
+    this.postSessionRefreshTrigger
+      .pipe(
+        debounceTime(1000), // max 1 query per second
+        switchMap(() => {
+          if (!this.getUserToken()) {
+            return of(null);
+          }
+          return this._postSessionRefresh();
+        }),
+      )
+      .subscribe((next) => {
+        this.userTokenDecoded.set(this.getUserToken(next?.id_token));
+        this.sharedLocalStorageService.set(this.authInfoKey, next);
+        this.periodicSessionRefresh();
+      });
+    // this.userTokenDecoded.set(this.getUserToken());
   }
 
   public _postSessionLogin(username: string, password: string) {
@@ -73,7 +136,8 @@ export class AuthService {
         const expiresInSeconds = next.refresh_expires_in; // Get expiration time from Keycloak response
         const expirationDate = new Date();
         expirationDate.setSeconds(expirationDate.getSeconds() + expiresInSeconds);
-        this.sharedCookieService.set<AuthResponse>('auth-info', next, { expires: expirationDate });
+        this.sharedLocalStorageService.set<AuthResponse>(this.authInfoKey, next);
+        this.postSessionRefreshTrigger.next(true);
         if (next) this.router.navigate(this.alreadyLoggedInGuardRedirectRoute());
       },
     });
@@ -84,57 +148,28 @@ export class AuthService {
   }
 
   private getAuthResponse(): AuthResponse | null {
-    return this.sharedCookieService.get<AuthResponse>('auth-info');
+    return this.sharedLocalStorageService.get<AuthResponse>(this.authInfoKey);
   }
 
-  private periodicSessionRefresh() {
-    const cookieAuthResponse = this.getAuthResponse();
-    const tokenTimeRemaining = this.tokenTimeRemaining(cookieAuthResponse);
-    if (tokenTimeRemaining === 0) {
-      this.sharedCookieService.delete('auth-info');
-      this.router.navigate(this.authGuardRedirectRoute());
-      // this.sharedNotificationService.openSnackBar("You have been logged out because your token expired!")
-      return;
-    }
-    if (cookieAuthResponse) {
-      setTimeout(
-        () => {
-          this._postSessionRefresh()
-            .pipe(take(1))
-            .subscribe({
-              next: (next) => {
-                // in case the user logged out, stop refreshing the token
-                this.userTokenDecoded.set(this.getUserToken(next.id_token));
-                this.sharedCookieService.set<AuthResponse>('auth-info', next);
-                console.log('ik-refreshed token!', next);
-                if (cookieAuthResponse) {
-                  this.periodicSessionRefresh();
-                }
-              },
-            });
-        },
-        // expiresIn * 0.8 * 1000,
-        // refresh when there's refreshTokenAtSecondsRemaining or immediately if less than that
-        tokenTimeRemaining > this.refreshTokenAtSecondsRemaining
-          ? (tokenTimeRemaining - this.refreshTokenAtSecondsRemaining) * 1000
-          : 0,
-      );
-    }
+  private deleteAuthInfo(routeToLogin = true) {
+    this.userTokenDecoded.set(null);
+    this.sharedLocalStorageService.remove(this.authInfoKey);
+    this.sharedLocalStorageService.clearNamespace(); // todo: is this overkill?
+    if (routeToLogin) this.router.navigate(this.authGuardAuthAppLoginRoute());
   }
 
-  private _postSessionRefresh() {
-    return this.http.post<AuthResponse>(`${this.apiBaseUrl()}/auth/session/refresh`, {});
-  }
-
-  public postSessionRefresh() {
-    this._postSessionRefresh()
-      .pipe(take(1))
-      .subscribe({
-        next: (next) => {
-          this.userTokenDecoded.set(this.getUserToken(next.id_token));
-          this.sharedCookieService.set<AuthResponse>('auth-info', next);
-        },
-      });
+  public _postSessionRefresh() {
+    return this.http.post<AuthResponse>(`${this.apiBaseUrl()}/auth/session/refresh`, {}).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.message.toLocaleLowerCase().includes('token is not active')) {
+          this.deleteAuthInfo(false);
+        }
+        return throwError(() => error);
+      }),
+      tap((next) => {
+        this.userTokenDecoded.set(this.getUserToken(next.id_token));
+      }),
+    );
   }
 
   private _postSessionLogout() {
@@ -142,56 +177,50 @@ export class AuthService {
   }
 
   public postSessionLogout() {
-    // TODO: figure out clearing these when the api works...
-    this.userTokenDecoded.set(null);
-    this.sharedCookieService.deleteAll();
     this._postSessionLogout()
       .pipe(take(1))
       .subscribe({
         next: () => {
-          console.log('ik- logout next!');
-          this.userTokenDecoded.set(null);
-          this.sharedCookieService.delete('auth-info');
-          this.router.navigate(this.authGuardRedirectRoute());
+          this.deleteAuthInfo();
         },
         error: () => {
-          console.log('ik- logout error!');
           // NOTE: the session won't be removed in this instance...
-          this.userTokenDecoded.set(null);
-          this.sharedCookieService.delete('auth-info');
-          this.router.navigate(this.authGuardRedirectRoute());
+          this.deleteAuthInfo();
         },
       });
   }
 
-  private tokenTimeRemaining(res?: AuthResponse | null): number {
+  private tokenTimeRemaining(res?: AuthResponse | null): { auth: number; refresh: number } {
     const authResponse = res || this.getAuthResponse();
-    if (!authResponse) return 0;
+    if (!authResponse) return { auth: 0, refresh: 0 };
     const currentTimestamp = Math.floor(Date.now() / 1000);
     const userTokenDecoded = this.getUserToken(authResponse.id_token);
-    if (!userTokenDecoded) return 0;
-    const exp = (authResponse.refresh_expires_in || 0) + userTokenDecoded['iat'];
-    // console.log({
-    //   "refresh_expires_in": authResponse.refresh_expires_in || 0,
-    //   "iat": userTokenDecoded['iat'],
-    //   exp,
-    //   currentTimestamp,
-    //   "seconds remianing": exp - currentTimestamp,
-    //   "minutes remaining": Math.floor((exp - currentTimestamp) / 60),
-    // })
-    if (exp < currentTimestamp) return 0;
-    return exp - currentTimestamp;
+    if (!userTokenDecoded) return { auth: 0, refresh: 0 };
+    const authExp = (authResponse.expires_in || 0) + userTokenDecoded['iat'];
+    const refreshExp = (authResponse.refresh_expires_in || 0) + userTokenDecoded['iat'];
+    return {
+      auth: Math.max(authExp - currentTimestamp, 0),
+      refresh: Math.max(refreshExp - currentTimestamp, 0),
+    };
   }
 
   public getUserToken(token: string | null = null): UserIdToken | null {
     if (!token) {
       const cookieAuthResponse = this.getAuthResponse();
-      console.log(cookieAuthResponse);
+      const tokenTimeRemaining = this.tokenTimeRemaining(cookieAuthResponse);
       if (!cookieAuthResponse) return null;
+      if (tokenTimeRemaining.refresh <= 0) {
+        this.deleteAuthInfo(false);
+        return null;
+      }
+      if (tokenTimeRemaining.auth <= 0) {
+        this.postSessionRefreshTrigger.next(true);
+      }
       token = cookieAuthResponse.id_token;
     }
     try {
-      return jwtDecode(token);
+      const decoded = jwtDecode<UserIdToken>(token);
+      return decoded;
     } catch {
       return null;
     }
@@ -219,7 +248,7 @@ export class AuthService {
         next: (next) => {
           if (next) {
             this.sharedNotificationService.openSnackBar('Account successfully registered!');
-            this.router.navigate(this.authGuardRedirectRoute());
+            this.router.navigate(this.authGuardAuthAppLoginRoute());
           }
         },
       });
@@ -237,9 +266,7 @@ export class AuthService {
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.userTokenDecoded.set(null);
-          this.sharedCookieService.delete('auth-info');
-          this.router.navigate(this.authGuardRedirectRoute());
+          this.deleteAuthInfo();
         },
       });
   }

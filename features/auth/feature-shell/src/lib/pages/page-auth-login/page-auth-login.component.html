@@ -36,7 +36,7 @@
         </div>
         <button mat-flat-button color="primary" type="submit" class="component-gradient w-60">Login</button>
         <br />
-        <div>Don't have an account yet? <a [routerLink]="['/register']">Register</a></div>
+        <div>Don't have an account yet? <a [routerLink]="authService.authGuardAuthAppRegisterRoute()">Register</a></div>
       </form>
     </mat-card-content>
   </mat-card>

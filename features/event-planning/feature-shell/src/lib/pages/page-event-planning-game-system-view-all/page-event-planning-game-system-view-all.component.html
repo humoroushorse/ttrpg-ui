@@ -26,7 +26,13 @@
 <section class="flex flex-col gap-4">
   <div class="flex flex-row">
     <div class="grow"><!-- spacer --></div>
-    <button mat-raised-button type="button" (click)="openCreateGameEventDialog()">Add New</button>
+    @if (authService.getUserTokenDecoded()()) {
+      <button mat-raised-button type="button" (click)="openCreateGameSessionDialog()">Add New</button>
+    } @else {
+      <div matTooltip="Log in to add a new Game System">
+        <button mat-raised-button type="button" disabled>Add New</button>
+      </div>
+    }
   </div>
 
   @if (currentView() === 'table') {
@@ -34,10 +40,12 @@
       <lib-shared-table
         [tableHeader]="'Game Systems'"
         [columnDefs]="columnDefs"
-        [data]="(data$ | async) || []"
+        [data]="gameEventStore.entities() || []"
+        [loading]="gameEventStore.loading()"
         (columnDefsChange)="onColumnDefsChange($event)"
         (resetColumnDefsClicked)="onResetColumnDefsClicked()"
-      ></lib-shared-table>
+      >
+      </lib-shared-table>
     </mat-card>
   } @else {
     TODO: CARD LIST

@@ -1,0 +1,7 @@
+<mat-chip-set aria-label="User list">
+  @for (user of users() || []; track user.username) {
+    <lib-user-avatar [user]="user"></lib-user-avatar>
+  } @empty {
+    {{ emptyListText() }}
+  }
+</mat-chip-set>

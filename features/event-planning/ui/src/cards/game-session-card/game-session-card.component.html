@@ -8,17 +8,23 @@
       }"
     >
       <mat-card-header>
-        @if (gameSession.game_master; as gameMaster) {
-          <img
-            mat-card-avatar
-            [src]="gameMaster.profile_picture_url"
-            alt="Photo of {{ gameMaster.username }}"
-            [matTooltip]="gameMaster.username"
-          />
-        }
+        <div mat-card-avatar>
+          @if (gameSession.game_master; as gameMaster) {
+            @if (gameMaster.profile_picture_url) {
+              <img
+                mat-card-avatar
+                [src]="gameMaster.profile_picture_url"
+                alt="Photo of {{ gameMaster.username }}"
+                [matTooltip]="gameMaster.username"
+              />
+            }
+          }
+        </div>
         <mat-card-title>{{ gameSession.title }}</mat-card-title>
         @if (gameSession.game_system; as gameSystem) {
-          <mat-card-subtitle>{{ gameSystem.name }} ({{ gameSystem.version }})</mat-card-subtitle>
+          <mat-card-subtitle
+            >{{ gameSystem.name }} ({{ gameSystem.version }}, {{ gameSystem.release_year }})</mat-card-subtitle
+          >
         }
         <mat-card-subtitle>
           <div class="flex flex-row items-center gap-4">
@@ -44,8 +50,7 @@
         <p>{{ gameSession.description }}</p>
       </mat-card-content>
       <mat-card-actions>
-        <!-- <button mat-button [disabled]="entity()?.max_players <= entity()?.players">JOIN</button> -->
-        <button mat-button type="button" (click)="viewGameSessionClicked.emit(gameSession)">VIEW</button>
+        <ng-container *ngTemplateOutlet="cardActions"></ng-container>
       </mat-card-actions>
     </mat-card>
   }
@@ -54,17 +59,23 @@
       <div class="flex flex-row">
         <div #cardContent>
           <mat-card-header>
-            @if (gameSession.game_master; as gameMaster) {
-              <img
-                mat-card-avatar
-                [src]="gameMaster.profile_picture_url"
-                alt="Photo of {{ gameMaster.username }}"
-                [matTooltip]="gameMaster.username"
-              />
-            }
+            <div mat-card-avatar>
+              @if (gameSession.game_master; as gameMaster) {
+                @if (gameMaster.profile_picture_url) {
+                  <img
+                    mat-card-avatar
+                    [src]="gameMaster.profile_picture_url"
+                    alt="Photo of {{ gameMaster.username }}"
+                    [matTooltip]="gameMaster.username"
+                  />
+                }
+              }
+            </div>
             <mat-card-title>{{ gameSession.title }}</mat-card-title>
             @if (gameSession.game_system; as gameSystem) {
-              <mat-card-subtitle>{{ gameSystem.name }} ({{ gameSystem.version }})</mat-card-subtitle>
+              <mat-card-subtitle
+                >{{ gameSystem.name }} ({{ gameSystem.version }}, {{ gameSystem.release_year }})</mat-card-subtitle
+              >
             }
             <mat-card-subtitle>
               <div class="flex w-full flex-wrap gap-x-4">
@@ -79,25 +90,61 @@
           </mat-card-header>
           <mat-card-content>
             <p>{{ gameSession.description }}</p>
+            <lib-user-avatar-list [users]="players()" />
           </mat-card-content>
           <mat-card-actions>
-            <!-- <button mat-button [disabled]="entity()?.max_players <= entity()?.players">JOIN</button> -->
-            <button mat-button type="button" (click)="viewGameSessionClicked.emit(gameSession)">VIEW</button>
+            <ng-container
+              *ngTemplateOutlet="
+                cardActions;
+                context: {
+                  gameSession,
+                }
+              "
+            ></ng-container>
           </mat-card-actions>
         </div>
         <div class="grow"><!--spacer--></div>
-        @if (gameSession.image_url && pageWidth() >= 900) {
-          <img
-            [style.height.px]="cardContentRef()?.nativeElement?.offsetHeight"
-            class="max-w-full rounded-r-xl object-cover"
-            [src]="gameSession.image_url"
-            [alt]="
-              gameSession.image_url_description ||
-              'Image representing the game session (game master did not add a description)'
-            "
-          />
+        @if (gameSession.image_url) {
+          @if (pageWidth() >= 1200) {
+            <img
+              [style.height.px]="cardContentRef()?.nativeElement?.offsetHeight"
+              class="max-w-full rounded-r-xl object-cover"
+              [src]="gameSession.image_url"
+              [alt]="
+                gameSession.image_url_description ||
+                'Image representing the game session (game master did not add a description)'
+              "
+            />
+          } @else {
+            <div class="flex h-full w-full items-center justify-end p-4">
+              <img
+                class="h-40 w-40 rounded-xl object-cover md:h-60 md:w-60"
+                [src]="gameSession.image_url"
+                [alt]="
+                  gameSession.image_url_description ||
+                  'Image representing the game session (game master did not add a description)'
+                "
+              />
+            </div>
+          }
         }
       </div>
     </mat-card>
   }
 }
+
+<ng-template #cardActions let-gameSession="gameSession">
+  @if (isUserInEvent()) {
+    <button mat-button (click)="leaveGameSessionClicked.emit(gameSession)" type="Button">LEAVE</button>
+  } @else {
+    @if ((gameSession.jt_user_game_session?.length || 0) < gameSession.max_players) {
+      <button mat-button (click)="joinGameSessionClicked.emit(gameSession)" type="Button">JOIN</button>
+    } @else {
+      <div matTooltip="Game session is at capacity!">
+        <button mat-button disabled>JOIN</button>
+      </div>
+    }
+  }
+
+  <button mat-button type="button" (click)="viewGameSessionClicked.emit(gameSession)">VIEW</button>
+</ng-template>

@@ -5,16 +5,14 @@ import {
   computed,
   effect,
   inject,
-  Injector,
   input,
   OnDestroy,
   output,
   signal,
   ViewChild,
-  ViewContainerRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TableModels, TableTokens } from '@ttrpg-ui/shared/table/models';
+import { TableModels } from '@ttrpg-ui/shared/table/models';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { SharedTableDynamicHostDirective } from '@ttrpg-ui/shared/table/util';
 import { MatSort, MatSortable, MatSortModule, SortDirection } from '@angular/material/sort';
@@ -33,6 +31,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { ColumnDef } from 'shared/table/models/src/lib/models';
 
 @Component({
   selector: 'lib-shared-table',
@@ -60,6 +60,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatInputModule,
     MatTableModule,
     MatCheckboxModule,
+    MatProgressBarModule,
   ],
   templateUrl: './shared-table.component.html',
   styleUrl: './shared-table.component.scss',
@@ -75,6 +76,8 @@ export class SharedTableComponent<T> implements AfterViewInit, OnDestroy {
   resetColumnDefsClicked = output<boolean>();
 
   tableHeader = input('');
+
+  loading = input(false);
 
   columnDefs = input<TableModels.ColumnDef[]>([]);
 
@@ -106,12 +109,9 @@ export class SharedTableComponent<T> implements AfterViewInit, OnDestroy {
       this.dataSource.data = this.data();
     });
 
-    effect(
-      () => {
-        this.tableColumnDefs.set(this.columnDefs().sort(this.sortPinned));
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      this.tableColumnDefs.set(this.columnDefs().sort(this.sortPinned));
+    });
   }
 
   private sortPinned(a: TableModels.ColumnDef, b: TableModels.ColumnDef) {
@@ -142,15 +142,6 @@ export class SharedTableComponent<T> implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.onDestroy$.next();
     this.onDestroy$.complete();
-  }
-
-  createInjector(datum: T, viewContainerRef: ViewContainerRef): Injector {
-    return Injector.create({
-      providers: [
-        { provide: TableTokens.SHARED_TABLE_DATA, useValue: datum },
-        { provide: TableTokens.SHARED_TABLE_VIEW_CONTAINER_REF, useValue: viewContainerRef },
-      ],
-    });
   }
 
   drop(event: CdkDragDrop<TableModels.ColumnDef[]>) {
@@ -223,5 +214,9 @@ export class SharedTableComponent<T> implements AfterViewInit, OnDestroy {
     }
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  getValue(column: ColumnDef, rowData: any) {
+    return column.valueGetter ? column.valueGetter(rowData) : rowData[column.field];
   }
 }

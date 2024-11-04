@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -6,12 +6,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 
 export interface SharedSidenavRouterItem {
   viewValue: string;
   path?: string[];
   icon?: string;
   children?: SharedSidenavRouterItem[];
+  requiresLogin?: boolean;
 }
 
 @Component({
@@ -28,9 +30,14 @@ export interface SharedSidenavRouterItem {
   ],
   templateUrl: './shared-sidenav-router-item.component.html',
   styleUrl: './shared-sidenav-router-item.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedSidenavRouterItemComponent {
   readonly router = inject(Router);
+
+  readonly authService = inject(AuthService);
+
+  isLoggedIn = computed(() => !!this.authService.getUserTokenDecoded()());
 
   public routerItem = input<SharedSidenavRouterItem>();
 

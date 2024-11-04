@@ -1,4 +1,4 @@
-import { Component, inject, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
@@ -9,9 +9,10 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
   imports: [CommonModule, RouterModule],
   templateUrl: './features-user-feature-shell.component.html',
   styleUrl: './features-user-feature-shell.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeaturesUserFeatureShellComponent {
-  private coreService = inject(SharedCoreService);
+  readonly sharedCoreService = inject(SharedCoreService);
 
-  public toolbarHeight: Signal<number> = this.coreService.getToolbarHeight();
+  public toolbarHeight: Signal<number> = this.sharedCoreService.getToolbarHeight();
 }

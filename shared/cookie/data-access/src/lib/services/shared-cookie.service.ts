@@ -11,9 +11,7 @@ export class SharedCookieService {
   readonly platformLocation = inject(PlatformLocation);
 
   set<T>(key: string, value: T, options: CookieOptions = {}): void {
-    console.log(this.platformLocation.getBaseHrefFromDOM(), location, location.host);
-    console.log('ik-cookie service set', key, value, options);
-    // if (!options.path) options.path = this.platformLocation.getBaseHrefFromDOM();
+    if (!options.path) options.path = this.platformLocation.getBaseHrefFromDOM();
     // if (!options.domain) options.domain = location.origin;
     this.cookieService.set(
       key,
@@ -41,12 +39,10 @@ export class SharedCookieService {
     secure = false,
     sameSite = undefined,
   ): void {
-    console.log('ik-cookie service delete', key);
     this.cookieService.delete(key, path, domain, secure, sameSite);
   }
 
   deleteAll(): void {
-    console.log('ik-cookie service delete all');
     this.cookieService.deleteAll();
   }
 }

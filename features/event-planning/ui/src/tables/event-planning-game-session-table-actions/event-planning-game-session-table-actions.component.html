@@ -1,0 +1,41 @@
+@if (data(); as data) {
+  <button mat-mini-fab [matMenuTriggerFor]="actionsMenu" attr.aria-label="Actions for {{ data.title }}">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #actionsMenu="matMenu">
+    <a mat-menu-item type="Button" [routerLink]="[data.id]"><mat-icon>open_in_browser</mat-icon> View</a>
+    @if (authService.getUserTokenDecoded()()) {
+      <button mat-menu-item type="Button" (click)="onJoinClicked(data)"><mat-icon>person_add</mat-icon> Join</button>
+    } @else {
+      <button mat-menu-item type="Button" matTooltip="You must log in to join game sessions." disabled>
+        <mat-icon>person_add</mat-icon> Join
+      </button>
+    }
+
+    @if (authService.getUserTokenDecoded()()) {
+      <button mat-menu-item type="Button" (click)="onLeaveClicked(data)">
+        <mat-icon>person_remove</mat-icon> Leave
+      </button>
+    } @else {
+      <button mat-menu-item type="Button" matTooltip="You must log in to leave game sessions." disabled>
+        <mat-icon>person_remove</mat-icon> Leave
+      </button>
+    }
+
+    @if (authService.getUserTokenDecoded()()) {
+      <button mat-menu-item type="Button" class="error-color" (click)="onDeleteClicked(data)">
+        <mat-icon>delete_forever</mat-icon> Delete
+      </button>
+    } @else {
+      <button
+        mat-menu-item
+        type="Button"
+        class="error-color"
+        matTooltip="You must log in to delete game sessions."
+        disabled
+      >
+        <mat-icon>delete_forever</mat-icon> Delete
+      </button>
+    }
+  </mat-menu>
+}

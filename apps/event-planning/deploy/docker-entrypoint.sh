@@ -3,6 +3,7 @@ set -eu
 
 envsubst '
   ${APP_TTRPG_EVENT_PLANNING__API_BASE_PATH}
+  ${APP_TTRPG_EVENT_PLANNING__API_URL}
 ' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf
 
 envsubst '

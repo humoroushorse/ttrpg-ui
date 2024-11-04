@@ -1,5 +1,5 @@
 {
-  "name": "features-game-event-feature-shell",
+  "name": "features-game-session-feature-shell",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "features/event-planning/feature-shell/src",
   "prefix": "lib",

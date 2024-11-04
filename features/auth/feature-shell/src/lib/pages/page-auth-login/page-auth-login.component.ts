@@ -31,13 +31,15 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageAuthLoginComponent implements OnInit {
-  private meta = inject(Meta);
+  readonly meta = inject(Meta);
 
-  private title = inject(Title);
+  readonly title = inject(Title);
 
-  private sharedCoreService = inject(SharedCoreService);
+  readonly sharedCoreService = inject(SharedCoreService);
 
-  private authService = inject(AuthService);
+  readonly authService = inject(AuthService);
+
+  public p = this.authService.authGuardAuthAppLoginRoute();
 
   public hidePassword = true;
 

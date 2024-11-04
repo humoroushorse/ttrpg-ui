@@ -17,7 +17,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageUserSettingsComponent implements OnInit {
-  private authService = inject(AuthService);
+  readonly authService = inject(AuthService);
 
   readonly meta = inject(Meta);
 

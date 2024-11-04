@@ -5,7 +5,7 @@ import { SharedLocalStorageService } from '@ttrpg-ui/shared/local-storage/data-a
   providedIn: 'root',
 })
 export class SharedTableService {
-  private sharedLocalStorageService = inject(SharedLocalStorageService);
+  readonly sharedLocalStorageService = inject(SharedLocalStorageService);
 
   private pageSizeOptions$$ = signal<number[]>([10, 25, 100]);
 

@@ -4,11 +4,11 @@ import { SharedTableComponent } from '@ttrpg-ui/shared/table/ui';
 import { TableModels } from '@ttrpg-ui/shared/table/models';
 import { SharedLocalStorageService } from '@ttrpg-ui/shared/local-storage/data-access';
 import { MatCardModule } from '@angular/material/card';
-import { EventPlanningApiService } from '@ttrpg-ui/features/event-planning/data-access';
+import { EventPlanningApiService, EventPlanningGameSystemStore } from '@ttrpg-ui/features/event-planning/data-access';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import {
-  EventPlanningGameSessionCreateDialogComponent,
-  GameSessionCardListComponent,
+  EventPlanningGameSystemCreateDialogComponent,
+  EventPlanningGameSystemTableActionsComponent,
 } from '@ttrpg-ui/features/event-planning/ui';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,6 +17,7 @@ import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 import { Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
+import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 
 @Component({
   selector: 'lib-page-event-planning-game-system-view-all',
@@ -24,7 +25,6 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
   imports: [
     CommonModule,
     SharedTableComponent,
-    GameSessionCardListComponent,
     MatCardModule,
     MatDialogModule,
     MatButtonModule,
@@ -48,6 +48,10 @@ export class PageEventPlanningGameSystemViewAllComponent implements OnInit {
 
   readonly sharedLocalStorageService = inject(SharedLocalStorageService);
 
+  readonly gameEventStore = inject(EventPlanningGameSystemStore);
+
+  readonly authService = inject(AuthService);
+
   ngOnInit(): void {
     this.title.setTitle(`Event Planning | View List of Game Systems | ${this.sharedCoreService.appTitle}`);
     this.meta.updateTag({ name: 'description', content: 'View a list of game systems.' });
@@ -66,15 +70,22 @@ export class PageEventPlanningGameSystemViewAllComponent implements OnInit {
 
   private eventPlanningApiService = inject(EventPlanningApiService);
 
-  public baseUrl = this.eventPlanningApiService.serviceConfig.APP_TTRPG_EVENT_PLANNING__API_BASE_PATH;
-
-  data$ = this.eventPlanningApiService.getGameSystems();
+  public baseUrl = this.eventPlanningApiService.serviceConfig.appConfig().APP_TTRPG_EVENT_PLANNING__API_BASE_PATH;
 
   private defaultColumnDefs: TableModels.ColumnDef[] = [
     { field: 'id', headerName: 'ID', cellDataType: 'text', sortable: true, pinned: 'left', hide: true },
     { field: 'name', headerName: 'Name', cellDataType: 'text', sortable: true },
     { field: 'version', headerName: 'Version', cellDataType: 'text', sortable: true },
+    { field: 'release_year', headerName: 'Release Year', cellDataType: 'text', sortable: true },
     { field: 'description', headerName: 'Description', cellDataType: 'text', sortable: true },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      cellDataType: 'component',
+      component: EventPlanningGameSystemTableActionsComponent,
+      sortable: true,
+      pinned: 'right',
+    },
   ];
 
   columnDefs: TableModels.ColumnDef[] = this.getColumnDefs();
@@ -107,11 +118,13 @@ export class PageEventPlanningGameSystemViewAllComponent implements OnInit {
     this.sharedLocalStorageService.remove('PageEventPlanningGameSystemViewAllComponent.columnDefs');
   }
 
-  openCreateGameEventDialog(): void {
-    this.dialog.open(EventPlanningGameSessionCreateDialogComponent, {});
+  openCreateGameSessionDialog(): void {
+    this.dialog.open(EventPlanningGameSystemCreateDialogComponent, {
+      data: { routeOnCreate: false },
+    });
   }
 
-  onViewGameSessionClicked(event: EventPlanningModels.Schemas.GameSessionSchema) {
+  onViewGameSessionClicked(event: EventPlanningModels.GameSession.GameSessionSchema) {
     this.router.navigate(['event-planning', 'game-system', event.id]);
   }
 }

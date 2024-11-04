@@ -16,7 +16,10 @@ export class SharedCoreService {
   private pageWidth = signal<number>(window.innerWidth);
 
   private toolbarHeight = computed<number>(() => {
-    return this.pageWidth() < 600 ? 52 : 60; // defults of the mat-toolbar anyways (v18)
+    // defults of the mat-toolbar anyways (v18)
+    // return this.pageWidth() < 600 ? 52 : 60;
+    // change at 640px which is sm media size from tailwindcss (v3.4.13)
+    return this.pageWidth() < 640 ? 52 : 60;
   });
 
   public appTitle = this.config.appTitle;

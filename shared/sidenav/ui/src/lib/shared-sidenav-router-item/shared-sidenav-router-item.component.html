@@ -5,8 +5,17 @@
       [routerLink]="routerItem.path"
       [routerLinkActiveOptions]="{ exact: true }"
       routerLinkActive="component-link-active"
+      matTooltip="{{ routerItem.requiresLogin && !isLoggedIn() ? 'You must log in first to view this route!' : '' }}"
     >
-      {{ routerItem.viewValue }}
+      <div class="flex flex-row items-center gap-2">
+        @if (routerItem.requiresLogin && !isLoggedIn()) {
+          <mat-icon>lock</mat-icon>
+        }
+        @if (!routerItem.requiresLogin && routerItem.icon) {
+          <mat-icon>{{ routerItem.icon }}</mat-icon>
+        }
+        <span>{{ routerItem.viewValue }}</span>
+      </div>
     </a>
   } @else {
     <mat-expansion-panel
