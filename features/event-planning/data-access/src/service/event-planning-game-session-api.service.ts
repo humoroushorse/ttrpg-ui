@@ -116,9 +116,7 @@ export class EventPlanningGameSessionApiService {
           observe: 'response',
         },
       )
-      .pipe(
-        map((r) => r.body),
-      );
+      .pipe(map((r) => r.body));
   }
 
   postLeaveSession(
@@ -137,8 +135,6 @@ export class EventPlanningGameSessionApiService {
           observe: 'response',
         },
       )
-      .pipe(
-        map((r) => r.body),
-      );
+      .pipe(map((r) => r.body));
   }
 }

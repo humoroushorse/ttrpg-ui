@@ -14,12 +14,12 @@ type StoreSchema = EventPlanningModels.GameSession.GameSessionSchema;
 export type StoreState = SharedModels.Store.BaseState<StoreSchema>;
 
 const getErrorMessage = (error: HttpErrorResponse): string => {
-  let errorMessage: any | string = error.error ? error.error : error.message
-  if ((typeof errorMessage !== 'string')) {
-    errorMessage = errorMessage.detail ? errorMessage.detail : JSON.stringify(errorMessage)
+  let errorMessage: any | string = error.error ? error.error : error.message;
+  if (typeof errorMessage !== 'string') {
+    errorMessage = errorMessage.detail ? errorMessage.detail : JSON.stringify(errorMessage);
   }
-  return errorMessage
-}
+  return errorMessage;
+};
 
 export const EventPlanningGameSessionStore = signalStore(
   // 👇 Providing `EventPlanningGameSessionStore` at the root level.
@@ -116,15 +116,9 @@ export const EventPlanningGameSessionStore = signalStore(
             }
           })
           .catch((error: HttpErrorResponse) => {
-            const errorMessage = getErrorMessage(error)
+            const errorMessage = getErrorMessage(error);
             sharedNotificationService.openSnackBar(`ERROR: '${errorMessage}'`);
-            patchState(
-              store,
-              SharedModels.Store.setError(
-                errorMessage,
-                `Error joining ${store.entityNamePlural()}`,
-              ),
-            );
+            patchState(store, SharedModels.Store.setError(errorMessage, `Error joining ${store.entityNamePlural()}`));
           })
           .finally(() => {
             patchState(store, SharedModels.Store.setLoading(false));
@@ -140,7 +134,7 @@ export const EventPlanningGameSessionStore = signalStore(
             }
           })
           .catch((error: HttpErrorResponse) => {
-            const errorMessage = getErrorMessage(error)
+            const errorMessage = getErrorMessage(error);
             sharedNotificationService.openSnackBar(`ERROR: '${errorMessage}'`);
             patchState(
               store,

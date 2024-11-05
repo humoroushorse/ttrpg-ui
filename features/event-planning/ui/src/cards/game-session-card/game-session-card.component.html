@@ -146,7 +146,7 @@
     <button mat-button (click)="leaveGameSessionClicked.emit(gameSession)" type="button">LEAVE</button>
   } @else {
     @if ((gameSession.jt_user_game_session?.length || 0) < gameSession.max_players) {
-      @if(authService.getUserTokenDecoded()()) {
+      @if (authService.getUserTokenDecoded()()) {
         <button mat-button (click)="joinGameSessionClicked.emit(gameSession)" type="button">JOIN</button>
       } @else {
         <div matTooltip="You must log in to join a session!">

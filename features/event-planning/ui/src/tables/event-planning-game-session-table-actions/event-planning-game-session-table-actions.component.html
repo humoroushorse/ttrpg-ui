@@ -5,30 +5,24 @@
   <mat-menu #actionsMenu="matMenu">
     <a mat-menu-item type="button" [routerLink]="[data.id]"><mat-icon>open_in_browser</mat-icon> View</a>
 
-
-
     @if (isUserInEvent()) {
       <button mat-menu-item (click)="onLeaveClicked(data)" type="button">
         <mat-icon>person_remove</mat-icon> Leave
       </button>
     } @else {
       @if ((data.jt_user_game_session?.length || 0) < data.max_players) {
-        @if(authService.getUserTokenDecoded()()) {
+        @if (authService.getUserTokenDecoded()()) {
           <button mat-menu-item (click)="onJoinClicked(data)" type="button">
             <mat-icon>person_add</mat-icon> Join
           </button>
         } @else {
           <div matTooltip="You must log in to join a session!">
-            <button mat-menu-item disabled>
-              <mat-icon>person_add</mat-icon> Join
-            </button>
+            <button mat-menu-item disabled><mat-icon>person_add</mat-icon> Join</button>
           </div>
         }
       } @else {
         <div matTooltip="Game session is at capacity!">
-          <button mat-menu-item disabled>
-            <mat-icon>person_add</mat-icon> Join
-          </button>
+          <button mat-menu-item disabled><mat-icon>person_add</mat-icon> Join</button>
         </div>
       }
     }
