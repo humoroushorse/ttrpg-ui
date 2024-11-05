@@ -7,10 +7,19 @@ import { EventPlanningGameSessionApiService } from '../service/event-planning-ga
 import { HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom, switchMap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SharedNotificationService } from '@ttrpg-ui/shared/notification/data-access';
 
 type StoreSchema = EventPlanningModels.GameSession.GameSessionSchema;
 
 export type StoreState = SharedModels.Store.BaseState<StoreSchema>;
+
+const getErrorMessage = (error: HttpErrorResponse): string => {
+  let errorMessage: any | string = error.error ? error.error : error.message
+  if ((typeof errorMessage !== 'string')) {
+    errorMessage = errorMessage.detail ? errorMessage.detail : JSON.stringify(errorMessage)
+  }
+  return errorMessage
+}
 
 export const EventPlanningGameSessionStore = signalStore(
   // 👇 Providing `EventPlanningGameSessionStore` at the root level.
@@ -27,6 +36,7 @@ export const EventPlanningGameSessionStore = signalStore(
     (
       store,
       storeService = inject(EventPlanningGameSessionApiService),
+      sharedNotificationService = inject(SharedNotificationService),
       route = inject(ActivatedRoute),
       router = inject(Router),
     ) => ({
@@ -101,14 +111,17 @@ export const EventPlanningGameSessionStore = signalStore(
         await firstValueFrom(storeService.postJoinSession(entity).pipe(switchMap(() => storeService.get(entity.id))))
           .then((next) => {
             if (next) {
+              sharedNotificationService.openSnackBar(`Joined session '${entity.title}'`);
               patchState(store, updateEntity({ id: entity.id, changes: next }));
             }
           })
           .catch((error: HttpErrorResponse) => {
+            const errorMessage = getErrorMessage(error)
+            sharedNotificationService.openSnackBar(`ERROR: '${errorMessage}'`);
             patchState(
               store,
               SharedModels.Store.setError(
-                error.error ? error.error : error.message,
+                errorMessage,
                 `Error joining ${store.entityNamePlural()}`,
               ),
             );
@@ -122,10 +135,13 @@ export const EventPlanningGameSessionStore = signalStore(
         await firstValueFrom(storeService.postLeaveSession(entity).pipe(switchMap(() => storeService.get(entity.id))))
           .then((next) => {
             if (next) {
+              sharedNotificationService.openSnackBar(`Left session '${entity.title}'`);
               patchState(store, updateEntity({ id: entity.id, changes: JSON.parse(JSON.stringify(next)) }));
             }
           })
           .catch((error: HttpErrorResponse) => {
+            const errorMessage = getErrorMessage(error)
+            sharedNotificationService.openSnackBar(`ERROR: '${errorMessage}'`);
             patchState(
               store,
               SharedModels.Store.setError(

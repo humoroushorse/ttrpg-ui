@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,6 +23,11 @@ export class EventPlanningGameSessionTableActionsComponent {
   readonly dataStore = inject(EventPlanningGameSessionStore);
 
   readonly data = input<EventPlanningModels.GameSession.GameSessionSchema>();
+
+  isUserInEvent = computed(() => {
+    const eventUsers = this.data()?.jt_user_game_session || [];
+    return !!eventUsers.find((e) => e.user?.id === this.authService.getUserTokenDecoded()()?.sub);
+  });
 
   onDeleteClicked(data: EventPlanningModels.GameSession.GameSessionSchema) {
     this.dataStore.delete(data);

@@ -48,9 +48,17 @@
       }
       <mat-card-content>
         <p>{{ gameSession.description }}</p>
+        <lib-user-avatar-list [users]="players()" />
       </mat-card-content>
       <mat-card-actions>
-        <ng-container *ngTemplateOutlet="cardActions"></ng-container>
+        <ng-container
+          *ngTemplateOutlet="
+            cardActions;
+            context: {
+              gameSession,
+            }
+          "
+        ></ng-container>
       </mat-card-actions>
     </mat-card>
   }
@@ -135,16 +143,21 @@
 
 <ng-template #cardActions let-gameSession="gameSession">
   @if (isUserInEvent()) {
-    <button mat-button (click)="leaveGameSessionClicked.emit(gameSession)" type="Button">LEAVE</button>
+    <button mat-button (click)="leaveGameSessionClicked.emit(gameSession)" type="button">LEAVE</button>
   } @else {
     @if ((gameSession.jt_user_game_session?.length || 0) < gameSession.max_players) {
-      <button mat-button (click)="joinGameSessionClicked.emit(gameSession)" type="Button">JOIN</button>
+      @if(authService.getUserTokenDecoded()()) {
+        <button mat-button (click)="joinGameSessionClicked.emit(gameSession)" type="button">JOIN</button>
+      } @else {
+        <div matTooltip="You must log in to join a session!">
+          <button mat-button disabled>JOIN</button>
+        </div>
+      }
     } @else {
       <div matTooltip="Game session is at capacity!">
         <button mat-button disabled>JOIN</button>
       </div>
     }
   }
-
   <button mat-button type="button" (click)="viewGameSessionClicked.emit(gameSession)">VIEW</button>
 </ng-template>

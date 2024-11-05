@@ -118,9 +118,6 @@ export class EventPlanningGameSessionApiService {
       )
       .pipe(
         map((r) => r.body),
-        tap((r) => {
-          if (r) this.sharedNotificationService.openSnackBar(`Joined session '${entity.title}'`);
-        }),
       );
   }
 
@@ -142,9 +139,6 @@ export class EventPlanningGameSessionApiService {
       )
       .pipe(
         map((r) => r.body),
-        tap((r) => {
-          if (r) this.sharedNotificationService.openSnackBar(`Left session '${entity.title}'`);
-        }),
       );
   }
 }

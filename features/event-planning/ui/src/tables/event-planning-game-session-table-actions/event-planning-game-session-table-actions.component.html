@@ -3,35 +3,46 @@
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #actionsMenu="matMenu">
-    <a mat-menu-item type="Button" [routerLink]="[data.id]"><mat-icon>open_in_browser</mat-icon> View</a>
-    @if (authService.getUserTokenDecoded()()) {
-      <button mat-menu-item type="Button" (click)="onJoinClicked(data)"><mat-icon>person_add</mat-icon> Join</button>
-    } @else {
-      <button mat-menu-item type="Button" matTooltip="You must log in to join game sessions." disabled>
-        <mat-icon>person_add</mat-icon> Join
-      </button>
-    }
+    <a mat-menu-item type="button" [routerLink]="[data.id]"><mat-icon>open_in_browser</mat-icon> View</a>
 
-    @if (authService.getUserTokenDecoded()()) {
-      <button mat-menu-item type="Button" (click)="onLeaveClicked(data)">
+
+
+    @if (isUserInEvent()) {
+      <button mat-menu-item (click)="onLeaveClicked(data)" type="button">
         <mat-icon>person_remove</mat-icon> Leave
       </button>
     } @else {
-      <button mat-menu-item type="Button" matTooltip="You must log in to leave game sessions." disabled>
-        <mat-icon>person_remove</mat-icon> Leave
-      </button>
+      @if ((data.jt_user_game_session?.length || 0) < data.max_players) {
+        @if(authService.getUserTokenDecoded()()) {
+          <button mat-menu-item (click)="onJoinClicked(data)" type="button">
+            <mat-icon>person_add</mat-icon> Join
+          </button>
+        } @else {
+          <div matTooltip="You must log in to join a session!">
+            <button mat-menu-item disabled>
+              <mat-icon>person_add</mat-icon> Join
+            </button>
+          </div>
+        }
+      } @else {
+        <div matTooltip="Game session is at capacity!">
+          <button mat-menu-item disabled>
+            <mat-icon>person_add</mat-icon> Join
+          </button>
+        </div>
+      }
     }
 
-    @if (authService.getUserTokenDecoded()()) {
-      <button mat-menu-item type="Button" class="error-color" (click)="onDeleteClicked(data)">
+    @if (authService.getUserTokenDecoded()()?.sub === data.created_by) {
+      <button mat-menu-item type="button" class="error-color" (click)="onDeleteClicked(data)">
         <mat-icon>delete_forever</mat-icon> Delete
       </button>
     } @else {
       <button
         mat-menu-item
-        type="Button"
+        type="button"
         class="error-color"
-        matTooltip="You must log in to delete game sessions."
+        matTooltip="You do not have permission to delete this event"
         disabled
       >
         <mat-icon>delete_forever</mat-icon> Delete

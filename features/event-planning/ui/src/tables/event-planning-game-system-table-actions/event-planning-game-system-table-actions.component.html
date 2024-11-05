@@ -3,15 +3,15 @@
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #actionsMenu="matMenu">
-    <a mat-menu-item type="Button" [routerLink]="[data.id]"><mat-icon>open_in_browser</mat-icon> View</a>
+    <a mat-menu-item type="button" [routerLink]="[data.id]"><mat-icon>open_in_browser</mat-icon> View</a>
     @if (authService.getUserTokenDecoded()()) {
-      <button mat-menu-item type="Button" class="error-color" (click)="onDeleteClicked(data)">
+      <button mat-menu-item type="button" class="error-color" (click)="onDeleteClicked(data)">
         <mat-icon>delete_forever</mat-icon> Delete
       </button>
     } @else {
       <button
         mat-menu-item
-        type="Button"
+        type="button"
         class="error-color"
         matTooltip="You must log in to delete game systems."
         disabled
