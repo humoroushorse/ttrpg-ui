@@ -37,7 +37,7 @@ server {
 
     # Forward API requests to the Docker container
     location ${APP_TTRPG_EVENT_PLANNING__API_BASE_PATH}/ {
-        proxy_pass http://ttrpg-api-event-planning:8002;
+        proxy_pass ${APP_TTRPG_EVENT_PLANNING__API_URL};
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

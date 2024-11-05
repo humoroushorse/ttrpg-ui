@@ -1,19 +1,25 @@
-<button
-  type="button"
-  class="component-inherit"
-  mat-icon-button
-  [matMenuTriggerFor]="menu"
-  aria-label="theme selection"
-  matTooltip="Select a theme"
->
-  <mat-icon>format_color_fill</mat-icon>
-</button>
+@if (isMenuItem()) {
+  <button type="button" mat-menu-item [matMenuTriggerFor]="menu" aria-label="theme selection">
+    <mat-icon>format_color_fill</mat-icon>
+    <span>Change Theme</span>
+  </button>
+} @else {
+  <button
+    type="button"
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    aria-label="theme selection"
+    matTooltip="Select a theme"
+  >
+    <mat-icon>format_color_fill</mat-icon>
+  </button>
+}
 
 <mat-menu #menu="matMenu">
   @for (theme of themes$(); track theme.viewValue) {
     <button mat-menu-item type="button" (click)="setTheme(theme)">
       @if (theme.viewValue === selectedTheme$()?.viewValue) {
-        <mat-icon class="component-selected">radio_button_checked</mat-icon>
+        <mat-icon class="primary-color">radio_button_checked</mat-icon>
       } @else {
         <mat-icon>radio_button_unchecked</mat-icon>
       }

@@ -1,1 +1,1 @@
-export * from './lib/features-event-planning-models/features-event-planning-models.component';
+export * as EventPlanningModels from './lib';

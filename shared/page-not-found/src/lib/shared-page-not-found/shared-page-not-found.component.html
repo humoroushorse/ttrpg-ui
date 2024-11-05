@@ -1,1 +1,14 @@
-<p>shared-page-not-found works!</p>
+<h1>Page Not Found!</h1>
+
+<p>
+  The page you are looking for appears to not exist. Perhaps you want to
+  <a mat-button type="button" [routerLink]="loginRoute()">Login</a> or go to the
+  <a mat-button type="button" [routerLink]="homeRoute()">Home</a> page?
+</p>
+
+<p>
+  {{ loginRoute() | json }}
+</p>
+<p>
+  {{ homeRoute() | json }}
+</p>

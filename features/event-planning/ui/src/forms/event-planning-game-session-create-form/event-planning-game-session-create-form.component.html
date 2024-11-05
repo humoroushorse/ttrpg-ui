@@ -1,0 +1,180 @@
+<form [formGroup]="gameSessionForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+  <!-- TODO: for now it's just the current user -->
+  <!-- <mat-form-field>
+    <mat-label>Game Master</mat-label>
+    <input matInput formControlName="game_master_id" type="text" />
+    @if(gameSessionForm.controls.game_master_id.hasError('required')) {
+      <mat-error> Game master is required </mat-error>
+    }
+  </mat-form-field> -->
+
+  <mat-form-field>
+    <mat-label>Title</mat-label>
+    <input matInput formControlName="title" type="text" />
+    <span matSuffix class="px-2"
+      >{{ gameSessionForm.controls.title.value?.length || 0 }}/{{ gameSessionFormValidation.title.max }}</span
+    >
+    @if (gameSessionForm.controls.title.hasError('required')) {
+      <mat-error> Title is required </mat-error>
+    }
+    @if (gameSessionForm.controls.title.hasError('minlength')) {
+      <mat-error> Min {{ gameSessionForm.controls.title.getError('minlength').requiredLength }} characters</mat-error>
+    }
+    @if (gameSessionForm.controls.title.hasError('maxlength')) {
+      <mat-error> Max {{ gameSessionForm.controls.title.getError('maxlength').requiredLength }} characters</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description" type="text"></textarea>
+    <span matSuffix class="px-2"
+      >{{ gameSessionForm.controls.description.value?.length || 0 }}/{{
+        gameSessionFormValidation.description.max
+      }}</span
+    >
+    @if (gameSessionForm.controls.description.hasError('required')) {
+      <mat-error> Description is required </mat-error>
+    }
+    @if (gameSessionForm.controls.description.hasError('minlength')) {
+      <mat-error>
+        Min {{ gameSessionForm.controls.description.getError('minlength').requiredLength }} characters</mat-error
+      >
+    }
+    @if (gameSessionForm.controls.description.hasError('maxlength')) {
+      <mat-error>
+        Max {{ gameSessionForm.controls.description.getError('maxlength').requiredLength }} characters</mat-error
+      >
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Game System</mat-label>
+    <lib-shared-forms-single-select
+      #gameSystemSingleSelect
+      [required]="true"
+      formControlName="game_system_id"
+      [placeholder]="'Select Game System'"
+      [options]="(gameSystemsFiltered$ | async) || []"
+      [multiInstanceTerm]="'Game Systems'"
+      [dataTestId]="dataTestId + 'GameSystemSelect'"
+      [trackFn]="'id'"
+      [valueAccessorFn]="'id'"
+      [viewValueAccessorFn]="gameSystemViewValueFn"
+    />
+    @if (gameSessionForm.controls.game_system_id.hasError('required')) {
+      <mat-error>Game system is required</mat-error>
+    }
+  </mat-form-field>
+
+  <div class="flex w-full flex-col gap-4 sm:flex-row">
+    <mat-form-field class="w-full min-w-60">
+      <mat-label>Start Date</mat-label>
+      <input matInput [matDatepicker]="startDatePicker" formControlName="start_date" [min]="dateNowNoTime" />
+      <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker></mat-datepicker>
+      @if (gameSessionForm.controls.start_date.hasError('required')) {
+        <mat-error> Start date is required </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="w-full min-w-60">
+      <mat-label>Start Time</mat-label>
+      <input matInput [matTimepicker]="startTimePicker" formControlName="start_date" />
+      <mat-timepicker-toggle matIconSuffix [for]="startTimePicker" />
+      <mat-timepicker #startTimePicker />
+      @if (gameSessionForm.controls.start_date.hasError('required')) {
+        <mat-error> Start time is required </mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <div class="flex w-full flex-col gap-4 sm:flex-row">
+    <mat-form-field class="w-full min-w-60">
+      <mat-label>End Date</mat-label>
+      <input matInput [matDatepicker]="endDatePicker" formControlName="end_date" [min]="dateNowNoTime" />
+      <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #endDatePicker></mat-datepicker>
+      @if (gameSessionForm.controls.end_date.hasError('required')) {
+        <mat-error> End date is required </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="w-full min-w-60">
+      <mat-label>End Time</mat-label>
+      <input matInput [matTimepicker]="endTimePicker" formControlName="end_date" />
+      <mat-timepicker-toggle matIconSuffix [for]="endTimePicker" />
+      <mat-timepicker #endTimePicker />
+      @if (gameSessionForm.controls.end_date.hasError('required')) {
+        <mat-error> End time is required </mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <mat-form-field>
+    <mat-label>Max Players</mat-label>
+    <input matInput type="number" formControlName="max_players" />
+    @if (gameSessionForm.controls.max_players.hasError('required')) {
+      <mat-error> Max players is required </mat-error>
+    }
+    @if (gameSessionForm.controls.max_players.hasError('min')) {
+      <mat-error> Min {{ gameSessionForm.controls.max_players.getError('min').min }} player(s) </mat-error>
+    }
+    @if (gameSessionForm.controls.max_players.hasError('max')) {
+      <mat-error> Min {{ gameSessionForm.controls.max_players.getError('max').max }} players </mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Image URL</mat-label>
+    <input matInput formControlName="image_url" type="text" />
+  </mat-form-field>
+
+  @if (gameSessionForm.controls.image_url.value) {
+    <mat-form-field>
+      <mat-label>Image URL Description</mat-label>
+      <textarea
+        matInput
+        formControlName="image_url_description"
+        type="text"
+        [required]="!!gameSessionForm.controls.image_url.value"
+      ></textarea>
+      <mat-icon
+        matIconSuffix
+        [matTooltip]="
+          'If you add an Image URL then this will be used to describe that image.' +
+          ' This is for accessability purposes.'
+        "
+        >info</mat-icon
+      >
+      <span matSuffix class="px-2"
+        >{{ gameSessionForm.controls.image_url_description.value?.length || 0 }}/{{
+          gameSessionFormValidation.image_url_description.max
+        }}</span
+      >
+      @if (gameSessionForm.controls.image_url_description.hasError('required')) {
+        <mat-error><span>Image URL Description is required</span></mat-error>
+      }
+      @if (gameSessionForm.controls.image_url_description.hasError('minlength')) {
+        <mat-error>
+          Min
+          {{ gameSessionForm.controls.image_url_description.getError('minlength').requiredLength }}
+          characters</mat-error
+        >
+      }
+      @if (gameSessionForm.controls.image_url_description.hasError('maxlength')) {
+        <mat-error>
+          Max
+          {{ gameSessionForm.controls.image_url_description.getError('maxlength').requiredLength }}
+          characters</mat-error
+        >
+      }
+    </mat-form-field>
+  }
+
+  <mat-checkbox formControlName="is_public">Is Public?</mat-checkbox>
+
+  @if (!hideSubmitButton()) {
+    <button mat-raised-button type="submit">Submit</button>
+  }
+</form>

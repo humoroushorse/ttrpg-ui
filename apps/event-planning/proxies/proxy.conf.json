@@ -1,0 +1,11 @@
+{
+  "/ttrpg-event-planning-api": {
+    "target": "http://localhost:8002",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/ttrpg-event-planning-api": ""
+    }
+  }
+}

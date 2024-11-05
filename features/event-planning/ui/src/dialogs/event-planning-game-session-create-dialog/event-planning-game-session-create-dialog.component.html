@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Create Game Session</h2>
+<mat-dialog-content class="mat-typography">
+  <div class="pt-1">
+    <lib-event-planning-game-session-create-form #createForm [hideSubmitButton]="true" />
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" mat-dialog-close>Cancel</button>
+  <button mat-button type="button" (click)="createForm.reset()">Reset</button>
+  <button mat-button type="submit" cdkFocusInitial (click)="onSubmit()">Submit</button>
+</mat-dialog-actions>

@@ -1,0 +1,8 @@
+@if (user(); as user) {
+  <mat-chip disableRipple="true">
+    @if (user.profile_picture_url) {
+      <img matChipAvatar [src]="user.profile_picture_url" alt="Photo of {{ user.username }}" />
+    }
+    <strong>{{ user.username }}</strong>
+  </mat-chip>
+}

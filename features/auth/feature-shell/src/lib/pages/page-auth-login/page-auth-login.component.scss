@@ -1,0 +1,8 @@
+.component-gradient {
+  background: linear-gradient(
+    to right,
+    var(--primary-color),
+    hsl(calc(210 + 50), /* Rotate hue by x degrees */ 100%, /* Keep saturation */ 50% /* Keep lightness */)
+  ) !important;
+  color: var(--primary-on-container) !important;
+}

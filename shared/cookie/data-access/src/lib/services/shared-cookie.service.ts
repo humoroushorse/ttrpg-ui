@@ -1,3 +1,4 @@
+import { PlatformLocation } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
 import { CookieOptions, CookieService } from 'ngx-cookie-service';
 
@@ -7,7 +8,11 @@ import { CookieOptions, CookieService } from 'ngx-cookie-service';
 export class SharedCookieService {
   private cookieService = inject(CookieService);
 
+  readonly platformLocation = inject(PlatformLocation);
+
   set<T>(key: string, value: T, options: CookieOptions = {}): void {
+    if (!options.path) options.path = this.platformLocation.getBaseHrefFromDOM();
+    // if (!options.domain) options.domain = location.origin;
     this.cookieService.set(
       key,
       JSON.stringify(value),
@@ -26,7 +31,18 @@ export class SharedCookieService {
     return JSON.parse(cookieValue);
   }
 
-  delete(key: string): void {
-    this.cookieService.delete(key);
+  delete(
+    key: string,
+    path = this.platformLocation.getBaseHrefFromDOM(),
+    domain: string | undefined = undefined,
+    // domain=location.origin,
+    secure = false,
+    sameSite = undefined,
+  ): void {
+    this.cookieService.delete(key, path, domain, secure, sameSite);
+  }
+
+  deleteAll(): void {
+    this.cookieService.deleteAll();
   }
 }

@@ -1,5 +1,5 @@
 export default {
-  displayName: 'features-game-event-feature-shell',
+  displayName: 'features-game-session-feature-shell',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../../coverage/features/event-planning/feature-shell',

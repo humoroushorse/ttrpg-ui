@@ -34,7 +34,6 @@ export class SharedDownloadService {
   }
 
   private convertToCsv<T>(data: T[], headers: string[], indexColumn?: string): string {
-    console.log(data, headers, indexColumn);
     const array = typeof data !== 'object' ? JSON.parse(data) : data;
     let fileContents = '';
     const row = `${indexColumn ? indexColumn + ',' : ''}${headers.join(',')}`;

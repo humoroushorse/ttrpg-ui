@@ -12,7 +12,9 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+# RUN npm install
+# TODO: change install methodology when off of angular rc tags
+RUN npm install --legacy-peer-deps
 
 COPY . .
 

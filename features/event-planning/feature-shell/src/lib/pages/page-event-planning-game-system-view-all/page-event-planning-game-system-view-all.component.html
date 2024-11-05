@@ -1,0 +1,53 @@
+<div class="flex flex-row items-center">
+  <h1>Game Systems</h1>
+  <div class="grow"><!-- spacer --></div>
+  <div>
+    <button
+      mat-icon-button
+      matTooltip="Card View"
+      [ngClass]="{ 'primary-color': currentView() === 'card' }"
+      (click)="currentView.set('card')"
+    >
+      <mat-icon>view_module</mat-icon>
+    </button>
+  </div>
+  <div>
+    <button
+      mat-icon-button
+      matTooltip="Table View"
+      [ngClass]="{ 'primary-color': currentView() === 'table' }"
+      (click)="currentView.set('table')"
+    >
+      <mat-icon>view_list</mat-icon>
+    </button>
+  </div>
+</div>
+
+<section class="flex flex-col gap-4">
+  <div class="flex flex-row">
+    <div class="grow"><!-- spacer --></div>
+    @if (authService.getUserTokenDecoded()()) {
+      <button mat-raised-button type="button" (click)="openCreateGameSessionDialog()">Add New</button>
+    } @else {
+      <div matTooltip="Log in to add a new Game System">
+        <button mat-raised-button type="button" disabled>Add New</button>
+      </div>
+    }
+  </div>
+
+  @if (currentView() === 'table') {
+    <mat-card>
+      <lib-shared-table
+        [tableHeader]="'Game Systems'"
+        [columnDefs]="columnDefs"
+        [data]="gameEventStore.entities() || []"
+        [loading]="gameEventStore.loading()"
+        (columnDefsChange)="onColumnDefsChange($event)"
+        (resetColumnDefsClicked)="onResetColumnDefsClicked()"
+      >
+      </lib-shared-table>
+    </mat-card>
+  } @else {
+    TODO: CARD LIST
+  }
+</section>

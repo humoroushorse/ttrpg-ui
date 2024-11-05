@@ -1,0 +1,37 @@
+<form [formGroup]="gameSystemForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" type="text" />
+    @if (gameSystemForm.controls.name.hasError('required')) {
+      <mat-error> Name is required </mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Version</mat-label>
+    <input matInput formControlName="version" type="text" />
+    @if (gameSystemForm.controls.version.hasError('required')) {
+      <mat-error> Version is required </mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Release Year</mat-label>
+    <input matInput formControlName="release_year" type="number" />
+    @if (gameSystemForm.controls.release_year.hasError('required')) {
+      <mat-error> Release year is required </mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description" type="text"></textarea>
+    @if (gameSystemForm.controls.description.hasError('required')) {
+      <mat-error> Description is required </mat-error>
+    }
+  </mat-form-field>
+
+  @if (!hideSubmitButton()) {
+    <button mat-raised-button type="submit">Submit</button>
+  }
+</form>

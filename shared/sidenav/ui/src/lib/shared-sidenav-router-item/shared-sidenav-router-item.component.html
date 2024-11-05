@@ -1,0 +1,61 @@
+@if (routerItem(); as routerItem) {
+  @if (routerItem.path) {
+    <a
+      mat-list-item
+      [routerLink]="routerItem.path"
+      [routerLinkActiveOptions]="{ exact: true }"
+      routerLinkActive="component-link-active"
+      matTooltip="{{ routerItem.requiresLogin && !isLoggedIn() ? 'You must log in first to view this route!' : '' }}"
+    >
+      <div class="flex flex-row items-center gap-2">
+        @if (routerItem.requiresLogin && !isLoggedIn()) {
+          <mat-icon>lock</mat-icon>
+        }
+        @if (!routerItem.requiresLogin && routerItem.icon) {
+          <mat-icon>{{ routerItem.icon }}</mat-icon>
+        }
+        <span>{{ routerItem.viewValue }}</span>
+      </div>
+    </a>
+  } @else {
+    <mat-expansion-panel
+      [expanded]="showChildren"
+      class="mat-elevation-z0"
+      [ngClass]="{ 'component-link-active-color': isChildActive(routerItem.children || []) }"
+    >
+      <mat-expansion-panel-header>
+        <div>
+          @if (routerItem.icon) {
+            <mat-icon>{{ routerItem.icon }}</mat-icon>
+          }
+          <span>{{ routerItem.viewValue }}</span>
+        </div>
+      </mat-expansion-panel-header>
+      @if (routerItem.children) {
+        <mat-nav-list attr.aria-label="Navigation for {{ routerItem.viewValue }}">
+          @for (childRouterItem of routerItem.children; track childRouterItem.viewValue) {
+            <lib-shared-sidenav-router-item [routerItem]="childRouterItem" />
+          }
+        </mat-nav-list>
+      }
+    </mat-expansion-panel>
+
+    <!-- <div mat-list-item class="flex flex-row items-center gap-4">
+      <span>{{routerItem.viewValue}}</span>
+      <span class="grow"></span>
+      <button
+        mat-icon-button
+        type="button"
+        [matTooltip]="(showChildren ? 'hide' : 'show') + ' child routes'"
+        (click)="showChildren = !showChildren"
+      >
+        <mat-icon>{{showChildren ? 'expand_less' : 'expand_more'}}</mat-icon>
+      </button>
+    </div>
+    @if (showChildren) {
+      @for(childRouterItem of (routerItem?.children || []); track childRouterItem.viewValue) {
+        <lib-shared-sidenav-router-item [routerItem]="childRouterItem"/>
+      }
+    } -->
+  }
+}

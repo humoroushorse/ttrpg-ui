@@ -1,0 +1,74 @@
+<mat-select
+  #matSelect
+  class="component-container"
+  [formControl]="asFormControl(ngControl.control)"
+  [compareWith]="compareWithFn()"
+  [placeholder]="placeholder"
+  (openedChange)="onOpenedChange($event)"
+  (selectionChange)="selectionChange.emit($event)"
+  attr.data-testid="{{ dataTestId() }} + 'MatSelect'"
+>
+  <section class="component-search-container">
+    <mat-form-field class="w-full" subscriptSizing="dynamic">
+      <mat-label>Search {{ multiInstanceTerm() }} [{{ options().length }}]</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        #searchInput
+        matInput
+        type="text"
+        (focus)="isSearchFocused = true"
+        (blur)="isSearchFocused = false"
+        placeholder=""
+        [value]="searchInputValue()"
+        (input)="searchInputValue.set($any($event.target).value || '')"
+        attr.data-testid="{{ dataTestId() }} + 'InputSearch'"
+      />
+      @if (searchInputValue()) {
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          matTooltip="Clear {{ multiInstanceTerm() }} Search"
+          attr.aria-label="Clear {{ multiInstanceTerm() }} Search"
+          (click)="searchInputValue.set('')"
+          attr.data-testid="{{ dataTestId() }} + 'InputSearchClear'"
+        >
+          <mat-icon>clear</mat-icon>
+        </button>
+      }
+      <mat-hint>{{ searchHint() || 'Type to filter ' + multiInstanceTerm() }}</mat-hint>
+    </mat-form-field>
+  </section>
+
+  <mat-divider></mat-divider>
+
+  @if (loading()) {
+    <mat-progress-bar></mat-progress-bar>
+  }
+
+  <!-- @if(error(); as error) {
+    <mat-option class="flex flex-row items-center gap-1 py-4 px-6 error-color" disabled>
+      <mat-icon>error_outline</mat-icon>
+      <span>{{error}}</span>
+    </mat-option>
+  } -->
+
+  @if (noneOptionText(); as noneOptionText) {
+    <mat-option>{{ noneOptionText }}</mat-option>
+  }
+
+  @for (option of optionsFiltered(); track getTrackFn(i, option); let i = $index) {
+    <mat-option
+      [value]="getValueFn(option)"
+      [disabled]="isOptionDisabledFn()(option)"
+      attr.data-testid="{{ dataTestId() }} + 'MatOption' + {{ i }}"
+    >
+      {{ getViewValueFn(option) }}
+    </mat-option>
+  } @empty {
+    <mat-option class="flex flex-row items-center gap-1 px-6 py-4" disabled>
+      <mat-icon>error_outline</mat-icon>
+      <span>No {{ multiInstanceTerm() }} found for: '{{ searchInputValue() }}'</span>
+    </mat-option>
+  }
+</mat-select>

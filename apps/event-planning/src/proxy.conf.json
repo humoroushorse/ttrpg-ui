@@ -1,9 +1,0 @@
-{
-  "/ttrpg-event-planning-api": {
-    "target": "http://localhost:8002",
-    "secure": false,
-    "pathRewrite": {
-      "^/ttrpg-event-planning-api": ""
-    }
-  }
-}

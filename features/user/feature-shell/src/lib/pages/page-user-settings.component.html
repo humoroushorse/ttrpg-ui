@@ -1,0 +1,43 @@
+<div class="flex flex-col">
+  <h1>User Settings</h1>
+
+  <h2>User Token</h2>
+
+  <section class="flex flex-col gap-4">
+    @if (userTokenTimeRemaining$ | async; as tokenTimeSeconds) {
+      <div class="flex flex-row items-center gap-4">
+        <div>
+          Auth Token Time Remaining: {{ tokenTimeSeconds.auth }} seconds ({{
+            tokenTimeSeconds.auth / 60 | number: '1.0-1'
+          }}
+          minutes)
+        </div>
+        <mat-icon
+          matTooltip="Token will refresh when there are {{ refreshTokenAtSecondsRemaining }} seconds remaining ({{
+            refreshTokenAtSecondsRemaining / 60 | number: '1.0-1'
+          }} minutes)"
+          >info</mat-icon
+        >
+      </div>
+      <div class="flex flex-row items-center gap-4">
+        <div>
+          Refresh Token Time Remaining: {{ tokenTimeSeconds.refresh }} seconds ({{
+            tokenTimeSeconds.refresh / 60 | number: '1.0-1'
+          }}
+          minutes)
+        </div>
+      </div>
+    }
+    <pre><code>{{userTokenDecoded() | json}}</code></pre>
+  </section>
+
+  <h2>Theme</h2>
+  <lib-shared-theme-picker></lib-shared-theme-picker>
+
+  <h2>Delete Account</h2>
+  <div>
+    <button mat-raised-button type="button" class="error-color" (click)="deleteAccount()">
+      <mat-icon>delete_forever</mat-icon>Delete Account
+    </button>
+  </div>
+</div>

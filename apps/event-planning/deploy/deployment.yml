@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ttrpg-event-planning-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ttrpg-event-planning-ui
+  template:
+    metadata:
+      labels:
+        app: ttrpg-event-planning-ui
+    spec:
+      containers:
+        - name: ttrpg-event-planning-ui
+          image: ttrpg-event-planning-ui:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          env:
+            - name: APP_TTRPG_EVENT_PLANNING__API_BASE_PATH
+              value: '/ttrpg-event-planning-api'
+            - name: APP_TTRPG_EVENT_PLANNING__API_URL
+              value: 'http://host.docker.internal:8002'
+            - name: NGINX_PORT
+              value: '80'

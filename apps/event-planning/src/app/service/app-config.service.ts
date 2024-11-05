@@ -1,4 +1,4 @@
-import { Injectable, isDevMode, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { AppConfig } from '../models/models';
 import { HttpClient } from '@angular/common/http';
 import { LocationStrategy } from '@angular/common';
@@ -11,22 +11,18 @@ export class AppConfigService {
   public initialized = signal<boolean>(false);
   public appConfig = signal<Partial<AppConfig>>({});
 
-  initializerFactory(httpClient: HttpClient, locationStrategy: LocationStrategy) {
+  initializerFactory(httpClient: HttpClient, locationStrategy: LocationStrategy): Promise<Partial<AppConfig>> {
     let baseUrl = `${window.location.origin}${locationStrategy.getBaseHref()}`.trim();
     if (!baseUrl.endsWith('/')) baseUrl = baseUrl + '/';
     const assetsUrl = 'assets/app.config.json';
 
-    return (): Promise<Partial<AppConfig>> =>
-      firstValueFrom(
-        httpClient.get<Partial<AppConfig>>(`${baseUrl}${assetsUrl}`).pipe(
-          tap((config) => {
-            if (isDevMode()) console.log('AppConfigService.init::', config);
-          }),
-          tap((config) => {
-            this.appConfig.set(config);
-            this.initialized.set(true);
-          }),
-        ),
-      );
+    return firstValueFrom(
+      httpClient.get<Partial<AppConfig>>(`${baseUrl}${assetsUrl}`).pipe(
+        tap((config) => {
+          this.appConfig.set(config);
+          this.initialized.set(true);
+        }),
+      ),
+    );
   }
 }
