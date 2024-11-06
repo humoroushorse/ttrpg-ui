@@ -1,4 +1,4 @@
-import { SelectEntityId } from '@ngrx/signals/entities';
+import { EntityId, SelectEntityId } from '@ngrx/signals/entities';
 import { GameSystemSchema } from './game-system.model';
 import { BookkeepingSchema, UserSchema } from './model';
 import { JtUserGameSessionSchema } from './jt-user-game-session.model';
@@ -26,6 +26,8 @@ export interface GameSessionSchema extends BookkeepingSchema {
 }
 
 export const selectGameSessionId: SelectEntityId<GameSessionSchema> = (gs) => gs.id;
+
+export const selectGameSessionIdKey: EntityId = "id" as keyof GameSessionSchema;
 
 export interface GameSessionPostInput {
   game_master_id: string;

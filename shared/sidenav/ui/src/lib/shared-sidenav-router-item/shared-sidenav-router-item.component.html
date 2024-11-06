@@ -6,6 +6,7 @@
       [routerLinkActiveOptions]="{ exact: true }"
       routerLinkActive="component-link-active"
       matTooltip="{{ routerItem.requiresLogin && !isLoggedIn() ? 'You must log in first to view this route!' : '' }}"
+      matTooltipPosition="right"
     >
       <div class="flex flex-row items-center gap-2">
         @if (routerItem.requiresLogin && !isLoggedIn()) {
@@ -39,23 +40,5 @@
         </mat-nav-list>
       }
     </mat-expansion-panel>
-
-    <!-- <div mat-list-item class="flex flex-row items-center gap-4">
-      <span>{{routerItem.viewValue}}</span>
-      <span class="grow"></span>
-      <button
-        mat-icon-button
-        type="button"
-        [matTooltip]="(showChildren ? 'hide' : 'show') + ' child routes'"
-        (click)="showChildren = !showChildren"
-      >
-        <mat-icon>{{showChildren ? 'expand_less' : 'expand_more'}}</mat-icon>
-      </button>
-    </div>
-    @if (showChildren) {
-      @for(childRouterItem of (routerItem?.children || []); track childRouterItem.viewValue) {
-        <lib-shared-sidenav-router-item [routerItem]="childRouterItem"/>
-      }
-    } -->
   }
 }

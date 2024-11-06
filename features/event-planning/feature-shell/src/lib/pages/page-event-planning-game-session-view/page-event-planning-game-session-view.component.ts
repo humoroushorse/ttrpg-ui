@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameSessionCardComponent } from '@ttrpg-ui/features/event-planning/ui';
 import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 import { ActivatedRoute } from '@angular/router';
-import { EventPlanningApiService } from '@ttrpg-ui/features/event-planning/data-access';
-import { map, Observable, of, switchMap } from 'rxjs';
+import { EventPlanningApiService, EventPlanningGameSessionStore, EventPlanningGameSystemStore } from '@ttrpg-ui/features/event-planning/data-access';
+import { map, Observable, of, switchMap, tap } from 'rxjs';
 import { Meta, Title } from '@angular/platform-browser';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'lib-page-event-planning-game-session-view',
@@ -19,7 +20,7 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 export class PageEventPlanningGameSessionViewComponent implements OnInit {
   readonly route = inject(ActivatedRoute);
 
-  readonly eventPlanningApiService = inject(EventPlanningApiService);
+  readonly eventPlanningGameSessionStore = inject(EventPlanningGameSessionStore);
 
   readonly meta = inject(Meta);
 
@@ -32,12 +33,22 @@ export class PageEventPlanningGameSessionViewComponent implements OnInit {
     this.meta.updateTag({ name: 'description', content: 'View a single game event.' });
   }
 
-  routeId$: Observable<string | null> = this.route.params.pipe(map((params) => params['id'] || null));
-
-  entity$: Observable<EventPlanningModels.GameSession.GameSessionSchema | null> = this.routeId$.pipe(
-    switchMap(() => {
-      // return this.eventPlanningApiService.getGameSessionById(id);
-      return of(null);
-    }),
+  routeId$: Observable<string | null> = this.route.params.pipe(
+    map((params) => params['id'] || null),
+    tap((id: string | null) => {
+      this.eventPlanningGameSessionStore.get(id)
+    })
   );
+
+  routeId = toSignal<string | null>(this.routeId$, { initialValue: null });
+
+  entity = computed(() => {
+    const selectedEntity = this.eventPlanningGameSessionStore.selected();
+    if (selectedEntity?.id === this.routeId()) {
+      return selectedEntity
+    }
+    return null;
+  })
+
+  loading = this.eventPlanningGameSessionStore.loading;
 }

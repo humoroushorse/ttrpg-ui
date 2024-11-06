@@ -7,6 +7,7 @@
       matTooltip="Card View"
       [ngClass]="{ 'primary-color': currentView() === 'card' }"
       (click)="currentView.set('card')"
+      aria-label="Card list view"
     >
       <mat-icon>view_module</mat-icon>
     </button>
@@ -17,6 +18,7 @@
       matTooltip="Table View"
       [ngClass]="{ 'primary-color': currentView() === 'table' }"
       (click)="currentView.set('table')"
+      aria-label="Table view"
     >
       <mat-icon>view_list</mat-icon>
     </button>

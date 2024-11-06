@@ -46,7 +46,7 @@
             matSuffix
             type="button"
             (click)="hidePassword = !hidePassword"
-            aria-label="Toggle password visibility"
+            attr.aria-label="{{ hidePassword ? 'Show password' : 'Hide password' }}"
             matTooltip="{{ hidePassword ? 'Show password' : 'Hide password' }}"
           >
             <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
@@ -64,7 +64,7 @@
             matSuffix
             type="button"
             (click)="hidePasswordVerify = !hidePasswordVerify"
-            aria-label="Toggle password visibility"
+            attr.aria-label="{{ hidePassword ? 'Show password' : 'Hide password' }}"
             matTooltip="{{ hidePasswordVerify ? 'Show password' : 'Hide password' }}"
           >
             <mat-icon>{{ hidePasswordVerify ? 'visibility_off' : 'visibility' }}</mat-icon>
