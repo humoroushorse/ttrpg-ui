@@ -14,7 +14,7 @@ type StoreSchema = EventPlanningModels.GameSession.GameSessionSchema;
 export type StoreState = SharedModels.Store.BaseState<StoreSchema>;
 
 const getErrorMessage = (error: HttpErrorResponse): string => {
-  let errorMessage: any | string = error.error ? error.error : error.message;
+  let errorMessage = error.error ? error.error : error.message;
   if (typeof errorMessage !== 'string') {
     errorMessage = errorMessage.detail ? errorMessage.detail : JSON.stringify(errorMessage);
   }
@@ -28,6 +28,7 @@ export const EventPlanningGameSessionStore = signalStore(
   withState<StoreState>(SharedModels.Store.getBaseStateDefault<StoreSchema>()),
   withState({
     entitySelectId: EventPlanningModels.GameSession.selectGameSessionId,
+    selectGameSessionIdKey: EventPlanningModels.GameSession.selectGameSessionIdKey,
     entityNameSingle: 'game event',
     entityNamePlural: 'game events',
   }),
@@ -50,7 +51,36 @@ export const EventPlanningGameSessionStore = signalStore(
             patchState(
               store,
               SharedModels.Store.setError(
-                error.error ? error.error : error.message,
+                getErrorMessage(error),
+                `Error fetching ${store.entityNamePlural()}`,
+              ),
+            );
+          })
+          .finally(() => {
+            patchState(store, SharedModels.Store.setLoaded(true), SharedModels.Store.setLoading(false));
+          });
+      },
+      async get(id: string | null): Promise<void> {
+        if (!id) {
+          // patchState(store, SharedModels.Store.setSelectedEntity(null, store.selectGameSessionIdKey()));
+          return;
+        }
+        patchState(store, SharedModels.Store.setLoading(true), SharedModels.Store.setError(null, null));
+        await firstValueFrom(storeService.get(id))
+          .then((next) => {
+            if (next) {
+              patchState(
+                store,
+                updateEntity({ id, changes: next }),
+                SharedModels.Store.setSelectedEntity(next, store.selectGameSessionIdKey())
+              );
+            }
+          })
+          .catch((error: HttpErrorResponse) => {
+            patchState(
+              store,
+              SharedModels.Store.setError(
+                getErrorMessage(error),
                 `Error fetching ${store.entityNamePlural()}`,
               ),
             );
@@ -76,7 +106,7 @@ export const EventPlanningGameSessionStore = signalStore(
             patchState(
               store,
               SharedModels.Store.setError(
-                error.error ? error.error : error.message,
+                getErrorMessage(error),
                 `Error creating ${store.entityNamePlural()}`,
               ),
             );
@@ -97,7 +127,7 @@ export const EventPlanningGameSessionStore = signalStore(
             patchState(
               store,
               SharedModels.Store.setError(
-                error.error ? error.error : error.message,
+                getErrorMessage(error),
                 `Error creating ${store.entityNamePlural()}`,
               ),
             );
@@ -139,7 +169,7 @@ export const EventPlanningGameSessionStore = signalStore(
             patchState(
               store,
               SharedModels.Store.setError(
-                error.error ? error.error : error.message,
+                getErrorMessage(error),
                 `Error joining ${store.entityNamePlural()}`,
               ),
             );

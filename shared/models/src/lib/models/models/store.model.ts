@@ -18,8 +18,8 @@ export function setError(
   return { error, errorSummary };
 }
 
-export function setSelectedEntity<T>(entity: T | null, idKey = 'id'): { selectedId: string | number } {
-  return { selectedId: entity ? (entity as any)[idKey] : null };
+export function setSelectedEntity<T>(entity: T | null, idKey: EntityId = 'id'): { selectedEntityId: EntityId | null } {
+  return { selectedEntityId: entity ? (entity as any)[idKey] : null };
 }
 
 export interface BaseState<T> extends EntityState<T> {

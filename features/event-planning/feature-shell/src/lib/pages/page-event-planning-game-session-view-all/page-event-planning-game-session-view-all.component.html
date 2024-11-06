@@ -7,6 +7,7 @@
       matTooltip="Card View (list)"
       [ngClass]="{ 'primary-color': currentView() === 'card:list' }"
       (click)="currentView.set('card:list')"
+      aria-label="Card list view"
     >
       <mat-icon>view_module</mat-icon>
     </button>
@@ -17,6 +18,7 @@
       matTooltip="Card View (gallery)"
       [ngClass]="{ 'primary-color': currentView() === 'card:gallery' }"
       (click)="currentView.set('card:gallery')"
+      aria-label="Card gallery view"
     >
       <mat-icon>view_module</mat-icon>
     </button>
@@ -27,6 +29,7 @@
       matTooltip="Table View"
       [ngClass]="{ 'primary-color': currentView() === 'table' }"
       (click)="currentView.set('table')"
+      aria-label="Table view"
     >
       <mat-icon>view_list</mat-icon>
     </button>

@@ -1,8 +1,12 @@
 @if (routeId$ | async; as routeId) {
-  @if (entity$ | async; as gameSession) {
-    <lib-game-session-card [entity]="gameSession" />
+  @if (loading()) {
+    Fetching, please wait...
   } @else {
-    <h1>Game Event</h1>
-    Game event with id ({{ routeId }}) not found!
+    @if (entity(); as gameSession) {
+      <lib-game-session-card [entity]="gameSession" />
+    } @else {
+      <h1>Game Session</h1>
+      Game session with id ({{ routeId }}) not found!
+    }
   }
 }
