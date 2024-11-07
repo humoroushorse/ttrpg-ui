@@ -7,8 +7,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   providedIn: 'root',
 })
 export class SharedCoreService {
-  private sidenavOpened = signal<boolean>(false);
-
   private config: SharedCoreServiceConfig = inject(SHARED_CORE_SERVICE_CONFIG_TOKEN);
 
   private pageHeight = signal<number>(window.innerHeight);
@@ -19,10 +17,17 @@ export class SharedCoreService {
     // defults of the mat-toolbar anyways (v18)
     // return this.pageWidth() < 600 ? 52 : 60;
     // change at 640px which is sm media size from tailwindcss (v3.4.13)
-    return this.pageWidth() < 640 ? 52 : 60;
+    return this.pageWidth() < 640 ? 52 : 60; // TODO: make configurable by app?
   });
 
   public appTitle = this.config.appTitle;
+
+  private sidenavOpened = signal<boolean>(false);
+
+  public sidenavMode = computed<'side' | 'over'>(() => {
+    // 768 is tailwindcss 'md' screen size
+    return this.getPageWidth()() > 768 ? 'side' : 'over'; // TODO: make configurable by app?
+  });
 
   constructor() {
     fromEvent(window, 'resize')
@@ -31,6 +36,12 @@ export class SharedCoreService {
         this.pageHeight.set(window.innerHeight);
         this.pageWidth.set(window.innerWidth);
       });
+  }
+
+  toggleSidenavIfModeOver(): void {
+    if (this.sidenavMode() === 'over') {
+      this.toggleSidenav(false);
+    }
   }
 
   getToolbarHeight(): Signal<number> {

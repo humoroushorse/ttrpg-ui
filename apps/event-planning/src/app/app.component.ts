@@ -48,10 +48,7 @@ export class AppComponent {
 
   public sidenavOpened$ = this.sharedCoreService.getSidenavOpened();
 
-  sidenavMode = computed<'side' | 'over'>(() => {
-    // 768 is tailwindcss 'md' screen size
-    return this.sharedCoreService.getPageWidth()() > 768 ? 'side' : 'over';
-  });
+  sidenavMode = this.sharedCoreService.sidenavMode;
 
   public toggleSidenav(opened?: boolean) {
     this.sharedCoreService.toggleSidenav(opened);
