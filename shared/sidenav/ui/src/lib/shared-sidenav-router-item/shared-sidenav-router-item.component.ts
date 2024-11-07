@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AuthService } from '@ttrpg-ui/features/auth/data-access';
+import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 
 export interface SharedSidenavRouterItem {
   viewValue: string;
@@ -37,6 +38,8 @@ export class SharedSidenavRouterItemComponent {
 
   readonly authService = inject(AuthService);
 
+  readonly sharedCoreService = inject(SharedCoreService);
+
   isLoggedIn = computed(() => !!this.authService.getUserTokenDecoded()());
 
   public routerItem = input<SharedSidenavRouterItem>();
@@ -48,5 +51,9 @@ export class SharedSidenavRouterItemComponent {
       if (child.path && this.router.url.includes(child.path?.join('/') || '')) return true;
       return child.children ? this.isChildActive(child.children) : false;
     });
+  }
+
+  toggleSidenavIfModeOver() {
+    this.sharedCoreService.toggleSidenavIfModeOver();
   }
 }

@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameSessionCardComponent } from '@ttrpg-ui/features/event-planning/ui';
-import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 import { ActivatedRoute } from '@angular/router';
-import { EventPlanningApiService, EventPlanningGameSessionStore, EventPlanningGameSystemStore } from '@ttrpg-ui/features/event-planning/data-access';
-import { map, Observable, of, switchMap, tap } from 'rxjs';
+import { EventPlanningGameSessionStore } from '@ttrpg-ui/features/event-planning/data-access';
+import { map, Observable, tap } from 'rxjs';
 import { Meta, Title } from '@angular/platform-browser';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -36,8 +35,8 @@ export class PageEventPlanningGameSessionViewComponent implements OnInit {
   routeId$: Observable<string | null> = this.route.params.pipe(
     map((params) => params['id'] || null),
     tap((id: string | null) => {
-      this.eventPlanningGameSessionStore.get(id)
-    })
+      this.eventPlanningGameSessionStore.get(id);
+    }),
   );
 
   routeId = toSignal<string | null>(this.routeId$, { initialValue: null });
@@ -45,10 +44,10 @@ export class PageEventPlanningGameSessionViewComponent implements OnInit {
   entity = computed(() => {
     const selectedEntity = this.eventPlanningGameSessionStore.selected();
     if (selectedEntity?.id === this.routeId()) {
-      return selectedEntity
+      return selectedEntity;
     }
     return null;
-  })
+  });
 
   loading = this.eventPlanningGameSessionStore.loading;
 }

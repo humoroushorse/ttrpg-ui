@@ -23,6 +23,6 @@ spec:
               value: '/ttrpg-event-planning-api'
             - name: APP_TTRPG_EVENT_PLANNING__API_URL
               # value: 'http://host.docker.internal:8002'
-              value: 'http://127.0.0.1:8002'
+              value: 'http://ttrpg-api-event-planning:8002'
             - name: NGINX_PORT
               value: '80'

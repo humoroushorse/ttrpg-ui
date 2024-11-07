@@ -16,6 +16,7 @@ k3s-load-image:
 k8s-deploy:
 	kubectl apply -f ./apps/event-planning/deploy/deployment.yml
 	kubectl apply -f ./apps/event-planning/deploy/service.yml
+  # kubectl apply -f ./apps/event-planning/deploy/ingress.yml
 
 k8s-delete:
 	kubectl delete pod -l app=ttrpg-event-planning-ui
