@@ -10,6 +10,13 @@
           }
         "
       ></ng-container>
+    } @empty {
+      <lib-shared-notification
+        class="sm:col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-4"
+        [title]=" 'No game systems found!' "
+        [color]=" 'primary' "
+        [icon]=" 'info_outline' "
+      ></lib-shared-notification>
     }
   </div>
 } @else {
@@ -24,7 +31,13 @@
           }
         "
       ></ng-container>
-    }
+    } @empty {
+      <lib-shared-notification
+        [title]=" 'No game systems found!' "
+        [color]=" 'primary' "
+        [icon]=" 'info_outline' "
+      ></lib-shared-notification>
+      }
   </div>
 }
 

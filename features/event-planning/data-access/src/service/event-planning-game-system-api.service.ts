@@ -1,14 +1,12 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable, resource, signal } from '@angular/core';
 import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
-import { map, Observable, tap } from 'rxjs';
-import { SharedNotificationService } from '@ttrpg-ui/shared/notification/data-access';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventPlanningGameSystemApiService {
-  readonly sharedNotificationService = inject(SharedNotificationService);
 
   readonly serviceConfig: EventPlanningModels.Service.EventPlanningApiServiceConfig = inject(
     EventPlanningModels.Service.EVENT_PLANNING_API_SERVICE_CONFIG_TOKEN,
@@ -52,6 +50,18 @@ export class EventPlanningGameSystemApiService {
       .pipe(map((r) => r.body));
   }
 
+  get(id: string): Observable<EventPlanningModels.GameSystem.GameSystemSchema | null> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http
+      .get<EventPlanningModels.GameSystem.GameSystemSchema>(`${this.baseUrl}/game-system/${id}`, {
+        headers,
+        observe: 'response',
+      })
+      .pipe(map((r) => r.body));
+  }
+
   post(
     options: EventPlanningModels.GameSystem.GameSystemPostInput,
   ): Observable<EventPlanningModels.GameSystem.GameSystemSchema | null> {
@@ -65,9 +75,6 @@ export class EventPlanningGameSystemApiService {
       })
       .pipe(
         map((r) => r.body),
-        tap((r) => {
-          this.sharedNotificationService.openSnackBar(`Created game system '${r?.name}'`);
-        }),
       );
   }
 
@@ -82,9 +89,6 @@ export class EventPlanningGameSystemApiService {
       })
       .pipe(
         map((r) => r.body),
-        tap((r) => {
-          if (r) this.sharedNotificationService.openSnackBar(`Deleted game system '${entity.name}'`);
-        }),
       );
   }
 }

@@ -2,8 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SharedTableComponent } from './shared-table.component';
 
 describe('SharedTableComponent', () => {
-  let component: SharedTableComponent;
-  let fixture: ComponentFixture<SharedTableComponent>;
+  let component: SharedTableComponent<any>;
+  let fixture: ComponentFixture<SharedTableComponent<any>>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

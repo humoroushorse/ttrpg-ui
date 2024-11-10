@@ -1,0 +1,39 @@
+<section
+  [ngClass]="{
+    'primary-border': color() === 'primary',
+    'error-border': color() === 'error',
+    'no-border': color() === undefined,
+  }"
+  class="flex flex-row rounded-s border-2 border-solid"
+>
+  @if(icon(); as icon) {
+    <div
+      [ngClass]="{
+        'primary-background': color() === 'primary',
+        'error-background': color() === 'error',
+      }"
+      class="p-2 min-h-6"
+    >
+      <mat-icon class="min-w-6 h-6">{{icon}}</mat-icon>
+    </div>
+  }
+
+  <div class="flex flex-col gap-2 p-2">
+    @if(title(); as title) {
+      <div class="flex items-center h-full min-h-6">
+        <strong class="leading-1">{{title}}</strong>
+      </div>
+    }
+    @if(description(); as description) {
+      <div>{{description}}</div>
+    }
+    @if(descriptionHtml(); as descriptionHtml) {
+      <div [innerHTML]="descriptionHtml"></div>
+    }
+    @if(descriptionJson(); as descriptionJson) {
+      <pre class="whitespace-pre-wrap"><code>{{descriptionJson | json}}</code></pre>
+    }
+  </div>
+
+</section>
+

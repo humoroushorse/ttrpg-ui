@@ -92,6 +92,7 @@ export class PageEventPlanningGameSessionViewAllComponent implements OnInit {
         return {
           users: value.jt_user_game_session?.map((v) => v.user) || [],
           emptyListText: 'No users in this session yet!',
+          userCap: 4,
         };
       },
       component: UserAvatarListComponent,
@@ -108,7 +109,8 @@ export class PageEventPlanningGameSessionViewAllComponent implements OnInit {
       headerName: 'Actions',
       cellDataType: 'component',
       component: EventPlanningGameSessionTableActionsComponent,
-      sortable: true,
+      sortable: false,
+      appHideColumnSettingsMenu: true,
       pinned: 'right',
     },
   ];

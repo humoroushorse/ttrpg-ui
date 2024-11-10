@@ -1,7 +1,17 @@
-<mat-chip-set aria-label="User list">
-  @for (user of users() || []; track user.username) {
+<div class="flex -space-x-4 rtl:space-x-reverse">
+  @for(user of usersTruncated() || []; track user.username) {
     <lib-user-avatar [user]="user"></lib-user-avatar>
-  } @empty {
-    {{ emptyListText() }}
   }
-</mat-chip-set>
+
+  @if ((users()?.length || 0) > usersTruncated().length) {
+    <!-- <a class="flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800" href="#">
+      +{{usersTruncated().length - (users()?.length || 0)}}
+    </a> -->
+    <div class="flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800"
+      [matTooltip]="usersTruncatedTooltip()"
+    >
+      +{{(users()?.length || 0) - usersTruncated().length}}
+    </div>
+  }
+</div>
+

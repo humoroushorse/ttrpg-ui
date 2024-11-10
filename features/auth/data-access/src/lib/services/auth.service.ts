@@ -247,7 +247,7 @@ export class AuthService {
         // next: () => { this.postSessionLogin(user.userName, user.password) }
         next: (next) => {
           if (next) {
-            this.sharedNotificationService.openSnackBar('Account successfully registered!');
+            this.sharedNotificationService.openSnackBar('Account successfully registered!', 'close');
             this.router.navigate(this.authGuardAuthAppLoginRoute());
           }
         },

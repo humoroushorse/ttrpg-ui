@@ -9,6 +9,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import {
   EventPlanningGameSystemCreateDialogComponent,
   EventPlanningGameSystemTableActionsComponent,
+  GameSystemCardListComponent,
 } from '@ttrpg-ui/features/event-planning/ui';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,6 +26,7 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
   imports: [
     CommonModule,
     SharedTableComponent,
+    GameSystemCardListComponent,
     MatCardModule,
     MatDialogModule,
     MatButtonModule,
@@ -83,7 +85,8 @@ export class PageEventPlanningGameSystemViewAllComponent implements OnInit {
       headerName: 'Actions',
       cellDataType: 'component',
       component: EventPlanningGameSystemTableActionsComponent,
-      sortable: true,
+      sortable: false,
+      appHideColumnSettingsMenu: true,
       pinned: 'right',
     },
   ];
@@ -118,13 +121,17 @@ export class PageEventPlanningGameSystemViewAllComponent implements OnInit {
     this.sharedLocalStorageService.remove('PageEventPlanningGameSystemViewAllComponent.columnDefs');
   }
 
-  openCreateGameSessionDialog(): void {
+  openCreateGameSystemDialog(): void {
     this.dialog.open(EventPlanningGameSystemCreateDialogComponent, {
       data: { routeOnCreate: false },
     });
   }
 
-  onViewGameSessionClicked(event: EventPlanningModels.GameSession.GameSessionSchema) {
+  onViewGameSystemClicked(event: EventPlanningModels.GameSystem.GameSystemSchema) {
     this.router.navigate(['event-planning', 'game-system', event.id]);
+  }
+
+  onDeleteGameSystemClicked(event: EventPlanningModels.GameSystem.GameSystemSchema) {
+    this.gameEventStore.delete(event);
   }
 }

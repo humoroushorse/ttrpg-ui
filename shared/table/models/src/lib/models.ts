@@ -11,6 +11,7 @@ interface BaseColumnDef {
   pinned?: SharedTablePinned;
   hide?: boolean;
   valueGetter?(data: any): any;
+  appHideColumnSettingsMenu?: boolean;
 }
 
 interface ComponentColumnDef extends BaseColumnDef {
