@@ -1,6 +1,6 @@
 import { GameSessionSchema } from './game-session.model';
 import { BookkeepingSchema } from './model';
-import { SelectEntityId } from '@ngrx/signals/entities';
+import { EntityId, SelectEntityId } from '@ngrx/signals/entities';
 
 export interface GetListInput {
   limit?: number;
@@ -17,6 +17,8 @@ export interface GameSystemSchema extends BookkeepingSchema {
 }
 
 export const selectGameSystemId: SelectEntityId<GameSystemSchema> = (gs) => gs.id;
+
+export const selectGameSystemIdKey: EntityId = "id" as keyof GameSystemSchema;
 
 export interface GameSystemPostInput {
   name: string;

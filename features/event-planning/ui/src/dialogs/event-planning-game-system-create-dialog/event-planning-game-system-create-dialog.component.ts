@@ -33,6 +33,7 @@ export class EventPlanningGameSystemCreateDialogComponent {
       //    skip first instance
       this.eventPlanningGameSystemStore.entities();
       if (this.initialized) {
+        this.createForm.reset();
         this.dialogRef.close();
       }
       this.initialized = true;

@@ -1,0 +1,19 @@
+
+
+.primary-border {
+  border-color: var(--primary-color);
+}
+
+.primary-background {
+  background-color: var(--primary-color);
+  color: var(--primary-color-on-background);
+}
+
+.error-border {
+  border-color: var(--error-color);
+}
+
+.error-background {
+  background-color: var(--error-color);
+  color: var(--error-color-on-background);
+}

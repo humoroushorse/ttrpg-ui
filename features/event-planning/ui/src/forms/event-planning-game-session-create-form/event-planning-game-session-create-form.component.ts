@@ -138,6 +138,9 @@ export class EventPlanningGameSessionCreateFormComponent {
       max_players: 6,
       is_public: true,
     });
+    this.sharedLocalStorageService.remove(
+      'EventPlanningGameSessionCreateFormComponent.gameSessionForm',
+    );
   }
 
   constructor() {
@@ -147,7 +150,7 @@ export class EventPlanningGameSessionCreateFormComponent {
       .subscribe((v) => {
         if (v === null) {
           this.gameSessionForm.controls.start_date.setValue(this.dateNowNoTime);
-          this.sharedNotificationService.openSnackBar('No start date set, defaulted to today!');
+          this.sharedNotificationService.openSnackBar('No start date set, defaulted to today!', 'close');
         }
       });
     this.gameSessionForm.controls.end_date.valueChanges
@@ -155,7 +158,7 @@ export class EventPlanningGameSessionCreateFormComponent {
       .subscribe((v) => {
         if (v === null) {
           this.gameSessionForm.controls.end_date.setValue(this.dateNowNoTime);
-          this.sharedNotificationService.openSnackBar('No end date set, defaulted to today!');
+          this.sharedNotificationService.openSnackBar('No end date set, defaulted to today!', 'close');
         }
       });
 

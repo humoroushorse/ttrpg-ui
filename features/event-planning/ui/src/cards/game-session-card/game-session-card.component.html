@@ -1,106 +1,83 @@
 @if (entity(); as gameSession) {
   @if (mode() === 'gallery') {
-    <mat-card
-      appearance="outlined"
-      [ngClass]="{
-        '... row-span-1': !gameSession.image_url,
-        '... row-span-2': gameSession.image_url,
-      }"
-    >
-      <mat-card-header>
-        <div mat-card-avatar>
-          @if (gameSession.game_master; as gameMaster) {
-            @if (gameMaster.profile_picture_url) {
-              <img
-                mat-card-avatar
-                [src]="gameMaster.profile_picture_url"
-                alt="Photo of {{ gameMaster.username }}"
-                [matTooltip]="gameMaster.username"
-              />
-            }
-          }
-        </div>
-        <mat-card-title>{{ gameSession.title }}</mat-card-title>
+    <mat-card class="border border-gray-200 rounded-lg shadow w-full">
+      @if(gameSession.image_url) {
+        <img class="rounded-t-lg max-h-[40%] w-full" [src]="gameSession.image_url" [alt]="gameSession.image_url_description" />
+      }
+      <div class="p-4">
+        <h5 class="mb-2 mt-0 text-2xl font-bold tracking-tight">{{gameSession.title}}</h5>
         @if (gameSession.game_system; as gameSystem) {
-          <mat-card-subtitle
-            >{{ gameSystem.name }} ({{ gameSystem.version }}, {{ gameSystem.release_year }})</mat-card-subtitle
-          >
+          <mat-card-subtitle>
+            {{ gameSystem.name }} ({{ gameSystem.version }}, {{ gameSystem.release_year }})
+          </mat-card-subtitle>
         }
         <mat-card-subtitle>
-          <div class="flex flex-row items-center gap-4">
-            <mat-icon>calendar_month</mat-icon><span>{{ gameSession.start_date | date: 'medium' }}</span>
-          </div>
-          <div class="flex flex-row items-center gap-4">
-            <mat-icon>calendar_month</mat-icon><span>{{ gameSession.end_date | date: 'medium' }}</span>
+          <div class="flex w-full flex-wrap gap-x-4">
+            <div class="flex flex-row items-center gap-4">
+              <mat-icon>calendar_month</mat-icon><span>{{ gameSession.start_date | date: 'medium' }}</span>
+            </div>
+            <!-- <div class="flex flex-row items-center gap-4">
+              <mat-icon>calendar_month</mat-icon><span>{{ gameSession.end_date | date: 'medium' }}</span>
+            </div> -->
           </div>
         </mat-card-subtitle>
-      </mat-card-header>
-      @if (gameSession.image_url) {
-        <img
-          mat-card-image
-          class="max-w-full"
-          [src]="gameSession.image_url"
-          [alt]="
-            gameSession.image_url_description ||
-            'Image representing the game session (game master did not add a description)'
-          "
-        />
-      }
-      <mat-card-content>
-        <p>{{ gameSession.description }}</p>
-        <lib-user-avatar-list [users]="players()" />
-      </mat-card-content>
-      <mat-card-actions>
-        <ng-container
-          *ngTemplateOutlet="
-            cardActions;
-            context: {
-              gameSession,
-            }
-          "
-        ></ng-container>
-      </mat-card-actions>
+        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+          {{gameSession.description}}
+        </p>
+        <p>
+          <lib-user-avatar-list [users]="players()" />
+        </p>
+        <div class="flex flex-row gap-2">
+          <ng-container
+            *ngTemplateOutlet="
+              cardActions;
+              context: {
+                gameSession,
+              }
+            "
+          ></ng-container>
+        </div>
+      </div>
     </mat-card>
   }
   @if (mode() === 'list') {
-    <mat-card class="w-full" appearance="outlined">
-      <div class="flex flex-row">
-        <div #cardContent>
-          <mat-card-header>
-            <div mat-card-avatar>
-              @if (gameSession.game_master; as gameMaster) {
-                @if (gameMaster.profile_picture_url) {
-                  <img
-                    mat-card-avatar
-                    [src]="gameMaster.profile_picture_url"
-                    alt="Photo of {{ gameMaster.username }}"
-                    [matTooltip]="gameMaster.username"
-                  />
-                }
+    <mat-card class="w-full rounded-lg max-h-72">
+      <div class="flex flex-row items-center w-full max-h-72 overflow-hidden">
+        <div class="max-h-72 h-full overflow-hidden w-full flex flex-col">
+          <div class="p-4 overflow-y-auto flex-grow">
+            <div class="max-h-40 overflow-hidden flex flex-col justify-between leading-normal w-full max-w-full">
+              <h5 class="mb-2 mt-0 text-2xl font-bold tracking-tight">{{ gameSession.title }}</h5>
+              @if (gameSession.game_system; as gameSystem) {
+                <mat-card-subtitle>
+                  {{ gameSystem.name }} ({{ gameSystem.version }}, {{ gameSystem.release_year }})
+                </mat-card-subtitle>
               }
+              <mat-card-subtitle>
+                <div class="flex w-full flex-wrap gap-x-4">
+                  <div class="flex flex-row items-center gap-4">
+                    <mat-icon>calendar_month</mat-icon><span>{{ gameSession.start_date | date: 'medium' }}</span>
+                  </div>
+                  <!-- @if(sharedCoreService.getPageWidth()() > 870) {
+                    <div class="flex flex-row items-center gap-4">
+                      <mat-icon>calendar_month</mat-icon><span>{{ gameSession.end_date | date: 'medium' }}</span>
+                    </div>
+                  } -->
+                  <div class="flex flex-row items-center gap-4">
+                    <mat-icon>calendar_month</mat-icon><span>{{ gameSession.end_date | date: 'medium' }}</span>
+                  </div>
+                </div>
+              </mat-card-subtitle>
+              <p class="m-0 font-normal text-gray-700 dark:text-gray-400">
+                {{ gameSession.description }}
+              </p>
             </div>
-            <mat-card-title>{{ gameSession.title }}</mat-card-title>
-            @if (gameSession.game_system; as gameSystem) {
-              <mat-card-subtitle
-                >{{ gameSystem.name }} ({{ gameSystem.version }}, {{ gameSystem.release_year }})</mat-card-subtitle
-              >
-            }
-            <mat-card-subtitle>
-              <div class="flex w-full flex-wrap gap-x-4">
-                <div class="flex flex-row items-center gap-4">
-                  <mat-icon>calendar_month</mat-icon><span>{{ gameSession.start_date | date: 'medium' }}</span>
-                </div>
-                <div class="flex flex-row items-center gap-4">
-                  <mat-icon>calendar_month</mat-icon><span>{{ gameSession.end_date | date: 'medium' }}</span>
-                </div>
-              </div>
-            </mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <p>{{ gameSession.description }}</p>
-            <lib-user-avatar-list [users]="players()" />
-          </mat-card-content>
-          <mat-card-actions>
+          </div>
+          @if(players().length) {
+            <p class="m-0 px-4">
+              <lib-user-avatar-list [users]="players()" />
+            </p>
+          }
+          <div class="h-9 flex flex-row gap-2 p-2">
             <ng-container
               *ngTemplateOutlet="
                 cardActions;
@@ -109,34 +86,13 @@
                 }
               "
             ></ng-container>
-          </mat-card-actions>
+          </div>
         </div>
-        <div class="grow"><!--spacer--></div>
-        @if (gameSession.image_url) {
-          @if (pageWidth() >= 1200) {
-            <img
-              [style.height.px]="cardContentRef()?.nativeElement?.offsetHeight"
-              class="max-w-full rounded-r-xl object-cover"
-              [src]="gameSession.image_url"
-              [alt]="
-                gameSession.image_url_description ||
-                'Image representing the game session (game master did not add a description)'
-              "
-            />
-          } @else {
-            <div class="flex h-full w-full items-center justify-end p-4">
-              <img
-                class="h-40 w-40 rounded-xl object-cover md:h-60 md:w-60"
-                [src]="gameSession.image_url"
-                [alt]="
-                  gameSession.image_url_description ||
-                  'Image representing the game session (game master did not add a description)'
-                "
-              />
-            </div>
-          }
+        @if(gameSession.image_url) {
+          <img class="object-cover h-72 w-[40%] max-w-96 rounded-r-2xl hidden sm:block" [src]="gameSession.image_url" [alt]="gameSession.image_url_description" />
         }
       </div>
+
     </mat-card>
   }
 }
@@ -159,5 +115,7 @@
       </div>
     }
   }
-  <button mat-button type="button" (click)="viewGameSessionClicked.emit(gameSession)">VIEW</button>
+  @if (!hideViewButton()) {
+    <button mat-button type="button" (click)="viewGameSessionClicked.emit(gameSession)">VIEW</button>
+  }
 </ng-template>

@@ -78,7 +78,7 @@ export class EventPlanningGameSessionApiService {
       .pipe(
         map((r) => r.body),
         tap((r) => {
-          this.sharedNotificationService.openSnackBar(`Created game session '${r?.title}'`);
+          this.sharedNotificationService.openSnackBar(`Created game session '${r?.title}'`, 'close');
         }),
       );
   }
@@ -95,7 +95,7 @@ export class EventPlanningGameSessionApiService {
       .pipe(
         map((r) => r.body),
         tap((r) => {
-          if (r) this.sharedNotificationService.openSnackBar(`Deleted game session '${entity.title}'`);
+          if (r) this.sharedNotificationService.openSnackBar(`Deleted game session '${entity.title}'`, 'close');
         }),
       );
   }

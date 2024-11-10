@@ -1,1 +1,12 @@
-<p>page-event-planning-game-system-view works!</p>
+@if (routeId$ | async; as routeId) {
+  @if (loading()) {
+    Fetching, please wait...
+  } @else {
+    @if (entity(); as gameSession) {
+      <lib-game-system-card [entity]="gameSession" [hideViewButton]="true"/>
+    } @else {
+      <h1>Game Session</h1>
+      Game session with id ({{ routeId }}) not found!
+    }
+  }
+}

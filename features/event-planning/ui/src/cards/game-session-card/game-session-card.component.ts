@@ -16,11 +16,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { AuthService } from '@ttrpg-ui/features/auth/data-access';
-import { UserAvatarListComponent } from '@ttrpg-ui/features-user-ui';
+import { UserAvatarComponent, UserAvatarListComponent } from '@ttrpg-ui/features-user-ui';
+
 @Component({
   selector: 'lib-game-session-card',
   standalone: true,
-  imports: [CommonModule, UserAvatarListComponent, MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [CommonModule, UserAvatarComponent, UserAvatarListComponent, MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule],
   templateUrl: './game-session-card.component.html',
   styleUrl: './game-session-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,6 +38,8 @@ export class GameSessionCardComponent {
   leaveGameSessionClicked = output<EventPlanningModels.GameSession.GameSessionSchema>();
 
   entity = input<EventPlanningModels.GameSession.GameSessionSchema>();
+
+  hideViewButton = input(false);
 
   players = computed(() => {
     const players: EventPlanningModels.Schemas.UserSchema[] = [];

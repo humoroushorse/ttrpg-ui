@@ -75,6 +75,10 @@ export class SharedTableComponent<T> implements AfterViewInit, OnDestroy {
 
   resetColumnDefsClicked = output<boolean>();
 
+  rowClicked = output<T>();
+
+  rowDoubleClicked = output<T>();
+
   tableHeader = input('');
 
   loading = input(false);

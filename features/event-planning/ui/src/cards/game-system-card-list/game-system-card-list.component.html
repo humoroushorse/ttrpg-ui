@@ -1,0 +1,15 @@
+<div class="grid grid-flow-row-dense gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+  @for(entity of entities(); track entity.id) {
+    <lib-game-system-card
+      [entity]="entity"
+      (viewClicked)="viewClicked.emit($event)"
+      (deleteClicked)="deleteClicked.emit($event)"
+    />
+  } @empty {
+    <lib-shared-notification
+      [title]=" 'No game systems found!' "
+      [color]=" 'primary' "
+      [icon]=" 'info_outline' "
+    ></lib-shared-notification>
+  }
+</div>

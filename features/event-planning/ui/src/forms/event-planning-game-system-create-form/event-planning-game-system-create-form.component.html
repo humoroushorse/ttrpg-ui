@@ -1,7 +1,7 @@
 <form [formGroup]="gameSystemForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
   <mat-form-field>
     <mat-label>Name</mat-label>
-    <input matInput formControlName="name" type="text" />
+    <input matInput formControlName="name" type="text"/>
     @if (gameSystemForm.controls.name.hasError('required')) {
       <mat-error> Name is required </mat-error>
     }

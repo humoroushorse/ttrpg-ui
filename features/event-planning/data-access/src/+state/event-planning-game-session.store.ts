@@ -28,7 +28,7 @@ export const EventPlanningGameSessionStore = signalStore(
   withState<StoreState>(SharedModels.Store.getBaseStateDefault<StoreSchema>()),
   withState({
     entitySelectId: EventPlanningModels.GameSession.selectGameSessionId,
-    selectGameSessionIdKey: EventPlanningModels.GameSession.selectGameSessionIdKey,
+    entityIdKey: EventPlanningModels.GameSession.selectGameSessionIdKey,
     entityNameSingle: 'game event',
     entityNamePlural: 'game events',
   }),
@@ -55,6 +55,7 @@ export const EventPlanningGameSessionStore = signalStore(
                 `Error fetching ${store.entityNamePlural()}`,
               ),
             );
+            sharedNotificationService.openSnackBar(`Error fetching ${store.entityNamePlural()}`, 'close')
           })
           .finally(() => {
             patchState(store, SharedModels.Store.setLoaded(true), SharedModels.Store.setLoading(false));
@@ -72,7 +73,7 @@ export const EventPlanningGameSessionStore = signalStore(
               patchState(
                 store,
                 updateEntity({ id, changes: next }),
-                SharedModels.Store.setSelectedEntity(next, store.selectGameSessionIdKey())
+                SharedModels.Store.setSelectedEntity(next, store.entityIdKey())
               );
             }
           })
@@ -84,6 +85,7 @@ export const EventPlanningGameSessionStore = signalStore(
                 `Error fetching ${store.entityNamePlural()}`,
               ),
             );
+            sharedNotificationService.openSnackBar(`Error fetching ${store.entityNamePlural()}`, 'close')
           })
           .finally(() => {
             patchState(store, SharedModels.Store.setLoaded(true), SharedModels.Store.setLoading(false));
@@ -110,6 +112,7 @@ export const EventPlanningGameSessionStore = signalStore(
                 `Error creating ${store.entityNamePlural()}`,
               ),
             );
+            sharedNotificationService.openSnackBar(`Error creating ${store.entityNamePlural()}`, 'close')
           })
           .finally(() => {
             patchState(store, SharedModels.Store.setLoading(false));
@@ -131,6 +134,7 @@ export const EventPlanningGameSessionStore = signalStore(
                 `Error creating ${store.entityNamePlural()}`,
               ),
             );
+            sharedNotificationService.openSnackBar(`Error deleting ${store.entityNamePlural()}`, 'close')
           })
           .finally(() => {
             patchState(store, SharedModels.Store.setLoading(false));
@@ -141,14 +145,14 @@ export const EventPlanningGameSessionStore = signalStore(
         await firstValueFrom(storeService.postJoinSession(entity).pipe(switchMap(() => storeService.get(entity.id))))
           .then((next) => {
             if (next) {
-              sharedNotificationService.openSnackBar(`Joined session '${entity.title}'`);
+              sharedNotificationService.openSnackBar(`Joined session '${entity.title}'`, 'close');
               patchState(store, updateEntity({ id: entity.id, changes: next }));
             }
           })
           .catch((error: HttpErrorResponse) => {
             const errorMessage = getErrorMessage(error);
-            sharedNotificationService.openSnackBar(`ERROR: '${errorMessage}'`);
             patchState(store, SharedModels.Store.setError(errorMessage, `Error joining ${store.entityNamePlural()}`));
+            sharedNotificationService.openSnackBar(`Error joining ${store.entityNamePlural()}`, 'close')
           })
           .finally(() => {
             patchState(store, SharedModels.Store.setLoading(false));
@@ -159,13 +163,11 @@ export const EventPlanningGameSessionStore = signalStore(
         await firstValueFrom(storeService.postLeaveSession(entity).pipe(switchMap(() => storeService.get(entity.id))))
           .then((next) => {
             if (next) {
-              sharedNotificationService.openSnackBar(`Left session '${entity.title}'`);
+              sharedNotificationService.openSnackBar(`Left session '${entity.title}'`, 'close');
               patchState(store, updateEntity({ id: entity.id, changes: JSON.parse(JSON.stringify(next)) }));
             }
           })
           .catch((error: HttpErrorResponse) => {
-            const errorMessage = getErrorMessage(error);
-            sharedNotificationService.openSnackBar(`ERROR: '${errorMessage}'`);
             patchState(
               store,
               SharedModels.Store.setError(
@@ -173,6 +175,7 @@ export const EventPlanningGameSessionStore = signalStore(
                 `Error joining ${store.entityNamePlural()}`,
               ),
             );
+            sharedNotificationService.openSnackBar(`Error leaving ${store.entityNamePlural()}`, 'close')
           })
           .finally(() => {
             patchState(store, SharedModels.Store.setLoading(false));

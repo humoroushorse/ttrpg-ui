@@ -60,26 +60,28 @@
           <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
           <div class="flex flex-row items-center gap-2">
             @if (column.pinned !== undefined) {
-              <div class="min-size-6 flex items-center">
+              <!-- <div class="min-size-6 flex items-center">
                 <mat-icon matTooltip="Pinned {{ column.pinned }}">push_pin</mat-icon>
-              </div>
+              </div> -->
             } @else {
               <div class="min-size-6 flex items-center">
                 <mat-icon class="cursor-move" cdkDragHandle>drag_indicator</mat-icon>
               </div>
             }
             <span>{{ column.headerName }}</span>
-            <button
-              mat-icon-button
-              class="duration-250 invisible ease-in-out group-hover:visible"
-              type="button"
-              [matMenuTriggerFor]="columnSettingsMenu"
-              [matMenuTriggerData]="{ 'columnDef': column }"
-              (click)="$event.stopPropagation()"
-              aria-label="Column settings"
-            >
-              <mat-icon>more_vert</mat-icon>
-            </button>
+            @if (!column.appHideColumnSettingsMenu) {
+              <button
+                mat-icon-button
+                class="duration-250 invisible ease-in-out group-hover:visible"
+                type="button"
+                [matMenuTriggerFor]="columnSettingsMenu"
+                [matMenuTriggerData]="{ 'columnDef': column }"
+                (click)="$event.stopPropagation()"
+                aria-label="Column settings"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            }
           </div>
         </th>
         <td mat-cell *matCellDef="let rowData">
@@ -130,7 +132,11 @@
 
     <!-- Header and Row Declarations -->
     <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: stickyHeader()"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns()"></tr>
+    <tr mat-row
+      *matRowDef="let row; columns: displayedColumns()"
+      (click)="rowClicked.emit(row)"
+      (dblclick)="rowDoubleClicked.emit(row)"
+    ></tr>
   </table>
 </div>
 @if (loading()) {
