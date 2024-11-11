@@ -1,0 +1,7 @@
+# Block all web crawlers from accessing the /private directory
+#    There currently is no /private directory but this is an example
+User-agent: *
+Disallow: /private
+
+# hopefully this stiemap loads properly...
+Sitemap: https://iankirkpatrick.dev/assets/sitemap.xml

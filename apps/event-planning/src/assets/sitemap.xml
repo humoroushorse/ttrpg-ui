@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://iankirkpatrick.dev/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://iankirkpatrick.dev/auth/login</loc>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://iankirkpatrick.dev/auth/register</loc>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://iankirkpatrick.dev/user/settings</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://iankirkpatrick.dev/event-planning/game-session</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://iankirkpatrick.dev/event-planning/game-system</loc>
+    <priority>0.8</priority>
+  </url>
+  <!-- Add more URLs as needed -->
+</urlset>

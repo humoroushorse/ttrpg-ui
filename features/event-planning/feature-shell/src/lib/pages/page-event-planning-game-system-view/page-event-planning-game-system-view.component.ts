@@ -7,6 +7,7 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { map, Observable, tap } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { GameSystemCardComponent } from '@ttrpg-ui/features/event-planning/ui';
+import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 
 @Component({
   selector: 'lib-page-event-planning-game-system-view',
@@ -50,4 +51,8 @@ export class PageEventPlanningGameSystemViewComponent implements OnInit {
   });
 
   loading = this.eventPlanningGameSystemStore.loading;
+
+  onDeleteGameSystemClicked(event: EventPlanningModels.GameSystem.GameSystemSchema) {
+    this.eventPlanningGameSystemStore.delete(event);
+  }
 }
