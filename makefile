@@ -7,6 +7,10 @@
 container-build:
 	docker build -f apps/event-planning/deploy/Dockerfile -t ttrpg-event-planning-ui:latest .
 
+compose-up:
+	docker compose -f apps/event-planning/deploy/docker-compose.yml -p ttrpg up
+
+
 k3d-load-image:
 	k3d image import ttrpg-event-planning-ui:latest -c ttrpg
 

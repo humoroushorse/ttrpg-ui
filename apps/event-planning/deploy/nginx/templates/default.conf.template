@@ -7,6 +7,11 @@ server {
     root        /usr/share/nginx/html;
     index index.html;
 
+    # Serve robots.txt at root
+    location = /robots.txt {
+        root /usr/share/nginx/html;
+    }
+
     # Serve static files directly
     location / {
         try_files $uri $uri/ /index.html;
