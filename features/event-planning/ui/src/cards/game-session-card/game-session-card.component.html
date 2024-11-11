@@ -1,11 +1,15 @@
 @if (entity(); as gameSession) {
   @if (mode() === 'gallery') {
-    <mat-card class="rounded-lg shadow w-full max-w-screen-sm">
-      @if(gameSession.image_url) {
-        <img class="rounded-t-lg max-h-[40%] w-full" [src]="gameSession.image_url" [alt]="gameSession.image_url_description" />
+    <mat-card class="w-full max-w-screen-sm rounded-lg shadow">
+      @if (gameSession.image_url) {
+        <img
+          class="max-h-[40%] w-full rounded-t-lg"
+          [src]="gameSession.image_url"
+          [alt]="gameSession.image_url_description"
+        />
       }
       <div class="p-4">
-        <div class="mb-2 mt-0 text-2xl font-bold tracking-tight">{{gameSession.title}}</div>
+        <div class="mb-2 mt-0 text-2xl font-bold tracking-tight">{{ gameSession.title }}</div>
         @if (gameSession.game_system; as gameSystem) {
           <mat-card-subtitle>
             {{ gameSystem.name }} ({{ gameSystem.version }}, {{ gameSystem.release_year }})
@@ -23,7 +27,7 @@
         </mat-card-subtitle>
         <mat-card-content>
           <p class="mb-3 font-normal">
-            {{gameSession.description}}
+            {{ gameSession.description }}
           </p>
           <p>
             <lib-user-avatar-list [users]="players()" />
@@ -43,11 +47,11 @@
     </mat-card>
   }
   @if (mode() === 'list') {
-    <mat-card class="w-full rounded-lg max-h-72">
-      <div class="flex flex-row items-center w-full max-h-72 overflow-hidden">
-        <div class="max-h-72 h-full overflow-hidden w-full flex flex-col">
-          <div class="p-4 overflow-y-auto flex-grow">
-            <div class="max-h-40 overflow-hidden flex flex-col justify-between leading-normal w-full max-w-full">
+    <mat-card class="max-h-72 w-full rounded-lg">
+      <div class="flex max-h-72 w-full flex-row items-center overflow-hidden">
+        <div class="flex h-full max-h-72 w-full flex-col overflow-hidden">
+          <div class="flex-grow overflow-y-auto p-4">
+            <div class="flex max-h-40 w-full max-w-full flex-col justify-between overflow-hidden leading-normal">
               <div class="mb-2 mt-0 text-2xl font-bold tracking-tight">{{ gameSession.title }}</div>
               @if (gameSession.game_system; as gameSystem) {
                 <mat-card-subtitle>
@@ -74,12 +78,12 @@
               </p>
             </div>
           </div>
-          @if(players().length) {
+          @if (players().length) {
             <p class="m-0 px-4">
               <lib-user-avatar-list [users]="players()" />
             </p>
           }
-          <div class="h-9 flex flex-row gap-2 p-2">
+          <div class="flex h-9 flex-row gap-2 p-2">
             <ng-container
               *ngTemplateOutlet="
                 cardActions;
@@ -90,11 +94,14 @@
             ></ng-container>
           </div>
         </div>
-        @if(gameSession.image_url) {
-          <img class="object-cover h-72 w-[40%] max-w-96 rounded-r-2xl hidden sm:block" [src]="gameSession.image_url" [alt]="gameSession.image_url_description" />
+        @if (gameSession.image_url) {
+          <img
+            class="hidden h-72 w-[40%] max-w-96 rounded-r-2xl object-cover sm:block"
+            [src]="gameSession.image_url"
+            [alt]="gameSession.image_url_description"
+          />
         }
       </div>
-
     </mat-card>
   }
 }
