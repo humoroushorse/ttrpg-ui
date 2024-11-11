@@ -29,7 +29,7 @@
           matSuffix
           type="button"
           matTooltip="Clear {{ multiInstanceTerm() }} Search"
-          aria-label="Clear table search"
+          attr.aria-label="Clear {{ multiInstanceTerm() }} Search"
           (click)="searchInputValue.set('')"
           attr.data-testid="{{ dataTestId() }} + 'InputSearchClear'"
         >
