@@ -2,6 +2,7 @@
   @if (loading()) {
     Fetching, please wait...
   } @else {
+    <h1>Game Session</h1>
     @if (entity(); as gameSession) {
       <lib-game-system-card
         [entity]="gameSession"
@@ -9,7 +10,6 @@
         (deleteClicked)="onDeleteGameSystemClicked($event)"
       />
     } @else {
-      <h1>Game Session</h1>
       Game session with id ({{ routeId }}) not found!
     }
   }
