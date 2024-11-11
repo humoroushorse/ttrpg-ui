@@ -42,8 +42,8 @@
       <lib-shared-table
         [tableHeader]="'Game Systems'"
         [columnDefs]="columnDefs"
-        [data]="gameEventStore.entities() || []"
-        [loading]="gameEventStore.loading()"
+        [data]="eventPlanningGameSystemStore.entities() || []"
+        [loading]="eventPlanningGameSystemStore.loading()"
         (columnDefsChange)="onColumnDefsChange($event)"
         (resetColumnDefsClicked)="onResetColumnDefsClicked()"
         (rowDoubleClicked)="onViewGameSystemClicked($event)"
@@ -52,7 +52,7 @@
     </mat-card>
   } @else {
     <lib-game-system-card-list
-      [entities]="gameEventStore.entities() || []"
+      [entities]="eventPlanningGameSystemStore.entities() || []"
       (viewClicked)="onViewGameSystemClicked($event)"
       (deleteClicked)="onDeleteGameSystemClicked($event)"
     ></lib-game-system-card-list>

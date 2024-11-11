@@ -7,6 +7,7 @@ import { map, Observable, tap } from 'rxjs';
 import { Meta, Title } from '@angular/platform-browser';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 
 @Component({
   selector: 'lib-page-event-planning-game-session-view',
@@ -50,4 +51,12 @@ export class PageEventPlanningGameSessionViewComponent implements OnInit {
   });
 
   loading = this.eventPlanningGameSessionStore.loading;
+
+  onJoinGameSessionClicked(event: EventPlanningModels.GameSession.GameSessionSchema) {
+    this.eventPlanningGameSessionStore.joinSession(event);
+  }
+
+  onLeaveGameSessionClicked(event: EventPlanningModels.GameSession.GameSessionSchema) {
+    this.eventPlanningGameSessionStore.leaveSession(event);
+  }
 }

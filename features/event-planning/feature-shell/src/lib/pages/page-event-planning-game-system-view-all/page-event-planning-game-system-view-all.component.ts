@@ -50,7 +50,7 @@ export class PageEventPlanningGameSystemViewAllComponent implements OnInit {
 
   readonly sharedLocalStorageService = inject(SharedLocalStorageService);
 
-  readonly gameEventStore = inject(EventPlanningGameSystemStore);
+  readonly eventPlanningGameSystemStore = inject(EventPlanningGameSystemStore);
 
   readonly authService = inject(AuthService);
 
@@ -132,6 +132,6 @@ export class PageEventPlanningGameSystemViewAllComponent implements OnInit {
   }
 
   onDeleteGameSystemClicked(event: EventPlanningModels.GameSystem.GameSystemSchema) {
-    this.gameEventStore.delete(event);
+    this.eventPlanningGameSystemStore.delete(event);
   }
 }

@@ -3,7 +3,12 @@
     Fetching, please wait...
   } @else {
     @if (entity(); as gameSession) {
-      <lib-game-session-card [entity]="gameSession" [hideViewButton]="true"/>
+      <lib-game-session-card
+        [entity]="gameSession"
+        [hideViewButton]="true"
+        (joinGameSessionClicked)="onJoinGameSessionClicked($event)"
+        (leaveGameSessionClicked)="onLeaveGameSessionClicked($event)"
+      />
     } @else {
       <h1>Game Session</h1>
       Game session with id ({{ routeId }}) not found!
