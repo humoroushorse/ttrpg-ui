@@ -17,6 +17,8 @@
         "tsConfig": "apps/event-planning/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
+          "apps/event-planning/src/robots.txt",
+          "apps/event-planning/src/sitemap.xml",
           "apps/event-planning/src/assets",
           {
             "glob": "**/*",

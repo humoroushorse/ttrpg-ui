@@ -4,4 +4,4 @@ User-agent: *
 Disallow: /private
 
 # hopefully this stiemap loads properly...
-Sitemap: https://iankirkpatrick.dev/assets/sitemap.xml
+Sitemap: https://iankirkpatrick.dev/sitemap.xml

@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 import { SharedPageNotFoundComponent } from '@ttrpg-ui/shared/page-not-found';
 
-// NOTE: please update ../assets/sitemap.xml as needed...
+// NOTE: please update ../sitemap.xml as needed...
 export const appRoutes: Route[] = [
   {
     path: 'event-planning',
