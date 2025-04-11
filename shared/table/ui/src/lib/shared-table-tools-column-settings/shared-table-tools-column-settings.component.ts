@@ -10,7 +10,6 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'lib-shared-table-tools-column-settings',
-  standalone: true,
   imports: [
     CommonModule,
     ScrollingModule,

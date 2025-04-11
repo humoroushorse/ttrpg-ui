@@ -9,7 +9,6 @@ import { EventPlanningGameSystemStore } from '@ttrpg-ui/features/event-planning/
 
 @Component({
   selector: 'lib-event-planning-game-system-create-dialog',
-  standalone: true,
   imports: [CommonModule, EventPlanningGameSystemCreateFormComponent, MatDialogModule, MatButtonModule],
   templateUrl: './event-planning-game-system-create-dialog.component.html',
   styleUrl: './event-planning-game-system-create-dialog.component.scss',

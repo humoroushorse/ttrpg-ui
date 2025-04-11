@@ -19,7 +19,6 @@ export interface SharedSidenavRouterItem {
 
 @Component({
   selector: 'lib-shared-sidenav-router-item',
-  standalone: true,
   imports: [
     CommonModule,
     RouterModule,

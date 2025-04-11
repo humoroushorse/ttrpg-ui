@@ -11,7 +11,6 @@ import { AppTheme } from '@ttrpg-ui/shared/theme/models';
 
 @Component({
   selector: 'lib-shared-theme-picker',
-  standalone: true,
   imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule, MatRadioModule, MatTooltipModule],
   templateUrl: './shared-theme-picker.component.html',
   styleUrl: './shared-theme-picker.component.scss',

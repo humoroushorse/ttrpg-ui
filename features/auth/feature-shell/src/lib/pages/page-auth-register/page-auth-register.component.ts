@@ -14,13 +14,11 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 import { RegisterUserInput } from 'features/auth/models/src/lib/models/models';
 @Component({
   selector: 'lib-page-auth-register',
-  standalone: true,
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-
     MatInputModule,
     MatButtonModule,
     MatTooltipModule,

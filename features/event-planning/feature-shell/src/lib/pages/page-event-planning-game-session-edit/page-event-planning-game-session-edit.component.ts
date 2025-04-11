@@ -5,7 +5,6 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 
 @Component({
   selector: 'lib-page-event-planning-game-session-edit',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './page-event-planning-game-session-edit.component.html',
   styleUrl: './page-event-planning-game-session-edit.component.scss',

@@ -43,7 +43,8 @@ export const getBaseStateDefault = <T>(): BaseState<T> => {
 };
 
 export function withComputedBase<T>() {
-  return withComputed(({ selectedEntityId, entityMap }) => ({
+  // ik-todo typing
+  return withComputed(({ selectedEntityId, entityMap }: any) => ({
     selected: computed<T | null>(() => {
       const entityId = (<Signal<EntityId | null>>selectedEntityId)();
       const eMap = entityMap ? (<Signal<EntityMap<T>>>entityMap)() : undefined;

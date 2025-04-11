@@ -7,7 +7,6 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 
 @Component({
   selector: 'lib-page-auth-unauthorized',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './page-auth-unauthorized.component.html',
   styleUrl: './page-auth-unauthorized.component.scss',

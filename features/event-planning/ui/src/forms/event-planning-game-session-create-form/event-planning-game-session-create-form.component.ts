@@ -30,14 +30,11 @@ dayjs.extend(isSameOrAfter);
 
 @Component({
   selector: 'lib-event-planning-game-session-create-form',
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-
     SharedFormsSingleSelectComponent,
-
     MatInputModule,
     MatCheckboxModule,
     MatDatepickerModule,
@@ -138,9 +135,7 @@ export class EventPlanningGameSessionCreateFormComponent {
       max_players: 6,
       is_public: true,
     });
-    this.sharedLocalStorageService.remove(
-      'EventPlanningGameSessionCreateFormComponent.gameSessionForm',
-    );
+    this.sharedLocalStorageService.remove('EventPlanningGameSessionCreateFormComponent.gameSessionForm');
   }
 
   constructor() {

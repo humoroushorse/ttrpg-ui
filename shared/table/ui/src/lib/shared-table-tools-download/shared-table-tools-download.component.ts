@@ -8,7 +8,6 @@ import { SharedDownloadService } from '@ttrpg-ui/shared/download/data-access';
 
 @Component({
   selector: 'lib-shared-table-tools-download',
-  standalone: true,
   imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule],
   templateUrl: './shared-table-tools-download.component.html',
   styleUrl: './shared-table-tools-download.component.scss',

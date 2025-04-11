@@ -19,5 +19,6 @@
     "titleBar.inactiveBackground": "#f9aecf99",
     "titleBar.inactiveForeground": "#15202b99"
   },
-  "peacock.color": "#f9aecf"
+  "peacock.color": "#f9aecf",
+  "makefile.configureOnOpen": false
 }

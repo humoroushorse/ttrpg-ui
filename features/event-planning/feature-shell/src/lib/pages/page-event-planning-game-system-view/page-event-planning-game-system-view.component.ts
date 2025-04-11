@@ -11,7 +11,6 @@ import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 
 @Component({
   selector: 'lib-page-event-planning-game-system-view',
-  standalone: true,
   imports: [CommonModule, GameSystemCardComponent],
   templateUrl: './page-event-planning-game-system-view.component.html',
   styleUrl: './page-event-planning-game-system-view.component.scss',

@@ -39,12 +39,10 @@ import { MatFormFieldControl } from '@angular/material/form-field';
 
 @Component({
   selector: 'lib-shared-forms-single-select',
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-
     MatInputModule,
     MatSelectModule,
     MatOptionModule,

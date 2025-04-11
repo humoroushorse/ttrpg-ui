@@ -6,7 +6,6 @@ import { SharedNotificationComponent } from '@ttrpg-ui/shared/notification/ui';
 
 @Component({
   selector: 'lib-game-session-card-list',
-  standalone: true,
   imports: [CommonModule, GameSessionCardComponent, SharedNotificationComponent],
   templateUrl: './game-session-card-list.component.html',
   styleUrl: './game-session-card-list.component.scss',

@@ -23,7 +23,6 @@ import { UserAvatarListComponent } from '@ttrpg-ui/features-user-ui';
 
 @Component({
   selector: 'lib-page-event-planning-game-session-view-all',
-  standalone: true,
   imports: [
     CommonModule,
     SharedTableComponent,

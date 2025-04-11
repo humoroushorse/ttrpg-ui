@@ -36,16 +36,13 @@ import { ColumnDef } from 'shared/table/models/src/lib/models';
 
 @Component({
   selector: 'lib-shared-table',
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-
     SharedTableDynamicHostDirective,
     SharedTableToolsColumnSettingsComponent,
     SharedTableToolsDownloadComponent,
-
     ScrollingModule,
     CdkDropList,
     CdkDrag,

@@ -22,7 +22,6 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 
 @Component({
   selector: 'lib-page-event-planning-game-system-view-all',
-  standalone: true,
   imports: [
     CommonModule,
     SharedTableComponent,

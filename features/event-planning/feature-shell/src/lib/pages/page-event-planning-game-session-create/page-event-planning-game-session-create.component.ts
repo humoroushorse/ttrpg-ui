@@ -6,7 +6,6 @@ import { EventPlanningGameSessionCreateFormComponent } from '@ttrpg-ui/features/
 
 @Component({
   selector: 'lib-page-event-planning-game-session-create',
-  standalone: true,
   imports: [CommonModule, EventPlanningGameSessionCreateFormComponent],
   templateUrl: './page-event-planning-game-session-create.component.html',
   styleUrl: './page-event-planning-game-session-create.component.scss',

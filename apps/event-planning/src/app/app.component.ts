@@ -15,12 +15,10 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { SharedSidenavRouterItemComponent, SharedSidenavRouterItem } from '@ttrpg-ui/shared/sidenav/ui';
 @Component({
-  standalone: true,
   imports: [
     RouterModule,
     SharedThemePickerComponent,
     SharedSidenavRouterItemComponent,
-
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,

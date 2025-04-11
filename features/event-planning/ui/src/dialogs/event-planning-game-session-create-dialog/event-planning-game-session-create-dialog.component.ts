@@ -9,7 +9,6 @@ import { DialogRef } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'lib-event-planning-game-session-create-dialog',
-  standalone: true,
   imports: [CommonModule, EventPlanningGameSessionCreateFormComponent, MatDialogModule, MatButtonModule],
   templateUrl: './event-planning-game-session-create-dialog.component.html',
   styleUrl: './event-planning-game-session-create-dialog.component.scss',

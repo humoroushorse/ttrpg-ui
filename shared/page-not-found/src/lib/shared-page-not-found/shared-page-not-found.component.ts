@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'lib-shared-page-not-found',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './shared-page-not-found.component.html',
   styleUrl: './shared-page-not-found.component.scss',

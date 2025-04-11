@@ -6,7 +6,6 @@ import { EventPlanningGameSystemCreateFormComponent } from 'features/event-plann
 
 @Component({
   selector: 'lib-page-event-planning-game-system-create',
-  standalone: true,
   imports: [CommonModule, EventPlanningGameSystemCreateFormComponent],
   templateUrl: './page-event-planning-game-system-create.component.html',
   styleUrl: './page-event-planning-game-system-create.component.scss',

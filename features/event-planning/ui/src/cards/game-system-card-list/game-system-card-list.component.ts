@@ -6,7 +6,6 @@ import { SharedNotificationComponent } from '@ttrpg-ui/shared/notification/ui';
 
 @Component({
   selector: 'lib-game-system-card-list',
-  standalone: true,
   imports: [CommonModule, GameSystemCardComponent, SharedNotificationComponent],
   templateUrl: './game-system-card-list.component.html',
   styleUrl: './game-system-card-list.component.scss',
@@ -18,5 +17,4 @@ export class GameSystemCardListComponent {
   deleteClicked = output<EventPlanningModels.GameSystem.GameSystemSchema>();
 
   entities = input<EventPlanningModels.GameSystem.GameSystemSchema[]>();
-
 }

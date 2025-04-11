@@ -14,7 +14,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'lib-event-planning-game-system-create-form',
-  standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, MatInputModule, MatButtonModule, MatTooltipModule],
   templateUrl: './event-planning-game-system-create-form.component.html',
   styleUrl: './event-planning-game-system-create-form.component.scss',
@@ -27,7 +26,7 @@ export class EventPlanningGameSystemCreateFormComponent {
 
   readonly sharedNotificationService = inject(SharedNotificationService);
 
-  readonly sharedLocalStorageService = inject(SharedLocalStorageService)
+  readonly sharedLocalStorageService = inject(SharedLocalStorageService);
 
   public hideSubmitButton = input<boolean>(false);
 
@@ -56,9 +55,7 @@ export class EventPlanningGameSystemCreateFormComponent {
 
   public reset() {
     this.gameSystemForm.reset();
-    this.sharedLocalStorageService.remove(
-      'EventPlanningGameSystemCreateFormComponent.gameSystemForm',
-    );
+    this.sharedLocalStorageService.remove('EventPlanningGameSystemCreateFormComponent.gameSystemForm');
   }
 
   public onSubmit(routeOnCreate = true) {

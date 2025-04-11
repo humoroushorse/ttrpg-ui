@@ -10,7 +10,6 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 
 @Component({
   selector: 'lib-event-planning-game-system-table-actions',
-  standalone: true,
   imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule, MatMenuModule],
   templateUrl: './event-planning-game-system-table-actions.component.html',
   styleUrl: './event-planning-game-system-table-actions.component.scss',

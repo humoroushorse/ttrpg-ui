@@ -13,13 +13,11 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 
 @Component({
   selector: 'lib-page-auth-login',
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-
     MatInputModule,
     MatButtonModule,
     MatTooltipModule,

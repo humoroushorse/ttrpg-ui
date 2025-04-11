@@ -7,7 +7,6 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 
 @Component({
   selector: 'lib-page-auth-forgot-password',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './page-auth-forgot-password.component.html',
   styleUrl: './page-auth-forgot-password.component.scss',

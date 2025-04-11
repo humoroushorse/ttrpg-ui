@@ -11,7 +11,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'lib-event-planning-game-session-table-actions',
-  standalone: true,
   imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
   templateUrl: './event-planning-game-session-table-actions.component.html',
   styleUrl: './event-planning-game-session-table-actions.component.scss',

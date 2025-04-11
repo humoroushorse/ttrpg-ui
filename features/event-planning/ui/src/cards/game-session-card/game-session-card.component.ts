@@ -20,8 +20,15 @@ import { UserAvatarComponent, UserAvatarListComponent } from '@ttrpg-ui/features
 
 @Component({
   selector: 'lib-game-session-card',
-  standalone: true,
-  imports: [CommonModule, UserAvatarComponent, UserAvatarListComponent, MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [
+    CommonModule,
+    UserAvatarComponent,
+    UserAvatarListComponent,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+  ],
   templateUrl: './game-session-card.component.html',
   styleUrl: './game-session-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
