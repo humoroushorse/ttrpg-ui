@@ -13,23 +13,21 @@ import { SharedFormValidators } from '@ttrpg-ui/shared/forms/util';
 import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 import { RegisterUserInput } from 'features/auth/models/src/lib/models/models';
 @Component({
-  selector: 'lib-page-auth-register',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-
-    MatInputModule,
-    MatButtonModule,
-    MatTooltipModule,
-    MatCardModule,
-    MatIconModule,
-  ],
-  templateUrl: './page-auth-register.component.html',
-  styleUrl: './page-auth-register.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-page-auth-register',
+    imports: [
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatButtonModule,
+        MatTooltipModule,
+        MatCardModule,
+        MatIconModule,
+    ],
+    templateUrl: './page-auth-register.component.html',
+    styleUrl: './page-auth-register.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PageAuthRegisterComponent implements OnInit {
   readonly meta = inject(Meta);

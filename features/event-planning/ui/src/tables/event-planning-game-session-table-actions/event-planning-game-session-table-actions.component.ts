@@ -10,12 +10,11 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'lib-event-planning-game-session-table-actions',
-  standalone: true,
-  imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
-  templateUrl: './event-planning-game-session-table-actions.component.html',
-  styleUrl: './event-planning-game-session-table-actions.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-event-planning-game-session-table-actions',
+    imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
+    templateUrl: './event-planning-game-session-table-actions.component.html',
+    styleUrl: './event-planning-game-session-table-actions.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventPlanningGameSessionTableActionsComponent {
   readonly authService = inject(AuthService);

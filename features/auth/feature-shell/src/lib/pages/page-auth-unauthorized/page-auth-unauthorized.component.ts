@@ -6,12 +6,11 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 
 @Component({
-  selector: 'lib-page-auth-unauthorized',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './page-auth-unauthorized.component.html',
-  styleUrl: './page-auth-unauthorized.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-page-auth-unauthorized',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './page-auth-unauthorized.component.html',
+    styleUrl: './page-auth-unauthorized.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PageAuthUnauthorizedComponent implements OnInit {
   readonly meta = inject(Meta);

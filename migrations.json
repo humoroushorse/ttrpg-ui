@@ -1,18 +1,11 @@
 {
   "migrations": [
     {
-      "version": "19.0.0-0",
-      "description": "Updates Angular Material to v19",
-      "factory": "./ng-update/index_bundled#updateToV19",
-      "package": "@angular/material",
-      "name": "migration-v19"
-    },
-    {
-      "version": "19.0.0-0",
-      "description": "Updates the Angular CDK to v19",
-      "factory": "./ng-update/index#updateToV19",
-      "package": "@angular/cdk",
-      "name": "migration-v19"
+      "description": "Replace several properties with a single props object",
+      "version": "19.0.0-rc.0",
+      "factory": "./19_0_0-rc_0-props/index",
+      "package": "@ngrx/signals",
+      "name": "19_0_0-rc_0-props"
     }
   ]
 }

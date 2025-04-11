@@ -7,12 +7,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SharedDownloadService } from '@ttrpg-ui/shared/download/data-access';
 
 @Component({
-  selector: 'lib-shared-table-tools-download',
-  standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule],
-  templateUrl: './shared-table-tools-download.component.html',
-  styleUrl: './shared-table-tools-download.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-shared-table-tools-download',
+    imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule],
+    templateUrl: './shared-table-tools-download.component.html',
+    styleUrl: './shared-table-tools-download.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedTableToolsDownloadComponent<T> {
   readonly sharedDownloadService = inject(SharedDownloadService);

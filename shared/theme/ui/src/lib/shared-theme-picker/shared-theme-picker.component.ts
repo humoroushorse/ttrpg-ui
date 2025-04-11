@@ -10,12 +10,11 @@ import { SharedThemeService } from '@ttrpg-ui/shared/theme/data-access';
 import { AppTheme } from '@ttrpg-ui/shared/theme/models';
 
 @Component({
-  selector: 'lib-shared-theme-picker',
-  standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule, MatRadioModule, MatTooltipModule],
-  templateUrl: './shared-theme-picker.component.html',
-  styleUrl: './shared-theme-picker.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-shared-theme-picker',
+    imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule, MatRadioModule, MatTooltipModule],
+    templateUrl: './shared-theme-picker.component.html',
+    styleUrl: './shared-theme-picker.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedThemePickerComponent {
   readonly sharedThemeService = inject(SharedThemeService);

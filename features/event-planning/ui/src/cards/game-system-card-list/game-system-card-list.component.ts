@@ -5,12 +5,11 @@ import { GameSystemCardComponent } from '../game-system-card/game-system-card.co
 import { SharedNotificationComponent } from '@ttrpg-ui/shared/notification/ui';
 
 @Component({
-  selector: 'lib-game-system-card-list',
-  standalone: true,
-  imports: [CommonModule, GameSystemCardComponent, SharedNotificationComponent],
-  templateUrl: './game-system-card-list.component.html',
-  styleUrl: './game-system-card-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-game-system-card-list',
+    imports: [CommonModule, GameSystemCardComponent, SharedNotificationComponent],
+    templateUrl: './game-system-card-list.component.html',
+    styleUrl: './game-system-card-list.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameSystemCardListComponent {
   viewClicked = output<EventPlanningModels.GameSystem.GameSystemSchema>();

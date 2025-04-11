@@ -13,12 +13,11 @@ import { debounceTime } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'lib-event-planning-game-system-create-form',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatInputModule, MatButtonModule, MatTooltipModule],
-  templateUrl: './event-planning-game-system-create-form.component.html',
-  styleUrl: './event-planning-game-system-create-form.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-event-planning-game-system-create-form',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, MatInputModule, MatButtonModule, MatTooltipModule],
+    templateUrl: './event-planning-game-system-create-form.component.html',
+    styleUrl: './event-planning-game-system-create-form.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventPlanningGameSystemCreateFormComponent {
   readonly eventPlanningGameSystemStore = inject(EventPlanningGameSystemStore);

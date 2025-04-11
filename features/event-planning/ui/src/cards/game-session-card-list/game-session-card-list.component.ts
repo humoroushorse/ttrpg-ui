@@ -5,12 +5,11 @@ import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 import { SharedNotificationComponent } from '@ttrpg-ui/shared/notification/ui';
 
 @Component({
-  selector: 'lib-game-session-card-list',
-  standalone: true,
-  imports: [CommonModule, GameSessionCardComponent, SharedNotificationComponent],
-  templateUrl: './game-session-card-list.component.html',
-  styleUrl: './game-session-card-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-game-session-card-list',
+    imports: [CommonModule, GameSessionCardComponent, SharedNotificationComponent],
+    templateUrl: './game-session-card-list.component.html',
+    styleUrl: './game-session-card-list.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameSessionCardListComponent {
   viewGameSessionClicked = output<EventPlanningModels.GameSession.GameSessionSchema>();

@@ -38,26 +38,24 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldControl } from '@angular/material/form-field';
 
 @Component({
-  selector: 'lib-shared-forms-single-select',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-
-    MatInputModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatProgressBarModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTooltipModule,
-    MatDividerModule,
-  ],
-  templateUrl: './shared-forms-single-select.component.html',
-  styleUrl: './shared-forms-single-select.component.scss',
-  providers: [{ provide: MatFormFieldControl, useExisting: SharedFormsSingleSelectComponent }],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-shared-forms-single-select',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatSelectModule,
+        MatOptionModule,
+        MatProgressBarModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTooltipModule,
+        MatDividerModule,
+    ],
+    templateUrl: './shared-forms-single-select.component.html',
+    styleUrl: './shared-forms-single-select.component.scss',
+    providers: [{ provide: MatFormFieldControl, useExisting: SharedFormsSingleSelectComponent }],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SharedFormsSingleSelectComponent implements ControlValueAccessor, OnDestroy {
   /*****************************************************************************

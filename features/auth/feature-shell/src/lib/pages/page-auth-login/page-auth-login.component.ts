@@ -12,23 +12,21 @@ import { Meta, Title } from '@angular/platform-browser';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 
 @Component({
-  selector: 'lib-page-auth-login',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule,
-
-    MatInputModule,
-    MatButtonModule,
-    MatTooltipModule,
-    MatIconModule,
-    MatCardModule,
-  ],
-  templateUrl: './page-auth-login.component.html',
-  styleUrl: './page-auth-login.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-page-auth-login',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        MatInputModule,
+        MatButtonModule,
+        MatTooltipModule,
+        MatIconModule,
+        MatCardModule,
+    ],
+    templateUrl: './page-auth-login.component.html',
+    styleUrl: './page-auth-login.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PageAuthLoginComponent implements OnInit {
   readonly meta = inject(Meta);

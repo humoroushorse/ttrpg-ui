@@ -14,24 +14,21 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'lib-page-user-settings',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-
-    SharedThemePickerComponent,
-    UserAvatarComponent,
-
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule
-  ],
-  templateUrl: './page-user-settings.component.html',
-  styleUrl: './page-user-settings.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-page-user-settings',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SharedThemePickerComponent,
+        UserAvatarComponent,
+        MatInputModule,
+        MatButtonModule,
+        MatIconModule,
+        MatTooltipModule
+    ],
+    templateUrl: './page-user-settings.component.html',
+    styleUrl: './page-user-settings.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PageUserSettingsComponent implements OnInit {
   readonly authService = inject(AuthService);

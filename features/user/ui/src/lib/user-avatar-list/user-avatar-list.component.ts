@@ -5,12 +5,11 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'lib-user-avatar-list',
-  standalone: true,
-  imports: [CommonModule, UserAvatarComponent, MatChipsModule, MatTooltipModule],
-  templateUrl: './user-avatar-list.component.html',
-  styleUrl: './user-avatar-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-user-avatar-list',
+    imports: [CommonModule, UserAvatarComponent, MatChipsModule, MatTooltipModule],
+    templateUrl: './user-avatar-list.component.html',
+    styleUrl: './user-avatar-list.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserAvatarListComponent {
 

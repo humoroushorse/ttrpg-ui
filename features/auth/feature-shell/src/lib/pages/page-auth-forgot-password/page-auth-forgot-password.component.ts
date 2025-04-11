@@ -6,12 +6,11 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 
 @Component({
-  selector: 'lib-page-auth-forgot-password',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './page-auth-forgot-password.component.html',
-  styleUrl: './page-auth-forgot-password.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-page-auth-forgot-password',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './page-auth-forgot-password.component.html',
+    styleUrl: './page-auth-forgot-password.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PageAuthForgotPasswordComponent implements OnInit {
   readonly meta = inject(Meta);

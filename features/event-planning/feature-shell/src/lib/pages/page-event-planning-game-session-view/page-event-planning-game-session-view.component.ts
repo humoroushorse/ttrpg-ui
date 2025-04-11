@@ -10,12 +10,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 
 @Component({
-  selector: 'lib-page-event-planning-game-session-view',
-  standalone: true,
-  imports: [CommonModule, GameSessionCardComponent],
-  templateUrl: './page-event-planning-game-session-view.component.html',
-  styleUrl: './page-event-planning-game-session-view.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-page-event-planning-game-session-view',
+    imports: [CommonModule, GameSessionCardComponent],
+    templateUrl: './page-event-planning-game-session-view.component.html',
+    styleUrl: './page-event-planning-game-session-view.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PageEventPlanningGameSessionViewComponent implements OnInit {
   readonly route = inject(ActivatedRoute);

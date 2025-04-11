@@ -29,27 +29,24 @@ import { GameSystemSchema } from 'features/event-planning/models/src/lib/game-sy
 dayjs.extend(isSameOrAfter);
 
 @Component({
-  selector: 'lib-event-planning-game-session-create-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-
-    SharedFormsSingleSelectComponent,
-
-    MatInputModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    MatButtonModule,
-    MatTooltipModule,
-    MatSelectModule,
-    MatTimepickerModule,
-    MatIconModule,
-  ],
-  templateUrl: './event-planning-game-session-create-form.component.html',
-  styleUrl: './event-planning-game-session-create-form.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-event-planning-game-session-create-form',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SharedFormsSingleSelectComponent,
+        MatInputModule,
+        MatCheckboxModule,
+        MatDatepickerModule,
+        MatButtonModule,
+        MatTooltipModule,
+        MatSelectModule,
+        MatTimepickerModule,
+        MatIconModule,
+    ],
+    templateUrl: './event-planning-game-session-create-form.component.html',
+    styleUrl: './event-planning-game-session-create-form.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EventPlanningGameSessionCreateFormComponent {
   readonly eventPlanningApiService = inject(EventPlanningApiService);
