@@ -11,9 +11,15 @@ describe('SharedUtilElementSizeDirective', () => {
     constructor(callback: (entries: ResizeObserverEntry[]) => void) {
       resizeObserverCallback = callback;
     }
-    observe() { /* empty */ }
-    unobserve() { /* empty */ }
-    disconnect() { /* empty */ }
+    observe() {
+      /* empty */
+    }
+    unobserve() {
+      /* empty */
+    }
+    disconnect() {
+      /* empty */
+    }
   }
 
   beforeEach(() => {
@@ -23,10 +29,7 @@ describe('SharedUtilElementSizeDirective', () => {
     elementRefMock = new ElementRef(document.createElement('div'));
 
     TestBed.configureTestingModule({
-      providers: [
-        SharedUtilElementSizeDirective,
-        { provide: ElementRef, useValue: elementRefMock },
-      ],
+      providers: [SharedUtilElementSizeDirective, { provide: ElementRef, useValue: elementRefMock }],
     });
   });
 

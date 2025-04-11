@@ -9,21 +9,21 @@ import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
-    selector: 'lib-shared-table-tools-column-settings',
-    imports: [
-        CommonModule,
-        ScrollingModule,
-        CdkDropList,
-        CdkDrag,
-        CdkDragPlaceholder,
-        MatButtonModule,
-        MatIconModule,
-        MatMenuModule,
-        MatCheckboxModule,
-    ],
-    templateUrl: './shared-table-tools-column-settings.component.html',
-    styleUrl: './shared-table-tools-column-settings.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'lib-shared-table-tools-column-settings',
+  imports: [
+    CommonModule,
+    ScrollingModule,
+    CdkDropList,
+    CdkDrag,
+    CdkDragPlaceholder,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatCheckboxModule,
+  ],
+  templateUrl: './shared-table-tools-column-settings.component.html',
+  styleUrl: './shared-table-tools-column-settings.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedTableToolsColumnSettingsComponent {
   columnDefs = model<TableModels.ColumnDef[]>([]);

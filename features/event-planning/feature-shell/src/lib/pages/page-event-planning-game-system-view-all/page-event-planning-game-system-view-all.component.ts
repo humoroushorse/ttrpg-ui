@@ -21,20 +21,20 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 
 @Component({
-    selector: 'lib-page-event-planning-game-system-view-all',
-    imports: [
-        CommonModule,
-        SharedTableComponent,
-        GameSystemCardListComponent,
-        MatCardModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatIconModule,
-        MatTooltipModule,
-    ],
-    templateUrl: './page-event-planning-game-system-view-all.component.html',
-    styleUrl: './page-event-planning-game-system-view-all.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'lib-page-event-planning-game-system-view-all',
+  imports: [
+    CommonModule,
+    SharedTableComponent,
+    GameSystemCardListComponent,
+    MatCardModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+  ],
+  templateUrl: './page-event-planning-game-system-view-all.component.html',
+  styleUrl: './page-event-planning-game-system-view-all.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageEventPlanningGameSystemViewAllComponent implements OnInit {
   readonly dialog = inject(MatDialog);

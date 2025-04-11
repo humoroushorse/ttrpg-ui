@@ -19,11 +19,19 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 import { UserAvatarComponent, UserAvatarListComponent } from '@ttrpg-ui/features-user-ui';
 
 @Component({
-    selector: 'lib-game-session-card',
-    imports: [CommonModule, UserAvatarComponent, UserAvatarListComponent, MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule],
-    templateUrl: './game-session-card.component.html',
-    styleUrl: './game-session-card.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'lib-game-session-card',
+  imports: [
+    CommonModule,
+    UserAvatarComponent,
+    UserAvatarListComponent,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+  ],
+  templateUrl: './game-session-card.component.html',
+  styleUrl: './game-session-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameSessionCardComponent {
   readonly sharedCoreService = inject(SharedCoreService);

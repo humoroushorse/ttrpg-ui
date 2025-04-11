@@ -9,11 +9,11 @@ import { EventPlanningGameSystemStore } from '@ttrpg-ui/features/event-planning/
 import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 
 @Component({
-    selector: 'lib-event-planning-game-system-table-actions',
-    imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule, MatMenuModule],
-    templateUrl: './event-planning-game-system-table-actions.component.html',
-    styleUrl: './event-planning-game-system-table-actions.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'lib-event-planning-game-system-table-actions',
+  imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule, MatMenuModule],
+  templateUrl: './event-planning-game-system-table-actions.component.html',
+  styleUrl: './event-planning-game-system-table-actions.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventPlanningGameSystemTableActionsComponent {
   readonly authService = inject(AuthService);

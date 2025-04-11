@@ -8,11 +8,11 @@ import { Router } from '@angular/router';
 import { EventPlanningGameSystemStore } from '@ttrpg-ui/features/event-planning/data-access';
 
 @Component({
-    selector: 'lib-event-planning-game-system-create-dialog',
-    imports: [CommonModule, EventPlanningGameSystemCreateFormComponent, MatDialogModule, MatButtonModule],
-    templateUrl: './event-planning-game-system-create-dialog.component.html',
-    styleUrl: './event-planning-game-system-create-dialog.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'lib-event-planning-game-system-create-dialog',
+  imports: [CommonModule, EventPlanningGameSystemCreateFormComponent, MatDialogModule, MatButtonModule],
+  templateUrl: './event-planning-game-system-create-dialog.component.html',
+  styleUrl: './event-planning-game-system-create-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventPlanningGameSystemCreateDialogComponent {
   readonly router = inject(Router);

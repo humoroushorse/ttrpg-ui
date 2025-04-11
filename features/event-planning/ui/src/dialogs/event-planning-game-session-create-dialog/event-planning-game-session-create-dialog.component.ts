@@ -8,11 +8,11 @@ import { EventPlanningGameSessionStore } from '@ttrpg-ui/features/event-planning
 import { DialogRef } from '@angular/cdk/dialog';
 
 @Component({
-    selector: 'lib-event-planning-game-session-create-dialog',
-    imports: [CommonModule, EventPlanningGameSessionCreateFormComponent, MatDialogModule, MatButtonModule],
-    templateUrl: './event-planning-game-session-create-dialog.component.html',
-    styleUrl: './event-planning-game-session-create-dialog.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'lib-event-planning-game-session-create-dialog',
+  imports: [CommonModule, EventPlanningGameSessionCreateFormComponent, MatDialogModule, MatButtonModule],
+  templateUrl: './event-planning-game-session-create-dialog.component.html',
+  styleUrl: './event-planning-game-session-create-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventPlanningGameSessionCreateDialogComponent {
   readonly router = inject(Router);

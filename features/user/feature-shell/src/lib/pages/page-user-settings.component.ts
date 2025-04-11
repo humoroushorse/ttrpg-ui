@@ -14,21 +14,21 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-    selector: 'lib-page-user-settings',
-    imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        SharedThemePickerComponent,
-        UserAvatarComponent,
-        MatInputModule,
-        MatButtonModule,
-        MatIconModule,
-        MatTooltipModule
-    ],
-    templateUrl: './page-user-settings.component.html',
-    styleUrl: './page-user-settings.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'lib-page-user-settings',
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SharedThemePickerComponent,
+    UserAvatarComponent,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+  ],
+  templateUrl: './page-user-settings.component.html',
+  styleUrl: './page-user-settings.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageUserSettingsComponent implements OnInit {
   readonly authService = inject(AuthService);
@@ -39,7 +39,7 @@ export class PageUserSettingsComponent implements OnInit {
 
   readonly sharedCoreService = inject(SharedCoreService);
 
-  readonly eventPlanningApiService = inject(EventPlanningApiService)
+  readonly eventPlanningApiService = inject(EventPlanningApiService);
 
   userTokenDecoded = this.authService.getUserTokenDecoded();
 
@@ -49,24 +49,25 @@ export class PageUserSettingsComponent implements OnInit {
 
   currentUserTrigger$ = new BehaviorSubject(false);
 
-  currentUser$ = this.currentUserTrigger$.pipe(
-    switchMap(() => this.eventPlanningApiService.getCurrentUser()),
-  )
+  currentUser$ = this.currentUserTrigger$.pipe(switchMap(() => this.eventPlanningApiService.getCurrentUser()));
 
   userForm = new FormGroup({
     profile_picture_url: new FormControl<string | null>(null),
-  })
+  });
 
   public onSubmit() {
     if (!this.userForm.valid) return;
-    this.eventPlanningApiService.updateCurrentUser({
-      profile_picture_url: this.userForm.controls.profile_picture_url.value || undefined
-    }).pipe(take(1)).subscribe({
-      next: () => {
-        this.currentUserTrigger$.next(true);
-        this.userForm.reset();
-      }
-    })
+    this.eventPlanningApiService
+      .updateCurrentUser({
+        profile_picture_url: this.userForm.controls.profile_picture_url.value || undefined,
+      })
+      .pipe(take(1))
+      .subscribe({
+        next: () => {
+          this.currentUserTrigger$.next(true);
+          this.userForm.reset();
+        },
+      });
   }
 
   ngOnInit(): void {

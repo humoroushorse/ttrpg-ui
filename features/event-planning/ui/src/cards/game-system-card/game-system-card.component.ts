@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  input,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 import { MatCardModule } from '@angular/material/card';
@@ -16,11 +10,11 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 import { UserAvatarListComponent } from '@ttrpg-ui/features-user-ui';
 
 @Component({
-    selector: 'lib-game-system-card',
-    imports: [CommonModule, UserAvatarListComponent, MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule],
-    templateUrl: './game-system-card.component.html',
-    styleUrl: './game-system-card.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'lib-game-system-card',
+  imports: [CommonModule, UserAvatarListComponent, MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule],
+  templateUrl: './game-system-card.component.html',
+  styleUrl: './game-system-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameSystemCardComponent {
   readonly sharedCoreService = inject(SharedCoreService);

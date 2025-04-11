@@ -5,11 +5,11 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { EventPlanningGameSessionCreateFormComponent } from '@ttrpg-ui/features/event-planning/ui';
 
 @Component({
-    selector: 'lib-page-event-planning-game-session-create',
-    imports: [CommonModule, EventPlanningGameSessionCreateFormComponent],
-    templateUrl: './page-event-planning-game-session-create.component.html',
-    styleUrl: './page-event-planning-game-session-create.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'lib-page-event-planning-game-session-create',
+  imports: [CommonModule, EventPlanningGameSessionCreateFormComponent],
+  templateUrl: './page-event-planning-game-session-create.component.html',
+  styleUrl: './page-event-planning-game-session-create.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageEventPlanningGameSessionCreateComponent implements OnInit {
   readonly meta = inject(Meta);

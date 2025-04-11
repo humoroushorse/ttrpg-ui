@@ -18,19 +18,19 @@ export interface SharedSidenavRouterItem {
 }
 
 @Component({
-    selector: 'lib-shared-sidenav-router-item',
-    imports: [
-        CommonModule,
-        RouterModule,
-        MatButtonModule,
-        MatIconModule,
-        MatTooltipModule,
-        MatListModule,
-        MatExpansionModule,
-    ],
-    templateUrl: './shared-sidenav-router-item.component.html',
-    styleUrl: './shared-sidenav-router-item.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'lib-shared-sidenav-router-item',
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatListModule,
+    MatExpansionModule,
+  ],
+  templateUrl: './shared-sidenav-router-item.component.html',
+  styleUrl: './shared-sidenav-router-item.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedSidenavRouterItemComponent {
   readonly router = inject(Router);
