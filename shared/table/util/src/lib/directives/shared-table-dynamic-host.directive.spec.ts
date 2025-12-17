@@ -4,14 +4,14 @@ import { SharedTableDynamicHostDirective } from './shared-table-dynamic-host.dir
 
 @Component({
   template: '<div libSharedTableDynamicHost></div>',
-  imports: [SharedTableDynamicHostDirective]
+  imports: [SharedTableDynamicHostDirective],
 })
 class TestComponent {}
 
 describe('SharedTableDynamicHostDirective', () => {
   it('should create an instance', () => {
     TestBed.configureTestingModule({
-      imports: [TestComponent]
+      imports: [TestComponent],
     });
     const fixture = TestBed.createComponent(TestComponent);
     expect(fixture).toBeTruthy();
