@@ -7,10 +7,18 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "shared/table/models/jest.config.ts"
+        "config": "shared/table/models/vite.config.mts"
+      }
+    },
+    "test:jest": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "jestConfig": "shared/table/models/jest.config.ts",
+        "tsConfig": "shared/table/models/tsconfig.spec.json"
       }
     },
     "lint": {

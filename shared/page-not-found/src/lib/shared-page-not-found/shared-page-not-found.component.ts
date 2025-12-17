@@ -11,9 +11,9 @@ import { RouterModule } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedPageNotFoundComponent {
-  readonly authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
 
-  readonly loginRoute = this.authService.authGuardAuthAppLoginRoute;
+  public readonly loginRoute = this.authService.authGuardAuthAppLoginRoute;
 
-  readonly homeRoute = this.authService.alreadyLoggedInGuardRedirectRoute;
+  public readonly homeRoute = this.authService.alreadyLoggedInGuardRedirectRoute;
 }

@@ -1,25 +1,40 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { AppComponent } from './app.component';
-import { NxWelcomeComponent } from './nx-welcome.component';
 import { RouterModule } from '@angular/router';
+import { SHARED_THEME_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/theme/models';
+import { SHARED_LOCAL_STORAGE_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/local-storage/models';
+import { SHARED_CORE_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/core/models';
+import { AUTH_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/features/auth/models';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent, NxWelcomeComponent, RouterModule.forRoot([])],
+      imports: [AppComponent, RouterModule.forRoot([])],
+      providers: [
+        provideHttpClient(),
+        {
+          provide: SHARED_THEME_SERVICE_CONFIG_TOKEN,
+          useValue: { themes: [] },
+        },
+        {
+          provide: SHARED_LOCAL_STORAGE_SERVICE_CONFIG_TOKEN,
+          useValue: { namespace: 'test' },
+        },
+        {
+          provide: SHARED_CORE_SERVICE_CONFIG_TOKEN,
+          useValue: { appTitle: 'Test' },
+        },
+        {
+          provide: AUTH_SERVICE_CONFIG_TOKEN,
+          useValue: { appConfig: () => ({ AUTH_BASE_URL: 'http://test' }) },
+        },
+      ],
     }).compileComponents();
   });
 
-  it('should render title', () => {
+  it('should create', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Welcome event-planning');
-  });
-
-  it(`should have as title 'event-planning'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('event-planning');
+    expect(fixture.componentInstance).toBeTruthy();
   });
 });

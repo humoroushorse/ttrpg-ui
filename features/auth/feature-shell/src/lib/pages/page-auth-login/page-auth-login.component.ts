@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,7 +14,6 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 @Component({
   selector: 'lib-page-auth-login',
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
@@ -29,13 +28,13 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageAuthLoginComponent implements OnInit {
-  readonly meta = inject(Meta);
+  private readonly meta = inject(Meta);
 
-  readonly title = inject(Title);
+  private readonly title = inject(Title);
 
-  readonly sharedCoreService = inject(SharedCoreService);
+  private readonly sharedCoreService = inject(SharedCoreService);
 
-  readonly authService = inject(AuthService);
+  public readonly authService = inject(AuthService);
 
   public p = this.authService.authGuardAuthAppLoginRoute();
 

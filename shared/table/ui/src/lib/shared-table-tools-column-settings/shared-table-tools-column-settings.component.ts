@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, model } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { TableModels } from '@ttrpg-ui/shared/table/models';
 import { CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,7 +11,6 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 @Component({
   selector: 'lib-shared-table-tools-column-settings',
   imports: [
-    CommonModule,
     ScrollingModule,
     CdkDropList,
     CdkDrag,
@@ -25,16 +24,16 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
   styleUrl: './shared-table-tools-column-settings.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedTableToolsColumnSettingsComponent {
-  columnDefs = model<TableModels.ColumnDef[]>([]);
+export class SharedTableToolsColumnSettingsComponent<T> {
+  columnDefs = model<TableModels.ColumnDef<T>[]>([]);
 
-  drop(event: CdkDragDrop<TableModels.ColumnDef[]>) {
+  drop(event: CdkDragDrop<TableModels.ColumnDef<T>[]>) {
     const columnDefs = this.columnDefs();
     moveItemInArray(columnDefs, event.previousIndex, event.currentIndex);
     this.columnDefs.set([...columnDefs]);
   }
 
-  onCheckboxClicked(columnDef: TableModels.ColumnDef, event: MatCheckboxChange) {
+  onCheckboxClicked(columnDef: TableModels.ColumnDef<T>, event: MatCheckboxChange) {
     this.columnDefs.set([
       ...this.columnDefs().map((c) => {
         return c.field === columnDef.field ? { ...c, hide: !event.checked } : c;

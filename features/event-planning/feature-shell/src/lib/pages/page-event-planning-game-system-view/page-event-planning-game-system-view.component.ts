@@ -17,15 +17,15 @@ import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageEventPlanningGameSystemViewComponent implements OnInit {
-  readonly route = inject(ActivatedRoute);
+  private readonly route = inject(ActivatedRoute);
 
-  readonly eventPlanningGameSystemStore = inject(EventPlanningGameSystemStore);
+  private readonly eventPlanningGameSystemStore = inject(EventPlanningGameSystemStore);
 
-  readonly meta = inject(Meta);
+  private readonly meta = inject(Meta);
 
-  readonly title = inject(Title);
+  private readonly title = inject(Title);
 
-  readonly sharedCoreService = inject(SharedCoreService);
+  private readonly sharedCoreService = inject(SharedCoreService);
 
   ngOnInit(): void {
     this.title.setTitle(`Event Planning | View Game System | ${this.sharedCoreService.appTitle}`);

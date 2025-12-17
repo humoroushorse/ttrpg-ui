@@ -39,7 +39,7 @@
 
   @if (currentView() === 'table') {
     <mat-card>
-      <lib-shared-table
+      <lib-shared-angular-material-table
         [tableHeader]="'Game Systems'"
         [columnDefs]="columnDefs"
         [data]="eventPlanningGameSystemStore.entities() || []"
@@ -48,7 +48,7 @@
         (resetColumnDefsClicked)="onResetColumnDefsClicked()"
         (rowDoubleClicked)="onViewGameSystemClicked($event)"
       >
-      </lib-shared-table>
+      </lib-shared-angular-material-table>
     </mat-card>
   } @else {
     <lib-game-system-card-list

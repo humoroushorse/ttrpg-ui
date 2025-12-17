@@ -14,6 +14,7 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { SharedSidenavRouterItemComponent, SharedSidenavRouterItem } from '@ttrpg-ui/shared/sidenav/ui';
+
 @Component({
   imports: [
     RouterModule,
@@ -34,11 +35,11 @@ import { SharedSidenavRouterItemComponent, SharedSidenavRouterItem } from '@ttrp
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  public sharedThemeService = inject(SharedThemeService);
+  public readonly sharedThemeService = inject(SharedThemeService);
 
-  readonly sharedCoreService = inject(SharedCoreService);
+  private readonly sharedCoreService = inject(SharedCoreService);
 
-  readonly authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
 
   public appTitle = this.sharedCoreService.appTitle;
 

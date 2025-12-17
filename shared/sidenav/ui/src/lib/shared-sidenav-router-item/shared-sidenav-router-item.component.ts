@@ -33,11 +33,11 @@ export interface SharedSidenavRouterItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedSidenavRouterItemComponent {
-  readonly router = inject(Router);
+  private readonly router = inject(Router);
 
-  readonly authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
 
-  readonly sharedCoreService = inject(SharedCoreService);
+  private readonly sharedCoreService = inject(SharedCoreService);
 
   isLoggedIn = computed(() => !!this.authService.getUserTokenDecoded()());
 

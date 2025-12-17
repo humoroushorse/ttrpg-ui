@@ -3,7 +3,7 @@ import {
   ErrorHandler,
   inject,
   provideAppInitializer,
-  provideExperimentalZonelessChangeDetection,
+  provideZonelessChangeDetection,
   // provideZoneChangeDetection
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
@@ -42,7 +42,7 @@ export const appConfig: ApplicationConfig = {
     //   deps: [AppConfigService, HttpClient, LocationStrategy],
     //   multi: true,
     // },
-    provideExperimentalZonelessChangeDetection(),
+    provideZonelessChangeDetection(),
     // provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     provideAnimationsAsync(),

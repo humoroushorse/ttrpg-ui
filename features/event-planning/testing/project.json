@@ -6,6 +6,21 @@
   "projectType": "library",
   "tags": [],
   "targets": {
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "config": "features/event-planning/testing/vite.config.mts"
+      }
+    },
+    "test:jest": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "jestConfig": "features/event-planning/testing/jest.config.ts",
+        "tsConfig": "features/event-planning/testing/tsconfig.spec.json"
+      }
+    },
     "lint": {
       "executor": "@nx/eslint:lint"
     }

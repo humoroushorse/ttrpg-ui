@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject, OnInit, signal, Type } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedTableComponent } from '@ttrpg-ui/shared/table/ui';
+import { SharedAngularMaterialTableComponent } from '@ttrpg-ui/shared/table/ui';
 import { TableModels } from '@ttrpg-ui/shared/table/models';
 import { SharedLocalStorageService } from '@ttrpg-ui/shared/local-storage/data-access';
 import { MatCardModule } from '@angular/material/card';
@@ -19,13 +19,13 @@ import { Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { AuthService } from '@ttrpg-ui/features/auth/data-access';
-import { UserAvatarListComponent } from '@ttrpg-ui/features-user-ui';
+import { UserAvatarListComponent } from '@ttrpg-ui/features/user/ui';
 
 @Component({
   selector: 'lib-page-event-planning-game-session-view-all',
   imports: [
     CommonModule,
-    SharedTableComponent,
+    SharedAngularMaterialTableComponent,
     GameSessionCardListComponent,
     UserAvatarListComponent,
     MatCardModule,
@@ -39,23 +39,23 @@ import { UserAvatarListComponent } from '@ttrpg-ui/features-user-ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageEventPlanningGameSessionViewAllComponent implements OnInit {
-  readonly dialog = inject(MatDialog);
+  private readonly dialog = inject(MatDialog);
 
-  readonly router = inject(Router);
+  private readonly router = inject(Router);
 
-  readonly meta = inject(Meta);
+  private readonly meta = inject(Meta);
 
-  readonly title = inject(Title);
+  private readonly title = inject(Title);
 
-  readonly sharedCoreService = inject(SharedCoreService);
+  private readonly sharedCoreService = inject(SharedCoreService);
 
-  readonly sharedLocalStorageService = inject(SharedLocalStorageService);
+  private readonly sharedLocalStorageService = inject(SharedLocalStorageService);
 
-  readonly eventPlanningApiService = inject(EventPlanningApiService);
+  private readonly eventPlanningApiService = inject(EventPlanningApiService);
 
-  readonly eventPlanningGameSessionStore = inject(EventPlanningGameSessionStore);
+  public readonly eventPlanningGameSessionStore = inject(EventPlanningGameSessionStore);
 
-  readonly authService = inject(AuthService);
+  public readonly authService = inject(AuthService);
 
   ngOnInit(): void {
     this.title.setTitle(`Event Planning | View List of Game Events | ${this.sharedCoreService.appTitle}`);
@@ -79,7 +79,7 @@ export class PageEventPlanningGameSessionViewAllComponent implements OnInit {
 
   public baseUrl = this.eventPlanningApiService.serviceConfig.appConfig().APP_TTRPG_EVENT_PLANNING__API_BASE_PATH;
 
-  private defaultColumnDefs: TableModels.ColumnDef[] = [
+  private defaultColumnDefs: TableModels.ColumnDef<EventPlanningModels.GameSession.GameSessionSchema>[] = [
     { field: 'id', headerName: 'ID', cellDataType: 'text', sortable: true, pinned: 'left', hide: true },
     { field: 'game_system_id', headerName: 'Game System ID', cellDataType: 'text', sortable: true, hide: true },
     { field: 'game_master_id', headerName: 'Game Master ID', cellDataType: 'text', sortable: true },
@@ -114,12 +114,11 @@ export class PageEventPlanningGameSessionViewAllComponent implements OnInit {
     },
   ];
 
-  columnDefs: TableModels.ColumnDef[] = this.getColumnDefs();
+  columnDefs: TableModels.ColumnDef<EventPlanningModels.GameSession.GameSessionSchema>[] = this.getColumnDefs();
 
-  private getColumnDefs(): TableModels.ColumnDef[] {
-    const storedColumnDefs: TableModels.ColumnDef[] | null = this.sharedLocalStorageService.get(
-      'PageEventPlanningGameSessionViewAllComponent.columnDefs',
-    );
+  private getColumnDefs(): TableModels.ColumnDef<EventPlanningModels.GameSession.GameSessionSchema>[] {
+    const storedColumnDefs: TableModels.ColumnDef<EventPlanningModels.GameSession.GameSessionSchema>[] | null =
+      this.sharedLocalStorageService.get('PageEventPlanningGameSessionViewAllComponent.columnDefs');
     if (storedColumnDefs) {
       return storedColumnDefs.map((c) => {
         if (c.cellDataType === 'component') {
@@ -135,7 +134,7 @@ export class PageEventPlanningGameSessionViewAllComponent implements OnInit {
     return [...this.defaultColumnDefs];
   }
 
-  onColumnDefsChange(columnDefs: TableModels.ColumnDef[]) {
+  onColumnDefsChange(columnDefs: TableModels.ColumnDef<EventPlanningModels.GameSession.GameSessionSchema>[]) {
     this.sharedLocalStorageService.set('PageEventPlanningGameSessionViewAllComponent.columnDefs', columnDefs);
   }
 

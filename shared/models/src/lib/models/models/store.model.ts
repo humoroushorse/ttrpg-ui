@@ -30,17 +30,15 @@ export interface BaseState<T> extends EntityState<T> {
   errorSummary: string | null;
 }
 
-export const getBaseStateDefault = <T>(): BaseState<T> => {
-  return {
-    entityMap: {},
-    ids: [],
-    loading: false,
-    loaded: false,
-    error: null,
-    errorSummary: null,
-    selectedEntityId: null,
-  };
-};
+export const getBaseStateDefault = <T>(): BaseState<T> => ({
+  entityMap: {},
+  ids: [],
+  loading: false,
+  loaded: false,
+  error: null,
+  errorSummary: null,
+  selectedEntityId: null,
+});
 
 export function withComputedBase<T>() {
   // ik-todo typing

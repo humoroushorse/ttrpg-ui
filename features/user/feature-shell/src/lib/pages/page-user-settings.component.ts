@@ -7,8 +7,7 @@ import { SharedThemePickerComponent } from '@ttrpg-ui/shared/theme/ui';
 import { Meta, Title } from '@angular/platform-browser';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { UserAvatarComponent } from '@ttrpg-ui/features-user-ui';
-import { EventPlanningApiService } from '@ttrpg-ui/features/event-planning/data-access';
+import { UserAvatarComponent } from '@ttrpg-ui/features/user/ui';
 import { BehaviorSubject, switchMap, take } from 'rxjs';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -31,15 +30,13 @@ import { MatInputModule } from '@angular/material/input';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageUserSettingsComponent implements OnInit {
-  readonly authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
 
-  readonly meta = inject(Meta);
+  private readonly meta = inject(Meta);
 
-  readonly title = inject(Title);
+  private readonly title = inject(Title);
 
-  readonly sharedCoreService = inject(SharedCoreService);
-
-  readonly eventPlanningApiService = inject(EventPlanningApiService);
+  private readonly sharedCoreService = inject(SharedCoreService);
 
   userTokenDecoded = this.authService.getUserTokenDecoded();
 
@@ -49,7 +46,7 @@ export class PageUserSettingsComponent implements OnInit {
 
   currentUserTrigger$ = new BehaviorSubject(false);
 
-  currentUser$ = this.currentUserTrigger$.pipe(switchMap(() => this.eventPlanningApiService.getCurrentUser()));
+  currentUser$ = this.currentUserTrigger$.pipe(switchMap(() => this.authService.getCurrentUser()));
 
   userForm = new FormGroup({
     profile_picture_url: new FormControl<string | null>(null),
@@ -57,7 +54,7 @@ export class PageUserSettingsComponent implements OnInit {
 
   public onSubmit() {
     if (!this.userForm.valid) return;
-    this.eventPlanningApiService
+    this.authService
       .updateCurrentUser({
         profile_picture_url: this.userForm.controls.profile_picture_url.value || undefined,
       })

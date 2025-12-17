@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,17 +10,17 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 
 @Component({
   selector: 'lib-event-planning-game-system-table-actions',
-  imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule, MatMenuModule],
+  imports: [RouterModule, MatButtonModule, MatIconModule, MatMenuModule],
   templateUrl: './event-planning-game-system-table-actions.component.html',
   styleUrl: './event-planning-game-system-table-actions.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventPlanningGameSystemTableActionsComponent {
-  readonly authService = inject(AuthService);
+  public readonly authService = inject(AuthService);
 
-  readonly dataStore = inject(EventPlanningGameSystemStore);
+  private readonly dataStore = inject(EventPlanningGameSystemStore);
 
-  readonly data = input<EventPlanningModels.GameSystem.GameSystemSchema>();
+  public readonly data = input<EventPlanningModels.GameSystem.GameSystemSchema>();
 
   onDeleteClicked(data: EventPlanningModels.GameSystem.GameSystemSchema) {
     this.dataStore.delete(data);

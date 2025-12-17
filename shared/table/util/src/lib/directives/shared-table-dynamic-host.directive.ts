@@ -1,4 +1,4 @@
-import { Directive, ViewContainerRef } from '@angular/core';
+import { Directive, inject, ViewContainerRef } from '@angular/core';
 
 @Directive({
   selector: '[libSharedTableDynamicHost]',
@@ -6,5 +6,5 @@ import { Directive, ViewContainerRef } from '@angular/core';
   standalone: true,
 })
 export class SharedTableDynamicHostDirective {
-  constructor(public viewContainerRef: ViewContainerRef) {}
+  public readonly viewContainerRef = inject(ViewContainerRef);
 }

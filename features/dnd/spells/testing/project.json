@@ -1,0 +1,28 @@
+{
+  "name": "dnd-spells-testing",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "features/dnd/testing/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["dnd", "testing"],
+  "targets": {
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../../../coverage/features/dnd/spells/testing"
+      }
+    },
+    "test:jest": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "jestConfig": "features/dnd/spells/testing/jest.config.ts",
+        "tsConfig": "features/dnd/spells/testing/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

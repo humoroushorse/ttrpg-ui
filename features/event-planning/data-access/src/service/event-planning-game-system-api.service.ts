@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { inject, Injectable, resource, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 import { map, Observable } from 'rxjs';
 
@@ -7,30 +7,13 @@ import { map, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class EventPlanningGameSystemApiService {
-
-  readonly serviceConfig: EventPlanningModels.Service.EventPlanningApiServiceConfig = inject(
+  private readonly serviceConfig: EventPlanningModels.Service.EventPlanningApiServiceConfig = inject(
     EventPlanningModels.Service.EVENT_PLANNING_API_SERVICE_CONFIG_TOKEN,
   );
 
-  readonly baseUrl = this.serviceConfig.appConfig().APP_TTRPG_EVENT_PLANNING__API_BASE_PATH;
+  private readonly baseUrl = this.serviceConfig.appConfig().APP_TTRPG_EVENT_PLANNING__API_BASE_PATH;
 
-  readonly http = inject(HttpClient);
-
-  // TODO: go with resources or remove
-  getListResourceOptions = signal<EventPlanningModels.GameSystem.GetListInput | null>(null);
-
-  // TODO: go with resources or remove
-  getListResource = resource({
-    request: () => ({ options: this.getListResourceOptions() }),
-    loader: ({ request: { options }, abortSignal }) => {
-      let params = new HttpParams();
-      if (options?.limit) params = params.append('limit', options.limit);
-      if (options?.offset) params = params.append('offset', options.offset);
-      return fetch(`${this.baseUrl}/game-system${params.toString()}`, {
-        signal: abortSignal,
-      }).then((res) => res.json() as Promise<EventPlanningModels.GameSystem.GameSystemSchema[] | null>);
-    },
-  });
+  private readonly http = inject(HttpClient);
 
   getList(
     options?: EventPlanningModels.GameSystem.GetListInput,
@@ -73,9 +56,7 @@ export class EventPlanningGameSystemApiService {
         headers,
         observe: 'response',
       })
-      .pipe(
-        map((r) => r.body),
-      );
+      .pipe(map((r) => r.body));
   }
 
   delete(entity: EventPlanningModels.GameSystem.GameSystemSchema): Observable<string | null> {
@@ -87,8 +68,6 @@ export class EventPlanningGameSystemApiService {
         headers,
         observe: 'response',
       })
-      .pipe(
-        map((r) => r.body),
-      );
+      .pipe(map((r) => r.body));
   }
 }

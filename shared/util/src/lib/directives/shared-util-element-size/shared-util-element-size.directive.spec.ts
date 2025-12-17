@@ -40,7 +40,7 @@ describe('SharedUtilElementSizeDirective', () => {
 
   it('should observe the element on initialization', () => {
     const directive = TestBed.inject(SharedUtilElementSizeDirective);
-    const observeSpy = jest.spyOn(MockResizeObserver.prototype, 'observe');
+    const observeSpy = vi.spyOn(MockResizeObserver.prototype, 'observe');
 
     directive.ngOnInit();
 
@@ -49,7 +49,7 @@ describe('SharedUtilElementSizeDirective', () => {
 
   it('should disconnect the observer on destruction', () => {
     const directive = TestBed.inject(SharedUtilElementSizeDirective);
-    const disconnectSpy = jest.spyOn(MockResizeObserver.prototype, 'disconnect');
+    const disconnectSpy = vi.spyOn(MockResizeObserver.prototype, 'disconnect');
 
     directive.ngOnDestroy();
 
@@ -58,7 +58,7 @@ describe('SharedUtilElementSizeDirective', () => {
 
   it('should emit sizeChange when ResizeObserver callback is triggered', () => {
     const directive = TestBed.inject(SharedUtilElementSizeDirective);
-    const emitSpy = jest.spyOn(directive.sizeChange, 'emit');
+    const emitSpy = vi.spyOn(directive.sizeChange, 'emit');
 
     const mockEntry = {
       contentRect: { width: 100, height: 200 },

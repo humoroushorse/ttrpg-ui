@@ -6,9 +6,9 @@ import { CookieOptions, CookieService } from 'ngx-cookie-service';
   providedIn: 'root',
 })
 export class SharedCookieService {
-  private cookieService = inject(CookieService);
+  private readonly cookieService = inject(CookieService);
 
-  readonly platformLocation = inject(PlatformLocation);
+  public readonly platformLocation = inject(PlatformLocation);
 
   set<T>(key: string, value: T, options: CookieOptions = {}): void {
     if (!options.path) options.path = this.platformLocation.getBaseHrefFromDOM();

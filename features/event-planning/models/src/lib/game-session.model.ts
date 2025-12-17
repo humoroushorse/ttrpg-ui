@@ -1,14 +1,15 @@
 import { EntityId, SelectEntityId } from '@ngrx/signals/entities';
 import { GameSystemSchema } from './game-system.model';
-import { BookkeepingSchema, UserSchema } from './model';
+import { UserSchema } from './model';
 import { JtUserGameSessionSchema } from './jt-user-game-session.model';
+import { SharedModels } from '@ttrpg-ui/shared/models';
 
 export interface GetListInput {
   limit?: number;
   offset?: number;
 }
 
-export interface GameSessionSchema extends BookkeepingSchema {
+export interface GameSessionSchema extends SharedModels.Schemas.BookkeepingSchema {
   id: string;
   game_system_id: string;
   game_system?: GameSystemSchema;
@@ -27,7 +28,7 @@ export interface GameSessionSchema extends BookkeepingSchema {
 
 export const selectGameSessionId: SelectEntityId<GameSessionSchema> = (gs) => gs.id;
 
-export const selectGameSessionIdKey: EntityId = "id" as keyof GameSessionSchema;
+export const selectGameSessionIdKey: EntityId = 'id' as keyof GameSessionSchema;
 
 export interface GameSessionPostInput {
   game_master_id: string;

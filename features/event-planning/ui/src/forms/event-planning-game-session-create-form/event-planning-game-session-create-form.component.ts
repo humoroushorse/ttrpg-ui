@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
-  EventPlanningApiService,
   EventPlanningGameSystemStore,
   EventPlanningGameSessionStore,
 } from '@ttrpg-ui/features/event-planning/data-access';
@@ -24,7 +23,6 @@ import { SharedNotificationService } from '@ttrpg-ui/shared/notification/data-ac
 import { SharedFormsSingleSelectComponent } from '@ttrpg-ui/shared/forms/ui';
 import { SharedFormValidators } from '@ttrpg-ui/shared/forms/util';
 import { SharedLocalStorageService } from '@ttrpg-ui/shared/local-storage/data-access';
-import { GameSystemSchema } from 'features/event-planning/models/src/lib/game-system.model';
 
 dayjs.extend(isSameOrAfter);
 
@@ -49,15 +47,13 @@ dayjs.extend(isSameOrAfter);
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventPlanningGameSessionCreateFormComponent {
-  readonly eventPlanningApiService = inject(EventPlanningApiService);
+  private readonly eventPlanningGameSystemStore = inject(EventPlanningGameSystemStore);
 
-  readonly eventPlanningGameSystemStore = inject(EventPlanningGameSystemStore);
+  private readonly eventPlanningGameSessionStore = inject(EventPlanningGameSessionStore);
 
-  readonly eventPlanningGameSessionStore = inject(EventPlanningGameSessionStore);
+  private readonly sharedLocalStorageService = inject(SharedLocalStorageService);
 
-  readonly sharedLocalStorageService = inject(SharedLocalStorageService);
-
-  readonly dataTestId = 'EventPlanningGameSystemCreateForm';
+  public readonly dataTestId = 'EventPlanningGameSystemCreateForm';
 
   public gameSystemSearch$ = new BehaviorSubject('');
 
@@ -71,15 +67,15 @@ export class EventPlanningGameSessionCreateFormComponent {
     }),
   );
 
-  readonly authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
 
-  readonly sharedNotificationService = inject(SharedNotificationService);
+  private readonly sharedNotificationService = inject(SharedNotificationService);
 
   public hideSubmitButton = input<boolean>(false);
 
-  readonly dateNowNoTime = new Date(new Date().setHours(0, 0, 0, 0));
+  public readonly dateNowNoTime = new Date(new Date().setHours(0, 0, 0, 0));
 
-  readonly gameSessionFormValidation = {
+  public readonly gameSessionFormValidation = {
     title: {
       min: 3,
       max: 50,
@@ -227,7 +223,7 @@ export class EventPlanningGameSessionCreateFormComponent {
     return gs1 === gs2;
   }
 
-  gameSystemViewValueFn(gs: GameSystemSchema) {
+  gameSystemViewValueFn(gs: EventPlanningModels.GameSystem.GameSystemSchema) {
     return `${gs.name} (${gs.version}, ${gs.release_year})`;
   }
 }

@@ -1,5 +1,3 @@
-
-
 // cards
 export { GameSessionCardListComponent } from './cards/game-session-card-list/game-session-card-list.component';
 export { GameSessionCardComponent } from './cards/game-session-card/game-session-card.component';
@@ -10,6 +8,7 @@ export { EventPlanningGameSessionCreateDialogComponent } from './dialogs/event-p
 export { EventPlanningGameSystemCreateDialogComponent } from './dialogs/event-planning-game-system-create-dialog/event-planning-game-system-create-dialog.component';
 // forms
 export { EventPlanningGameSessionCreateFormComponent } from './forms/event-planning-game-session-create-form/event-planning-game-session-create-form.component';
+export { EventPlanningGameSystemCreateFormComponent } from './forms/event-planning-game-system-create-form/event-planning-game-system-create-form.component';
 // tables
 export { EventPlanningGameSessionTableActionsComponent } from './tables/event-planning-game-session-table-actions/event-planning-game-session-table-actions.component';
 export { EventPlanningGameSystemTableActionsComponent } from './tables/event-planning-game-system-table-actions/event-planning-game-system-table-actions.component';

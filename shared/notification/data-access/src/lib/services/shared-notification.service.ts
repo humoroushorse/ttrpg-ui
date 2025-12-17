@@ -5,7 +5,7 @@ import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
   providedIn: 'root',
 })
 export class SharedNotificationService {
-  readonly snackBar = inject(MatSnackBar);
+  private readonly snackBar = inject(MatSnackBar);
 
   openSnackBar(message: string, action?: string, config?: MatSnackBarConfig) {
     if (!config) config = { duration: 3000 };

@@ -1,5 +1,5 @@
+import { SharedModels } from '@ttrpg-ui/shared/models';
 import { GameSessionSchema } from './game-session.model';
-import { BookkeepingSchema } from './model';
 import { EntityId, SelectEntityId } from '@ngrx/signals/entities';
 
 export interface GetListInput {
@@ -7,7 +7,7 @@ export interface GetListInput {
   offset?: number;
 }
 
-export interface GameSystemSchema extends BookkeepingSchema {
+export interface GameSystemSchema extends SharedModels.Schemas.BookkeepingSchema {
   id: string;
   game_sessions?: GameSessionSchema[];
   name: string;
@@ -18,7 +18,7 @@ export interface GameSystemSchema extends BookkeepingSchema {
 
 export const selectGameSystemId: SelectEntityId<GameSystemSchema> = (gs) => gs.id;
 
-export const selectGameSystemIdKey: EntityId = "id" as keyof GameSystemSchema;
+export const selectGameSystemIdKey: EntityId = 'id' as keyof GameSystemSchema;
 
 export interface GameSystemPostInput {
   name: string;

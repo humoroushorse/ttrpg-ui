@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  ttrpg-ui-dnd:
+    restart: unless-stopped
+    build:
+      context: ../../..
+      dockerfile: apps/dnd/deploy/Dockerfile
+      args:
+        BUILD_CONFIGURATION: production
+        BUILD_BASE_HREF: /
+
+        APP_TTRPG_DND__API_BASE_PATH: /ttrpg-dnd-api
+        APP_TTRPG_DND_SPELL__API_BASE_PATH: 'http://ttrpg-api-dnd:8002'
+    container_name: ttrpg-ui-dnd
+    ports:
+      # use the nginx port
+      - 4203:80
+    environment:
+      NGINX_PORT: 80
+      APP_TTRPG_DND__API_BASE_PATH: '/ttrpg-dnd-api'
+      APP_TTRPG_DND_SPELL__API_BASE_PATH: 'http://ttrpg-api-dnd:8002'

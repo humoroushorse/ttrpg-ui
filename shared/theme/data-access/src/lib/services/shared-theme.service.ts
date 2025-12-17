@@ -1,5 +1,5 @@
-import { Inject, inject, Injectable, Signal, signal } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { inject, Injectable, Signal, signal, DOCUMENT } from '@angular/core';
+
 import { AppTheme, SharedThemeServiceConfig, SHARED_THEME_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/theme/models';
 import { SharedLocalStorageService } from '@ttrpg-ui/shared/local-storage/data-access';
 
@@ -7,16 +7,18 @@ import { SharedLocalStorageService } from '@ttrpg-ui/shared/local-storage/data-a
   providedIn: 'root',
 })
 export class SharedThemeService {
-  private document: Document = inject(DOCUMENT);
+  private readonly document: Document = inject(DOCUMENT);
 
-  private sharedLocalStorageService = inject(SharedLocalStorageService);
+  private readonly sharedLocalStorageService = inject(SharedLocalStorageService);
+
+  private readonly config: SharedThemeServiceConfig = inject(SHARED_THEME_SERVICE_CONFIG_TOKEN);
 
   private themes$ = signal<AppTheme[]>([]);
 
   private activeTheme$ = signal<AppTheme | null>(null);
 
-  constructor(@Inject(SHARED_THEME_SERVICE_CONFIG_TOKEN) config: SharedThemeServiceConfig) {
-    this.themes$.set(config.themes);
+  constructor() {
+    this.themes$.set(this.config.themes);
 
     const storageActiveTheme = this.sharedLocalStorageService.get<AppTheme>(this.getLocalStorageKey('activeTheme$'));
 

@@ -8,7 +8,7 @@ import {
   providedIn: 'root',
 })
 export class SharedLocalStorageService {
-  private config: SharedLocalStorageServiceConfig = inject(SHARED_LOCAL_STORAGE_SERVICE_CONFIG_TOKEN);
+  private readonly config: SharedLocalStorageServiceConfig = inject(SHARED_LOCAL_STORAGE_SERVICE_CONFIG_TOKEN);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getAll(): Record<string, any> {
