@@ -1,0 +1,28 @@
+{
+  "name": "dnd-spells-data-access",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "features/dnd/data-access/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["dnd", "data-access"],
+  "targets": {
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../../../coverage/features/dnd/spells/data-access"
+      }
+    },
+    "test:jest": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "jestConfig": "features/dnd/spells/data-access/jest.config.ts",
+        "tsConfig": "features/dnd/spells/data-access/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

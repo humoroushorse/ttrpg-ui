@@ -5,7 +5,7 @@ import { SharedLocalStorageService } from '@ttrpg-ui/shared/local-storage/data-a
   providedIn: 'root',
 })
 export class SharedTableService {
-  readonly sharedLocalStorageService = inject(SharedLocalStorageService);
+  private readonly sharedLocalStorageService = inject(SharedLocalStorageService);
 
   private pageSizeOptions$$ = signal<number[]>([10, 25, 100]);
 
@@ -13,8 +13,14 @@ export class SharedTableService {
 
   public showFirstLastButtons$$ = signal<boolean>(true);
 
+  private filterDebounceTime$$ = signal<number>(300);
+
   getPageSizeOptions(): Signal<number[]> {
     return this.pageSizeOptions$$.asReadonly();
+  }
+
+  getFilterDebounceTime(): Signal<number> {
+    return this.filterDebounceTime$$.asReadonly();
   }
 
   public setSelectedPageSize(pageSize: number) {

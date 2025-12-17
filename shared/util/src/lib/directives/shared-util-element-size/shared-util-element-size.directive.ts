@@ -5,7 +5,7 @@ import { Directive, ElementRef, inject, OnDestroy, OnInit, output } from '@angul
   standalone: true,
 })
 export class SharedUtilElementSizeDirective implements OnInit, OnDestroy {
-  readonly elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
   sizeChange = output<{ width: number; height: number }>();
 

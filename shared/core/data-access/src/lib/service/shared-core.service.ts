@@ -7,13 +7,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   providedIn: 'root',
 })
 export class SharedCoreService {
-  private config: SharedCoreServiceConfig = inject(SHARED_CORE_SERVICE_CONFIG_TOKEN);
+  private readonly config: SharedCoreServiceConfig = inject(SHARED_CORE_SERVICE_CONFIG_TOKEN);
 
-  private pageHeight = signal<number>(window.innerHeight);
+  private readonly pageHeight = signal<number>(window.innerHeight);
 
-  private pageWidth = signal<number>(window.innerWidth);
+  private readonly pageWidth = signal<number>(window.innerWidth);
 
-  private toolbarHeight = computed<number>(() => {
+  private readonly toolbarHeight = computed<number>(() => {
     // defults of the mat-toolbar anyways (v18)
     // return this.pageWidth() < 600 ? 52 : 60;
     // change at 640px which is sm media size from tailwindcss (v3.4.13)

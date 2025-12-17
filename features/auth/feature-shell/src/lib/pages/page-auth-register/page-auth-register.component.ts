@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
@@ -15,7 +15,6 @@ import { RegisterUserInput } from 'features/auth/models/src/lib/models/models';
 @Component({
   selector: 'lib-page-auth-register',
   imports: [
-    CommonModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
@@ -30,13 +29,13 @@ import { RegisterUserInput } from 'features/auth/models/src/lib/models/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageAuthRegisterComponent implements OnInit {
-  readonly meta = inject(Meta);
+  private readonly meta = inject(Meta);
 
-  readonly title = inject(Title);
+  private readonly title = inject(Title);
 
-  readonly sharedCoreService = inject(SharedCoreService);
+  private readonly sharedCoreService = inject(SharedCoreService);
 
-  readonly authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
 
   readonly loginRoute = this.authService.authGuardAuthAppLoginRoute;
 

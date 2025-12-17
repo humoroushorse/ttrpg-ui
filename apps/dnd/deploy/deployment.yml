@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ttrpg-dnd-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ttrpg-dnd-ui
+  template:
+    metadata:
+      labels:
+        app: ttrpg-dnd-ui
+    spec:
+      containers:
+        - name: ttrpg-dnd-ui
+          image: ttrpg-dnd-ui:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          env:
+            - name: APP_TTRPG_DND__API_BASE_PATH
+              value: '/ttrpg-dnd-api'
+            - name: APP_TTRPG_DND_SPELL__API_BASE_PATH
+              # value: 'http://host.docker.internal:8002'
+              value: 'http://ttrpg-api-dnd:8002'
+            - name: NGINX_PORT
+              value: '80'

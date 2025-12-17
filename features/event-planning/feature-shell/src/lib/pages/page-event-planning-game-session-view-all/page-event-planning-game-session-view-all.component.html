@@ -50,14 +50,14 @@
 
   @if (currentView() === 'table') {
     <mat-card>
-      <lib-shared-table
+      <lib-shared-angular-material-table
         [tableHeader]="'Game Events'"
         [columnDefs]="columnDefs"
         [data]="eventPlanningGameSessionStore.entities() || []"
         (columnDefsChange)="onColumnDefsChange($event)"
         (resetColumnDefsClicked)="onResetColumnDefsClicked()"
         (rowDoubleClicked)="onViewGameSessionClicked($event)"
-      ></lib-shared-table>
+      ></lib-shared-angular-material-table>
     </mat-card>
   } @else if (currentView() === 'card:list') {
     <lib-game-session-card-list

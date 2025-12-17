@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { inject, Injectable, resource, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 import { map, Observable, tap } from 'rxjs';
 import { SharedNotificationService } from '@ttrpg-ui/shared/notification/data-access';
@@ -8,31 +8,15 @@ import { SharedNotificationService } from '@ttrpg-ui/shared/notification/data-ac
   providedIn: 'root',
 })
 export class EventPlanningGameSessionApiService {
-  readonly sharedNotificationService = inject(SharedNotificationService);
+  private readonly sharedNotificationService = inject(SharedNotificationService);
 
-  readonly serviceConfig: EventPlanningModels.Service.EventPlanningApiServiceConfig = inject(
+  private readonly serviceConfig: EventPlanningModels.Service.EventPlanningApiServiceConfig = inject(
     EventPlanningModels.Service.EVENT_PLANNING_API_SERVICE_CONFIG_TOKEN,
   );
 
   readonly baseUrl = this.serviceConfig.appConfig().APP_TTRPG_EVENT_PLANNING__API_BASE_PATH;
 
-  readonly http = inject(HttpClient);
-
-  // TODO: go with resources or remove
-  getListResourceOptions = signal<EventPlanningModels.GameSession.GetListInput | null>(null);
-
-  // TODO: go with resources or remove
-  getListResource = resource({
-    request: () => ({ options: this.getListResourceOptions() }),
-    loader: ({ request: { options }, abortSignal }) => {
-      let params = new HttpParams();
-      if (options?.limit) params = params.append('limit', options.limit);
-      if (options?.offset) params = params.append('offset', options.offset);
-      return fetch(`${this.baseUrl}/game-session${params.toString()}`, {
-        signal: abortSignal,
-      }).then((res) => res.json() as Promise<EventPlanningModels.GameSession.GameSessionSchema[] | null>);
-    },
-  });
+  private readonly http = inject(HttpClient);
 
   getList(
     options?: EventPlanningModels.GameSession.GetListInput,

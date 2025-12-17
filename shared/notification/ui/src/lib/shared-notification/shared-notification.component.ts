@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [CommonModule, MatCardModule, MatIconModule],
   templateUrl: './shared-notification.component.html',
   styleUrl: './shared-notification.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedNotificationComponent {
   title = input<string | undefined>();

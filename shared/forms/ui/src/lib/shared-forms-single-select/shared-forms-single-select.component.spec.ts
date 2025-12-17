@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NgControl } from '@angular/forms';
 import { SharedFormsSingleSelectComponent } from './shared-forms-single-select.component';
 
 describe('SharedFormsSingleSelectComponent', () => {
@@ -8,11 +9,20 @@ describe('SharedFormsSingleSelectComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SharedFormsSingleSelectComponent],
+      providers: [
+        {
+          provide: NgControl,
+          useValue: {
+            control: { value: null },
+            errors: null,
+            touched: false,
+          },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedFormsSingleSelectComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

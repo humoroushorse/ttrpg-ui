@@ -1,0 +1,28 @@
+{
+  "name": "dnd-spells-util",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "features/dnd/util/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["dnd", "util"],
+  "targets": {
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "config": "features/dnd/spells/util/vite.config.mts"
+      }
+    },
+    "test:jest": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "jestConfig": "features/dnd/spells/util/jest.config.ts",
+        "tsConfig": "features/dnd/spells/util/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

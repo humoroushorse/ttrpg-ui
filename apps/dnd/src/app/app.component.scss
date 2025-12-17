@@ -1,0 +1,12 @@
+.component-toolbar {
+  background-color: var(--primary-color);
+  color: var(--primary-on-container);
+
+  mat-icon {
+    color: var(--primary-on-container) !important;
+  }
+}
+
+.component-error {
+  color: var(--error-color) !important;
+}

@@ -1,1 +1,1 @@
-export { SharedTableComponent } from './lib/shared-table/shared-table.component';
+export { SharedAngularMaterialTableComponent } from './lib/shared-angular-material-table/shared-angular-material-table.component';

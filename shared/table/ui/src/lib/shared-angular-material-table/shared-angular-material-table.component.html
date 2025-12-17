@@ -1,0 +1,535 @@
+<section class="flex flex-row items-center gap-4 p-4">
+  @if (tableHeader(); as tableHeader) {
+    <span class="mat-title">{{ tableHeader }}</span>
+  }
+  <div class="grow"><!-- spacer --></div>
+
+  <mat-form-field class="table-search" subscriptSizing="dynamic">
+    <mat-label>Filter</mat-label>
+    <mat-icon matIconPrefix>search</mat-icon>
+    <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Search table" #searchInput type="text" />
+    @if (searchInput.value) {
+      <button
+        matIconSuffix
+        mat-icon-button
+        type="button"
+        matTooltip="Clear table search"
+        (click)="searchInput.value = ''; clearGlobalFilter()"
+        aria-label="Clear table search"
+        attr.data-qa="{{ dataQa() }}GlobalFilterBtnClear"
+      >
+        <mat-icon>clear</mat-icon>
+      </button>
+    } @else {
+      <button
+        matIconSuffix
+        mat-icon-button
+        [disabled]="true"
+        aria-label="Disabled clear table search"
+        attr.data-qa="{{ dataQa() }}GlobalFilterBtnClear"
+      >
+        <mat-icon><!-- empty --></mat-icon>
+      </button>
+    }
+  </mat-form-field>
+
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="tableSettingsMenu"
+    matTooltip="Table settings"
+    aria-label="Table settings"
+    type="button"
+    attr.data-qa="{{ dataQa() }}TableSettingsBtnOpen"
+  >
+    <mat-icon>settings</mat-icon>
+  </button>
+</section>
+
+<div class="table-container" cdkScrollable>
+  <!-- ik-todo: use recycleRows? -> can't use if animated (e.g. expansion rows) -->
+  <table
+    mat-table
+    matSort
+    [dataSource]="dataSource"
+    class="mat-elevation-z8"
+    cdkDropList
+    cdkDropListOrientation="horizontal"
+    (cdkDropListDropped)="drop($event)"
+  >
+    <!-- Dynamic Column(s) -->
+    @for (column of tableColumnDefs(); track column.field) {
+      <ng-container
+        [matColumnDef]="column.field"
+        [sticky]="column.pinned === 'left'"
+        [stickyEnd]="column.pinned === 'right'"
+      >
+        <!-- TODO: on the drop event dont allow dropping at these indexes -->
+        <th mat-header-cell mat-sort-header cdkDrag class="group" [disabled]="!column.sortable" *matHeaderCellDef>
+          <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+          <div class="flex flex-row items-center gap-2">
+            @if (column.pinned !== undefined) {
+              <!-- <div class="min-size-6 flex items-center">
+                <mat-icon matTooltip="Pinned {{ column.pinned }}">push_pin</mat-icon>
+              </div> -->
+            } @else {
+              <div class="min-size-6 flex items-center">
+                <mat-icon class="cursor-move" cdkDragHandle>drag_indicator</mat-icon>
+              </div>
+            }
+            <span>{{ column.headerName }}</span>
+            @if (columnFilters().has(column.field)) {
+              <button
+                mat-icon-button
+                class="ml-1"
+                matTooltip="Clear filter"
+                (click)="
+                  applyColumnFilter(column.field, '', textFilterTypes().get(column.field) || 'contains');
+                  $event.stopPropagation()
+                "
+                aria-label="Clear filter"
+                tabindex="-1"
+                attr.data-qa="{{ dataQa() }}-{{ column.field }}FilterBtnClear"
+              >
+                <mat-icon color="primary">filter_alt</mat-icon>
+              </button>
+            }
+            @if (!column.appHideColumnSettingsMenu) {
+              <button
+                mat-icon-button
+                class="duration-250 invisible ease-in-out group-hover:visible"
+                type="button"
+                [matMenuTriggerFor]="columnSettingsMenu"
+                [matMenuTriggerData]="{ 'columnDef': column }"
+                [matMenuTriggerRestoreFocus]="false"
+                (click)="$event.stopImmediatePropagation()"
+                aria-label="Column options"
+                matTooltip="See column options"
+                attr.data-qa="{{ dataQa() }}-{{ column.field }}ColumnSettingsBtnOpen"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            }
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let rowData">
+          @if (column.cellDataType === 'component') {
+            <ng-container libSharedTableDynamicHost #dynamicHost="libSharedTableDynamicHost"></ng-container>
+            @if (dynamicHost) {
+              <!-- Use the service to dynamically load the component -->
+              <ng-container
+                *ngComponentOutlet="
+                  column.component;
+                  inputs: column.valueGetter ? getValue(column, rowData) : { data: rowData }
+                "
+              ></ng-container>
+            }
+          } @else if (column.cellDataType === 'number') {
+            {{ getValue(column, rowData) | number }}
+          } @else if (column.cellDataType === 'boolean') {
+            <mat-checkbox
+              [checked]="getValue(column, rowData)"
+              [indeterminate]="getValue(column, rowData) === null"
+              disabled
+              attr.data-qa="{{ dataQa() }}-{{ column.field }}-{{ rowData.id }}CellCheckbox"
+            ></mat-checkbox>
+          } @else if (column.cellDataType === 'date') {
+            {{ getValue(column, rowData) | date: 'medium' }}
+          } @else {
+            @if (getValue(column, rowData, false).length > 50) {
+              <div [matTooltip]="getValue(column, rowData)">
+                <span>{{ getValue(column, rowData) | slice: 0 : 50 }}</span>
+                <span>...</span>
+              </div>
+            } @else {
+              {{ getValue(column, rowData, false) }}
+            }
+          }
+        </td>
+      </ng-container>
+    }
+
+    <!-- No data row: filtered -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" [attr.colspan]="displayedColumns().length">
+        <div class="flex w-full flex-row items-center gap-2 p-4">
+          <mat-icon>warning</mat-icon> No data matches the current filter: "{{ searchInput.value }}"
+        </div>
+      </td>
+    </tr>
+
+    <!-- Header and Row Declarations -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: stickyHeader()"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns()"
+      (click)="rowClicked.emit(row)"
+      (dblclick)="rowDoubleClicked.emit(row)"
+    ></tr>
+  </table>
+</div>
+@if (loading()) {
+  <mat-progress-bar mode="query"></mat-progress-bar>
+}
+<mat-divider></mat-divider>
+<mat-paginator
+  [length]="dataSource.data.length"
+  [pageSize]="selectedPageSize$$()"
+  [pageSizeOptions]="pageSizeOptions$$()"
+  [showFirstLastButtons]="showFirstLastButtons$$()"
+  (page)="onPage($event)"
+  aria-label="Select page data results"
+></mat-paginator>
+
+<mat-menu #tableSettingsMenu="matMenu">
+  <lib-shared-table-tools-column-settings
+    [columnDefs]="tableColumnDefs()"
+    (columnDefsChange)="updateTableColumnDefs($event)"
+  ></lib-shared-table-tools-column-settings>
+  <lib-shared-table-tools-download
+    [dataSource]="dataSource"
+    [displayedColumns]="displayedColumns()"
+  ></lib-shared-table-tools-download>
+  <button
+    mat-menu-item
+    type="button"
+    (click)="resetColumnDefsClicked.emit(true)"
+    attr.data-qa="{{ dataQa() }}TableMenuBtnResetColumns"
+  >
+    <mat-icon>restore</mat-icon>
+    Reset Columns
+  </button>
+</mat-menu>
+
+<mat-menu #columnSettingsMenu="matMenu">
+  <ng-template matMenuContent let-columnDef="columnDef">
+    @if (columnDef.sortable) {
+      @if (sort.active !== columnDef.field || (sort.active === columnDef.field && sort.direction !== 'desc')) {
+        <button
+          type="button"
+          mat-menu-item
+          (click)="sortColumn(columnDef, 'desc')"
+          aria-label="Sort column desc"
+          attr.data-qa="{{ dataQa() }}-{{ columnDef.field }}-ColumnSettingsBtnSortDesc"
+        >
+          <mat-icon>arrow_downward</mat-icon>
+          <span>Sort by DESC</span>
+        </button>
+      }
+      @if (sort.active !== columnDef.field || (sort.active === columnDef.field && sort.direction !== 'asc')) {
+        <button
+          type="button"
+          mat-menu-item
+          (click)="sortColumn(columnDef, 'asc')"
+          aria-label="Sort column ASC"
+          attr.data-qa="{{ dataQa() }}-{{ columnDef.field }}-ColumnSettingsBtnSortAsc"
+        >
+          <mat-icon>arrow_upward</mat-icon>
+          <span>Sort by ASC</span>
+        </button>
+      }
+      @if (sort.active === columnDef.field) {
+        <button
+          type="button"
+          mat-menu-item
+          (click)="sortColumn(columnDef, '')"
+          aria-label="Unsort column"
+          attr.data-qa="{{ dataQa() }}-{{ columnDef.field }}-ColumnSettingsBtnUnsort"
+        >
+          <mat-icon><!-- empty for consistent padding --></mat-icon>
+          <span>Unsort</span>
+        </button>
+      }
+
+      <mat-divider></mat-divider>
+    }
+    @if (columnDef.pinned !== 'left') {
+      <button
+        type="button"
+        mat-menu-item
+        (click)="pinColumn(columnDef, 'left')"
+        aria-label="Pin column left"
+        attr.data-qa="{{ dataQa() }}-{{ columnDef.field }}-ColumnSettingsBtnPinLeft"
+      >
+        <mat-icon>push_pin</mat-icon>
+        <span>Pin to Left</span>
+      </button>
+    }
+    @if (columnDef.pinned !== 'right') {
+      <button
+        type="button"
+        mat-menu-item
+        (click)="pinColumn(columnDef, 'right')"
+        aria-label="Pin column right"
+        attr.data-qa="{{ dataQa() }}-{{ columnDef.field }}-ColumnSettingsBtnPinRight"
+      >
+        <mat-icon>push_pin</mat-icon>
+        <span>Pin to Right</span>
+      </button>
+    }
+    @if (columnDef.pinned !== undefined) {
+      <button
+        type="button"
+        mat-menu-item
+        (click)="pinColumn(columnDef, undefined)"
+        aria-label="Unpin column"
+        attr.data-qa="{{ dataQa() }}-{{ columnDef.field }}-ColumnSettingsBtnUnpin"
+      >
+        <mat-icon><!-- empty for consistent padding --></mat-icon>
+        <span>Unpin</span>
+      </button>
+    }
+    @if (columnDef.filter; as filterType) {
+      <mat-divider></mat-divider>
+      @if (filterType === 'agTextColumnFilter') {
+        <div
+          class="flex flex-col gap-1"
+          (click)="$event.stopPropagation()"
+          (keyup)="$event.stopPropagation()"
+          tabindex="0"
+        >
+          <mat-form-field class="w-full" subscriptSizing="dynamic">
+            <mat-label>Filter Type</mat-label>
+            <mat-select
+              [value]="textFilterTypes().get(columnDef.field) || 'contains'"
+              (selectionChange)="
+                applyColumnFilter(columnDef.field, columnFilters().get(columnDef.field) || '', $event.value)
+              "
+            >
+              <mat-option value="contains">Contains</mat-option>
+              <mat-option value="notContains">Does not contain</mat-option>
+              <mat-option value="equals">Equals</mat-option>
+              <mat-option value="notEqual">Not equal</mat-option>
+              <mat-option value="startsWith">Starts with</mat-option>
+              <mat-option value="endsWith">Ends with</mat-option>
+              <mat-option value="blank">Is blank</mat-option>
+              <mat-option value="notBlank">Is not blank</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="w-full" subscriptSizing="dynamic">
+            <mat-label>Filter value</mat-label>
+            <input
+              matInput
+              [disabled]="['blank', 'notBlank'].includes(textFilterTypes().get(columnDef.field) || 'contains')"
+              (input)="
+                applyColumnFilter(
+                  columnDef.field,
+                  $any($event.target).value,
+                  textFilterTypes().get(columnDef.field) || 'contains'
+                )
+              "
+              [value]="columnFilters().get(columnDef.field) || ''"
+              placeholder="Value"
+              (click)="$event.stopPropagation()"
+            />
+            @if (columnFilters().get(columnDef.field)) {
+              <button
+                mat-icon-button
+                matSuffix
+                matTooltip="Clear filter"
+                aria-label="Clear filter"
+                (click)="
+                  applyColumnFilter(columnDef.field, '', textFilterTypes().get(columnDef.field) || 'contains');
+                  $event.stopPropagation()
+                "
+                tabindex="-1"
+                attr.data-qa="{{ dataQa() }}-{{ columnDef.field }}FilterBtnClear"
+              >
+                <mat-icon>clear</mat-icon>
+              </button>
+            }
+          </mat-form-field>
+        </div>
+      }
+      @if (filterType === 'agDateColumnFilter') {
+        <div
+          class="flex flex-col gap-2"
+          (click)="$event.stopPropagation()"
+          (keyup)="$event.stopPropagation()"
+          tabindex="0"
+        >
+          <mat-form-field class="w-full" subscriptSizing="dynamic">
+            <mat-label>Filter Type</mat-label>
+            <mat-select
+              [value]="textFilterTypes().get(columnDef.field) || 'equals'"
+              (selectionChange)="
+                applyColumnFilter(columnDef.field, columnFilters().get(columnDef.field) || '', $event.value)
+              "
+            >
+              <mat-option value="equals">Equals</mat-option>
+              <mat-option value="notEqual">Not equal</mat-option>
+              <mat-option value="before">Before</mat-option>
+              <mat-option value="after">After</mat-option>
+              <mat-option value="blank">Is blank</mat-option>
+              <mat-option value="notBlank">Is not blank</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="w-full" subscriptSizing="dynamic">
+            <mat-label>Filter date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [disabled]="['blank', 'notBlank'].includes(textFilterTypes().get(columnDef.field) || 'equals')"
+              (dateChange)="
+                applyColumnFilter(columnDef.field, $event.value, textFilterTypes().get(columnDef.field) || 'equals')
+              "
+              [value]="columnFilters().get(columnDef.field) || null"
+              placeholder="Date"
+              (click)="$event.stopPropagation()"
+            />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            @if (columnFilters().get(columnDef.field)) {
+              <button
+                mat-icon-button
+                matSuffix
+                matTooltip="Clear filter"
+                aria-label="Clear filter"
+                (click)="
+                  applyColumnFilter(columnDef.field, '', textFilterTypes().get(columnDef.field) || 'equals');
+                  $event.stopPropagation()
+                "
+                tabindex="-1"
+                attr.data-qa="{{ dataQa() }}-{{ columnDef.field }}FilterBtnClear"
+              >
+                <mat-icon>clear</mat-icon>
+              </button>
+            }
+          </mat-form-field>
+        </div>
+      }
+      @if (filterType === 'agNumberColumnFilter') {
+        <div
+          class="flex flex-col gap-2"
+          (click)="$event.stopPropagation()"
+          (keyup)="$event.stopPropagation()"
+          tabindex="0"
+        >
+          <mat-form-field class="w-full" subscriptSizing="dynamic">
+            <mat-label>Filter Type</mat-label>
+            <mat-select
+              [value]="textFilterTypes().get(columnDef.field) || 'equals'"
+              (selectionChange)="
+                applyColumnFilter(columnDef.field, columnFilters().get(columnDef.field) || '', $event.value)
+              "
+            >
+              <mat-option value="equals">Equals</mat-option>
+              <mat-option value="notEqual">Does not equal</mat-option>
+              <mat-option value="greaterThan">Greater than</mat-option>
+              <mat-option value="greaterThanOrEqual">Greater than or equal</mat-option>
+              <mat-option value="lessThan">Less than</mat-option>
+              <mat-option value="lessThanOrEqual">Less than or equal</mat-option>
+              <mat-option value="blank">Is blank</mat-option>
+              <mat-option value="notBlank">Is not blank</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="w-full" subscriptSizing="dynamic">
+            <mat-label>Filter value</mat-label>
+            <input
+              matInput
+              type="number"
+              [disabled]="['blank', 'notBlank'].includes(textFilterTypes().get(columnDef.field) || 'equals')"
+              (input)="
+                applyColumnFilter(
+                  columnDef.field,
+                  $any($event.target).value,
+                  textFilterTypes().get(columnDef.field) || 'equals'
+                )
+              "
+              [value]="columnFilters().get(columnDef.field) || ''"
+              placeholder="Value"
+              (click)="$event.stopPropagation()"
+            />
+            @if (columnFilters().get(columnDef.field)) {
+              <button
+                mat-icon-button
+                matSuffix
+                matTooltip="Clear filter"
+                aria-label="Clear filter"
+                (click)="
+                  applyColumnFilter(columnDef.field, '', textFilterTypes().get(columnDef.field) || 'equals');
+                  $event.stopPropagation()
+                "
+                tabindex="-1"
+                attr.data-qa="{{ dataQa() }}-{{ columnDef.field }}FilterBtnClear"
+              >
+                <mat-icon>clear</mat-icon>
+              </button>
+            }
+          </mat-form-field>
+        </div>
+      }
+      @if (filterType === 'agSetColumnFilter') {
+        <div
+          class="flex max-h-64 flex-col gap-2 overflow-auto"
+          (click)="$event.stopPropagation()"
+          (keyup)="$event.stopPropagation()"
+          tabindex="0"
+          style="min-width: 200px"
+        >
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="setFilterMenu"
+            [matMenuTriggerData]="{ field: columnDef.field }"
+            aria-label="Open set filter"
+            attr.data-qa="{{ dataQa() }}-{{ columnDef.field }}SetFilterBtnOpen"
+          >
+            <mat-icon>filter_list</mat-icon>
+          </button>
+        </div>
+      }
+      @if (
+        filterType === 'agTextColumnFilter' ||
+        filterType === 'agDateColumnFilter' ||
+        filterType === 'agNumberColumnFilter'
+      ) {
+        <mat-divider></mat-divider>
+      }
+    }
+    <mat-divider></mat-divider>
+    <button
+      mat-menu-item
+      type="button"
+      (click)="hideColumn(columnDef)"
+      aria-label="Hide column"
+      attr.data-qa="{{ dataQa() }}-{{ columnDef.field }}ColumnSettingsBtnHide"
+    >
+      <mat-icon>visibility_off</mat-icon>
+      Hide Column
+    </button>
+    <lib-shared-table-tools-column-settings
+      [columnDefs]="tableColumnDefs()"
+      (columnDefsChange)="updateTableColumnDefs($event)"
+    ></lib-shared-table-tools-column-settings>
+  </ng-template>
+</mat-menu>
+
+<mat-menu #setFilterMenu="matMenu">
+  <ng-template matMenuContent let-field="field">
+    <div
+      class="flex max-h-64 flex-col gap-2 overflow-auto p-2"
+      style="min-width: 200px"
+      (click)="$event.stopPropagation()"
+      (keyup)="$event.stopPropagation()"
+      tabindex="0"
+    >
+      <mat-checkbox
+        [checked]="isAllSetOptionsSelected(field)"
+        [indeterminate]="isSomeSetOptionsSelected(field)"
+        (change)="toggleSelectAllSetOptions(field)"
+        attr.data-qa="{{ dataQa() }}-{{ field }}SetFilterBtnSelectAll"
+      >
+        Select All
+      </mat-checkbox>
+      <mat-divider></mat-divider>
+      @for (option of getUniqueColumnValues(field); track option) {
+        <mat-checkbox
+          [checked]="isSetOptionSelected(field, option)"
+          (change)="toggleSetOption(field, option)"
+          attr.data-qa="{{ dataQa() }}-{{ field }}SetFilterBtnOption-{{ option }}"
+        >
+          {{ option }}
+        </mat-checkbox>
+      }
+    </div>
+  </ng-template>
+</mat-menu>

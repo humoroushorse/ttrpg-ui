@@ -7,10 +7,18 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "shared/sidenav/ui/jest.config.ts"
+        "reportsDirectory": "../../../coverage/shared/sidenav/ui"
+      }
+    },
+    "test:jest": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "jestConfig": "shared/sidenav/ui/jest.config.ts",
+        "tsConfig": "shared/sidenav/ui/tsconfig.spec.json"
       }
     },
     "lint": {

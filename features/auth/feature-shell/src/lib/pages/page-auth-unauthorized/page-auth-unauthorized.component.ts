@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
@@ -7,21 +7,21 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 
 @Component({
   selector: 'lib-page-auth-unauthorized',
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   templateUrl: './page-auth-unauthorized.component.html',
   styleUrl: './page-auth-unauthorized.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageAuthUnauthorizedComponent implements OnInit {
-  readonly meta = inject(Meta);
+  private readonly meta = inject(Meta);
 
-  readonly title = inject(Title);
+  private readonly title = inject(Title);
 
-  readonly authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
 
-  readonly loginRoute = this.authService.authGuardAuthAppLoginRoute;
+  public readonly loginRoute = this.authService.authGuardAuthAppLoginRoute;
 
-  readonly sharedCoreService = inject(SharedCoreService);
+  private readonly sharedCoreService = inject(SharedCoreService);
 
   public unauthorizedRoute: string | null = null;
 

@@ -25,7 +25,7 @@ import { Router } from '@angular/router';
 import { RegisterUserInput } from 'features/auth/models/src/lib/models/models';
 import { SharedNotificationService } from '@ttrpg-ui/shared/notification/data-access';
 import { SharedLocalStorageService } from '@ttrpg-ui/shared/local-storage/data-access';
-
+import { UserModels } from '@ttrpg-ui/features/user/models';
 @Injectable({
   providedIn: 'root',
 })
@@ -51,11 +51,11 @@ export class AuthService {
 
   public postSessionRefreshTrigger = new BehaviorSubject<boolean>(false);
 
-  readonly router = inject(Router);
+  private readonly router = inject(Router);
 
-  readonly sharedNotificationService = inject(SharedNotificationService);
+  private readonly sharedNotificationService = inject(SharedNotificationService);
 
-  readonly authServiceConfig: AuthServiceConfig = inject(AUTH_SERVICE_CONFIG_TOKEN);
+  private readonly authServiceConfig: AuthServiceConfig = inject(AUTH_SERVICE_CONFIG_TOKEN);
 
   public authGuardAuthAppBaseRoute = signal<string[]>(
     this.authServiceConfig.authGuardAuthAppRouteBase ? [...this.authServiceConfig.authGuardAuthAppRouteBase] : ['/'],
@@ -70,14 +70,14 @@ export class AuthService {
   });
 
   public alreadyLoggedInGuardRedirectRoute = signal<string[]>(
-    this.authServiceConfig.alreadyLoggedInGuardRedirectRoute || ['/', 'home'],
+    this.authServiceConfig.alreadyLoggedInGuardRedirectRoute ?? ['/', 'home'],
   ).asReadonly();
 
-  private apiBaseUrl = computed(() => this.authServiceConfig.appConfig().APP_TTRPG_EVENT_PLANNING__API_BASE_PATH);
+  private apiBaseUrl = computed(() => this.authServiceConfig.appConfig().AUTH_BASE_URL || '');
 
-  readonly http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
-  readonly sharedLocalStorageService = inject(SharedLocalStorageService);
+  private readonly sharedLocalStorageService = inject(SharedLocalStorageService);
 
   private userTokenDecoded = signal<UserIdToken | null>(this.getUserToken());
 
@@ -269,5 +269,33 @@ export class AuthService {
           this.deleteAuthInfo();
         },
       });
+  }
+
+  getCurrentUser(): Observable<UserModels.Schemas.UserSchema | null> {
+    const currentUserId = this.getUserTokenDecoded()()?.sub;
+    if (!currentUserId) return of(null);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http
+      .get<UserModels.Schemas.UserSchema>(`${this.authGuardAuthAppBaseRoute()}/user/${currentUserId}`, {
+        headers,
+        observe: 'response',
+      })
+      .pipe(map((r) => r.body));
+  }
+
+  updateCurrentUser(body: UserModels.Schemas.PutUserInput): Observable<UserModels.Schemas.UserSchema | null> {
+    const currentUserId = this.getUserTokenDecoded()()?.sub;
+    if (!currentUserId) return of(null);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http
+      .put<UserModels.Schemas.UserSchema>(`${this.authGuardAuthAppBaseRoute()}/user/${currentUserId}`, body, {
+        headers,
+        observe: 'response',
+      })
+      .pipe(map((r) => r.body));
   }
 }

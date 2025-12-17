@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject, OnInit, signal, Type } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedTableComponent } from '@ttrpg-ui/shared/table/ui';
+import { SharedAngularMaterialTableComponent } from '@ttrpg-ui/shared/table/ui';
 import { TableModels } from '@ttrpg-ui/shared/table/models';
 import { SharedLocalStorageService } from '@ttrpg-ui/shared/local-storage/data-access';
 import { MatCardModule } from '@angular/material/card';
@@ -24,7 +24,7 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
   selector: 'lib-page-event-planning-game-system-view-all',
   imports: [
     CommonModule,
-    SharedTableComponent,
+    SharedAngularMaterialTableComponent,
     GameSystemCardListComponent,
     MatCardModule,
     MatDialogModule,
@@ -37,21 +37,21 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageEventPlanningGameSystemViewAllComponent implements OnInit {
-  readonly dialog = inject(MatDialog);
+  private readonly dialog = inject(MatDialog);
 
-  readonly router = inject(Router);
+  private readonly router = inject(Router);
 
-  readonly meta = inject(Meta);
+  private readonly meta = inject(Meta);
 
-  readonly title = inject(Title);
+  private readonly title = inject(Title);
 
-  readonly sharedCoreService = inject(SharedCoreService);
+  private readonly sharedCoreService = inject(SharedCoreService);
 
-  readonly sharedLocalStorageService = inject(SharedLocalStorageService);
+  private readonly sharedLocalStorageService = inject(SharedLocalStorageService);
 
-  readonly eventPlanningGameSystemStore = inject(EventPlanningGameSystemStore);
+  public readonly eventPlanningGameSystemStore = inject(EventPlanningGameSystemStore);
 
-  readonly authService = inject(AuthService);
+  public readonly authService = inject(AuthService);
 
   ngOnInit(): void {
     this.title.setTitle(`Event Planning | View List of Game Systems | ${this.sharedCoreService.appTitle}`);
@@ -73,11 +73,18 @@ export class PageEventPlanningGameSystemViewAllComponent implements OnInit {
 
   public baseUrl = this.eventPlanningApiService.serviceConfig.appConfig().APP_TTRPG_EVENT_PLANNING__API_BASE_PATH;
 
-  private defaultColumnDefs: TableModels.ColumnDef[] = [
+  private defaultColumnDefs: TableModels.ColumnDef<EventPlanningModels.GameSystem.GameSystemSchema>[] = [
     { field: 'id', headerName: 'ID', cellDataType: 'text', sortable: true, pinned: 'left', hide: true },
-    { field: 'name', headerName: 'Name', cellDataType: 'text', sortable: true },
+    { field: 'name', headerName: 'Name', cellDataType: 'text', sortable: true, filter: 'agTextColumnFilter' },
     { field: 'version', headerName: 'Version', cellDataType: 'text', sortable: true },
-    { field: 'release_year', headerName: 'Release Year', cellDataType: 'text', sortable: true },
+    {
+      field: 'release_year',
+      headerName: 'Release Year',
+      cellDataType: 'text',
+      sortable: true,
+      filter: 'agSetColumnFilter',
+      // valueGetter: (params) => new Date(params.release_year, 0)
+    },
     { field: 'description', headerName: 'Description', cellDataType: 'text', sortable: true },
     {
       field: 'actions',
@@ -90,12 +97,11 @@ export class PageEventPlanningGameSystemViewAllComponent implements OnInit {
     },
   ];
 
-  columnDefs: TableModels.ColumnDef[] = this.getColumnDefs();
+  columnDefs: TableModels.ColumnDef<EventPlanningModels.GameSystem.GameSystemSchema>[] = this.getColumnDefs();
 
-  private getColumnDefs(): TableModels.ColumnDef[] {
-    const storedColumnDefs: TableModels.ColumnDef[] | null = this.sharedLocalStorageService.get(
-      'PageEventPlanningGameSystemViewAllComponent.columnDefs',
-    );
+  private getColumnDefs(): TableModels.ColumnDef<EventPlanningModels.GameSystem.GameSystemSchema>[] {
+    const storedColumnDefs: TableModels.ColumnDef<EventPlanningModels.GameSystem.GameSystemSchema>[] | null =
+      this.sharedLocalStorageService.get('PageEventPlanningGameSystemViewAllComponent.columnDefs');
     if (storedColumnDefs) {
       return storedColumnDefs.map((c) => {
         if (c.cellDataType === 'component') {
@@ -111,7 +117,7 @@ export class PageEventPlanningGameSystemViewAllComponent implements OnInit {
     return [...this.defaultColumnDefs];
   }
 
-  onColumnDefsChange(columnDefs: TableModels.ColumnDef[]) {
+  onColumnDefsChange(columnDefs: TableModels.ColumnDef<EventPlanningModels.GameSystem.GameSystemSchema>[]) {
     this.sharedLocalStorageService.set('PageEventPlanningGameSystemViewAllComponent.columnDefs', columnDefs);
   }
 

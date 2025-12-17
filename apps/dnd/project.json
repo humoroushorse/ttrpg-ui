@@ -1,0 +1,118 @@
+{
+  "name": "dnd",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/dnd/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/dnd",
+        "index": "apps/dnd/src/index.html",
+        "browser": "apps/dnd/src/main.ts",
+        "polyfills": [],
+        "tsConfig": "apps/dnd/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/dnd/src/robots.txt",
+          "apps/dnd/src/sitemap.xml",
+          "apps/dnd/src/assets",
+          {
+            "glob": "**/*",
+            "input": "apps/dnd/public"
+          }
+        ],
+        "styles": [
+          "apps/dnd/src/styles.scss",
+          {
+            "input": "shared/scss/themes/default-theme-light.scss",
+            "bundleName": "default-theme-light",
+            "inject": false
+          },
+          {
+            "input": "shared/scss/themes/default-theme-dark.scss",
+            "bundleName": "default-theme-dark",
+            "inject": false
+          }
+        ],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular/build:dev-server",
+      "options": {
+        "port": 4203,
+        "proxyConfig": "apps/dnd/proxies/proxy.conf.json"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "dnd:build:production"
+        },
+        "development": {
+          "buildTarget": "dnd:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "continuous": true
+    },
+    "extract-i18n": {
+      "executor": "@angular/build:extract-i18n",
+      "options": {
+        "buildTarget": "dnd:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "config": "apps/dnd/vite.config.mts"
+      }
+    },
+    "test:jest": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "jestConfig": "apps/dnd/jest.config.ts",
+        "tsConfig": "apps/dnd/tsconfig.spec.json"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "dnd:build",
+        "port": 4203,
+        "staticFilePath": "dist/apps/dnd/browser",
+        "spa": true
+      }
+    }
+  }
+}

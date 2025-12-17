@@ -8,13 +8,11 @@ import {
   input,
   Input,
   OnDestroy,
-  Optional,
   output,
-  Self,
   signal,
   viewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -40,7 +38,6 @@ import { MatFormFieldControl } from '@angular/material/form-field';
 @Component({
   selector: 'lib-shared-forms-single-select',
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -184,9 +181,9 @@ export class SharedFormsSingleSelectComponent implements ControlValueAccessor, O
    * SharedFormsSingleSelectComponent fields
    ****************************************************************************/
 
-  readonly focusMonitor = inject(FocusMonitor);
+  private readonly focusMonitor = inject(FocusMonitor);
 
-  readonly elementRef = inject(ElementRef<HTMLElement>);
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
 
   openedChange = output<boolean>();
 
@@ -314,11 +311,9 @@ export class SharedFormsSingleSelectComponent implements ControlValueAccessor, O
 
   searchInput = viewChild<ElementRef>('searchInput');
 
-  constructor(
-    @Optional() @Self() public ngControl: NgControl,
-    // @Optional() parentForm: NgForm,
-    // @Optional() parentFormGroup: FormGroupDirective,
-  ) {
+  public readonly ngControl = inject(NgControl, { optional: true, self: true }) ?? ({} as NgControl);
+
+  constructor() {
     this.focusMonitor
       .monitor(this.elementRef.nativeElement, true)
       .pipe(takeUntilDestroyed())
