@@ -89,19 +89,45 @@
 
 // ── Global utility classes (for templates) ───────────────────────────────────
 
-.g-text-h1 { @include text-h1; }
-.g-text-h2 { @include text-h2; }
-.g-text-h3 { @include text-h3; }
-.g-text-h4 { @include text-h4; }
-.g-text-title { @include text-title; }
-.g-text-title-lg { @include text-title-lg; }
-.g-text-body { @include text-body; }
-.g-text-body-sm { @include text-body-sm; }
-.g-text-body-strong { @include text-body-strong; }
-.g-text-label { @include text-label; }
-.g-text-label-sm { @include text-label-sm; }
-.g-text-caption { @include text-caption; }
-.g-text-chip { @include text-chip; }
+.g-text-h1 {
+  @include text-h1;
+}
+.g-text-h2 {
+  @include text-h2;
+}
+.g-text-h3 {
+  @include text-h3;
+}
+.g-text-h4 {
+  @include text-h4;
+}
+.g-text-title {
+  @include text-title;
+}
+.g-text-title-lg {
+  @include text-title-lg;
+}
+.g-text-body {
+  @include text-body;
+}
+.g-text-body-sm {
+  @include text-body-sm;
+}
+.g-text-body-strong {
+  @include text-body-strong;
+}
+.g-text-label {
+  @include text-label;
+}
+.g-text-label-sm {
+  @include text-label-sm;
+}
+.g-text-caption {
+  @include text-caption;
+}
+.g-text-chip {
+  @include text-chip;
+}
 
 // Empty/null value display — applied when a field has no meaningful value
 .empty-value {

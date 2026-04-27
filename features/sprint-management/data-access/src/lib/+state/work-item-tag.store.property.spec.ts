@@ -17,9 +17,7 @@ import { signal } from '@angular/core';
 import { WorkItemStore } from './work-item.store';
 import { SprintManagementApiService } from '../service/sprint-management-api.service';
 import { WebSocketService } from '../service/websocket.service';
-import {
-  SprintModels,
-} from '@ttrpg-ui/features/sprint-management/models';
+import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 
 const SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN = SprintModels.Service.SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN;
 const { WorkItemType, WorkItemStatus, WorkItemPriority } = SprintModels.WorkItem;
@@ -82,55 +80,49 @@ describe('WorkItemStore - Tag Uniqueness (Property 1)', () => {
 
   it('adding a tag that already exists does not create duplicates', () => {
     fc.assert(
-      fc.property(
-        fc.uuid(),
-        fc.array(tagArb, { minLength: 1, maxLength: 10 }),
-        tagArb,
-        (id, initialTags, tagToAdd) => {
-          const uniqueInitial = [...new Set(initialTags)];
-          const item = makeWorkItem(id, uniqueInitial);
-          patchState(store, addEntity(item));
+      fc.property(fc.uuid(), fc.array(tagArb, { minLength: 1, maxLength: 10 }), tagArb, (id, initialTags, tagToAdd) => {
+        const uniqueInitial = [...new Set(initialTags)];
+        const item = makeWorkItem(id, uniqueInitial);
+        patchState(store, addEntity(item));
 
-          const updatedItem = { ...item, tags: uniqueInitial.includes(tagToAdd) ? uniqueInitial : [...uniqueInitial, tagToAdd] };
-          vi.spyOn(apiService, 'addTag').mockReturnValue(of(updatedItem));
+        const updatedItem = {
+          ...item,
+          tags: uniqueInitial.includes(tagToAdd) ? uniqueInitial : [...uniqueInitial, tagToAdd],
+        };
+        vi.spyOn(apiService, 'addTag').mockReturnValue(of(updatedItem));
 
-          store.addTag({ workItemId: id, tag: tagToAdd });
+        store.addTag({ workItemId: id, tag: tagToAdd });
 
-          const result = store.entityMap()[id];
-          const tags = result?.tags ?? [];
+        const result = store.entityMap()[id];
+        const tags = result?.tags ?? [];
 
-          const uniqueTags = new Set(tags);
-          expect(uniqueTags.size).toBe(tags.length);
-        }
-      ),
-      { numRuns: 200 }
+        const uniqueTags = new Set(tags);
+        expect(uniqueTags.size).toBe(tags.length);
+      }),
+      { numRuns: 200 },
     );
   });
 
   it('adding the same tag multiple times results in exactly one occurrence', () => {
     fc.assert(
-      fc.property(
-        fc.uuid(),
-        tagArb,
-        (id, tag) => {
-          const item = makeWorkItem(id, []);
-          patchState(store, addEntity(item));
+      fc.property(fc.uuid(), tagArb, (id, tag) => {
+        const item = makeWorkItem(id, []);
+        patchState(store, addEntity(item));
 
-          const updatedItem = { ...item, tags: [tag] };
-          vi.spyOn(apiService, 'addTag').mockReturnValue(of(updatedItem));
+        const updatedItem = { ...item, tags: [tag] };
+        vi.spyOn(apiService, 'addTag').mockReturnValue(of(updatedItem));
 
-          store.addTag({ workItemId: id, tag });
-          store.addTag({ workItemId: id, tag });
-          store.addTag({ workItemId: id, tag });
+        store.addTag({ workItemId: id, tag });
+        store.addTag({ workItemId: id, tag });
+        store.addTag({ workItemId: id, tag });
 
-          const result = store.entityMap()[id];
-          const tags = result?.tags ?? [];
-          const occurrences = tags.filter((t) => t === tag).length;
+        const result = store.entityMap()[id];
+        const tags = result?.tags ?? [];
+        const occurrences = tags.filter((t) => t === tag).length;
 
-          expect(occurrences).toBeLessThanOrEqual(1);
-        }
-      ),
-      { numRuns: 200 }
+        expect(occurrences).toBeLessThanOrEqual(1);
+      }),
+      { numRuns: 200 },
     );
   });
 
@@ -142,7 +134,7 @@ describe('WorkItemStore - Tag Uniqueness (Property 1)', () => {
             id: fc.uuid(),
             tags: fc.array(tagArb, { minLength: 0, maxLength: 5 }),
           }),
-          { minLength: 1, maxLength: 10 }
+          { minLength: 1, maxLength: 10 },
         ),
         (items) => {
           items.forEach(({ id, tags }) => {
@@ -153,32 +145,29 @@ describe('WorkItemStore - Tag Uniqueness (Property 1)', () => {
           const uniqueAvailable = new Set(available);
 
           expect(uniqueAvailable.size).toBe(available.length);
-        }
+        },
       ),
-      { numRuns: 200 }
+      { numRuns: 200 },
     );
   });
 
   it('work item form addTag method prevents duplicates', () => {
     fc.assert(
-      fc.property(
-        fc.array(tagArb, { minLength: 1, maxLength: 10 }),
-        (tags) => {
-          const seen = new Set<string>();
-          const result: string[] = [];
+      fc.property(fc.array(tagArb, { minLength: 1, maxLength: 10 }), (tags) => {
+        const seen = new Set<string>();
+        const result: string[] = [];
 
-          for (const tag of tags) {
-            if (!result.includes(tag)) {
-              result.push(tag);
-              seen.add(tag);
-            }
+        for (const tag of tags) {
+          if (!result.includes(tag)) {
+            result.push(tag);
+            seen.add(tag);
           }
-
-          const uniqueResult = new Set(result);
-          expect(uniqueResult.size).toBe(result.length);
         }
-      ),
-      { numRuns: 200 }
+
+        const uniqueResult = new Set(result);
+        expect(uniqueResult.size).toBe(result.length);
+      }),
+      { numRuns: 200 },
     );
   });
 });

@@ -10,12 +10,7 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -151,7 +146,7 @@ export class WorkItemFormComponent implements OnInit {
     });
 
     // Update parent_id validation when type changes
-    this.form.get('type')?.valueChanges.subscribe(type => {
+    this.form.get('type')?.valueChanges.subscribe((type) => {
       if (type) {
         this.typeSignal.set(type);
       }
@@ -193,13 +188,13 @@ export class WorkItemFormComponent implements OnInit {
   addTag(tag?: string): void {
     const value = tag ?? this.tagInput.value?.trim();
     if (value && !this.tags().includes(value)) {
-      this.tags.update(tags => [...tags, value]);
+      this.tags.update((tags) => [...tags, value]);
       this.tagInput.setValue('');
     }
   }
 
   removeTag(tag: string): void {
-    this.tags.update(tags => tags.filter(t => t !== tag));
+    this.tags.update((tags) => tags.filter((t) => t !== tag));
   }
 
   onSubmit(): void {
@@ -251,7 +246,7 @@ export class WorkItemFormComponent implements OnInit {
       }
     } else {
       // Mark all fields as touched to show validation errors
-      Object.keys(this.form.controls).forEach(key => {
+      Object.keys(this.form.controls).forEach((key) => {
         const control = this.form.get(key);
         control?.markAsTouched();
       });

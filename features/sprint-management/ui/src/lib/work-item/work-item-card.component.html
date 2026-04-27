@@ -2,14 +2,12 @@
   class="work-item-card"
   [ngClass]="'work-item-card--type-' + workItem().type"
   (click)="onCardClick()"
-  [attr.aria-label]="'Work item: ' + workItem().title">
-
+  [attr.aria-label]="'Work item: ' + workItem().title"
+>
   <mat-card-header class="work-item-card__header">
     <div class="work-item-card__header-content">
       <div class="work-item-card__type-info">
-        <mat-icon
-          [matTooltip]="workItem().type"
-          class="work-item-card__type-icon">
+        <mat-icon [matTooltip]="workItem().type" class="work-item-card__type-icon">
           {{ getTypeIcon() }}
         </mat-icon>
         @if (getTicketNumber()) {
@@ -22,8 +20,7 @@
       </mat-card-title>
     </div>
 
-    <mat-chip
-      [class]="'work-item-card__status-badge ' + getStatusColor()">
+    <mat-chip [class]="'work-item-card__status-badge ' + getStatusColor()">
       {{ workItem().status }}
     </mat-chip>
   </mat-card-header>
@@ -73,18 +70,10 @@
   </mat-card-content>
 
   <mat-card-actions class="work-item-card__actions">
-    <button
-      mat-icon-button
-      (click)="onViewClick($event)"
-      matTooltip="View details"
-      aria-label="View work item details">
+    <button mat-icon-button (click)="onViewClick($event)" matTooltip="View details" aria-label="View work item details">
       <mat-icon>visibility</mat-icon>
     </button>
-    <button
-      mat-icon-button
-      (click)="onEditClick($event)"
-      matTooltip="Edit"
-      aria-label="Edit work item">
+    <button mat-icon-button (click)="onEditClick($event)" matTooltip="Edit" aria-label="Edit work item">
       <mat-icon>edit</mat-icon>
     </button>
   </mat-card-actions>

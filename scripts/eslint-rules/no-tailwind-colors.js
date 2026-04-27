@@ -12,7 +12,8 @@ module.exports = {
       recommended: true,
     },
     messages: {
-      noTailwindColor: 'Avoid Tailwind color class "{{className}}". Use design tokens (var(--g-color-*)) in SCSS instead.',
+      noTailwindColor:
+        'Avoid Tailwind color class "{{className}}". Use design tokens (var(--g-color-*)) in SCSS instead.',
     },
     schema: [],
   },

@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,14 +13,7 @@ const { LinkType } = SprintModels.WorkItemLink;
 @Component({
   selector: 'lib-work-item-link-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatChipsModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTooltipModule,
-    RouterLink,
-  ],
+  imports: [CommonModule, MatChipsModule, MatIconModule, MatButtonModule, MatTooltipModule, RouterLink],
   templateUrl: './work-item-link-list.component.html',
   styleUrl: './work-item-link-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -67,9 +55,7 @@ export class WorkItemLinkListComponent {
 
   getLinkedItemId(link: WorkItemLink): string {
     const currentId = this.currentWorkItemId();
-    return link.source_work_item_id === currentId
-      ? link.target_work_item_id
-      : link.source_work_item_id;
+    return link.source_work_item_id === currentId ? link.target_work_item_id : link.source_work_item_id;
   }
 
   onDeleteLink(linkId: string): void {

@@ -6,17 +6,7 @@ import {
   UserIdToken,
 } from '@ttrpg-ui/features/auth/models';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import {
-  catchError,
-  interval,
-  map,
-  Observable,
-  of,
-  startWith,
-  take,
-  tap,
-  throwError,
-} from 'rxjs';
+import { catchError, interval, map, Observable, of, startWith, take, tap, throwError } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { RegisterUserInput } from 'features/auth/models/src/lib/models/models';
@@ -58,7 +48,6 @@ export class AuthService {
   private readonly sharedLocalStorageService = inject(SharedLocalStorageService);
 
   private userTokenDecoded = signal<UserIdToken | null>(this.getUserToken());
-
 
   public readonly refreshTokenAtSecondsRemaining = 30;
 

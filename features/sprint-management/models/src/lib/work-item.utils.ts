@@ -11,10 +11,7 @@ import { WorkItem } from './work-item.models';
  * @param projectKey Project key (e.g., 'DND', 'SPRINT')
  * @returns Formatted ticket number (e.g., 'DND-123') or null
  */
-export function formatTicketNumber(
-  workItem: Pick<WorkItem, 'ticket_number'>,
-  projectKey?: string
-): string | null {
+export function formatTicketNumber(workItem: Pick<WorkItem, 'ticket_number'>, projectKey?: string): string | null {
   if (!workItem.ticket_number) {
     return null;
   }
@@ -32,10 +29,7 @@ export function formatTicketNumber(
  * @param projectKey Project key
  * @returns Title with ticket number prefix (e.g., '[DND-123] My Work Item')
  */
-export function getDisplayTitle(
-  workItem: Pick<WorkItem, 'title' | 'ticket_number'>,
-  projectKey?: string
-): string {
+export function getDisplayTitle(workItem: Pick<WorkItem, 'title' | 'ticket_number'>, projectKey?: string): string {
   const ticketNum = formatTicketNumber(workItem, projectKey);
   return ticketNum ? `[${ticketNum}] ${workItem.title}` : workItem.title;
 }

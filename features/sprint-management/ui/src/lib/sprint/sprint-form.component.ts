@@ -1,18 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  output,
-  effect,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -90,7 +78,7 @@ export class SprintFormComponent {
     },
     {
       validators: [sprintDateValidator()],
-    }
+    },
   );
 
   constructor() {

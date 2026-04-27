@@ -12,8 +12,7 @@ import { SprintManagementApiService } from '../service/sprint-management-api.ser
 import { WebSocketService } from '../service/websocket.service';
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 
-const SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN =
-  SprintModels.Service.SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN;
+const SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN = SprintModels.Service.SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN;
 const { LinkType } = SprintModels.WorkItemLink;
 type WorkItemLink = SprintModels.WorkItemLink.WorkItemLink;
 
@@ -77,7 +76,7 @@ describe('WorkItemLinkStore', () => {
 
     it('should set error on load failure', () => {
       vi.spyOn(apiService, 'getWorkItemLinks').mockReturnValue(
-        throwError(() => ({ message: 'Network error', error: {} }))
+        throwError(() => ({ message: 'Network error', error: {} })),
       );
 
       store.loadLinks('wi-a');
@@ -93,9 +92,7 @@ describe('WorkItemLinkStore', () => {
 
   describe('createLink', () => {
     it('should optimistically add a link before API completes', () => {
-      vi.spyOn(apiService, 'createWorkItemLink').mockReturnValue(
-        of(makeLink({ id: 'l-real' }))
-      );
+      vi.spyOn(apiService, 'createWorkItemLink').mockReturnValue(of(makeLink({ id: 'l-real' })));
 
       store.createLink({
         source_work_item_id: 'wi-a',
@@ -107,9 +104,7 @@ describe('WorkItemLinkStore', () => {
     });
 
     it('should rollback optimistic add on API error', async () => {
-      vi.spyOn(apiService, 'createWorkItemLink').mockReturnValue(
-        throwError(() => ({ message: 'error', error: {} }))
-      );
+      vi.spyOn(apiService, 'createWorkItemLink').mockReturnValue(throwError(() => ({ message: 'error', error: {} })));
 
       store.createLink({
         source_work_item_id: 'wi-a',
@@ -129,7 +124,7 @@ describe('WorkItemLinkStore', () => {
         setAllEntities([
           makeLink({ id: 'l-1', source_work_item_id: 'wi-a', target_work_item_id: 'wi-b', link_type: LinkType.Blocks }),
           makeLink({ id: 'l-2', source_work_item_id: 'wi-b', target_work_item_id: 'wi-c', link_type: LinkType.Blocks }),
-        ])
+        ]),
       );
 
       const spy = vi.spyOn(apiService, 'createWorkItemLink');
@@ -148,11 +143,18 @@ describe('WorkItemLinkStore', () => {
         store,
         setAllEntities([
           makeLink({ id: 'l-1', source_work_item_id: 'wi-a', target_work_item_id: 'wi-b', link_type: LinkType.Blocks }),
-        ])
+        ]),
       );
 
       vi.spyOn(apiService, 'createWorkItemLink').mockReturnValue(
-        of(makeLink({ id: 'l-new', source_work_item_id: 'wi-b', target_work_item_id: 'wi-a', link_type: LinkType.RelatedTo }))
+        of(
+          makeLink({
+            id: 'l-new',
+            source_work_item_id: 'wi-b',
+            target_work_item_id: 'wi-a',
+            link_type: LinkType.RelatedTo,
+          }),
+        ),
       );
 
       store.createLink({
@@ -186,9 +188,7 @@ describe('WorkItemLinkStore', () => {
       const link = makeLink({ id: 'l-1' });
       patchState(store, addEntity(link));
 
-      vi.spyOn(apiService, 'deleteWorkItemLink').mockReturnValue(
-        throwError(() => ({ message: 'error', error: {} }))
-      );
+      vi.spyOn(apiService, 'deleteWorkItemLink').mockReturnValue(throwError(() => ({ message: 'error', error: {} })));
 
       store.deleteLink('l-1');
 
@@ -212,7 +212,7 @@ describe('WorkItemLinkStore', () => {
           makeLink({ id: 'l-3', link_type: LinkType.RelatedTo }),
           makeLink({ id: 'l-4', link_type: LinkType.DuplicateOf }),
           makeLink({ id: 'l-5', link_type: LinkType.RelatedTo }),
-        ])
+        ]),
       );
     });
 
@@ -249,9 +249,7 @@ describe('WorkItemLinkStore', () => {
 
   describe('clearLinks', () => {
     it('should clear all links and reset currentWorkItemId', () => {
-      vi.spyOn(apiService, 'getWorkItemLinks').mockReturnValue(
-        of([makeLink({ id: 'l-1' })])
-      );
+      vi.spyOn(apiService, 'getWorkItemLinks').mockReturnValue(of([makeLink({ id: 'l-1' })]));
       store.loadLinks('wi-a');
       expect(store.entities().length).toBe(1);
 
@@ -268,35 +266,32 @@ describe('WorkItemLinkStore', () => {
   describe('Property-Based Tests', () => {
     it('**Validates: Requirements 7.6** — no circular blocks: if A blocks B and B blocks C, C cannot block A', () => {
       fc.assert(
-        fc.property(
-          fc.array(fc.string({ minLength: 2, maxLength: 4 }), { minLength: 3, maxLength: 6 }),
-          (nodeIds) => {
-            const uniqueIds = [...new Set(nodeIds)];
-            if (uniqueIds.length < 3) return;
+        fc.property(fc.array(fc.string({ minLength: 2, maxLength: 4 }), { minLength: 3, maxLength: 6 }), (nodeIds) => {
+          const uniqueIds = [...new Set(nodeIds)];
+          if (uniqueIds.length < 3) return;
 
-            const [a, b, c] = uniqueIds;
+          const [a, b, c] = uniqueIds;
 
-            const existingLinks: WorkItemLink[] = [
-              makeLink({ id: 'l-ab', source_work_item_id: a, target_work_item_id: b, link_type: LinkType.Blocks }),
-              makeLink({ id: 'l-bc', source_work_item_id: b, target_work_item_id: c, link_type: LinkType.Blocks }),
-            ];
+          const existingLinks: WorkItemLink[] = [
+            makeLink({ id: 'l-ab', source_work_item_id: a, target_work_item_id: b, link_type: LinkType.Blocks }),
+            makeLink({ id: 'l-bc', source_work_item_id: b, target_work_item_id: c, link_type: LinkType.Blocks }),
+          ];
 
-            patchState(store, setAllEntities(existingLinks));
+          patchState(store, setAllEntities(existingLinks));
 
-            const spy = vi.spyOn(apiService, 'createWorkItemLink');
+          const spy = vi.spyOn(apiService, 'createWorkItemLink');
 
-            store.createLink({
-              source_work_item_id: c,
-              target_work_item_id: a,
-              link_type: LinkType.Blocks,
-            });
+          store.createLink({
+            source_work_item_id: c,
+            target_work_item_id: a,
+            link_type: LinkType.Blocks,
+          });
 
-            expect(spy).not.toHaveBeenCalled();
+          expect(spy).not.toHaveBeenCalled();
 
-            spy.mockRestore();
-          }
-        ),
-        { numRuns: 50 }
+          spy.mockRestore();
+        }),
+        { numRuns: 50 },
       );
     });
 
@@ -311,7 +306,14 @@ describe('WorkItemLinkStore', () => {
             patchState(store, setAllEntities([] as WorkItemLink[]));
 
             vi.spyOn(apiService, 'createWorkItemLink').mockReturnValue(
-              of(makeLink({ id: `l-${Date.now()}`, source_work_item_id: sourceId, target_work_item_id: targetId, link_type: LinkType.Blocks }))
+              of(
+                makeLink({
+                  id: `l-${Date.now()}`,
+                  source_work_item_id: sourceId,
+                  target_work_item_id: targetId,
+                  link_type: LinkType.Blocks,
+                }),
+              ),
             );
 
             store.createLink({
@@ -321,49 +323,43 @@ describe('WorkItemLinkStore', () => {
             });
 
             expect(apiService.createWorkItemLink).toHaveBeenCalled();
-          }
+          },
         ),
-        { numRuns: 50 }
+        { numRuns: 50 },
       );
     });
 
     it('**Validates: Requirements 7.6** — longer chains are also detected as cycles', () => {
       fc.assert(
-        fc.property(
-          fc.array(
-            fc.string({ minLength: 2, maxLength: 4 }),
-            { minLength: 4, maxLength: 8 }
-          ),
-          (nodeIds) => {
-            const uniqueIds = [...new Set(nodeIds)];
-            if (uniqueIds.length < 4) return;
+        fc.property(fc.array(fc.string({ minLength: 2, maxLength: 4 }), { minLength: 4, maxLength: 8 }), (nodeIds) => {
+          const uniqueIds = [...new Set(nodeIds)];
+          if (uniqueIds.length < 4) return;
 
-            const chain = uniqueIds.slice(0, 4);
-            const chainLinks: WorkItemLink[] = chain.slice(0, -1).map((id, i) =>
-              makeLink({
-                id: `l-chain-${i}`,
-                source_work_item_id: id,
-                target_work_item_id: chain[i + 1],
-                link_type: LinkType.Blocks,
-              })
-            );
-
-            patchState(store, setAllEntities(chainLinks));
-
-            const spy = vi.spyOn(apiService, 'createWorkItemLink');
-
-            store.createLink({
-              source_work_item_id: chain[chain.length - 1],
-              target_work_item_id: chain[0],
+          const chain = uniqueIds.slice(0, 4);
+          const chainLinks: WorkItemLink[] = chain.slice(0, -1).map((id, i) =>
+            makeLink({
+              id: `l-chain-${i}`,
+              source_work_item_id: id,
+              target_work_item_id: chain[i + 1],
               link_type: LinkType.Blocks,
-            });
+            }),
+          );
 
-            expect(spy).not.toHaveBeenCalled();
+          patchState(store, setAllEntities(chainLinks));
 
-            spy.mockRestore();
-          }
-        ),
-        { numRuns: 50 }
+          const spy = vi.spyOn(apiService, 'createWorkItemLink');
+
+          store.createLink({
+            source_work_item_id: chain[chain.length - 1],
+            target_work_item_id: chain[0],
+            link_type: LinkType.Blocks,
+          });
+
+          expect(spy).not.toHaveBeenCalled();
+
+          spy.mockRestore();
+        }),
+        { numRuns: 50 },
       );
     });
   });

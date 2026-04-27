@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  input,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -63,10 +57,7 @@ export class CustomFieldComponent {
 
   onValueChange(event: Event): void {
     const target = event.target as HTMLInputElement;
-    const value =
-      this.fieldDefinition().type === CustomFieldType.Number
-        ? parseFloat(target.value)
-        : target.value;
+    const value = this.fieldDefinition().type === CustomFieldType.Number ? parseFloat(target.value) : target.value;
 
     this.valueChange.emit({
       key: this.fieldDefinition().key,

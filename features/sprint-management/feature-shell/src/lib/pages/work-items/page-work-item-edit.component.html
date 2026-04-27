@@ -1,12 +1,12 @@
-<div class="p-4 max-w-4xl mx-auto">
+<div class="mx-auto max-w-4xl p-4">
   @if (isLoading()) {
-    <div class="flex justify-center items-center min-h-screen">
+    <div class="flex min-h-screen items-center justify-center">
       <mat-spinner></mat-spinner>
     </div>
   }
 
   @if (!isLoading() && workItem()) {
-    <div class="flex items-center justify-between mb-6">
+    <div class="mb-6 flex items-center justify-between">
       <div>
         <h1>Edit Work Item</h1>
         <p>Update work item details</p>
@@ -21,7 +21,13 @@
         <form [formGroup]="workItemForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
           <mat-form-field class="w-full">
             <mat-label>Title *</mat-label>
-            <input matInput formControlName="title" placeholder="Enter work item title" required aria-label="Work item title" />
+            <input
+              matInput
+              formControlName="title"
+              placeholder="Enter work item title"
+              required
+              aria-label="Work item title"
+            />
             @if (workItemForm.get('title')?.invalid) {
               <mat-error>{{ getErrorMessage('title') }}</mat-error>
             }
@@ -29,10 +35,16 @@
 
           <mat-form-field class="w-full">
             <mat-label>Description</mat-label>
-            <textarea matInput formControlName="description" placeholder="Enter work item description" rows="4" aria-label="Work item description"></textarea>
+            <textarea
+              matInput
+              formControlName="description"
+              placeholder="Enter work item description"
+              rows="4"
+              aria-label="Work item description"
+            ></textarea>
           </mat-form-field>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
             <mat-form-field>
               <mat-label>Type *</mat-label>
               <mat-select formControlName="type" required aria-label="Work item type">
@@ -70,7 +82,7 @@
             </mat-form-field>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
             <mat-form-field>
               <mat-label>Project</mat-label>
               <mat-select formControlName="project_id" aria-label="Project">
@@ -96,7 +108,7 @@
             </mat-form-field>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
             <mat-form-field>
               <mat-label>Assignee</mat-label>
               <input matInput formControlName="assignee_id" placeholder="Enter assignee ID" aria-label="Assignee ID" />
@@ -105,7 +117,13 @@
             @if (isParentRequired()) {
               <mat-form-field>
                 <mat-label>Parent Epic *</mat-label>
-                <input matInput formControlName="parent_id" placeholder="Enter parent Epic ID" required aria-label="Parent Epic ID" />
+                <input
+                  matInput
+                  formControlName="parent_id"
+                  placeholder="Enter parent Epic ID"
+                  required
+                  aria-label="Parent Epic ID"
+                />
                 <mat-hint>Story and Defect must be linked to an Epic</mat-hint>
                 @if (workItemForm.get('parent_id')?.invalid) {
                   <mat-error>{{ getErrorMessage('parent_id') }}</mat-error>
@@ -114,10 +132,17 @@
             }
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
             <mat-form-field>
               <mat-label>Story Points</mat-label>
-              <input matInput type="number" formControlName="story_points" placeholder="Enter story points" min="0" aria-label="Story points" />
+              <input
+                matInput
+                type="number"
+                formControlName="story_points"
+                placeholder="Enter story points"
+                min="0"
+                aria-label="Story points"
+              />
               @if (workItemForm.get('story_points')?.invalid) {
                 <mat-error>{{ getErrorMessage('story_points') }}</mat-error>
               }
@@ -125,7 +150,14 @@
 
             <mat-form-field>
               <mat-label>Estimated Hours</mat-label>
-              <input matInput type="number" formControlName="estimated_hours" placeholder="Enter estimated hours" min="0" aria-label="Estimated hours" />
+              <input
+                matInput
+                type="number"
+                formControlName="estimated_hours"
+                placeholder="Enter estimated hours"
+                min="0"
+                aria-label="Estimated hours"
+              />
               @if (workItemForm.get('estimated_hours')?.invalid) {
                 <mat-error>{{ getErrorMessage('estimated_hours') }}</mat-error>
               }
@@ -133,11 +165,18 @@
           </div>
 
           <div>
-            <p class="mat-body-2 block mb-2">Tags</p>
-            <div class="flex gap-2 mb-2">
+            <p class="mat-body-2 mb-2 block">Tags</p>
+            <div class="mb-2 flex gap-2">
               <mat-form-field class="flex-1">
                 <mat-label>Add Tag</mat-label>
-                <input matInput [(ngModel)]="tagInput" [ngModelOptions]="{ standalone: true }" placeholder="Enter tag name" (keyup.enter)="addTag()" aria-label="Tag input" />
+                <input
+                  matInput
+                  [(ngModel)]="tagInput"
+                  [ngModelOptions]="{ standalone: true }"
+                  placeholder="Enter tag name"
+                  (keyup.enter)="addTag()"
+                  aria-label="Tag input"
+                />
               </mat-form-field>
               <button mat-raised-button type="button" (click)="addTag()" [disabled]="!tagInput()" aria-label="Add tag">
                 <mat-icon>add</mat-icon>
@@ -154,14 +193,28 @@
             </mat-chip-set>
           </div>
 
-          <div class="flex justify-between items-center pt-4 border-t border-solid">
-            <button mat-button type="button" (click)="clearCachedFormData()" [disabled]="isSubmitting()" aria-label="Discard draft">
+          <div class="flex items-center justify-between border-t border-solid pt-4">
+            <button
+              mat-button
+              type="button"
+              (click)="clearCachedFormData()"
+              [disabled]="isSubmitting()"
+              aria-label="Discard draft"
+            >
               <mat-icon>restore</mat-icon>
               Discard Draft
             </button>
             <div class="flex gap-2">
-              <button mat-button type="button" (click)="onCancel()" [disabled]="isSubmitting()" aria-label="Cancel">Cancel</button>
-              <button mat-raised-button color="primary" type="submit" [disabled]="workItemForm.invalid || isSubmitting()" aria-label="Save changes">
+              <button mat-button type="button" (click)="onCancel()" [disabled]="isSubmitting()" aria-label="Cancel">
+                Cancel
+              </button>
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="workItemForm.invalid || isSubmitting()"
+                aria-label="Save changes"
+              >
                 @if (isSubmitting()) {
                   <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
                   Saving...

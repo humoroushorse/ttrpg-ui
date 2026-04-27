@@ -17,11 +17,11 @@ export const workItemResolver: ResolveFn<WorkItem | null> = (route) => {
   }
 
   return apiService.getWorkItem(id).pipe(
-    map(workItem => workItem),
+    map((workItem) => workItem),
     catchError(() => {
       // If work item not found, redirect to 404
       router.navigate(['/not-found']);
       return EMPTY;
-    })
+    }),
   );
 };

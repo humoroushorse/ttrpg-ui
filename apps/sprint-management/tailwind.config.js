@@ -4,10 +4,7 @@ const { tailwindTheme } = require('../../shared/scss/themes/tailwind-theme.ts');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    join(__dirname, 'src/**/!(*.stories|*.spec).{ts,html}'),
-    ...createGlobPatternsForDependencies(__dirname),
-  ],
+  content: [join(__dirname, 'src/**/!(*.stories|*.spec).{ts,html}'), ...createGlobPatternsForDependencies(__dirname)],
   theme: tailwindTheme,
   plugins: [],
 };

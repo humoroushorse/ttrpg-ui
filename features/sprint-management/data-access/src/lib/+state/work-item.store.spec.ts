@@ -15,9 +15,7 @@ import { addEntity } from '@ngrx/signals/entities';
 import { WorkItemStore } from './work-item.store';
 import { SprintManagementApiService } from '../service/sprint-management-api.service';
 import { WebSocketService } from '../service/websocket.service';
-import {
-  SprintModels,
-} from '@ttrpg-ui/features/sprint-management/models';
+import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 import { signal } from '@angular/core';
 
 const SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN = SprintModels.Service.SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN;
@@ -157,9 +155,7 @@ describe('WorkItemStore', () => {
       const item = makeWorkItem({ id: 'item-1', tags: ['existing'] });
       patchState(store, addEntity(item));
 
-      vi.spyOn(apiService, 'addTag').mockReturnValue(
-        of({ ...item, tags: ['existing', 'new-tag'] }).pipe(delay(100))
-      );
+      vi.spyOn(apiService, 'addTag').mockReturnValue(of({ ...item, tags: ['existing', 'new-tag'] }).pipe(delay(100)));
 
       store.addTag({ workItemId: 'item-1', tag: 'new-tag' });
 
@@ -190,7 +186,7 @@ describe('WorkItemStore', () => {
       // This means the optimistic add is permanent when the tag wasn't there before.
       // Test verifies the optimistic add happened correctly.
       vi.spyOn(apiService, 'addTag').mockReturnValue(
-        new (await import('rxjs')).Observable((sub) => sub.error({ message: 'error', error: {} }))
+        new (await import('rxjs')).Observable((sub) => sub.error({ message: 'error', error: {} })),
       );
 
       store.addTag({ workItemId: 'item-1', tag: 'new-tag' });
@@ -211,9 +207,7 @@ describe('WorkItemStore', () => {
       const item = makeWorkItem({ id: 'item-1', tags: ['tag1', 'tag2'] });
       patchState(store, addEntity(item));
 
-      vi.spyOn(apiService, 'removeTag').mockReturnValue(
-        of({ ...item, tags: ['tag2'] }).pipe(delay(100))
-      );
+      vi.spyOn(apiService, 'removeTag').mockReturnValue(of({ ...item, tags: ['tag2'] }).pipe(delay(100)));
 
       store.removeTag({ workItemId: 'item-1', tag: 'tag1' });
 
@@ -293,9 +287,7 @@ describe('WorkItemStore', () => {
             expect(beforeUpdate?.title).toBe(initialWorkItem.title);
 
             const updatedWorkItem = { ...initialWorkItem, ...updates };
-            const apiSpy = vi.spyOn(apiService, 'updateWorkItem').mockReturnValue(
-              of(updatedWorkItem).pipe(delay(100))
-            );
+            const apiSpy = vi.spyOn(apiService, 'updateWorkItem').mockReturnValue(of(updatedWorkItem).pipe(delay(100)));
 
             const updateRequest: UpdateWorkItemRequest = {
               id: initialWorkItem.id,
@@ -312,9 +304,9 @@ describe('WorkItemStore', () => {
             expect(storeWorkItem?.status).toBe(updates.status);
 
             apiSpy.mockRestore();
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });

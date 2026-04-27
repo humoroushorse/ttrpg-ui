@@ -1,12 +1,6 @@
 import { computed, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withMethods,
-  withState,
-} from '@ngrx/signals';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
@@ -65,10 +59,10 @@ export const CustomFieldStore = signalStore(
                   error: error.error?.detail || error.message || 'Failed to load custom fields',
                 });
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
-  }))
+  })),
 );

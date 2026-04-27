@@ -15,18 +15,14 @@ type PaginatedProjectResponse = SprintModels.Project.PaginatedProjectResponse;
 })
 export class ProjectApiService {
   private readonly http = inject(HttpClient);
-  public readonly serviceConfig: SprintManagementApiServiceConfig = inject(
-    SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN
-  );
+  public readonly serviceConfig: SprintManagementApiServiceConfig = inject(SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN);
 
   private get baseUrl(): string {
     return this.serviceConfig.appConfig().APP_SPRINT_MANAGEMENT__API_BASE_PATH;
   }
 
   getProjects(page = 1, pageSize = 25): Observable<PaginatedProjectResponse> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('page_size', pageSize.toString());
+    const params = new HttpParams().set('page', page.toString()).set('page_size', pageSize.toString());
 
     return this.http.get<PaginatedProjectResponse>(`${this.baseUrl}/projects`, { params });
   }

@@ -2,9 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { SharedLocalStorageService } from '@ttrpg-ui/shared/local-storage/data-access';
 import { SHARED_LOCAL_STORAGE_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/local-storage/models';
 import { UserPreferencesService } from './user-preferences.service';
-import {
-  SprintModels,
-} from '@ttrpg-ui/features/sprint-management/models';
+import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 
 const { DEFAULT_USER_PREFERENCES, ViewMode } = SprintModels.UserPreferences;
 

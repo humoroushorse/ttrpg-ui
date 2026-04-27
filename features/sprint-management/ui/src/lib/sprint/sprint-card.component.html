@@ -42,9 +42,7 @@
       <div class="sprint-card__progress">
         <div class="sprint-card__progress-header">
           <span class="sprint-card__progress-label">Progress</span>
-          <span class="sprint-card__progress-percentage">
-            {{ progressPercentage() }}%
-          </span>
+          <span class="sprint-card__progress-percentage"> {{ progressPercentage() }}% </span>
         </div>
         <mat-progress-bar
           mode="determinate"
@@ -62,20 +60,11 @@
   </mat-card-content>
 
   <mat-card-actions class="sprint-card__actions">
-    <button
-      mat-button
-      color="primary"
-      (click)="onViewClick($event)"
-      aria-label="View sprint details"
-    >
+    <button mat-button color="primary" (click)="onViewClick($event)" aria-label="View sprint details">
       <mat-icon>visibility</mat-icon>
       View
     </button>
-    <button
-      mat-button
-      (click)="onEditClick($event)"
-      aria-label="Edit sprint"
-    >
+    <button mat-button (click)="onEditClick($event)" aria-label="Edit sprint">
       <mat-icon>edit</mat-icon>
       Edit
     </button>

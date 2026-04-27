@@ -16,10 +16,7 @@ describe('KeyboardShortcutsDialogComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [KeyboardShortcutsDialogComponent],
-      providers: [
-        { provide: MatDialogRef, useValue: mockDialogRef },
-        KeyboardShortcutService,
-      ],
+      providers: [{ provide: MatDialogRef, useValue: mockDialogRef }, KeyboardShortcutService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(KeyboardShortcutsDialogComponent);

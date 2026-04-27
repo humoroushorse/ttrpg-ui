@@ -6,7 +6,7 @@ services:
       context: ../..
       dockerfile: apps/sprint-management/deploy/Dockerfile
     ports:
-      - "4204:4204"
+      - '4204:4204'
     environment:
       - PORT=4204
       - NODE_ENV=production
@@ -14,4 +14,4 @@ services:
       - AUTH_API_TARGET=http://host.docker.internal:8081
       - SPRINT_API_TARGET=http://host.docker.internal:8003
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - 'host.docker.internal:host-gateway'

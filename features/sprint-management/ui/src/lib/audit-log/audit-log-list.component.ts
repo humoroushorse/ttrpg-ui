@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  input,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -188,19 +182,14 @@ export class AuditLogListComponent {
   }
 
   getChangesEntries(
-    log: AuditLog
+    log: AuditLog,
   ): Array<{ key: string; oldValue: string | null; newValue: string; isSimple: boolean }> {
     if (!log.changes) {
       return [];
     }
     return Object.entries(log.changes).map(([key, value]) => {
       const label = key.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
-      if (
-        value !== null &&
-        typeof value === 'object' &&
-        'old' in value &&
-        'new' in value
-      ) {
+      if (value !== null && typeof value === 'object' && 'old' in value && 'new' in value) {
         return {
           key: label,
           oldValue: this.formatChangeValue((value as { old: unknown; new: unknown }).old),

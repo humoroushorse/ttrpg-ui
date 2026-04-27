@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  input,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,19 +14,16 @@ export interface WorkItemLinkDialogData {
 @Component({
   selector: 'lib-work-item-link-dialog',
   standalone: true,
-  imports: [
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule,
-    WorkItemLinkFormComponent,
-  ],
+  imports: [MatDialogModule, MatButtonModule, MatIconModule, WorkItemLinkFormComponent],
   templateUrl: './work-item-link-dialog.component.html',
   styleUrl: './work-item-link-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkItemLinkDialogComponent {
   private readonly dialogRef = inject(MatDialogRef<WorkItemLinkDialogComponent>);
-  private readonly dialogData: WorkItemLinkDialogData = inject(MAT_DIALOG_DATA, { optional: true }) ?? { sourceWorkItemId: '' };
+  private readonly dialogData: WorkItemLinkDialogData = inject(MAT_DIALOG_DATA, { optional: true }) ?? {
+    sourceWorkItemId: '',
+  };
 
   sourceWorkItemId = input<string>(this.dialogData.sourceWorkItemId);
   loading = input<boolean>(false);

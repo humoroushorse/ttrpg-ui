@@ -10,9 +10,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 import { patchState } from '@ngrx/signals';
 import { addEntity, setAllEntities } from '@ngrx/signals/entities';
-import {
-  SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN,
-} from '@ttrpg-ui/features/sprint-management/models';
+import { SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/features/sprint-management/models';
 import {
   getBaseStateWithPaginationDefault,
   setPagination,
@@ -54,14 +52,11 @@ export function setupStoreTestBed(config: StoreTestConfig = {}): void {
 /**
  * Wait for store to finish loading
  */
-export async function waitForStoreLoaded(
-  store: { loading: () => boolean },
-  timeout = 5000
-): Promise<void> {
+export async function waitForStoreLoaded(store: { loading: () => boolean }, timeout = 5000): Promise<void> {
   const startTime = Date.now();
 
   while (store.loading() && Date.now() - startTime < timeout) {
-    await new Promise(resolve => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 10));
   }
 
   if (store.loading()) {
@@ -72,14 +67,11 @@ export async function waitForStoreLoaded(
 /**
  * Wait for a condition to be true
  */
-export async function waitForCondition(
-  condition: () => boolean,
-  timeout = 5000
-): Promise<void> {
+export async function waitForCondition(condition: () => boolean, timeout = 5000): Promise<void> {
   const startTime = Date.now();
 
   while (!condition() && Date.now() - startTime < timeout) {
-    await new Promise(resolve => setTimeout(resolve, 10));
+    await new Promise((resolve) => setTimeout(resolve, 10));
   }
 
   if (!condition()) {
@@ -90,20 +82,14 @@ export async function waitForCondition(
 /**
  * Populate store with entities
  */
-export function populateStoreWithEntities<T extends { id: string }>(
-  store: any,
-  entities: T[]
-): void {
+export function populateStoreWithEntities<T extends { id: string }>(store: any, entities: T[]): void {
   patchState(store, setAllEntities(entities));
 }
 
 /**
  * Add single entity to store
  */
-export function addEntityToStore<T extends { id: string }>(
-  store: any,
-  entity: T
-): void {
+export function addEntityToStore<T extends { id: string }>(store: any, entity: T): void {
   patchState(store, addEntity(entity));
 }
 
@@ -131,12 +117,7 @@ export function setStoreError(store: any, error: string, summary?: string): void
 /**
  * Set store pagination state
  */
-export function setStorePagination(
-  store: any,
-  page: number,
-  pageSize: number,
-  totalItems: number
-): void {
+export function setStorePagination(store: any, page: number, pageSize: number, totalItems: number): void {
   patchState(store, setPagination(page, pageSize, totalItems));
 }
 
@@ -152,7 +133,7 @@ export function resetStore<T>(store: any): void {
  */
 export function getEntityFromStore<T extends { id: string }>(
   store: { entityMap: () => Record<string, T> },
-  id: string
+  id: string,
 ): T | undefined {
   return store.entityMap()[id];
 }
@@ -160,28 +141,21 @@ export function getEntityFromStore<T extends { id: string }>(
 /**
  * Get all entities from store
  */
-export function getAllEntitiesFromStore<T>(
-  store: { entities: () => T[] }
-): T[] {
+export function getAllEntitiesFromStore<T>(store: { entities: () => T[] }): T[] {
   return store.entities();
 }
 
 /**
  * Check if store has entity
  */
-export function storeHasEntity(
-  store: { entityMap: () => Record<string, any> },
-  id: string
-): boolean {
+export function storeHasEntity(store: { entityMap: () => Record<string, any> }, id: string): boolean {
   return id in store.entityMap();
 }
 
 /**
  * Get store entity count
  */
-export function getStoreEntityCount(
-  store: { entities: () => any[] }
-): number {
+export function getStoreEntityCount(store: { entities: () => any[] }): number {
   return store.entities().length;
 }
 
@@ -206,9 +180,7 @@ export function assertStoreNotLoading(store: { loading: () => boolean }): void {
 /**
  * Assert store has error
  */
-export function assertStoreHasError(
-  store: { error: () => string | null }
-): void {
+export function assertStoreHasError(store: { error: () => string | null }): void {
   if (!store.error()) {
     throw new Error('Expected store to have error');
   }
@@ -217,9 +189,7 @@ export function assertStoreHasError(
 /**
  * Assert store has no error
  */
-export function assertStoreNoError(
-  store: { error: () => string | null }
-): void {
+export function assertStoreNoError(store: { error: () => string | null }): void {
   if (store.error()) {
     throw new Error(`Expected store to have no error, but got: ${store.error()}`);
   }
@@ -232,7 +202,7 @@ export function assertStorePagination(
   store: { pagination: () => { currentPage: number; pageSize: number; totalItems: number } },
   expectedPage: number,
   expectedPageSize: number,
-  expectedTotalItems: number
+  expectedTotalItems: number,
 ): void {
   const pagination = store.pagination();
 
@@ -279,15 +249,18 @@ export function createMockStore<T extends { id: string }>(
     loaded?: boolean;
     error?: string | null;
     errorSummary?: string | null;
-  } = {}
+  } = {},
 ): any {
   return {
     entities: signal(entities),
     entityMap: signal(
-      entities.reduce((map, entity) => {
-        map[entity.id] = entity;
-        return map;
-      }, {} as Record<string, T>)
+      entities.reduce(
+        (map, entity) => {
+          map[entity.id] = entity;
+          return map;
+        },
+        {} as Record<string, T>,
+      ),
     ),
     loading: signal(options.loading ?? false),
     loaded: signal(options.loaded ?? false),

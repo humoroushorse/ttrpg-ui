@@ -32,14 +32,16 @@
             <div class="card-header">
               <div class="card-type">
                 <mat-icon class="type-icon">{{ getTypeIcon(item.type) }}</mat-icon>
-                <span class="ticket-number">{{ item.project_key && item.ticket_number ? item.project_key + '-' + item.ticket_number : (item.ticket_number ? '#' + item.ticket_number : item.type) }}</span>
+                <span class="ticket-number">{{
+                  item.project_key && item.ticket_number
+                    ? item.project_key + '-' + item.ticket_number
+                    : item.ticket_number
+                      ? '#' + item.ticket_number
+                      : item.type
+                }}</span>
               </div>
               @if (item.priority) {
-                <mat-chip
-                  class="priority-chip"
-                  [color]="getPriorityColor(item.priority)"
-                  highlighted
-                >
+                <mat-chip class="priority-chip" [color]="getPriorityColor(item.priority)" highlighted>
                   {{ item.priority }}
                 </mat-chip>
               }

@@ -10,9 +10,7 @@ import { PageWorkItemCreateComponent } from './page-work-item-create.component';
 import { SharedLocalStorageService } from '@ttrpg-ui/shared/local-storage/data-access';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { WorkItemStore } from '@ttrpg-ui/features/sprint-management/data-access';
-import {
-  SprintModels,
-} from '@ttrpg-ui/features/sprint-management/models';
+import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 
 const SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN = SprintModels.Service.SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN;
 const { WorkItemType, WorkItemStatus, WorkItemPriority } = SprintModels.WorkItem;

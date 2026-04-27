@@ -1,21 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { MatCardModule } from '@angular/material/card';
@@ -33,7 +18,11 @@ import { getErrorMessage } from '@ttrpg-ui/features/sprint-management/util';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { SharedFormsSingleSelectAutocompleteComponent } from '@ttrpg-ui/shared/forms/ui';
 
-import { WorkItemStore, ProjectStore, SprintManagementApiService } from '@ttrpg-ui/features/sprint-management/data-access';
+import {
+  WorkItemStore,
+  ProjectStore,
+  SprintManagementApiService,
+} from '@ttrpg-ui/features/sprint-management/data-access';
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 
 const { WorkItemType, WorkItemStatus, WorkItemPriority } = SprintModels.WorkItem;
@@ -122,7 +111,7 @@ export class PageWorkItemCreateComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.workItemForm.get('type')?.valueChanges.subscribe(type => {
+    this.workItemForm.get('type')?.valueChanges.subscribe((type) => {
       this.typeSignal.set(type);
       const parentControl = this.workItemForm.get('parent_id');
       if (type === WorkItemType.Epic) {
@@ -136,9 +125,7 @@ export class PageWorkItemCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.title.setTitle(
-      `Sprint Management | Create Work Item | ${this.sharedCoreService.appTitle}`
-    );
+    this.title.setTitle(`Sprint Management | Create Work Item | ${this.sharedCoreService.appTitle}`);
     this.meta.updateTag({
       name: 'description',
       content: 'Create a new work item in the sprint management system.',
@@ -164,9 +151,7 @@ export class PageWorkItemCreateComponent implements OnInit, OnDestroy {
   }
 
   private restoreCachedFormData(): void {
-    const cachedData = this.sharedLocalStorageService.get<any>(
-      this.FORM_CACHE_KEY
-    );
+    const cachedData = this.sharedLocalStorageService.get<any>(this.FORM_CACHE_KEY);
 
     if (cachedData) {
       // Restore form values
@@ -179,11 +164,9 @@ export class PageWorkItemCreateComponent implements OnInit, OnDestroy {
 
       this.workItemForm.markAsPristine();
 
-      this.snackBar.open(
-        'Draft data restored. You can continue editing or clear the draft.',
-        'Dismiss',
-        { duration: 5000 }
-      );
+      this.snackBar.open('Draft data restored. You can continue editing or clear the draft.', 'Dismiss', {
+        duration: 5000,
+      });
     }
   }
 
@@ -215,11 +198,7 @@ export class PageWorkItemCreateComponent implements OnInit, OnDestroy {
   public async onSubmit(): Promise<void> {
     if (this.workItemForm.invalid) {
       this.workItemForm.markAllAsTouched();
-      this.snackBar.open(
-        'Please fill in all required fields correctly',
-        'Close',
-        { duration: 5000 }
-      );
+      this.snackBar.open('Please fill in all required fields correctly', 'Close', { duration: 5000 });
       return;
     }
 
@@ -257,20 +236,16 @@ export class PageWorkItemCreateComponent implements OnInit, OnDestroy {
       this.router.navigate(['/work-items']);
     } catch (error) {
       console.error('Failed to create work item:', error);
-      this.snackBar.open(
-        error instanceof Error ? error.message : 'Failed to create work item',
-        'Close',
-        { duration: 5000 }
-      );
+      this.snackBar.open(error instanceof Error ? error.message : 'Failed to create work item', 'Close', {
+        duration: 5000,
+      });
     } finally {
       this.isSubmitting.set(false);
     }
   }
 
   public searchSprints = (query: string): Observable<Sprint[]> => {
-    return this.sprintApiService.searchSprints(query).pipe(
-      map(response => response.items)
-    );
+    return this.sprintApiService.searchSprints(query).pipe(map((response) => response.items));
   };
 
   public getSprintDisplayName = (sprint: Sprint | null): string => {

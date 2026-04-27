@@ -8,9 +8,7 @@ import { signal } from '@angular/core';
 import { TimeTrackingStore } from './time-tracking.store';
 import { SprintManagementApiService } from '../service/sprint-management-api.service';
 import { WebSocketService } from '../service/websocket.service';
-import {
-  SprintModels,
-} from '@ttrpg-ui/features/sprint-management/models';
+import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 
 const SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN = SprintModels.Service.SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN;
 type TimeEntry = SprintModels.TimeTracking.TimeEntry;
@@ -58,10 +56,7 @@ describe('TimeTrackingStore', () => {
 
   describe('loadTimeEntries', () => {
     it('should load time entries and set state', () => {
-      const entries = [
-        makeTimeEntry({ id: 'te-1', hours: 2 }),
-        makeTimeEntry({ id: 'te-2', hours: 3 }),
-      ];
+      const entries = [makeTimeEntry({ id: 'te-1', hours: 2 }), makeTimeEntry({ id: 'te-2', hours: 3 })];
 
       vi.spyOn(apiService, 'getTimeEntries').mockReturnValue(of(entries));
 
@@ -74,7 +69,7 @@ describe('TimeTrackingStore', () => {
 
     it('should set error on load failure', () => {
       vi.spyOn(apiService, 'getTimeEntries').mockReturnValue(
-        throwError(() => ({ message: 'Network error', error: {} }))
+        throwError(() => ({ message: 'Network error', error: {} })),
       );
 
       store.loadTimeEntries({ workItemId: 'wi-1', estimatedHours: 10 });
@@ -86,9 +81,7 @@ describe('TimeTrackingStore', () => {
 
   describe('addTimeEntry', () => {
     it('should optimistically add entry before API completes', () => {
-      vi.spyOn(apiService, 'createTimeEntry').mockReturnValue(
-        of(makeTimeEntry({ id: 'te-real' })).pipe(delay(100))
-      );
+      vi.spyOn(apiService, 'createTimeEntry').mockReturnValue(of(makeTimeEntry({ id: 'te-real' })).pipe(delay(100)));
 
       store.addTimeEntry({
         work_item_id: 'wi-1',
@@ -102,9 +95,7 @@ describe('TimeTrackingStore', () => {
     });
 
     it('should rollback on API error', async () => {
-      vi.spyOn(apiService, 'createTimeEntry').mockReturnValue(
-        throwError(() => ({ message: 'error', error: {} }))
-      );
+      vi.spyOn(apiService, 'createTimeEntry').mockReturnValue(throwError(() => ({ message: 'error', error: {} })));
 
       store.addTimeEntry({
         work_item_id: 'wi-1',
@@ -126,9 +117,7 @@ describe('TimeTrackingStore', () => {
       vi.spyOn(apiService, 'getTimeEntries').mockReturnValue(of([entry]));
       store.loadTimeEntries({ workItemId: 'wi-1', estimatedHours: 10 });
 
-      vi.spyOn(apiService, 'updateTimeEntry').mockReturnValue(
-        of({ ...entry, hours: 5 }).pipe(delay(100))
-      );
+      vi.spyOn(apiService, 'updateTimeEntry').mockReturnValue(of({ ...entry, hours: 5 }).pipe(delay(100)));
 
       store.updateTimeEntry({
         workItemId: 'wi-1',
@@ -159,9 +148,7 @@ describe('TimeTrackingStore', () => {
       vi.spyOn(apiService, 'getTimeEntries').mockReturnValue(of([entry]));
       store.loadTimeEntries({ workItemId: 'wi-1', estimatedHours: 10 });
 
-      vi.spyOn(apiService, 'deleteTimeEntry').mockReturnValue(
-        throwError(() => ({ message: 'error', error: {} }))
-      );
+      vi.spyOn(apiService, 'deleteTimeEntry').mockReturnValue(throwError(() => ({ message: 'error', error: {} })));
 
       store.deleteTimeEntry({ workItemId: 'wi-1', entryId: 'te-1' });
 
@@ -173,10 +160,7 @@ describe('TimeTrackingStore', () => {
 
   describe('timeTrackingSummary', () => {
     it('should compute summary from entities', () => {
-      const entries = [
-        makeTimeEntry({ id: 'te-1', hours: 3 }),
-        makeTimeEntry({ id: 'te-2', hours: 2 }),
-      ];
+      const entries = [makeTimeEntry({ id: 'te-1', hours: 3 }), makeTimeEntry({ id: 'te-2', hours: 2 })];
       vi.spyOn(apiService, 'getTimeEntries').mockReturnValue(of(entries));
       store.loadTimeEntries({ workItemId: 'wi-1', estimatedHours: 10 });
 
@@ -220,14 +204,12 @@ describe('TimeTrackingStore', () => {
       fc.assert(
         fc.property(
           fc.float({ min: Math.fround(0.01), max: Math.fround(1000), noNaN: true }),
-          fc.array(
-            fc.float({ min: Math.fround(0.01), max: Math.fround(100), noNaN: true }),
-            { minLength: 1, maxLength: 20 }
-          ),
+          fc.array(fc.float({ min: Math.fround(0.01), max: Math.fround(100), noNaN: true }), {
+            minLength: 1,
+            maxLength: 20,
+          }),
           (estimatedHours, hoursArray) => {
-            const entries = hoursArray.map((h, i) =>
-              makeTimeEntry({ id: `te-${i}`, hours: h })
-            );
+            const entries = hoursArray.map((h, i) => makeTimeEntry({ id: `te-${i}`, hours: h }));
 
             vi.spyOn(apiService, 'getTimeEntries').mockReturnValue(of(entries));
             store.loadTimeEntries({ workItemId: 'wi-prop', estimatedHours: estimatedHours });
@@ -240,9 +222,9 @@ describe('TimeTrackingStore', () => {
 
             expect(summary!.logged_hours).toBeCloseTo(expectedLogged, 3);
             expect(summary!.remaining_hours).toBeCloseTo(expectedRemaining, 3);
-          }
+          },
         ),
-        { numRuns: 50 }
+        { numRuns: 50 },
       );
     });
   });

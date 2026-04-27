@@ -1,19 +1,7 @@
 import { computed, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withMethods,
-  withState,
-} from '@ngrx/signals';
-import {
-  addEntity,
-  removeEntity,
-  setAllEntities,
-  updateEntity,
-  withEntities,
-} from '@ngrx/signals/entities';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { addEntity, removeEntity, setAllEntities, updateEntity, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap, of } from 'rxjs';
 import { SharedModels } from '@ttrpg-ui/shared/models';
@@ -73,23 +61,20 @@ export const WorkItemStore = signalStore(
                   setPagination(response.page, response.page_size, response.total),
                   setLoaded(true),
                   setLoading(false),
-                  setError(null, null)
+                  setError(null, null),
                 );
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to load work items'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to load work items'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
     loadWorkItem: rxMethod<string>(
       pipe(
@@ -103,23 +88,20 @@ export const WorkItemStore = signalStore(
                   addEntity(workItem),
                   setSelectedEntity(workItem),
                   setLoading(false),
-                  setError(null, null)
+                  setError(null, null),
                 );
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to load work item'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to load work item'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
     create: rxMethod<SprintModels.Api.CreateWorkItemRequest>(
       pipe(
@@ -128,27 +110,19 @@ export const WorkItemStore = signalStore(
           apiService.createWorkItem(request).pipe(
             tapResponse({
               next: (workItem) => {
-                patchState(
-                  store,
-                  addEntity(workItem),
-                  setLoading(false),
-                  setError(null, null)
-                );
+                patchState(store, addEntity(workItem), setLoading(false), setError(null, null));
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to create work item'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to create work item'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
     update: rxMethod<SprintModels.Api.UpdateWorkItemRequest>(
       pipe(
@@ -159,11 +133,7 @@ export const WorkItemStore = signalStore(
           apiService.updateWorkItem(request.id, request).pipe(
             tapResponse({
               next: (workItem) => {
-                patchState(
-                  store,
-                  updateEntity({ id: workItem.id, changes: workItem }),
-                  setError(null, null)
-                );
+                patchState(store, updateEntity({ id: workItem.id, changes: workItem }), setError(null, null));
               },
               error: (error: any) => {
                 apiService.getWorkItem(request.id).subscribe({
@@ -171,27 +141,18 @@ export const WorkItemStore = signalStore(
                     patchState(
                       store,
                       updateEntity({ id: workItem.id, changes: workItem }),
-                      setError(
-                        error.message,
-                        error.error?.detail || 'Failed to update work item'
-                      )
+                      setError(error.message, error.error?.detail || 'Failed to update work item'),
                     );
                   },
                   error: () => {
-                    patchState(
-                      store,
-                      setError(
-                        error.message,
-                        error.error?.detail || 'Failed to update work item'
-                      )
-                    );
+                    patchState(store, setError(error.message, error.error?.detail || 'Failed to update work item'));
                   },
                 });
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
     delete: rxMethod<string>(
       pipe(
@@ -200,27 +161,19 @@ export const WorkItemStore = signalStore(
           apiService.deleteWorkItem(id).pipe(
             tapResponse({
               next: () => {
-                patchState(
-                  store,
-                  removeEntity(id),
-                  setLoading(false),
-                  setError(null, null)
-                );
+                patchState(store, removeEntity(id), setLoading(false), setError(null, null));
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to delete work item'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to delete work item'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
     bulkUpdate: rxMethod<SprintModels.Api.BulkUpdateRequest>(
       pipe(
@@ -238,16 +191,13 @@ export const WorkItemStore = signalStore(
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to bulk update work items'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to bulk update work items'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
     setFilters: (filters: SprintModels.Filter.FilterState) => {
       patchState(store, {
@@ -308,14 +258,17 @@ export const WorkItemStore = signalStore(
               error: (error: any) => {
                 const original = store.entityMap()[workItemId];
                 if (original) {
-                  patchState(store, updateEntity({ id: workItemId, changes: { tags: original.tags.filter((t) => t !== tag) } }));
+                  patchState(
+                    store,
+                    updateEntity({ id: workItemId, changes: { tags: original.tags.filter((t) => t !== tag) } }),
+                  );
                 }
                 patchState(store, setError(error.message, error.error?.detail || 'Failed to add tag'));
               },
-            })
+            }),
           );
-        })
-      )
+        }),
+      ),
     ),
 
     removeTag: rxMethod<{ workItemId: string; tag: string }>(
@@ -339,10 +292,10 @@ export const WorkItemStore = signalStore(
                 }
                 patchState(store, setError(error.message, error.error?.detail || 'Failed to remove tag'));
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     cloneWorkItem: (workItemId: string): SprintModels.Api.CreateWorkItemRequest | null => {
@@ -366,5 +319,5 @@ export const WorkItemStore = signalStore(
     handleWorkItemDeleted: (workItemId: string) => {
       patchState(store, removeEntity(workItemId));
     },
-  }))
+  })),
 );

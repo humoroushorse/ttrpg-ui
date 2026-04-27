@@ -19,13 +19,7 @@ import { KeyboardShortcutService } from '@ttrpg-ui/shared/keyboard-shortcut/data
 @Component({
   selector: 'lib-keyboard-shortcuts-dialog',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule,
-    MatDividerModule,
-  ],
+  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatDividerModule],
   templateUrl: './keyboard-shortcuts-dialog.component.html',
   styleUrls: ['./keyboard-shortcuts-dialog.component.css'],
 })
@@ -57,11 +51,6 @@ export class KeyboardShortcutsDialogComponent {
    * @returns Formatted key combination
    */
   formatKey(key: string): string {
-    return key
-      .replace('Ctrl', '⌃')
-      .replace('Cmd', '⌘')
-      .replace('Alt', '⌥')
-      .replace('Shift', '⇧')
-      .replace('+', ' + ');
+    return key.replace('Ctrl', '⌃').replace('Cmd', '⌘').replace('Alt', '⌥').replace('Shift', '⇧').replace('+', ' + ');
   }
 }

@@ -27,7 +27,7 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
               'work_item' as const,
               'sprint' as const,
               'dependency' as const,
-              'comment' as const
+              'comment' as const,
             ),
             entity_id: fc.uuid(),
             action: fc.constantFrom(
@@ -39,7 +39,7 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
               AuditAction.Unassigned,
               AuditAction.CommentAdded,
               AuditAction.DependencyAdded,
-              AuditAction.DependencyRemoved
+              AuditAction.DependencyRemoved,
             ),
             user_id: fc.uuid(),
             user_name: fc.option(fc.string({ minLength: 3, maxLength: 50 }), {
@@ -47,30 +47,21 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
             }),
             changes: fc.dictionary(
               fc.string({ minLength: 1, maxLength: 20 }),
-              fc.oneof(
-                fc.string(),
-                fc.integer(),
-                fc.boolean(),
-                fc.constant(null)
-              )
+              fc.oneof(fc.string(), fc.integer(), fc.boolean(), fc.constant(null)),
             ),
             // Generate timestamps within a reasonable range (last 365 days)
-            timestamp: fc
-              .integer({ min: 0, max: 365 * 24 * 60 * 60 * 1000 })
-              .map((offset) => {
-                const date = new Date(Date.now() - offset);
-                return date.toISOString();
-              }),
+            timestamp: fc.integer({ min: 0, max: 365 * 24 * 60 * 60 * 1000 }).map((offset) => {
+              const date = new Date(Date.now() - offset);
+              return date.toISOString();
+            }),
           }),
-          { minLength: 0, maxLength: 100 }
+          { minLength: 0, maxLength: 100 },
         ),
         (logs: AuditLog[]) => {
           // Sort logs by timestamp in descending order (newest first)
           // This simulates what the component does
           const sortedLogs = [...logs].sort((a, b) => {
-            return (
-              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-            );
+            return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
           });
 
           // Property 1: Completeness - The sorted array should have the same length as the original
@@ -101,9 +92,7 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
 
           // Property 5: Order - If there are logs, the last one should be the oldest
           if (sortedLogs.length > 0) {
-            const lastTimestamp = new Date(
-              sortedLogs[sortedLogs.length - 1].timestamp
-            ).getTime();
+            const lastTimestamp = new Date(sortedLogs[sortedLogs.length - 1].timestamp).getTime();
             for (const log of sortedLogs) {
               const timestamp = new Date(log.timestamp).getTime();
               expect(timestamp).toBeGreaterThanOrEqual(lastTimestamp);
@@ -114,9 +103,9 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
           const ids = sortedLogs.map((log) => log.id);
           const uniqueIds = new Set(ids);
           expect(uniqueIds.size).toBe(ids.length);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -133,14 +122,10 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
               'work_item' as const,
               'sprint' as const,
               'dependency' as const,
-              'comment' as const
+              'comment' as const,
             ),
             entity_id: fc.uuid(),
-            action: fc.constantFrom(
-              AuditAction.Created,
-              AuditAction.Updated,
-              AuditAction.Deleted
-            ),
+            action: fc.constantFrom(AuditAction.Created, AuditAction.Updated, AuditAction.Deleted),
             user_id: fc.uuid(),
             user_name: fc.option(fc.string({ minLength: 3, maxLength: 50 }), {
               nil: undefined,
@@ -148,13 +133,11 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
             changes: fc.dictionary(fc.string(), fc.string()),
             timestamp: fc.constant('2024-01-01T12:00:00.000Z'), // Same timestamp
           }),
-          { minLength: 0, maxLength: 20 }
+          { minLength: 0, maxLength: 20 },
         ),
         (logs: AuditLog[]) => {
           const sortedLogs = [...logs].sort((a, b) => {
-            return (
-              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-            );
+            return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
           });
 
           // Property: All logs should still be present after sorting
@@ -172,9 +155,9 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
           for (const log of logs) {
             expect(sortedLogs).toContainEqual(log);
           }
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -203,14 +186,10 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
             'work_item' as const,
             'sprint' as const,
             'dependency' as const,
-            'comment' as const
+            'comment' as const,
           ),
           entity_id: fc.uuid(),
-          action: fc.constantFrom(
-            AuditAction.Created,
-            AuditAction.Updated,
-            AuditAction.Deleted
-          ),
+          action: fc.constantFrom(AuditAction.Created, AuditAction.Updated, AuditAction.Deleted),
           user_id: fc.uuid(),
           user_name: fc.option(fc.string({ minLength: 3, maxLength: 50 }), {
             nil: undefined,
@@ -221,16 +200,14 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
         (log: AuditLog) => {
           const logs = [log];
           const sortedLogs = [...logs].sort((a, b) => {
-            return (
-              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-            );
+            return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
           });
 
           expect(sortedLogs).toEqual([log]);
           expect(sortedLogs.length).toBe(1);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -249,28 +226,22 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
                 'work_item' as const,
                 'sprint' as const,
                 'dependency' as const,
-                'comment' as const
+                'comment' as const,
               ),
               entity_id: fc.uuid(),
-              action: fc.constantFrom(
-                AuditAction.Created,
-                AuditAction.Updated,
-                AuditAction.Deleted
-              ),
+              action: fc.constantFrom(AuditAction.Created, AuditAction.Updated, AuditAction.Deleted),
               user_id: fc.uuid(),
               user_name: fc.option(fc.string({ minLength: 3, maxLength: 50 }), {
                 nil: undefined,
               }),
               changes: fc.dictionary(fc.string(), fc.string()),
-              timestamp: fc
-                .integer({ min: 0, max: 365 * 24 * 60 * 60 * 1000 })
-                .map((offset) => {
-                  const date = new Date(Date.now() - offset);
-                  return date.toISOString();
-                }),
+              timestamp: fc.integer({ min: 0, max: 365 * 24 * 60 * 60 * 1000 }).map((offset) => {
+                const date = new Date(Date.now() - offset);
+                return date.toISOString();
+              }),
             }),
-            { minLength: 0, maxLength: 50 }
-          )
+            { minLength: 0, maxLength: 50 },
+          ),
         ),
         ([entityId, logs]: [string, AuditLog[]]) => {
           // Filter logs by entity_id
@@ -278,25 +249,17 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
 
           // Sort filtered logs
           const sortedFilteredLogs = [...filteredLogs].sort((a, b) => {
-            return (
-              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-            );
+            return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
           });
 
           // Property: Filtered logs should be complete (all matching logs present)
-          const expectedCount = logs.filter(
-            (log) => log.entity_id === entityId
-          ).length;
+          const expectedCount = logs.filter((log) => log.entity_id === entityId).length;
           expect(sortedFilteredLogs.length).toBe(expectedCount);
 
           // Property: Filtered logs should be ordered correctly
           for (let i = 0; i < sortedFilteredLogs.length - 1; i++) {
-            const currentTimestamp = new Date(
-              sortedFilteredLogs[i].timestamp
-            ).getTime();
-            const nextTimestamp = new Date(
-              sortedFilteredLogs[i + 1].timestamp
-            ).getTime();
+            const currentTimestamp = new Date(sortedFilteredLogs[i].timestamp).getTime();
+            const nextTimestamp = new Date(sortedFilteredLogs[i + 1].timestamp).getTime();
             expect(currentTimestamp).toBeGreaterThanOrEqual(nextTimestamp);
           }
 
@@ -304,9 +267,9 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
           for (const log of sortedFilteredLogs) {
             expect(log.entity_id).toBe(entityId);
           }
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -317,11 +280,7 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
     fc.assert(
       fc.property(
         fc.tuple(
-          fc.constantFrom(
-            AuditAction.Created,
-            AuditAction.Updated,
-            AuditAction.Deleted
-          ), // action to filter by
+          fc.constantFrom(AuditAction.Created, AuditAction.Updated, AuditAction.Deleted), // action to filter by
           fc.array(
             fc.record({
               id: fc.uuid(),
@@ -329,29 +288,27 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
                 'work_item' as const,
                 'sprint' as const,
                 'dependency' as const,
-                'comment' as const
+                'comment' as const,
               ),
               entity_id: fc.uuid(),
               action: fc.constantFrom(
                 AuditAction.Created,
                 AuditAction.Updated,
                 AuditAction.Deleted,
-                AuditAction.StatusChanged
+                AuditAction.StatusChanged,
               ),
               user_id: fc.uuid(),
               user_name: fc.option(fc.string({ minLength: 3, maxLength: 50 }), {
                 nil: undefined,
               }),
               changes: fc.dictionary(fc.string(), fc.string()),
-              timestamp: fc
-                .integer({ min: 0, max: 365 * 24 * 60 * 60 * 1000 })
-                .map((offset) => {
-                  const date = new Date(Date.now() - offset);
-                  return date.toISOString();
-                }),
+              timestamp: fc.integer({ min: 0, max: 365 * 24 * 60 * 60 * 1000 }).map((offset) => {
+                const date = new Date(Date.now() - offset);
+                return date.toISOString();
+              }),
             }),
-            { minLength: 0, maxLength: 50 }
-          )
+            { minLength: 0, maxLength: 50 },
+          ),
         ),
         ([action, logs]: [AuditAction, AuditLog[]]) => {
           // Filter logs by action
@@ -359,9 +316,7 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
 
           // Sort filtered logs
           const sortedFilteredLogs = [...filteredLogs].sort((a, b) => {
-            return (
-              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-            );
+            return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
           });
 
           // Property: Filtered logs should be complete (all matching logs present)
@@ -370,12 +325,8 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
 
           // Property: Filtered logs should be ordered correctly
           for (let i = 0; i < sortedFilteredLogs.length - 1; i++) {
-            const currentTimestamp = new Date(
-              sortedFilteredLogs[i].timestamp
-            ).getTime();
-            const nextTimestamp = new Date(
-              sortedFilteredLogs[i + 1].timestamp
-            ).getTime();
+            const currentTimestamp = new Date(sortedFilteredLogs[i].timestamp).getTime();
+            const nextTimestamp = new Date(sortedFilteredLogs[i + 1].timestamp).getTime();
             expect(currentTimestamp).toBeGreaterThanOrEqual(nextTimestamp);
           }
 
@@ -383,9 +334,9 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
           for (const log of sortedFilteredLogs) {
             expect(log.action).toBe(action);
           }
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 });

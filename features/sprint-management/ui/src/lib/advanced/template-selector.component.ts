@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  input,
-  OnInit,
-  output,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -37,9 +29,7 @@ export class TemplateSelectorComponent implements OnInit {
   private readonly templateStore = inject(TemplateStore);
 
   placeholder = input<string>('Choose a template...');
-  helpText = input<string>(
-    'Templates provide pre-configured settings for common work item types'
-  );
+  helpText = input<string>('Templates provide pre-configured settings for common work item types');
   showNoneOption = input<boolean>(true);
 
   readonly templates = this.templateStore.entities;

@@ -71,7 +71,7 @@ export const getDefaultPaginationState = (): PaginationState => ({
 export function setPagination(
   currentPage: number,
   pageSize: number,
-  totalItems: number
+  totalItems: number,
 ): { pagination: PaginationState } {
   const totalPages = Math.ceil(totalItems / pageSize);
   return { pagination: { currentPage, pageSize, totalItems, totalPages } };

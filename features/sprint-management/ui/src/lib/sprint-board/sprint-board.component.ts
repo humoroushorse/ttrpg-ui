@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  input,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { MatCardModule } from '@angular/material/card';
@@ -17,7 +11,6 @@ import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 const { WorkItemStatus } = SprintModels.WorkItem;
 type WorkItem = SprintModels.WorkItem.WorkItem;
 type WorkItemStatus = SprintModels.WorkItem.WorkItemStatus;
-
 
 @Component({
   selector: 'lib-sprint-board',
@@ -47,25 +40,17 @@ export class SprintBoardComponent {
     { id: 'done', status: WorkItemStatus.Done, title: 'Done', icon: 'check_circle' },
   ];
 
-  todoItems = computed(() =>
-    this.workItems().filter(item => item.status === WorkItemStatus.Todo)
-  );
+  todoItems = computed(() => this.workItems().filter((item) => item.status === WorkItemStatus.Todo));
 
-  inProgressItems = computed(() =>
-    this.workItems().filter(item => item.status === WorkItemStatus.InProgress)
-  );
+  inProgressItems = computed(() => this.workItems().filter((item) => item.status === WorkItemStatus.InProgress));
 
-  inReviewItems = computed(() =>
-    this.workItems().filter(item => item.status === WorkItemStatus.InReview)
-  );
+  inReviewItems = computed(() => this.workItems().filter((item) => item.status === WorkItemStatus.InReview));
 
-  doneItems = computed(() =>
-    this.workItems().filter(item => item.status === WorkItemStatus.Done)
-  );
+  doneItems = computed(() => this.workItems().filter((item) => item.status === WorkItemStatus.Done));
 
   // Get items for a specific column
   getColumnItems(columnId: string): WorkItem[] {
-    const column = this.columns.find(c => c.id === columnId);
+    const column = this.columns.find((c) => c.id === columnId);
     if (!column) return [];
 
     switch (column.status) {
@@ -84,14 +69,12 @@ export class SprintBoardComponent {
 
   // Get connected drop lists (all columns except current)
   getConnectedLists(currentColumnId: string): string[] {
-    return this.columns
-      .filter(c => c.id !== currentColumnId)
-      .map(c => c.id);
+    return this.columns.filter((c) => c.id !== currentColumnId).map((c) => c.id);
   }
 
   // Handle drag and drop
   onDrop(event: CdkDragDrop<WorkItem[]>, columnId: string) {
-    const column = this.columns.find(c => c.id === columnId);
+    const column = this.columns.find((c) => c.id === columnId);
     if (!column) return;
 
     const item = event.item.data as WorkItem;

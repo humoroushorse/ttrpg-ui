@@ -34,11 +34,8 @@ export class OfflineService {
     ? merge(
         fromEvent(window, 'online').pipe(map(() => true)),
         fromEvent(window, 'offline').pipe(map(() => false)),
-        of(navigator.onLine)
-      ).pipe(
-        startWith(navigator.onLine),
-        distinctUntilChanged()
-      )
+        of(navigator.onLine),
+      ).pipe(startWith(navigator.onLine), distinctUntilChanged())
     : of(true).pipe(startWith(true));
 
   public readonly isOnline = toSignal(this.onlineEvents$, { initialValue: navigator.onLine });
@@ -133,7 +130,7 @@ export class OfflineService {
         .map((action) => {
           const failed = failedActions.find((f) => f.id === action.id);
           return failed || action;
-        })
+        }),
     );
 
     this.syncInProgressSignal.set(false);

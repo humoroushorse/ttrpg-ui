@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -45,23 +40,24 @@ export class PageProjectCreateComponent implements OnInit {
   private readonly projectStore = inject(ProjectStore);
 
   projectForm: FormGroup = this.fb.group({
-    key: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(10), Validators.pattern(/^[A-Z0-9]+$/)]],
+    key: [
+      '',
+      [Validators.required, Validators.minLength(3), Validators.maxLength(10), Validators.pattern(/^[A-Z0-9]+$/)],
+    ],
     name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]],
     description: [''],
     starting_number: [1, [Validators.required, Validators.min(1)]],
   });
 
   ngOnInit(): void {
-    this.title.setTitle(
-      `Sprint Management | Create Project | ${this.sharedCoreService.appTitle}`
-    );
+    this.title.setTitle(`Sprint Management | Create Project | ${this.sharedCoreService.appTitle}`);
     this.meta.updateTag({
       name: 'description',
       content: 'Create a new project for organizing work items.',
     });
 
     // Auto-uppercase the key field
-    this.projectForm.get('key')?.valueChanges.subscribe(value => {
+    this.projectForm.get('key')?.valueChanges.subscribe((value) => {
       if (value) {
         this.projectForm.get('key')?.setValue(value.toUpperCase(), { emitEvent: false });
       }

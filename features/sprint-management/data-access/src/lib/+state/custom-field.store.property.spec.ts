@@ -61,9 +61,9 @@ describe('CustomField Store - Number Field Validation (Property 3)', () => {
             expect(Number.isFinite(result) || result === null).toBe(true);
             expect(Number.isNaN(result)).toBe(false);
           }
-        }
+        },
       ),
-      { numRuns: 500 }
+      { numRuns: 500 },
     );
   });
 
@@ -79,35 +79,29 @@ describe('CustomField Store - Number Field Validation (Property 3)', () => {
         (nonNumericString) => {
           const result = simulateOnValueChange(numberFieldDef, nonNumericString);
           expect(result).toBeNull();
-        }
+        },
       ),
-      { numRuns: 200 }
+      { numRuns: 200 },
     );
   });
 
   it('valid numeric string input produces a finite number for number fields', () => {
     fc.assert(
-      fc.property(
-        fc.float({ noNaN: true, noDefaultInfinity: true }).map(String),
-        (numericString) => {
-          const result = simulateOnValueChange(numberFieldDef, numericString);
-          if (result !== null) {
-            expect(typeof result).toBe('number');
-            expect(Number.isNaN(result)).toBe(false);
-          }
+      fc.property(fc.float({ noNaN: true, noDefaultInfinity: true }).map(String), (numericString) => {
+        const result = simulateOnValueChange(numberFieldDef, numericString);
+        if (result !== null) {
+          expect(typeof result).toBe('number');
+          expect(Number.isNaN(result)).toBe(false);
         }
-      ),
-      { numRuns: 200 }
+      }),
+      { numRuns: 200 },
     );
   });
 
   it('non-number field types pass through values unchanged', () => {
     fc.assert(
       fc.property(
-        fc.oneof(
-          fc.constant(CustomFieldType.Text),
-          fc.constant(CustomFieldType.Select),
-        ),
+        fc.oneof(fc.constant(CustomFieldType.Text), fc.constant(CustomFieldType.Select)),
         fc.string({ maxLength: 50 }),
         (fieldType, value) => {
           const fieldDef: CustomFieldDefinition = {
@@ -117,9 +111,9 @@ describe('CustomField Store - Number Field Validation (Property 3)', () => {
           };
           const result = simulateOnValueChange(fieldDef, value);
           expect(result).toBe(value);
-        }
+        },
       ),
-      { numRuns: 200 }
+      { numRuns: 200 },
     );
   });
 });

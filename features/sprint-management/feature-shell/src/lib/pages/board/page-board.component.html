@@ -12,10 +12,7 @@
         @if (availableSprints().length > 0) {
           <mat-form-field class="sprint-selector">
             <mat-label>Select Sprint</mat-label>
-            <mat-select
-              [value]="selectedSprintId()"
-              (selectionChange)="onSprintChange($event.value)"
-            >
+            <mat-select [value]="selectedSprintId()" (selectionChange)="onSprintChange($event.value)">
               @for (sprint of availableSprints(); track sprint.id) {
                 <mat-option [value]="sprint.id">
                   {{ sprint.name }}
@@ -29,11 +26,7 @@
         }
 
         @if (currentSprint()) {
-          <button
-            mat-button
-            (click)="onViewSprintDetails()"
-            matTooltip="View sprint details"
-          >
+          <button mat-button (click)="onViewSprintDetails()" matTooltip="View sprint details">
             <mat-icon>info</mat-icon>
             Sprint Details
           </button>
@@ -78,18 +71,14 @@
         <mat-icon>inbox</mat-icon>
         <h2>No Active Sprint</h2>
         <p>There are no active sprints. Start a sprint to use the board.</p>
-        <button mat-raised-button color="primary" routerLink="/sprints">
-          Go to Sprints
-        </button>
+        <button mat-raised-button color="primary" routerLink="/sprints">Go to Sprints</button>
       </div>
     } @else if (sprintWorkItems().length === 0) {
       <div class="empty-state">
         <mat-icon>inbox</mat-icon>
         <h2>No Work Items</h2>
         <p>This sprint doesn't have any work items yet.</p>
-        <button mat-raised-button color="primary" routerLink="/work-items">
-          Add Work Items
-        </button>
+        <button mat-raised-button color="primary" routerLink="/work-items">Add Work Items</button>
       </div>
     } @else {
       <lib-sprint-board

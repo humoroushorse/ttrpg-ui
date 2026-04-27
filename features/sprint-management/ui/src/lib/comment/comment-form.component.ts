@@ -1,19 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  output,
-  signal,
-  effect,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, signal, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -79,9 +66,7 @@ export class CommentFormComponent {
     });
   }
 
-  private notEmptyValidator(
-    control: FormControl<string>
-  ): Record<string, unknown> | null {
+  private notEmptyValidator(control: FormControl<string>): Record<string, unknown> | null {
     const value = control.value || '';
     if (value.trim().length === 0) {
       return { empty: true };

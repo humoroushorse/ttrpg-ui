@@ -1,17 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  effect,
-  input,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -54,11 +43,7 @@ export class TimeEntryFormComponent {
       nonNullable: true,
       validators: [Validators.required],
     }),
-    hours: new FormControl<number | null>(null, [
-      Validators.required,
-      Validators.min(0.01),
-      Validators.max(24),
-    ]),
+    hours: new FormControl<number | null>(null, [Validators.required, Validators.min(0.01), Validators.max(24)]),
     description: new FormControl<string>('', {
       nonNullable: true,
       validators: [Validators.maxLength(500)],

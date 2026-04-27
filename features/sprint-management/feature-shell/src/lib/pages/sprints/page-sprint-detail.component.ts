@@ -27,11 +27,7 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 import { SprintBoardComponent } from '@ttrpg-ui/features/sprint-management/ui';
 
-import {
-  SprintStore,
-  WorkItemStore,
-  WebSocketService,
-} from '@ttrpg-ui/features/sprint-management/data-access';
+import { SprintStore, WorkItemStore, WebSocketService } from '@ttrpg-ui/features/sprint-management/data-access';
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 
 const { SprintStatus } = SprintModels.Sprint;
@@ -93,23 +89,17 @@ export class PageSprintDetailComponent implements OnInit, OnDestroy {
   public sprintWorkItems = computed(() => {
     const sprintId = this.sprintId();
     if (!sprintId) return [];
-    return this.workItemStore.entities().filter(
-      (item) => item.sprint_id === sprintId
-    );
+    return this.workItemStore.entities().filter((item) => item.sprint_id === sprintId);
   });
 
   public totalItems = computed(() => this.sprintWorkItems().length);
 
   public completedItems = computed(() => {
-    return this.sprintWorkItems().filter(
-      (item) => item.status === WorkItemStatus.Done
-    ).length;
+    return this.sprintWorkItems().filter((item) => item.status === WorkItemStatus.Done).length;
   });
 
   public inProgressItems = computed(() => {
-    return this.sprintWorkItems().filter(
-      (item) => item.status === WorkItemStatus.InProgress
-    ).length;
+    return this.sprintWorkItems().filter((item) => item.status === WorkItemStatus.InProgress).length;
   });
 
   public blockedItems = computed(() => {
@@ -131,10 +121,7 @@ export class PageSprintDetailComponent implements OnInit, OnDestroy {
   });
 
   public totalStoryPoints = computed(() => {
-    return this.sprintWorkItems().reduce(
-      (sum, item) => sum + (item.story_points || 0),
-      0
-    );
+    return this.sprintWorkItems().reduce((sum, item) => sum + (item.story_points || 0), 0);
   });
 
   public completedStoryPoints = computed(() => {
@@ -169,9 +156,7 @@ export class PageSprintDetailComponent implements OnInit, OnDestroy {
     effect(() => {
       const sprint = this.sprint();
       if (sprint) {
-        this.title.setTitle(
-          `${sprint.name} | Sprints | Sprint Management | ${this.sharedCoreService.appTitle}`
-        );
+        this.title.setTitle(`${sprint.name} | Sprints | Sprint Management | ${this.sharedCoreService.appTitle}`);
         this.meta.updateTag({
           name: 'description',
           content: sprint.description || 'View sprint details',
@@ -257,9 +242,7 @@ export class PageSprintDetailComponent implements OnInit, OnDestroy {
     const sprint = this.sprint();
     if (!sprint) return;
 
-    const confirmed = confirm(
-      `Are you sure you want to delete sprint "${sprint.name}"? This action cannot be undone.`
-    );
+    const confirmed = confirm(`Are you sure you want to delete sprint "${sprint.name}"? This action cannot be undone.`);
 
     if (!confirmed) return;
 
@@ -277,7 +260,7 @@ export class PageSprintDetailComponent implements OnInit, OnDestroy {
     if (!sprint) return;
 
     const confirmed = confirm(
-      `Are you sure you want to start sprint "${sprint.name}"? This will change its status to Active.`
+      `Are you sure you want to start sprint "${sprint.name}"? This will change its status to Active.`,
     );
 
     if (!confirmed) return;
@@ -299,7 +282,7 @@ export class PageSprintDetailComponent implements OnInit, OnDestroy {
     if (!sprint) return;
 
     const confirmed = confirm(
-      `Are you sure you want to complete sprint "${sprint.name}"? This will change its status to Completed.`
+      `Are you sure you want to complete sprint "${sprint.name}"? This will change its status to Completed.`,
     );
 
     if (!confirmed) return;

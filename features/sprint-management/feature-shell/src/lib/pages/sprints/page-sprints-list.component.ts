@@ -82,9 +82,7 @@ export class PageSprintsListComponent implements OnInit, OnDestroy {
   public readonly sprintStore = inject(SprintStore);
   public readonly authService = inject(AuthService);
   public currentView = signal<'card' | 'table'>(
-    this.sharedLocalStorageService.get<'card' | 'table'>(
-      'PageSprintsListComponent.currentView'
-    ) || 'card'
+    this.sharedLocalStorageService.get<'card' | 'table'>('PageSprintsListComponent.currentView') || 'card',
   );
   public searchControl = new FormControl('');
   public statusFilter = new FormControl<SprintStatus[]>([]);
@@ -160,23 +158,16 @@ export class PageSprintsListComponent implements OnInit, OnDestroy {
   constructor() {
     // Persist view mode to local storage
     effect(() => {
-      this.sharedLocalStorageService.set(
-        'PageSprintsListComponent.currentView',
-        this.currentView()
-      );
+      this.sharedLocalStorageService.set('PageSprintsListComponent.currentView', this.currentView());
     });
-    this.searchControl.valueChanges
-      .pipe(debounceTime(300))
-      .subscribe(() => {
-        this.applyFilters();
-      });
+    this.searchControl.valueChanges.pipe(debounceTime(300)).subscribe(() => {
+      this.applyFilters();
+    });
     this.statusFilter.valueChanges.subscribe(() => this.applyFilters());
   }
 
   ngOnInit(): void {
-    this.title.setTitle(
-      `Sprint Management | Sprints | ${this.sharedCoreService.appTitle}`
-    );
+    this.title.setTitle(`Sprint Management | Sprints | ${this.sharedCoreService.appTitle}`);
     this.meta.updateTag({
       name: 'description',
       content: 'View and manage sprints in the sprint management system.',
@@ -243,16 +234,16 @@ export class PageSprintsListComponent implements OnInit, OnDestroy {
   }
 
   private getColumnDefs(): TableModels.ColumnDef<Sprint>[] {
-    const storedColumnDefs: TableModels.ColumnDef<Sprint>[] | null =
-      this.sharedLocalStorageService.get('PageSprintsListComponent.columnDefs');
+    const storedColumnDefs: TableModels.ColumnDef<Sprint>[] | null = this.sharedLocalStorageService.get(
+      'PageSprintsListComponent.columnDefs',
+    );
 
     if (storedColumnDefs) {
       return storedColumnDefs.map((c) => {
         if (c.cellDataType === 'component') {
           return {
             ...c,
-            component: this.defaultColumnDefs.find((d) => d.field === c.field)
-              ?.component as Type<unknown>,
+            component: this.defaultColumnDefs.find((d) => d.field === c.field)?.component as Type<unknown>,
           };
         }
         return c;
@@ -262,10 +253,7 @@ export class PageSprintsListComponent implements OnInit, OnDestroy {
   }
 
   onColumnDefsChange(columnDefs: TableModels.ColumnDef<Sprint>[]) {
-    this.sharedLocalStorageService.set(
-      'PageSprintsListComponent.columnDefs',
-      columnDefs
-    );
+    this.sharedLocalStorageService.set('PageSprintsListComponent.columnDefs', columnDefs);
   }
 
   onResetColumnDefsClicked() {
@@ -307,9 +295,7 @@ export class PageSprintsListComponent implements OnInit, OnDestroy {
   removeFilter(filter: { field: string; value: string }): void {
     if (filter.field === 'status') {
       const current = this.statusFilter.value || [];
-      this.statusFilter.setValue(
-        current.filter((v) => v !== (filter.value as SprintStatus))
-      );
+      this.statusFilter.setValue(current.filter((v) => v !== (filter.value as SprintStatus)));
     }
   }
 

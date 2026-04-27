@@ -3,10 +3,10 @@ kind: ConfigMap
 metadata:
   name: sprint-management-config
 data:
-  APP_SPRINT_MANAGEMENT__API_BASE_PATH: "/sprint-management-api"
-  APP_SPRINT_MANAGEMENT__API_URL: "http://backend-service:8003"
-  AUTH_BASE_URL: "/auth-api"
-  PORT: "4000"
+  APP_SPRINT_MANAGEMENT__API_BASE_PATH: '/sprint-management-api'
+  APP_SPRINT_MANAGEMENT__API_URL: 'http://backend-service:8003'
+  AUTH_BASE_URL: '/auth-api'
+  PORT: '4000'
 
 ---
 apiVersion: apps/v1
@@ -54,11 +54,11 @@ spec:
           #         key: AUTH_BASE_URL
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: '128Mi'
+              cpu: '100m'
             limits:
-              memory: "256Mi"
-              cpu: "200m"
+              memory: '256Mi'
+              cpu: '200m'
           livenessProbe:
             httpGet:
               path: /

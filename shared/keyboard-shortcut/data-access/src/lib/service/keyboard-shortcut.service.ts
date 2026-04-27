@@ -3,11 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { fromEvent } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import {
-  KeyboardShortcut,
-  GroupedShortcuts,
-  KeyboardEventFilter,
-} from '../models/keyboard-shortcut.models';
+import { KeyboardShortcut, GroupedShortcuts, KeyboardEventFilter } from '../models/keyboard-shortcut.models';
 
 /**
  * Service for managing keyboard shortcuts throughout the application
@@ -77,7 +73,7 @@ export class KeyboardShortcutService {
     fromEvent<KeyboardEvent>(document, 'keydown')
       .pipe(
         filter((event) => this.shouldProcessEvent(event)),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((event) => {
         this.handleKeyboardEvent(event);

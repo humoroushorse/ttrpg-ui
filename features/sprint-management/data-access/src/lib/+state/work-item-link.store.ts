@@ -1,31 +1,14 @@
 import { computed, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withMethods,
-  withState,
-} from '@ngrx/signals';
-import {
-  addEntity,
-  removeEntity,
-  setAllEntities,
-  withEntities,
-} from '@ngrx/signals/entities';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { addEntity, removeEntity, setAllEntities, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { SharedModels } from '@ttrpg-ui/shared/models';
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 import { SprintManagementApiService } from '../service/sprint-management-api.service';
 
-const {
-  getBaseStateDefault,
-  setError,
-  setLoaded,
-  setLoading,
-  withComputedBase,
-} = SharedModels.Store;
+const { getBaseStateDefault, setError, setLoaded, setLoading, withComputedBase } = SharedModels.Store;
 
 type WorkItemLink = SprintModels.WorkItemLink.WorkItemLink;
 type CreateWorkItemLinkRequest = SprintModels.WorkItemLink.CreateWorkItemLinkRequest;
@@ -40,18 +23,10 @@ export const WorkItemLinkStore = signalStore(
   withEntities<WorkItemLink>(),
   withComputedBase<WorkItemLink>(),
   withComputed(({ entities }) => ({
-    blocksLinks: computed(() =>
-      entities().filter((l) => l.link_type === LinkType.Blocks)
-    ),
-    blockedByLinks: computed(() =>
-      entities().filter((l) => l.link_type === LinkType.BlockedBy)
-    ),
-    relatedToLinks: computed(() =>
-      entities().filter((l) => l.link_type === LinkType.RelatedTo)
-    ),
-    duplicateOfLinks: computed(() =>
-      entities().filter((l) => l.link_type === LinkType.DuplicateOf)
-    ),
+    blocksLinks: computed(() => entities().filter((l) => l.link_type === LinkType.Blocks)),
+    blockedByLinks: computed(() => entities().filter((l) => l.link_type === LinkType.BlockedBy)),
+    relatedToLinks: computed(() => entities().filter((l) => l.link_type === LinkType.RelatedTo)),
+    duplicateOfLinks: computed(() => entities().filter((l) => l.link_type === LinkType.DuplicateOf)),
     linksByType: computed(() => {
       const all = entities();
       return {
@@ -65,42 +40,27 @@ export const WorkItemLinkStore = signalStore(
   withMethods((store, apiService = inject(SprintManagementApiService)) => ({
     loadLinks: rxMethod<string>(
       pipe(
-        tap((workItemId) =>
-          patchState(store, setLoading(true), { currentWorkItemId: workItemId })
-        ),
+        tap((workItemId) => patchState(store, setLoading(true), { currentWorkItemId: workItemId })),
         switchMap((workItemId) =>
           apiService.getWorkItemLinks(workItemId).pipe(
             tapResponse({
               next: (links) => {
-                patchState(
-                  store,
-                  setAllEntities(links),
-                  setLoaded(true),
-                  setLoading(false),
-                  setError(null, null)
-                );
+                patchState(store, setAllEntities(links), setLoaded(true), setLoading(false), setError(null, null));
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to load links'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to load links'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
-    hasCircularBlocks: (
-      sourceId: string,
-      targetId: string,
-      allLinks: WorkItemLink[]
-    ): boolean => {
+    hasCircularBlocks: (sourceId: string, targetId: string, allLinks: WorkItemLink[]): boolean => {
       const visited = new Set<string>();
       const queue = [targetId];
 
@@ -110,9 +70,7 @@ export const WorkItemLinkStore = signalStore(
         if (visited.has(current)) continue;
         visited.add(current);
 
-        const outgoing = allLinks.filter(
-          (l) => l.link_type === LinkType.Blocks && l.source_work_item_id === current
-        );
+        const outgoing = allLinks.filter((l) => l.link_type === LinkType.Blocks && l.source_work_item_id === current);
         for (const link of outgoing) {
           queue.push(link.target_work_item_id);
         }
@@ -134,9 +92,7 @@ export const WorkItemLinkStore = signalStore(
                 if (visited.has(current)) continue;
                 visited.add(current);
                 const outgoing = allLinks.filter(
-                  (l) =>
-                    l.link_type === LinkType.Blocks &&
-                    l.source_work_item_id === current
+                  (l) => l.link_type === LinkType.Blocks && l.source_work_item_id === current,
                 );
                 for (const link of outgoing) {
                   queue.push(link.target_work_item_id);
@@ -148,10 +104,7 @@ export const WorkItemLinkStore = signalStore(
             if (wouldCycle) {
               patchState(
                 store,
-                setError(
-                  'Circular dependency detected',
-                  'Cannot create a "blocks" link that would create a cycle'
-                )
+                setError('Circular dependency detected', 'Cannot create a "blocks" link that would create a cycle'),
               );
               return;
             }
@@ -179,9 +132,7 @@ export const WorkItemLinkStore = signalStore(
                 if (visited.has(current)) continue;
                 visited.add(current);
                 const outgoing = allLinks.filter(
-                  (l) =>
-                    l.link_type === LinkType.Blocks &&
-                    l.source_work_item_id === current
+                  (l) => l.link_type === LinkType.Blocks && l.source_work_item_id === current,
                 );
                 for (const link of outgoing) {
                   queue.push(link.target_work_item_id);
@@ -203,12 +154,7 @@ export const WorkItemLinkStore = signalStore(
               next: (link) => {
                 const tempId = store.ids().find((id) => (id as string).startsWith('temp-'));
                 if (tempId) patchState(store, removeEntity(tempId));
-                patchState(
-                  store,
-                  addEntity(link),
-                  setLoading(false),
-                  setError(null, null)
-                );
+                patchState(store, addEntity(link), setLoading(false), setError(null, null));
               },
               error: (error: any) => {
                 const tempId = store.ids().find((id) => (id as string).startsWith('temp-'));
@@ -216,16 +162,13 @@ export const WorkItemLinkStore = signalStore(
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to create link'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to create link'),
                 );
               },
-            })
+            }),
           );
-        })
-      )
+        }),
+      ),
     ),
 
     deleteLink: rxMethod<string>(
@@ -245,16 +188,13 @@ export const WorkItemLinkStore = signalStore(
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to delete link'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to delete link'),
                 );
               },
-            })
+            }),
           );
-        })
-      )
+        }),
+      ),
     ),
 
     clearLinks: () => {
@@ -262,5 +202,5 @@ export const WorkItemLinkStore = signalStore(
         currentWorkItemId: null,
       });
     },
-  }))
+  })),
 );

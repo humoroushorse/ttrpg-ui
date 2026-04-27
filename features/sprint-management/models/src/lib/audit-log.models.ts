@@ -1,4 +1,3 @@
-
 export enum AuditAction {
   Created = 'created',
   Updated = 'updated',

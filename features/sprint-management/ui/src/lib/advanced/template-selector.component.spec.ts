@@ -42,9 +42,7 @@ describe('TemplateSelectorComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TemplateSelectorComponent, NoopAnimationsModule],
-      providers: [
-        { provide: TemplateStore, useValue: mockTemplateStore },
-      ],
+      providers: [{ provide: TemplateStore, useValue: mockTemplateStore }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TemplateSelectorComponent);

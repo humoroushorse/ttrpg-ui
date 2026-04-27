@@ -1,28 +1,10 @@
 import { computed } from '@angular/core';
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withMethods,
-  withState,
-} from '@ngrx/signals';
-import {
-  addEntity,
-  removeEntity,
-  setAllEntities,
-  updateEntity,
-  withEntities,
-} from '@ngrx/signals/entities';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { addEntity, removeEntity, setAllEntities, updateEntity, withEntities } from '@ngrx/signals/entities';
 import { SharedModels } from '@ttrpg-ui/shared/models';
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 
-const {
-  getBaseStateDefault,
-  setError,
-  setLoaded,
-  setLoading,
-  withComputedBase,
-} = SharedModels.Store;
+const { getBaseStateDefault, setError, setLoaded, setLoading, withComputedBase } = SharedModels.Store;
 
 export const NotificationStore = signalStore(
   { providedIn: 'root' },
@@ -51,20 +33,14 @@ export const NotificationStore = signalStore(
     },
 
     markAsRead: (notificationId: string) => {
-      patchState(
-        store,
-        updateEntity({ id: notificationId, changes: { is_read: true } })
-      );
+      patchState(store, updateEntity({ id: notificationId, changes: { is_read: true } }));
     },
 
     markAllAsRead: () => {
       const entities = store.entities();
       entities.forEach((notification) => {
         if (!notification.is_read) {
-          patchState(
-            store,
-            updateEntity({ id: notification.id, changes: { is_read: true } })
-          );
+          patchState(store, updateEntity({ id: notification.id, changes: { is_read: true } }));
         }
       });
     },
@@ -87,17 +63,11 @@ export const NotificationStore = signalStore(
         return createdAt >= thirtyDaysAgo;
       });
 
-      patchState(
-        store,
-        setAllEntities(recentNotifications),
-        setLoaded(true),
-        setLoading(false),
-        setError(null, null)
-      );
+      patchState(store, setAllEntities(recentNotifications), setLoaded(true), setLoading(false), setError(null, null));
     },
 
     clearNotifications: () => {
       patchState(store, setAllEntities([] as SprintModels.Notification.Notification[]));
     },
-  }))
+  })),
 );

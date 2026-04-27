@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -57,9 +51,7 @@ export class PageProjectEditComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.title.setTitle(
-      `Sprint Management | Edit Project | ${this.sharedCoreService.appTitle}`
-    );
+    this.title.setTitle(`Sprint Management | Edit Project | ${this.sharedCoreService.appTitle}`);
     this.meta.updateTag({
       name: 'description',
       content: 'Edit project details.',

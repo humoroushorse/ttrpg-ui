@@ -28,23 +28,19 @@ describe('PageSprintDetailComponent - Sprint Progress Metrics Property Tests', (
               nil: null,
             }),
           }),
-          { minLength: 0, maxLength: 100 }
+          { minLength: 0, maxLength: 100 },
         ),
         (workItems) => {
           // Calculate metrics (simulating what the component does)
           const totalItems = workItems.length;
-          const completedItems = workItems.filter(
-            (item) => item.status === WorkItemStatus.Done
-          ).length;
+          const completedItems = workItems.filter((item) => item.status === WorkItemStatus.Done).length;
           const remainingItems = totalItems - completedItems;
 
           // Property 1: total_items should equal the count of work items
           expect(totalItems).toBe(workItems.length);
 
           // Property 2: completed_items should equal the count of items with status "Done"
-          const expectedCompletedCount = workItems.filter(
-            (item) => item.status === WorkItemStatus.Done
-          ).length;
+          const expectedCompletedCount = workItems.filter((item) => item.status === WorkItemStatus.Done).length;
           expect(completedItems).toBe(expectedCompletedCount);
 
           // Property 3: remaining_items should equal total_items minus completed_items
@@ -55,9 +51,9 @@ describe('PageSprintDetailComponent - Sprint Progress Metrics Property Tests', (
 
           // Property 5: completed_items should be less than or equal to total_items
           expect(completedItems).toBeLessThanOrEqual(totalItems);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 });

@@ -11,7 +11,8 @@ module.exports = {
       recommended: true,
     },
     messages: {
-      noTailwindInTemplate: 'Avoid Tailwind class "{{className}}" in template. Use design tokens in component SCSS instead.',
+      noTailwindInTemplate:
+        'Avoid Tailwind class "{{className}}" in template. Use design tokens in component SCSS instead.',
     },
     schema: [],
   },

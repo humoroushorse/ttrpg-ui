@@ -13,13 +13,19 @@
 
 .axis-label {
   fill: var(--g-color-on-surface-variant);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 .axis-title {
   fill: var(--g-color-on-surface);
   font-weight: 600;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 .ideal-line {

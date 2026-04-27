@@ -19,8 +19,8 @@
             <h3>Circular Dependencies Detected</h3>
           </div>
           <p>
-            The following work items are part of circular dependency chains.
-            This may cause blocking issues and should be resolved.
+            The following work items are part of circular dependency chains. This may cause blocking issues and should
+            be resolved.
           </p>
           <div class="circular-items">
             @for (node of circularDependencyNodes(); track node.workItem.id) {
@@ -88,7 +88,15 @@
                               mat-stroked-button
                               class="related-item-btn"
                               [matTooltip]="blockedItem.title"
-                              (click)="onWorkItemClick({ workItem: blockedItem, blocks: [], blockedBy: [], isInCircularDependency: false }); $event.stopPropagation()"
+                              (click)="
+                                onWorkItemClick({
+                                  workItem: blockedItem,
+                                  blocks: [],
+                                  blockedBy: [],
+                                  isInCircularDependency: false,
+                                });
+                                $event.stopPropagation()
+                              "
                             >
                               {{ blockedItem.title }}
                             </button>
@@ -148,7 +156,15 @@
                               mat-stroked-button
                               class="related-item-btn"
                               [matTooltip]="blockerItem.title"
-                              (click)="onWorkItemClick({ workItem: blockerItem, blocks: [], blockedBy: [], isInCircularDependency: false }); $event.stopPropagation()"
+                              (click)="
+                                onWorkItemClick({
+                                  workItem: blockerItem,
+                                  blocks: [],
+                                  blockedBy: [],
+                                  isInCircularDependency: false,
+                                });
+                                $event.stopPropagation()
+                              "
                             >
                               {{ blockerItem.title }}
                             </button>
@@ -182,7 +198,14 @@
                   <div class="dependency-source">
                     <button
                       mat-button
-                      (click)="onWorkItemClick({ workItem: sourceItem, blocks: [], blockedBy: [], isInCircularDependency: false })"
+                      (click)="
+                        onWorkItemClick({
+                          workItem: sourceItem,
+                          blocks: [],
+                          blockedBy: [],
+                          isInCircularDependency: false,
+                        })
+                      "
                     >
                       {{ sourceItem.title }}
                     </button>
@@ -194,17 +217,19 @@
                   <div class="dependency-target">
                     <button
                       mat-button
-                      (click)="onWorkItemClick({ workItem: targetItem, blocks: [], blockedBy: [], isInCircularDependency: false })"
+                      (click)="
+                        onWorkItemClick({
+                          workItem: targetItem,
+                          blocks: [],
+                          blockedBy: [],
+                          isInCircularDependency: false,
+                        })
+                      "
                     >
                       {{ targetItem.title }}
                     </button>
                   </div>
-                  <button
-                    mat-icon-button
-                    color="warn"
-                    matTooltip="Remove dependency"
-                    (click)="onRemoveDependency(dep)"
-                  >
+                  <button mat-icon-button color="warn" matTooltip="Remove dependency" (click)="onRemoveDependency(dep)">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </div>

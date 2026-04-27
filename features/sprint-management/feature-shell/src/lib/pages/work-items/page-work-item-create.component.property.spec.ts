@@ -45,10 +45,15 @@ describe('PageWorkItemCreateComponent - Property-Based Tests', () => {
           const hasType = formData.type !== undefined && formData.type !== null;
           const hasStatus = formData.status !== undefined && formData.status !== null;
           const hasPriority = formData.priority !== undefined && formData.priority !== null;
-          const storyPointsValid = formData.story_points === undefined || formData.story_points === null || formData.story_points >= 0;
-          const estimatedHoursValid = formData.estimated_hours === undefined || formData.estimated_hours === null || formData.estimated_hours >= 0;
+          const storyPointsValid =
+            formData.story_points === undefined || formData.story_points === null || formData.story_points >= 0;
+          const estimatedHoursValid =
+            formData.estimated_hours === undefined ||
+            formData.estimated_hours === null ||
+            formData.estimated_hours >= 0;
 
-          const shouldBeValid = hasTitle && hasType && hasStatus && hasPriority && storyPointsValid && estimatedHoursValid;
+          const shouldBeValid =
+            hasTitle && hasType && hasStatus && hasPriority && storyPointsValid && estimatedHoursValid;
 
           expect(form.valid).toBe(shouldBeValid);
 
@@ -60,12 +65,16 @@ describe('PageWorkItemCreateComponent - Property-Based Tests', () => {
           if (formData.story_points !== undefined && formData.story_points !== null && formData.story_points < 0) {
             expect(form.get('story_points')?.hasError('min')).toBe(true);
           }
-          if (formData.estimated_hours !== undefined && formData.estimated_hours !== null && formData.estimated_hours < 0) {
+          if (
+            formData.estimated_hours !== undefined &&
+            formData.estimated_hours !== null &&
+            formData.estimated_hours < 0
+          ) {
             expect(form.get('estimated_hours')?.hasError('min')).toBe(true);
           }
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -105,9 +114,9 @@ describe('PageWorkItemCreateComponent - Property-Based Tests', () => {
           expect(form.get('priority')?.errors).toBeNull();
           expect(form.get('story_points')?.errors).toBeNull();
           expect(form.get('estimated_hours')?.errors).toBeNull();
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -137,9 +146,9 @@ describe('PageWorkItemCreateComponent - Property-Based Tests', () => {
           if (emptyTitle.trim().length === 0) {
             expect(form.valid).toBe(emptyTitle.length > 0);
           }
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 });
@@ -149,8 +158,12 @@ describe('PageWorkItemCreateComponent - Form Caching Property Tests', () => {
     const store: Record<string, unknown> = {};
     return {
       get: (key: string) => store[key],
-      set: (key: string, value: unknown) => { store[key] = value; },
-      remove: (key: string) => { delete store[key]; },
+      set: (key: string, value: unknown) => {
+        store[key] = value;
+      },
+      remove: (key: string) => {
+        delete store[key];
+      },
     };
   };
 
@@ -179,9 +192,9 @@ describe('PageWorkItemCreateComponent - Form Caching Property Tests', () => {
 
           expect(restored).toBeDefined();
           expect(restored).toEqual(originalFormData);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -205,9 +218,9 @@ describe('PageWorkItemCreateComponent - Form Caching Property Tests', () => {
 
           storage.remove(cacheKey);
           expect(storage.get(cacheKey)).toBeUndefined();
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -235,9 +248,9 @@ describe('PageWorkItemCreateComponent - Form Caching Property Tests', () => {
           }
 
           expect(currentData).toEqual(originalFormData);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -270,7 +283,7 @@ describe('PageWorkItemCreateComponent - Form Caching Property Tests', () => {
             story_points: null,
             estimated_hours: null,
             tags: [],
-          }
+          },
         ),
         (emptyFormData) => {
           const storage = makeMockStorage();
@@ -278,9 +291,9 @@ describe('PageWorkItemCreateComponent - Form Caching Property Tests', () => {
 
           storage.set(cacheKey, emptyFormData);
           expect(storage.get(cacheKey)).toEqual(emptyFormData);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 });

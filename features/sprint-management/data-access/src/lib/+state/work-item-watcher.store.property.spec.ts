@@ -34,100 +34,75 @@ const userArb = fc.record({
 describe('Watcher Uniqueness (Property 5)', () => {
   it('addWatcher never produces duplicate user IDs', () => {
     fc.assert(
-      fc.property(
-        fc.array(userArb, { minLength: 0, maxLength: 10 }),
-        userArb,
-        (existingWatchers, newUser) => {
-          const uniqueExisting = existingWatchers.filter(
-            (u, i, arr) => arr.findIndex((x) => x.id === u.id) === i
-          );
+      fc.property(fc.array(userArb, { minLength: 0, maxLength: 10 }), userArb, (existingWatchers, newUser) => {
+        const uniqueExisting = existingWatchers.filter((u, i, arr) => arr.findIndex((x) => x.id === u.id) === i);
 
-          const result = addWatcher(uniqueExisting, newUser);
+        const result = addWatcher(uniqueExisting, newUser);
 
-          const ids = result.map((w) => w.id);
-          const uniqueIds = new Set(ids);
-          expect(uniqueIds.size).toBe(ids.length);
-        }
-      ),
-      { numRuns: 200 }
+        const ids = result.map((w) => w.id);
+        const uniqueIds = new Set(ids);
+        expect(uniqueIds.size).toBe(ids.length);
+      }),
+      { numRuns: 200 },
     );
   });
 
   it('adding the same user multiple times results in exactly one occurrence', () => {
     fc.assert(
-      fc.property(
-        userArb,
-        (user) => {
-          let watchers: User[] = [];
-          watchers = addWatcher(watchers, user);
-          watchers = addWatcher(watchers, user);
-          watchers = addWatcher(watchers, user);
+      fc.property(userArb, (user) => {
+        let watchers: User[] = [];
+        watchers = addWatcher(watchers, user);
+        watchers = addWatcher(watchers, user);
+        watchers = addWatcher(watchers, user);
 
-          const occurrences = watchers.filter((w) => w.id === user.id).length;
-          expect(occurrences).toBe(1);
-        }
-      ),
-      { numRuns: 200 }
+        const occurrences = watchers.filter((w) => w.id === user.id).length;
+        expect(occurrences).toBe(1);
+      }),
+      { numRuns: 200 },
     );
   });
 
   it('addWatcher with an already-present user returns the same list unchanged', () => {
     fc.assert(
-      fc.property(
-        fc.array(userArb, { minLength: 1, maxLength: 10 }),
-        (users) => {
-          const uniqueUsers = users.filter(
-            (u, i, arr) => arr.findIndex((x) => x.id === u.id) === i
-          );
-          if (uniqueUsers.length === 0) return;
+      fc.property(fc.array(userArb, { minLength: 1, maxLength: 10 }), (users) => {
+        const uniqueUsers = users.filter((u, i, arr) => arr.findIndex((x) => x.id === u.id) === i);
+        if (uniqueUsers.length === 0) return;
 
-          const existingUser = uniqueUsers[0];
-          const result = addWatcher(uniqueUsers, existingUser);
+        const existingUser = uniqueUsers[0];
+        const result = addWatcher(uniqueUsers, existingUser);
 
-          expect(result.length).toBe(uniqueUsers.length);
-        }
-      ),
-      { numRuns: 200 }
+        expect(result.length).toBe(uniqueUsers.length);
+      }),
+      { numRuns: 200 },
     );
   });
 
   it('removeWatcher removes exactly the user with the given ID', () => {
     fc.assert(
-      fc.property(
-        fc.array(userArb, { minLength: 1, maxLength: 10 }),
-        (users) => {
-          const uniqueUsers = users.filter(
-            (u, i, arr) => arr.findIndex((x) => x.id === u.id) === i
-          );
-          if (uniqueUsers.length === 0) return;
+      fc.property(fc.array(userArb, { minLength: 1, maxLength: 10 }), (users) => {
+        const uniqueUsers = users.filter((u, i, arr) => arr.findIndex((x) => x.id === u.id) === i);
+        if (uniqueUsers.length === 0) return;
 
-          const userToRemove = uniqueUsers[0];
-          const result = removeWatcher(uniqueUsers, userToRemove.id);
+        const userToRemove = uniqueUsers[0];
+        const result = removeWatcher(uniqueUsers, userToRemove.id);
 
-          expect(result.some((w) => w.id === userToRemove.id)).toBe(false);
-          expect(result.length).toBe(uniqueUsers.length - 1);
-        }
-      ),
-      { numRuns: 200 }
+        expect(result.some((w) => w.id === userToRemove.id)).toBe(false);
+        expect(result.length).toBe(uniqueUsers.length - 1);
+      }),
+      { numRuns: 200 },
     );
   });
 
   it('removeWatcher on a non-existent user ID leaves the list unchanged', () => {
     fc.assert(
-      fc.property(
-        fc.array(userArb, { minLength: 0, maxLength: 10 }),
-        fc.uuid(),
-        (users, nonExistentId) => {
-          const uniqueUsers = users.filter(
-            (u, i, arr) => arr.findIndex((x) => x.id === u.id) === i
-          );
-          fc.pre(!uniqueUsers.some((u) => u.id === nonExistentId));
+      fc.property(fc.array(userArb, { minLength: 0, maxLength: 10 }), fc.uuid(), (users, nonExistentId) => {
+        const uniqueUsers = users.filter((u, i, arr) => arr.findIndex((x) => x.id === u.id) === i);
+        fc.pre(!uniqueUsers.some((u) => u.id === nonExistentId));
 
-          const result = removeWatcher(uniqueUsers, nonExistentId);
-          expect(result.length).toBe(uniqueUsers.length);
-        }
-      ),
-      { numRuns: 200 }
+        const result = removeWatcher(uniqueUsers, nonExistentId);
+        expect(result.length).toBe(uniqueUsers.length);
+      }),
+      { numRuns: 200 },
     );
   });
 
@@ -137,9 +112,9 @@ describe('Watcher Uniqueness (Property 5)', () => {
         fc.array(
           fc.oneof(
             fc.record({ op: fc.constant('add' as const), user: userArb }),
-            fc.record({ op: fc.constant('remove' as const), userId: fc.uuid() })
+            fc.record({ op: fc.constant('remove' as const), userId: fc.uuid() }),
           ),
-          { minLength: 1, maxLength: 20 }
+          { minLength: 1, maxLength: 20 },
         ),
         (operations) => {
           let watchers: User[] = [];
@@ -155,9 +130,9 @@ describe('Watcher Uniqueness (Property 5)', () => {
           const ids = watchers.map((w) => w.id);
           const uniqueIds = new Set(ids);
           expect(uniqueIds.size).toBe(ids.length);
-        }
+        },
       ),
-      { numRuns: 200 }
+      { numRuns: 200 },
     );
   });
 });

@@ -2,13 +2,7 @@
   <!-- Sprint Name -->
   <mat-form-field class="w-full">
     <mat-label>Sprint Name</mat-label>
-    <input
-      matInput
-      formControlName="name"
-      placeholder="Enter sprint name"
-      required
-      aria-label="Sprint name"
-    />
+    <input matInput formControlName="name" placeholder="Enter sprint name" required aria-label="Sprint name" />
     <mat-icon matPrefix>label</mat-icon>
     @if (hasError('name')) {
       <mat-error>{{ getErrorMessage('name') }}</mat-error>
@@ -32,7 +26,7 @@
   </mat-form-field>
 
   <!-- Date Range -->
-  <div class="flex gap-4 w-full">
+  <div class="flex w-full gap-4">
     <!-- Start Date -->
     <mat-form-field class="flex-1">
       <mat-label>Start Date</mat-label>
@@ -74,7 +68,7 @@
 
   <!-- Date Range Error -->
   @if (hasDateRangeError()) {
-    <div class="text-red-600 text-sm mb-4 flex items-center gap-2">
+    <div class="mb-4 flex items-center gap-2 text-sm text-red-600">
       <mat-icon class="text-sm">error</mat-icon>
       {{ getFormErrorMessage() }}
     </div>
@@ -113,14 +107,8 @@
   }
 
   <!-- Form Actions -->
-  <div class="flex justify-end gap-3 mt-6">
-    <button
-      mat-button
-      type="button"
-      (click)="onCancel()"
-      [disabled]="isSubmitting()"
-      aria-label="Cancel"
-    >
+  <div class="mt-6 flex justify-end gap-3">
+    <button mat-button type="button" (click)="onCancel()" [disabled]="isSubmitting()" aria-label="Cancel">
       Cancel
     </button>
     <button

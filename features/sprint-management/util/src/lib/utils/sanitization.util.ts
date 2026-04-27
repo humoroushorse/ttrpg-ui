@@ -49,7 +49,7 @@ export function sanitizeStyle(style: string, sanitizer: DomSanitizer): string {
 export function sanitizeApiResponse<T extends Record<string, any>>(
   data: T,
   sanitizer: DomSanitizer,
-  fieldsToSanitize: (keyof T)[]
+  fieldsToSanitize: (keyof T)[],
 ): T {
   if (!data) {
     return data;

@@ -1,19 +1,11 @@
 <div class="flex items-center gap-1">
   <!-- View Button -->
-  <button
-    mat-icon-button
-    (click)="onView()"
-    matTooltip="View details"
-    aria-label="View work item details">
+  <button mat-icon-button (click)="onView()" matTooltip="View details" aria-label="View work item details">
     <mat-icon>visibility</mat-icon>
   </button>
 
   <!-- More Actions Menu -->
-  <button
-    mat-icon-button
-    [matMenuTriggerFor]="actionsMenu"
-    matTooltip="More actions"
-    aria-label="More actions">
+  <button mat-icon-button [matMenuTriggerFor]="actionsMenu" matTooltip="More actions" aria-label="More actions">
     <mat-icon>more_vert</mat-icon>
   </button>
 </div>

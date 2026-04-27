@@ -46,21 +46,21 @@ describe('WorkItemTableActionsComponent', () => {
 
   it('should emit viewClicked when onView is called', () => {
     let emittedValue: WorkItem | undefined;
-    component.viewClicked.subscribe((value) => emittedValue = value);
+    component.viewClicked.subscribe((value) => (emittedValue = value));
     component.onView();
     expect(emittedValue).toEqual(mockWorkItem);
   });
 
   it('should emit editClicked when onEdit is called', () => {
     let emittedValue: WorkItem | undefined;
-    component.editClicked.subscribe((value) => emittedValue = value);
+    component.editClicked.subscribe((value) => (emittedValue = value));
     component.onEdit();
     expect(emittedValue).toEqual(mockWorkItem);
   });
 
   it('should emit deleteClicked when onDelete is called', () => {
     let emittedValue: WorkItem | undefined;
-    component.deleteClicked.subscribe((value) => emittedValue = value);
+    component.deleteClicked.subscribe((value) => (emittedValue = value));
     component.onDelete();
     expect(emittedValue).toEqual(mockWorkItem);
   });

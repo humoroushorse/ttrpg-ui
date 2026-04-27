@@ -1,19 +1,7 @@
 import { computed, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withMethods,
-  withState,
-} from '@ngrx/signals';
-import {
-  addEntity,
-  removeEntity,
-  setAllEntities,
-  updateEntity,
-  withEntities,
-} from '@ngrx/signals/entities';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { addEntity, removeEntity, setAllEntities, updateEntity, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { SharedModels } from '@ttrpg-ui/shared/models';
@@ -45,9 +33,7 @@ export const ProjectStore = signalStore(
   withComputedBase<Project>(),
   withComputedPagination(),
   withComputed((store) => ({
-    projectsSorted: computed(() =>
-      [...store.entities()].sort((a, b) => a.name.localeCompare(b.name))
-    ),
+    projectsSorted: computed(() => [...store.entities()].sort((a, b) => a.name.localeCompare(b.name))),
   })),
   withMethods((store, apiService = inject(ProjectApiService)) => ({
     loadProjects: rxMethod<{ page?: number; pageSize?: number }>(
@@ -63,23 +49,20 @@ export const ProjectStore = signalStore(
                   setPagination(response.page, response.page_size, response.total),
                   setLoaded(true),
                   setLoading(false),
-                  setError(null, null)
+                  setError(null, null),
                 );
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to load projects'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to load projects'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     loadProject: rxMethod<string>(
@@ -94,23 +77,20 @@ export const ProjectStore = signalStore(
                   addEntity(project),
                   setSelectedEntity(project),
                   setLoading(false),
-                  setError(null, null)
+                  setError(null, null),
                 );
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to load project'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to load project'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     loadProjectByKey: rxMethod<string>(
@@ -125,23 +105,20 @@ export const ProjectStore = signalStore(
                   addEntity(project),
                   setSelectedEntity(project),
                   setLoading(false),
-                  setError(null, null)
+                  setError(null, null),
                 );
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to load project'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to load project'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     create: rxMethod<CreateProjectRequest>(
@@ -151,27 +128,19 @@ export const ProjectStore = signalStore(
           apiService.createProject(request).pipe(
             tapResponse({
               next: (project) => {
-                patchState(
-                  store,
-                  addEntity(project),
-                  setLoading(false),
-                  setError(null, null)
-                );
+                patchState(store, addEntity(project), setLoading(false), setError(null, null));
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to create project'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to create project'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     update: rxMethod<{ id: string; request: UpdateProjectRequest }>(
@@ -185,23 +154,20 @@ export const ProjectStore = signalStore(
                   store,
                   updateEntity({ id: project.id, changes: project }),
                   setLoading(false),
-                  setError(null, null)
+                  setError(null, null),
                 );
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to update project'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to update project'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     delete: rxMethod<string>(
@@ -211,27 +177,19 @@ export const ProjectStore = signalStore(
           apiService.deleteProject(id).pipe(
             tapResponse({
               next: () => {
-                patchState(
-                  store,
-                  removeEntity(id),
-                  setLoading(false),
-                  setError(null, null)
-                );
+                patchState(store, removeEntity(id), setLoading(false), setError(null, null));
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to delete project'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to delete project'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     selectProject: (project: Project | null) => {
@@ -249,5 +207,5 @@ export const ProjectStore = signalStore(
         pagination: { ...store.pagination(), pageSize, currentPage: 1 },
       });
     },
-  }))
+  })),
 );

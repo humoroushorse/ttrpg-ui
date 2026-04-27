@@ -1,9 +1,4 @@
-<mat-chip
-  [class]="chipClass()"
-  [removable]="removable()"
-  (removed)="removed.emit(tag())"
-  class="tag-chip"
->
+<mat-chip [class]="chipClass()" [removable]="removable()" (removed)="removed.emit(tag())" class="tag-chip">
   {{ tag() }}
   @if (removable()) {
     <button matChipRemove aria-label="Remove tag">

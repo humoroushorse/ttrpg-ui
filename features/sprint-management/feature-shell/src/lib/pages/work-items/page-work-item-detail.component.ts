@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -22,7 +14,12 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { DisplayValuePipe, IsEmptyValuePipe } from '@ttrpg-ui/shared/util';
-import { TagChipComponent, WorkItemLinkListComponent, WorkItemLinkDialogComponent, AuditLogListComponent } from '@ttrpg-ui/features/sprint-management/ui';
+import {
+  TagChipComponent,
+  WorkItemLinkListComponent,
+  WorkItemLinkDialogComponent,
+  AuditLogListComponent,
+} from '@ttrpg-ui/features/sprint-management/ui';
 import { WorkItemDialogComponent } from '@ttrpg-ui/features/sprint-management/ui';
 
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
@@ -121,7 +118,7 @@ export class PageWorkItemDetailComponent implements OnInit {
     const workItemId = this.workItemId();
     if (!workItemId) return [];
     return this.dependencies().filter(
-      (dep) => dep.source_work_item_id === workItemId && dep.dependency_type === 'blocks'
+      (dep) => dep.source_work_item_id === workItemId && dep.dependency_type === 'blocks',
     );
   });
 
@@ -129,7 +126,7 @@ export class PageWorkItemDetailComponent implements OnInit {
     const workItemId = this.workItemId();
     if (!workItemId) return [];
     return this.dependencies().filter(
-      (dep) => dep.target_work_item_id === workItemId && dep.dependency_type === 'blocked_by'
+      (dep) => dep.target_work_item_id === workItemId && dep.dependency_type === 'blocked_by',
     );
   });
 
@@ -157,9 +154,7 @@ export class PageWorkItemDetailComponent implements OnInit {
     effect(() => {
       const workItem = this.workItem();
       if (workItem) {
-        this.title.setTitle(
-          `${workItem.title} | Work Items | Sprint Management | ${this.sharedCoreService.appTitle}`
-        );
+        this.title.setTitle(`${workItem.title} | Work Items | Sprint Management | ${this.sharedCoreService.appTitle}`);
         this.meta.updateTag({
           name: 'description',
           content: workItem.description || 'View work item details',
@@ -228,7 +223,7 @@ export class PageWorkItemDetailComponent implements OnInit {
     if (!workItem) return;
 
     const confirmed = confirm(
-      `Are you sure you want to delete work item "${workItem.title}"? This action cannot be undone.`
+      `Are you sure you want to delete work item "${workItem.title}"? This action cannot be undone.`,
     );
 
     if (!confirmed) return;
@@ -274,12 +269,14 @@ export class PageWorkItemDetailComponent implements OnInit {
       data: { sourceWorkItemId: id },
     });
 
-    const sub = dialogRef.afterClosed().subscribe((request: SprintModels.WorkItemLink.CreateWorkItemLinkRequest | undefined) => {
-      if (request) {
-        this.workItemLinkStore.createLink(request);
-      }
-      sub.unsubscribe();
-    });
+    const sub = dialogRef
+      .afterClosed()
+      .subscribe((request: SprintModels.WorkItemLink.CreateWorkItemLinkRequest | undefined) => {
+        if (request) {
+          this.workItemLinkStore.createLink(request);
+        }
+        sub.unsubscribe();
+      });
   }
 
   onDeleteLink(linkId: string): void {

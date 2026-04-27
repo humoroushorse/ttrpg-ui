@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  input,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,12 +10,7 @@ type TimeEntry = SprintModels.TimeTracking.TimeEntry;
 @Component({
   selector: 'lib-time-entry-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
-  ],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatTooltipModule],
   templateUrl: './time-entry-list.component.html',
   styleUrl: './time-entry-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,9 +25,7 @@ export class TimeEntryListComponent {
 
   sortedEntries = computed(() => {
     const items = this.entries();
-    return [...items].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
+    return [...items].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   });
 
   onEditClick(entry: TimeEntry): void {
@@ -58,11 +45,7 @@ export class TimeEntryListComponent {
     // Parse date-only strings as local date to avoid timezone offset issues
     const parts = dateString.split('-');
     if (parts.length === 3) {
-      const date = new Date(
-        parseInt(parts[0], 10),
-        parseInt(parts[1], 10) - 1,
-        parseInt(parts[2], 10)
-      );
+      const date = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
       return date.toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',

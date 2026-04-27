@@ -19,7 +19,17 @@ import {
   NgControl,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { Subject, debounceTime, distinctUntilChanged, switchMap, catchError, of, startWith, tap, Observable } from 'rxjs';
+import {
+  Subject,
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+  catchError,
+  of,
+  startWith,
+  tap,
+  Observable,
+} from 'rxjs';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';

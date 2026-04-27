@@ -59,9 +59,7 @@ export class UserPreferencesDialogComponent {
   private readonly themeService = inject(SharedThemeService);
 
   // Local copy of preferences for editing
-  protected readonly preferences = signal<UserPreferences>(
-    structuredClone(this.preferencesService.getPreferences()())
-  );
+  protected readonly preferences = signal<UserPreferences>(structuredClone(this.preferencesService.getPreferences()()));
 
   // Available themes from theme service
   protected readonly availableThemes = this.themeService.getThemes();
@@ -161,9 +159,7 @@ export class UserPreferencesDialogComponent {
     this.preferencesService.updatePreferences(this.preferences());
 
     // Update theme if changed
-    const selectedTheme = this.availableThemes().find(
-      (t) => t.path === this.preferences().theme
-    );
+    const selectedTheme = this.availableThemes().find((t) => t.path === this.preferences().theme);
     if (selectedTheme) {
       this.themeService.setTheme(selectedTheme);
     }

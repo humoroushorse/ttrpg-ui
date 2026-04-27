@@ -11,9 +11,7 @@ describe('CommentFormComponent - Comment Validation Property Tests', () => {
    * Custom validator to ensure content is not empty or whitespace only
    * This replicates the validator from CommentFormComponent
    */
-  function notEmptyValidator(
-    control: FormControl<string>
-  ): Record<string, unknown> | null {
+  function notEmptyValidator(control: FormControl<string>): Record<string, unknown> | null {
     const value = control.value || '';
     if (value.trim().length === 0) {
       return { empty: true };
@@ -40,7 +38,7 @@ describe('CommentFormComponent - Comment Validation Property Tests', () => {
               minLength: 1,
               maxLength: 50,
             })
-            .map((chars) => chars.join('')) // Mixed whitespace
+            .map((chars) => chars.join('')), // Mixed whitespace
         ),
         (content: string) => {
           // Create a form control with the validators
@@ -63,9 +61,9 @@ describe('CommentFormComponent - Comment Validation Property Tests', () => {
 
           // Property 3: Trimmed content should be empty
           expect(content.trim()).toBe('');
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -76,9 +74,7 @@ describe('CommentFormComponent - Comment Validation Property Tests', () => {
     fc.assert(
       fc.property(
         // Generate strings that contain at least one non-whitespace character
-        fc
-          .string({ minLength: 1, maxLength: 500 })
-          .filter((s) => s.trim().length > 0),
+        fc.string({ minLength: 1, maxLength: 500 }).filter((s) => s.trim().length > 0),
         (content: string) => {
           // Create a form control with the validators
           const control = new FormControl<string>(content, {
@@ -101,9 +97,9 @@ describe('CommentFormComponent - Comment Validation Property Tests', () => {
 
           // Property 4: Trimmed content should not be empty
           expect(content.trim().length).toBeGreaterThan(0);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -116,7 +112,7 @@ describe('CommentFormComponent - Comment Validation Property Tests', () => {
         fc.tuple(
           fc.string({ minLength: 0, maxLength: 20 }).map((s) => ' '.repeat(s.length)), // Leading whitespace
           fc.string({ minLength: 1, maxLength: 100 }).filter((s) => s.trim().length > 0), // Valid content
-          fc.string({ minLength: 0, maxLength: 20 }).map((s) => ' '.repeat(s.length)) // Trailing whitespace
+          fc.string({ minLength: 0, maxLength: 20 }).map((s) => ' '.repeat(s.length)), // Trailing whitespace
         ),
         ([leading, content, trailing]) => {
           const fullContent = leading + content + trailing;
@@ -139,9 +135,9 @@ describe('CommentFormComponent - Comment Validation Property Tests', () => {
 
           // Property 3: Trimmed content should not be empty
           expect(fullContent.trim().length).toBeGreaterThan(0);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -163,9 +159,9 @@ describe('CommentFormComponent - Comment Validation Property Tests', () => {
 
           expect(control.valid).toBe(true);
           expect(content.trim().length).toBeGreaterThan(0);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -187,7 +183,7 @@ describe('CommentFormComponent - Comment Validation Property Tests', () => {
           fc.constant('```\ncode\n```'),
           fc.string({ minLength: 1, maxLength: 100 }).map((s) => `**${s}**`),
           fc.string({ minLength: 1, maxLength: 100 }).map((s) => `*${s}*`),
-          fc.string({ minLength: 1, maxLength: 100 }).map((s) => `\`${s}\``)
+          fc.string({ minLength: 1, maxLength: 100 }).map((s) => `\`${s}\``),
         ),
         (content: string) => {
           const control = new FormControl<string>(content, {
@@ -201,9 +197,9 @@ describe('CommentFormComponent - Comment Validation Property Tests', () => {
           // Property: Markdown content should be valid
           expect(control.valid).toBe(true);
           expect(content.trim().length).toBeGreaterThan(0);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -225,9 +221,9 @@ describe('CommentFormComponent - Comment Validation Property Tests', () => {
 
           expect(control.valid).toBe(true);
           expect(char.trim().length).toBe(1);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -236,35 +232,32 @@ describe('CommentFormComponent - Comment Validation Property Tests', () => {
    */
   it('should produce consistent validation results for the same input', () => {
     fc.assert(
-      fc.property(
-        fc.string({ minLength: 0, maxLength: 100 }),
-        (content: string) => {
-          // Create two controls with the same content
-          const control1 = new FormControl<string>(content, {
-            nonNullable: true,
-            validators: [Validators.required, notEmptyValidator],
-          });
+      fc.property(fc.string({ minLength: 0, maxLength: 100 }), (content: string) => {
+        // Create two controls with the same content
+        const control1 = new FormControl<string>(content, {
+          nonNullable: true,
+          validators: [Validators.required, notEmptyValidator],
+        });
 
-          const control2 = new FormControl<string>(content, {
-            nonNullable: true,
-            validators: [Validators.required, notEmptyValidator],
-          });
+        const control2 = new FormControl<string>(content, {
+          nonNullable: true,
+          validators: [Validators.required, notEmptyValidator],
+        });
 
-          // Trigger validation on both
-          control1.markAsTouched();
-          control1.updateValueAndValidity();
-          control2.markAsTouched();
-          control2.updateValueAndValidity();
+        // Trigger validation on both
+        control1.markAsTouched();
+        control1.updateValueAndValidity();
+        control2.markAsTouched();
+        control2.updateValueAndValidity();
 
-          // Property: Both controls should have the same validity
-          expect(control1.valid).toBe(control2.valid);
-          expect(control1.invalid).toBe(control2.invalid);
+        // Property: Both controls should have the same validity
+        expect(control1.valid).toBe(control2.valid);
+        expect(control1.invalid).toBe(control2.invalid);
 
-          // Property: Both controls should have the same errors
-          expect(control1.errors).toEqual(control2.errors);
-        }
-      ),
-      { numRuns: 100 }
+        // Property: Both controls should have the same errors
+        expect(control1.errors).toEqual(control2.errors);
+      }),
+      { numRuns: 100 },
     );
   });
 });

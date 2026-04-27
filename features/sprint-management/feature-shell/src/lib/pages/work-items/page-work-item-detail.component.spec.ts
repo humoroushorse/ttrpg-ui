@@ -7,7 +7,13 @@ import { signal } from '@angular/core';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import { PageWorkItemDetailComponent } from './page-work-item-detail.component';
-import { WorkItemStore, CommentStore, DependencyStore, AuditLogStore, WorkItemLinkStore } from '@ttrpg-ui/features/sprint-management/data-access';
+import {
+  WorkItemStore,
+  CommentStore,
+  DependencyStore,
+  AuditLogStore,
+  WorkItemLinkStore,
+} from '@ttrpg-ui/features/sprint-management/data-access';
 import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
@@ -148,11 +154,7 @@ describe('PageWorkItemDetailComponent', () => {
     fixture.detectChanges();
     component.onEditClicked();
 
-    expect(mockRouter.navigate).toHaveBeenCalledWith([
-      '/work-items',
-      '1',
-      'edit',
-    ]);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/work-items', '1', 'edit']);
   });
 
   it('should navigate back to list when back button is clicked', () => {

@@ -32,21 +32,46 @@ import { SharedDateService } from '@ttrpg-ui/shared/date/data-access';
 export class SprintManagementApiService {
   private readonly http = inject(HttpClient);
   private readonly dateService = inject(SharedDateService);
-  public readonly serviceConfig: SprintManagementApiServiceConfig = inject(
-    SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN
-  );
+  public readonly serviceConfig: SprintManagementApiServiceConfig = inject(SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN);
 
   private get baseUrl(): string {
     return this.serviceConfig.appConfig().APP_SPRINT_MANAGEMENT__API_BASE_PATH;
   }
 
   private readonly mockCustomFields: SprintModels.CustomField.CustomFieldDefinition[] = [
-    { key: 'story_category', label: 'Story Category', type: SprintModels.CustomField.CustomFieldType.Select, options: ['Frontend', 'Backend', 'DevOps', 'Design'], placeholder: 'Select category' },
-    { key: 'complexity_score', label: 'Complexity Score', type: SprintModels.CustomField.CustomFieldType.Number, placeholder: '1-10', helpText: 'Rate complexity from 1 to 10' },
+    {
+      key: 'story_category',
+      label: 'Story Category',
+      type: SprintModels.CustomField.CustomFieldType.Select,
+      options: ['Frontend', 'Backend', 'DevOps', 'Design'],
+      placeholder: 'Select category',
+    },
+    {
+      key: 'complexity_score',
+      label: 'Complexity Score',
+      type: SprintModels.CustomField.CustomFieldType.Number,
+      placeholder: '1-10',
+      helpText: 'Rate complexity from 1 to 10',
+    },
     { key: 'due_date_override', label: 'Due Date Override', type: SprintModels.CustomField.CustomFieldType.Date },
-    { key: 'affected_components', label: 'Affected Components', type: SprintModels.CustomField.CustomFieldType.MultiSelect, options: ['Auth', 'API', 'UI', 'Database', 'Infrastructure'] },
-    { key: 'needs_review', label: 'Needs Design Review', type: SprintModels.CustomField.CustomFieldType.Checkbox, defaultValue: false },
-    { key: 'external_ticket', label: 'External Ticket ID', type: SprintModels.CustomField.CustomFieldType.Text, placeholder: 'e.g. JIRA-1234' },
+    {
+      key: 'affected_components',
+      label: 'Affected Components',
+      type: SprintModels.CustomField.CustomFieldType.MultiSelect,
+      options: ['Auth', 'API', 'UI', 'Database', 'Infrastructure'],
+    },
+    {
+      key: 'needs_review',
+      label: 'Needs Design Review',
+      type: SprintModels.CustomField.CustomFieldType.Checkbox,
+      defaultValue: false,
+    },
+    {
+      key: 'external_ticket',
+      label: 'External Ticket ID',
+      type: SprintModels.CustomField.CustomFieldType.Text,
+      placeholder: 'e.g. JIRA-1234',
+    },
   ];
 
   getCustomFieldDefinitions(): Observable<SprintModels.CustomField.CustomFieldDefinition[]> {
@@ -63,8 +88,18 @@ export class SprintManagementApiService {
       defaultTags: ['bug', 'needs-triage'],
       descriptionTemplate: '## Steps to Reproduce\n\n## Expected Behavior\n\n## Actual Behavior\n\n## Environment\n',
       customFields: [
-        { key: 'affected_components', label: 'Affected Components', type: SprintModels.CustomField.CustomFieldType.MultiSelect, options: ['Auth', 'API', 'UI', 'Database', 'Infrastructure'] },
-        { key: 'needs_review', label: 'Needs Design Review', type: SprintModels.CustomField.CustomFieldType.Checkbox, defaultValue: false },
+        {
+          key: 'affected_components',
+          label: 'Affected Components',
+          type: SprintModels.CustomField.CustomFieldType.MultiSelect,
+          options: ['Auth', 'API', 'UI', 'Database', 'Infrastructure'],
+        },
+        {
+          key: 'needs_review',
+          label: 'Needs Design Review',
+          type: SprintModels.CustomField.CustomFieldType.Checkbox,
+          defaultValue: false,
+        },
       ],
     },
     {
@@ -76,8 +111,18 @@ export class SprintManagementApiService {
       defaultTags: ['feature', 'enhancement'],
       descriptionTemplate: '## User Story\nAs a user, I want to...\n\n## Acceptance Criteria\n\n## Technical Notes\n',
       customFields: [
-        { key: 'story_category', label: 'Story Category', type: SprintModels.CustomField.CustomFieldType.Select, options: ['Frontend', 'Backend', 'DevOps', 'Design'] },
-        { key: 'complexity_score', label: 'Complexity Score', type: SprintModels.CustomField.CustomFieldType.Number, placeholder: '1-10' },
+        {
+          key: 'story_category',
+          label: 'Story Category',
+          type: SprintModels.CustomField.CustomFieldType.Select,
+          options: ['Frontend', 'Backend', 'DevOps', 'Design'],
+        },
+        {
+          key: 'complexity_score',
+          label: 'Complexity Score',
+          type: SprintModels.CustomField.CustomFieldType.Number,
+          placeholder: '1-10',
+        },
       ],
     },
     {
@@ -140,8 +185,8 @@ export class SprintManagementApiService {
 
     return this.http.post<Sprint>(`${this.baseUrl}/sprints`, request, {
       headers: {
-        'X-User-Timezone': userTimezone
-      }
+        'X-User-Timezone': userTimezone,
+      },
     });
   }
 
@@ -221,7 +266,9 @@ export class SprintManagementApiService {
   }
 
   removeTag(workItemId: string, tag: string): Observable<SprintModels.WorkItem.WorkItem> {
-    return this.http.delete<SprintModels.WorkItem.WorkItem>(`${this.baseUrl}/workitems/${workItemId}/tags/${encodeURIComponent(tag)}`);
+    return this.http.delete<SprintModels.WorkItem.WorkItem>(
+      `${this.baseUrl}/workitems/${workItemId}/tags/${encodeURIComponent(tag)}`,
+    );
   }
 
   getTags(workItemId: string): Observable<string[]> {
@@ -232,17 +279,22 @@ export class SprintManagementApiService {
     return this.http.get<SprintModels.TimeTracking.TimeEntry[]>(`${this.baseUrl}/workitems/${workItemId}/time-entries`);
   }
 
-  createTimeEntry(request: SprintModels.TimeTracking.CreateTimeEntryRequest): Observable<SprintModels.TimeTracking.TimeEntry> {
+  createTimeEntry(
+    request: SprintModels.TimeTracking.CreateTimeEntryRequest,
+  ): Observable<SprintModels.TimeTracking.TimeEntry> {
     return this.http.post<SprintModels.TimeTracking.TimeEntry>(
       `${this.baseUrl}/workitems/${request.work_item_id}/time-entries`,
-      request
+      request,
     );
   }
 
-  updateTimeEntry(workItemId: string, request: SprintModels.TimeTracking.UpdateTimeEntryRequest): Observable<SprintModels.TimeTracking.TimeEntry> {
+  updateTimeEntry(
+    workItemId: string,
+    request: SprintModels.TimeTracking.UpdateTimeEntryRequest,
+  ): Observable<SprintModels.TimeTracking.TimeEntry> {
     return this.http.put<SprintModels.TimeTracking.TimeEntry>(
       `${this.baseUrl}/workitems/${workItemId}/time-entries/${request.id}`,
-      request
+      request,
     );
   }
 
@@ -251,12 +303,16 @@ export class SprintManagementApiService {
   }
 
   getWorkItemLinks(workItemId: string): Observable<SprintModels.WorkItemLink.WorkItemLink[]> {
-    return of(this.mockWorkItemLinks.filter(
-      (l) => l.source_work_item_id === workItemId || l.target_work_item_id === workItemId
-    ));
+    return of(
+      this.mockWorkItemLinks.filter(
+        (l) => l.source_work_item_id === workItemId || l.target_work_item_id === workItemId,
+      ),
+    );
   }
 
-  createWorkItemLink(request: SprintModels.WorkItemLink.CreateWorkItemLinkRequest): Observable<SprintModels.WorkItemLink.WorkItemLink> {
+  createWorkItemLink(
+    request: SprintModels.WorkItemLink.CreateWorkItemLinkRequest,
+  ): Observable<SprintModels.WorkItemLink.WorkItemLink> {
     const link: SprintModels.WorkItemLink.WorkItemLink = {
       id: `link-${Date.now()}`,
       source_work_item_id: request.source_work_item_id,

@@ -1,31 +1,14 @@
 import { inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
-import {
-  patchState,
-  signalStore,
-  withMethods,
-  withState,
-} from '@ngrx/signals';
-import {
-  addEntity,
-  removeEntity,
-  setAllEntities,
-  updateEntity,
-  withEntities,
-} from '@ngrx/signals/entities';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { addEntity, removeEntity, setAllEntities, updateEntity, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { SharedModels } from '@ttrpg-ui/shared/models';
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 import { SprintManagementApiService } from '../service/sprint-management-api.service';
 
-const {
-  getBaseStateDefault,
-  setError,
-  setLoaded,
-  setLoading,
-  withComputedBase,
-} = SharedModels.Store;
+const { getBaseStateDefault, setError, setLoaded, setLoading, withComputedBase } = SharedModels.Store;
 
 export const CommentStore = signalStore(
   { providedIn: 'root' },
@@ -50,23 +33,20 @@ export const CommentStore = signalStore(
                   setAllEntities(sortedComments),
                   setLoaded(true),
                   setLoading(false),
-                  setError(null, null)
+                  setError(null, null),
                 );
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to load comments'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to load comments'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     createComment: rxMethod<{ workItemId: string; content: string }>(
@@ -76,27 +56,19 @@ export const CommentStore = signalStore(
           apiService.createComment(workItemId, content).pipe(
             tapResponse({
               next: (comment) => {
-                patchState(
-                  store,
-                  addEntity(comment),
-                  setLoading(false),
-                  setError(null, null)
-                );
+                patchState(store, addEntity(comment), setLoading(false), setError(null, null));
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to create comment'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to create comment'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     updateComment: rxMethod<{
@@ -114,23 +86,20 @@ export const CommentStore = signalStore(
                   store,
                   updateEntity({ id: comment.id, changes: comment }),
                   setLoading(false),
-                  setError(null, null)
+                  setError(null, null),
                 );
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to update comment'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to update comment'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     deleteComment: rxMethod<{ workItemId: string; commentId: string }>(
@@ -140,31 +109,23 @@ export const CommentStore = signalStore(
           apiService.deleteComment(workItemId, commentId).pipe(
             tapResponse({
               next: () => {
-                patchState(
-                  store,
-                  removeEntity(commentId),
-                  setLoading(false),
-                  setError(null, null)
-                );
+                patchState(store, removeEntity(commentId), setLoading(false), setError(null, null));
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to delete comment'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to delete comment'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     clearComments: () => {
       patchState(store, setAllEntities([] as SprintModels.Comment.Comment[]));
     },
-  }))
+  })),
 );

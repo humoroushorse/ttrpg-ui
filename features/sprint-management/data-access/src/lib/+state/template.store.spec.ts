@@ -10,8 +10,7 @@ import { SprintManagementApiService } from '../service/sprint-management-api.ser
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 import { WebSocketService } from '../service/websocket.service';
 
-const SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN =
-  SprintModels.Service.SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN;
+const SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN = SprintModels.Service.SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN;
 
 type WorkItemTemplate = SprintModels.Template.WorkItemTemplate;
 
@@ -72,7 +71,7 @@ describe('TemplateStore', () => {
 
     it('should set error on load failure', () => {
       vi.spyOn(apiService, 'getWorkItemTemplates').mockReturnValue(
-        throwError(() => ({ message: 'Network error', error: {} }))
+        throwError(() => ({ message: 'Network error', error: {} })),
       );
 
       store.loadTemplates();
@@ -147,7 +146,7 @@ describe('TemplateStore', () => {
               SprintModels.WorkItem.WorkItemPriority.Low,
               SprintModels.WorkItem.WorkItemPriority.Medium,
               SprintModels.WorkItem.WorkItemPriority.High,
-              SprintModels.WorkItem.WorkItemPriority.Critical
+              SprintModels.WorkItem.WorkItemPriority.Critical,
             ),
             tags: fc.array(fc.string({ minLength: 1, maxLength: 20 }), { minLength: 0, maxLength: 5 }),
             descriptionTemplate: fc.string({ minLength: 0, maxLength: 200 }),
@@ -157,7 +156,7 @@ describe('TemplateStore', () => {
               SprintModels.WorkItem.WorkItemPriority.Low,
               SprintModels.WorkItem.WorkItemPriority.Medium,
               SprintModels.WorkItem.WorkItemPriority.High,
-              SprintModels.WorkItem.WorkItemPriority.Critical
+              SprintModels.WorkItem.WorkItemPriority.Critical,
             ),
             description: fc.string({ minLength: 1, maxLength: 200 }),
           }),
@@ -196,11 +195,11 @@ describe('TemplateStore', () => {
             expect(formPriority).not.toBe(
               templateDefaults.priority === userOverrides.priority
                 ? null // same value, skip assertion
-                : templateDefaults.priority
+                : templateDefaults.priority,
             );
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -214,20 +213,19 @@ describe('TemplateStore', () => {
             type: fc.constantFrom(
               SprintModels.WorkItem.WorkItemType.Story,
               SprintModels.WorkItem.WorkItemType.Defect,
-              SprintModels.WorkItem.WorkItemType.Epic
+              SprintModels.WorkItem.WorkItemType.Epic,
             ),
             defaultPriority: fc.option(
               fc.constantFrom(
                 SprintModels.WorkItem.WorkItemPriority.Low,
                 SprintModels.WorkItem.WorkItemPriority.Medium,
-                SprintModels.WorkItem.WorkItemPriority.High
+                SprintModels.WorkItem.WorkItemPriority.High,
               ),
-              { nil: undefined }
+              { nil: undefined },
             ),
-            defaultTags: fc.option(
-              fc.array(fc.string({ minLength: 1, maxLength: 20 }), { maxLength: 5 }),
-              { nil: undefined }
-            ),
+            defaultTags: fc.option(fc.array(fc.string({ minLength: 1, maxLength: 20 }), { maxLength: 5 }), {
+              nil: undefined,
+            }),
           }),
           (templateData) => {
             const template: WorkItemTemplate = {
@@ -252,9 +250,9 @@ describe('TemplateStore', () => {
                 expect(applied.defaultTags).toEqual(templateData.defaultTags);
               }
             }
-          }
+          },
         ),
-        { numRuns: 50 }
+        { numRuns: 50 },
       );
     });
   });

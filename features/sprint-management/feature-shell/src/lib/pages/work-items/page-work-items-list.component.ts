@@ -39,10 +39,7 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 import { KeyboardShortcutService } from '@ttrpg-ui/shared/keyboard-shortcut/data-access';
 import { KeyboardShortcutsDialogComponent } from '@ttrpg-ui/shared/keyboard-shortcut/ui';
 
-import {
-  WorkItemStore,
-  SprintManagementApiService,
-} from '@ttrpg-ui/features/sprint-management/data-access';
+import { WorkItemStore, SprintManagementApiService } from '@ttrpg-ui/features/sprint-management/data-access';
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 import { TagFilterComponent, TagWithCount } from '@ttrpg-ui/features/sprint-management/ui';
 
@@ -103,9 +100,7 @@ export class PageWorkItemsListComponent implements OnInit, OnDestroy {
   public hasSelection = computed(() => this.selectedWorkItems().size > 0);
   public selectionCount = computed(() => this.selectedWorkItems().size);
   public currentView = signal<'card' | 'table'>(
-    this.sharedLocalStorageService.get<'card' | 'table'>(
-      'PageWorkItemsListComponent.currentView'
-    ) || 'table'
+    this.sharedLocalStorageService.get<'card' | 'table'>('PageWorkItemsListComponent.currentView') || 'table',
   );
   public searchControl = new FormControl('');
 
@@ -136,28 +131,28 @@ export class PageWorkItemsListComponent implements OnInit, OnDestroy {
 
     const types = this.typeFilter.value;
     if (types && types.length > 0) {
-      types.forEach(type => {
+      types.forEach((type) => {
         filters.push({ field: 'type', value: type, label: `Type: ${type}` });
       });
     }
 
     const statuses = this.statusFilter.value;
     if (statuses && statuses.length > 0) {
-      statuses.forEach(status => {
+      statuses.forEach((status) => {
         filters.push({ field: 'status', value: status, label: `Status: ${status}` });
       });
     }
 
     const priorities = this.priorityFilter.value;
     if (priorities && priorities.length > 0) {
-      priorities.forEach(priority => {
+      priorities.forEach((priority) => {
         filters.push({ field: 'priority', value: priority, label: `Priority: ${priority}` });
       });
     }
 
     const tags = this.selectedTagFilters();
     if (tags.length > 0) {
-      tags.forEach(tag => {
+      tags.forEach((tag) => {
         filters.push({ field: 'tags', value: tag, label: `Tag: ${tag}` });
       });
     }
@@ -236,17 +231,12 @@ export class PageWorkItemsListComponent implements OnInit, OnDestroy {
   constructor() {
     // Persist view mode to local storage
     effect(() => {
-      this.sharedLocalStorageService.set(
-        'PageWorkItemsListComponent.currentView',
-        this.currentView()
-      );
+      this.sharedLocalStorageService.set('PageWorkItemsListComponent.currentView', this.currentView());
     });
 
-    this.searchControl.valueChanges
-      .pipe(debounceTime(300))
-      .subscribe(() => {
-        this.applyFilters();
-      });
+    this.searchControl.valueChanges.pipe(debounceTime(300)).subscribe(() => {
+      this.applyFilters();
+    });
 
     this.typeFilter.valueChanges.subscribe(() => this.applyFilters());
     this.statusFilter.valueChanges.subscribe(() => this.applyFilters());
@@ -254,9 +244,7 @@ export class PageWorkItemsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.title.setTitle(
-      `Sprint Management | Work Items | ${this.sharedCoreService.appTitle}`
-    );
+    this.title.setTitle(`Sprint Management | Work Items | ${this.sharedCoreService.appTitle}`);
     this.meta.updateTag({
       name: 'description',
       content: 'View and manage work items in the sprint management system.',
@@ -323,8 +311,9 @@ export class PageWorkItemsListComponent implements OnInit, OnDestroy {
   }
 
   private getColumnDefs(): TableModels.ColumnDef<WorkItem>[] {
-    const storedColumnDefs: TableModels.ColumnDef<WorkItem>[] | null =
-      this.sharedLocalStorageService.get('PageWorkItemsListComponent.columnDefs');
+    const storedColumnDefs: TableModels.ColumnDef<WorkItem>[] | null = this.sharedLocalStorageService.get(
+      'PageWorkItemsListComponent.columnDefs',
+    );
 
     if (storedColumnDefs) {
       return storedColumnDefs.map((c) => {
@@ -332,8 +321,7 @@ export class PageWorkItemsListComponent implements OnInit, OnDestroy {
           return {
             ...c,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            component: this.defaultColumnDefs.find((d) => d.field === c.field)
-              ?.component as Type<any>,
+            component: this.defaultColumnDefs.find((d) => d.field === c.field)?.component as Type<any>,
           };
         }
         return c;
@@ -343,10 +331,7 @@ export class PageWorkItemsListComponent implements OnInit, OnDestroy {
   }
 
   onColumnDefsChange(columnDefs: TableModels.ColumnDef<WorkItem>[]) {
-    this.sharedLocalStorageService.set(
-      'PageWorkItemsListComponent.columnDefs',
-      columnDefs
-    );
+    this.sharedLocalStorageService.set('PageWorkItemsListComponent.columnDefs', columnDefs);
   }
 
   onResetColumnDefsClicked() {
@@ -421,21 +406,15 @@ export class PageWorkItemsListComponent implements OnInit, OnDestroy {
   removeFilter(filter: { field: string; value: string }): void {
     if (filter.field === 'type') {
       const current = this.typeFilter.value || [];
-      this.typeFilter.setValue(
-        current.filter((v) => v !== filter.value as WorkItemType)
-      );
+      this.typeFilter.setValue(current.filter((v) => v !== (filter.value as WorkItemType)));
     } else if (filter.field === 'status') {
       const current = this.statusFilter.value || [];
-      this.statusFilter.setValue(
-        current.filter((v) => v !== filter.value as WorkItemStatus)
-      );
+      this.statusFilter.setValue(current.filter((v) => v !== (filter.value as WorkItemStatus)));
     } else if (filter.field === 'priority') {
       const current = this.priorityFilter.value || [];
-      this.priorityFilter.setValue(
-        current.filter((v) => v !== filter.value as WorkItemPriority)
-      );
+      this.priorityFilter.setValue(current.filter((v) => v !== (filter.value as WorkItemPriority)));
     } else if (filter.field === 'tags') {
-      this.selectedTagFilters.update(tags => tags.filter(t => t !== filter.value));
+      this.selectedTagFilters.update((tags) => tags.filter((t) => t !== filter.value));
       this.applyFilters();
     }
   }
@@ -532,11 +511,9 @@ export class PageWorkItemsListComponent implements OnInit, OnDestroy {
         updates: { status },
       });
 
-      this.snackBar.open(
-        `Updated ${selectedIds.length} work item(s) to status: ${status}`,
-        'Close',
-        { duration: 3000 }
-      );
+      this.snackBar.open(`Updated ${selectedIds.length} work item(s) to status: ${status}`, 'Close', {
+        duration: 3000,
+      });
 
       this.clearSelection();
     } catch (_error) {
@@ -560,11 +537,9 @@ export class PageWorkItemsListComponent implements OnInit, OnDestroy {
         updates: { priority },
       });
 
-      this.snackBar.open(
-        `Updated ${selectedIds.length} work item(s) to priority: ${priority}`,
-        'Close',
-        { duration: 3000 }
-      );
+      this.snackBar.open(`Updated ${selectedIds.length} work item(s) to priority: ${priority}`, 'Close', {
+        duration: 3000,
+      });
 
       this.clearSelection();
     } catch (_error) {
@@ -588,11 +563,7 @@ export class PageWorkItemsListComponent implements OnInit, OnDestroy {
         updates: { sprint_id: sprintId },
       });
 
-      this.snackBar.open(
-        `Assigned ${selectedIds.length} work item(s) to sprint`,
-        'Close',
-        { duration: 3000 }
-      );
+      this.snackBar.open(`Assigned ${selectedIds.length} work item(s) to sprint`, 'Close', { duration: 3000 });
 
       this.clearSelection();
     } catch (_error) {
@@ -609,7 +580,7 @@ export class PageWorkItemsListComponent implements OnInit, OnDestroy {
 
     const selectedIds = Array.from(this.selectedWorkItems());
     const confirmed = confirm(
-      `Are you sure you want to delete ${selectedIds.length} work item(s)? This action cannot be undone.`
+      `Are you sure you want to delete ${selectedIds.length} work item(s)? This action cannot be undone.`,
     );
 
     if (!confirmed) return;
@@ -617,15 +588,11 @@ export class PageWorkItemsListComponent implements OnInit, OnDestroy {
     this.bulkOperationInProgress.set(true);
 
     try {
-    for (const id of selectedIds) {
+      for (const id of selectedIds) {
         this.workItemStore.delete(id);
       }
 
-      this.snackBar.open(
-        `Deleted ${selectedIds.length} work item(s)`,
-        'Close',
-        { duration: 3000 }
-      );
+      this.snackBar.open(`Deleted ${selectedIds.length} work item(s)`, 'Close', { duration: 3000 });
 
       this.clearSelection();
     } catch (_error) {

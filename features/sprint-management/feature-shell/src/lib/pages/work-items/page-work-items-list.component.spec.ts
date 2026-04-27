@@ -154,9 +154,7 @@ describe('PageWorkItemsListComponent - Integration Tests', () => {
     it('should display error message when loading fails', () => {
       vi.spyOn(workItemStore, 'loading').mockReturnValue(false);
       vi.spyOn(workItemStore, 'error').mockReturnValue('Network error');
-      vi.spyOn(workItemStore, 'errorSummary').mockReturnValue(
-        'Failed to load work items'
-      );
+      vi.spyOn(workItemStore, 'errorSummary').mockReturnValue('Failed to load work items');
       vi.spyOn(workItemStore, 'entities').mockReturnValue([]);
 
       fixture.detectChanges();
@@ -190,7 +188,7 @@ describe('PageWorkItemsListComponent - Integration Tests', () => {
               value: [WorkItemType.Story],
             }),
           ]),
-        })
+        }),
       );
     });
 
@@ -209,7 +207,7 @@ describe('PageWorkItemsListComponent - Integration Tests', () => {
               value: [WorkItemStatus.InProgress],
             }),
           ]),
-        })
+        }),
       );
     });
 
@@ -228,7 +226,7 @@ describe('PageWorkItemsListComponent - Integration Tests', () => {
               value: [WorkItemPriority.High],
             }),
           ]),
-        })
+        }),
       );
     });
 
@@ -250,7 +248,7 @@ describe('PageWorkItemsListComponent - Integration Tests', () => {
               value: 'test query',
             }),
           ]),
-        })
+        }),
       );
     });
 

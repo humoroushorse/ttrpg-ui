@@ -79,9 +79,7 @@
           color="accent"
           class="sprint-progress__progress-bar sprint-progress__progress-bar--small"
         ></mat-progress-bar>
-        <div class="sprint-progress__story-points-remaining">
-          {{ remainingStoryPoints() }} points remaining
-        </div>
+        <div class="sprint-progress__story-points-remaining">{{ remainingStoryPoints() }} points remaining</div>
       </div>
     }
 
@@ -106,9 +104,7 @@
       <span class="sprint-progress__summary-highlight">{{ remainingItems() }}</span> of
       <span class="sprint-progress__summary-highlight">{{ sprint().total_items }}</span> items remaining
       @if (sprint().blocked_items > 0) {
-        <span class="sprint-progress__summary-warning">
-          ({{ sprint().blocked_items }} blocked)
-        </span>
+        <span class="sprint-progress__summary-warning"> ({{ sprint().blocked_items }} blocked) </span>
       }
     </p>
   </div>

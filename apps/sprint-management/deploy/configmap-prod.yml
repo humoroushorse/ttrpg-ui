@@ -4,7 +4,7 @@ metadata:
   name: sprint-management-config
   namespace: prod
 data:
-  APP_SPRINT_MANAGEMENT__API_BASE_PATH: "/sprint-management-api"
-  APP_SPRINT_MANAGEMENT__API_URL: "https://api.yourcompany.com"
-  AUTH_BASE_URL: "/auth-api"
-  PORT: "4000"
+  APP_SPRINT_MANAGEMENT__API_BASE_PATH: '/sprint-management-api'
+  APP_SPRINT_MANAGEMENT__API_URL: 'https://api.yourcompany.com'
+  AUTH_BASE_URL: '/auth-api'
+  PORT: '4000'

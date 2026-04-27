@@ -1,20 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  effect,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { MatCardModule } from '@angular/material/card';
@@ -99,7 +85,7 @@ export class PageSprintEditComponent implements OnInit, OnDestroy {
         end_date: ['', [Validators.required]],
         goal: ['', []],
       },
-      { validators: dateRangeValidator }
+      { validators: dateRangeValidator },
     );
 
     effect(() => {
@@ -118,9 +104,7 @@ export class PageSprintEditComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.title.setTitle(
-      `Sprint Management | Edit Sprint | ${this.sharedCoreService.appTitle}`
-    );
+    this.title.setTitle(`Sprint Management | Edit Sprint | ${this.sharedCoreService.appTitle}`);
     this.meta.updateTag({
       name: 'description',
       content: 'Edit an existing sprint in the sprint management system.',
@@ -155,11 +139,7 @@ export class PageSprintEditComponent implements OnInit, OnDestroy {
       } else {
         const error = this.sprintStore.error();
         if (error) {
-          this.snackBar.open(
-            getErrorMessage(error, 'Failed to load sprint'),
-            'Close',
-            { duration: 5000 }
-          );
+          this.snackBar.open(getErrorMessage(error, 'Failed to load sprint'), 'Close', { duration: 5000 });
           this.router.navigate(['/sprints']);
         }
       }
@@ -167,25 +147,19 @@ export class PageSprintEditComponent implements OnInit, OnDestroy {
   }
 
   private populateForm(sprint: SprintModels.Sprint.Sprint): void {
-    const cachedData = this.sharedLocalStorageService.get<any>(
-      this.FORM_CACHE_KEY
-    );
+    const cachedData = this.sharedLocalStorageService.get<any>(this.FORM_CACHE_KEY);
 
     if (cachedData) {
       this.sprintForm.patchValue({
         ...cachedData,
-        start_date: cachedData.start_date
-          ? new Date(cachedData.start_date)
-          : null,
+        start_date: cachedData.start_date ? new Date(cachedData.start_date) : null,
         end_date: cachedData.end_date ? new Date(cachedData.end_date) : null,
       });
       this.sprintForm.markAsPristine();
 
-      this.snackBar.open(
-        'Draft changes restored. You can continue editing or discard the draft.',
-        'Dismiss',
-        { duration: 5000 }
-      );
+      this.snackBar.open('Draft changes restored. You can continue editing or discard the draft.', 'Dismiss', {
+        duration: 5000,
+      });
     } else {
       this.sprintForm.patchValue({
         name: sprint.name,
@@ -201,12 +175,8 @@ export class PageSprintEditComponent implements OnInit, OnDestroy {
   private cacheFormData(): void {
     const formData = {
       ...this.sprintForm.value,
-      start_date: this.sprintForm.value.start_date
-        ? new Date(this.sprintForm.value.start_date).toISOString()
-        : null,
-      end_date: this.sprintForm.value.end_date
-        ? new Date(this.sprintForm.value.end_date).toISOString()
-        : null,
+      start_date: this.sprintForm.value.start_date ? new Date(this.sprintForm.value.start_date).toISOString() : null,
+      end_date: this.sprintForm.value.end_date ? new Date(this.sprintForm.value.end_date).toISOString() : null,
     };
     this.sharedLocalStorageService.set(this.FORM_CACHE_KEY, formData);
   }
@@ -219,21 +189,13 @@ export class PageSprintEditComponent implements OnInit, OnDestroy {
       this.populateForm(currentSprint);
     }
 
-    this.snackBar.open(
-      'Draft discarded, form reset to original values',
-      'Dismiss',
-      { duration: 2000 }
-    );
+    this.snackBar.open('Draft discarded, form reset to original values', 'Dismiss', { duration: 2000 });
   }
 
   public async onSubmit(): Promise<void> {
     if (this.sprintForm.invalid) {
       this.sprintForm.markAllAsTouched();
-      this.snackBar.open(
-        'Please fill in all required fields correctly',
-        'Close',
-        { duration: 5000 }
-      );
+      this.snackBar.open('Please fill in all required fields correctly', 'Close', { duration: 5000 });
       return;
     }
 
@@ -275,11 +237,9 @@ export class PageSprintEditComponent implements OnInit, OnDestroy {
       this.router.navigate(['/sprints', this.sprintId]);
     } catch (error) {
       console.error('Failed to update sprint:', error);
-      this.snackBar.open(
-        error instanceof Error ? error.message : 'Failed to update sprint',
-        'Close',
-        { duration: 5000 }
-      );
+      this.snackBar.open(error instanceof Error ? error.message : 'Failed to update sprint', 'Close', {
+        duration: 5000,
+      });
     } finally {
       this.isSubmitting.set(false);
     }

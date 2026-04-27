@@ -8,7 +8,8 @@
           [matDatepicker]="picker"
           formControlName="date"
           [disabled]="loading()"
-          aria-label="Time entry date" />
+          aria-label="Time entry date"
+        />
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
         @if (form.controls.date.invalid && form.controls.date.touched) {
@@ -27,7 +28,8 @@
           min="0.01"
           max="24"
           [disabled]="loading()"
-          aria-label="Hours spent" />
+          aria-label="Hours spent"
+        />
         @if (form.controls.hours.invalid && form.controls.hours.touched) {
           <mat-error>{{ getErrorMessage('hours') }}</mat-error>
         }
@@ -52,21 +54,11 @@
 
     <div class="time-entry-form__actions">
       @if (isEditMode()) {
-        <button
-          mat-stroked-button
-          type="button"
-          (click)="onCancel()"
-          [disabled]="loading()">
-          Cancel
-        </button>
+        <button mat-stroked-button type="button" (click)="onCancel()" [disabled]="loading()">Cancel</button>
       }
-      <button
-        mat-raised-button
-        color="primary"
-        type="submit"
-        [disabled]="form.invalid || loading()">
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || loading()">
         @if (loading()) {
-          <mat-icon class="animate-spin mr-2">refresh</mat-icon>
+          <mat-icon class="mr-2 animate-spin">refresh</mat-icon>
         }
         {{ getSubmitButtonText() }}
       </button>

@@ -5,9 +5,7 @@ import * as fc from 'fast-check';
 import { signal } from '@angular/core';
 import { OfflineService } from './offline.service';
 import { SprintManagementApiService } from './sprint-management-api.service';
-import {
-  SprintModels,
-} from '@ttrpg-ui/features/sprint-management/models';
+import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 
 const SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN = SprintModels.Service.SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN;
 const { QueuedActionType } = SprintModels.Offline;
@@ -15,12 +13,8 @@ const { WorkItemType, WorkItemStatus, WorkItemPriority } = SprintModels.WorkItem
 type QueuedAction = SprintModels.Offline.QueuedAction;
 type CreateWorkItemRequest = SprintModels.Api.CreateWorkItemRequest;
 type UpdateWorkItemRequest = SprintModels.Api.UpdateWorkItemRequest;
-import {
-  SharedLocalStorageService,
-} from '@ttrpg-ui/shared/local-storage/data-access';
-import {
-  SHARED_LOCAL_STORAGE_SERVICE_CONFIG_TOKEN,
-} from '@ttrpg-ui/shared/local-storage/models';
+import { SharedLocalStorageService } from '@ttrpg-ui/shared/local-storage/data-access';
+import { SHARED_LOCAL_STORAGE_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/local-storage/models';
 
 /**
  * Property-Based Tests for Offline Service
@@ -74,25 +68,21 @@ describe('OfflineService - Property Tests', () => {
    */
   describe('Property 20: Offline Action Queuing and Sync', () => {
     // Arbitraries for generating test data
-    const workItemTypeArb = fc.constantFrom(
-      WorkItemType.Story,
-      WorkItemType.Defect,
-      WorkItemType.Epic
-    );
+    const workItemTypeArb = fc.constantFrom(WorkItemType.Story, WorkItemType.Defect, WorkItemType.Epic);
 
     const workItemStatusArb = fc.constantFrom(
       WorkItemStatus.Backlog,
       WorkItemStatus.Todo,
       WorkItemStatus.InProgress,
       WorkItemStatus.InReview,
-      WorkItemStatus.Done
+      WorkItemStatus.Done,
     );
 
     const workItemPriorityArb = fc.constantFrom(
       WorkItemPriority.Low,
       WorkItemPriority.Medium,
       WorkItemPriority.High,
-      WorkItemPriority.Critical
+      WorkItemPriority.Critical,
     );
 
     const createWorkItemRequestArb = fc.record({
@@ -118,16 +108,16 @@ describe('OfflineService - Property Tests', () => {
     const actionTypeArb = fc.constantFrom(
       QueuedActionType.CreateWorkItem,
       QueuedActionType.UpdateWorkItem,
-      QueuedActionType.DeleteWorkItem
+      QueuedActionType.DeleteWorkItem,
     );
 
     it('should queue all actions when offline', () => {
       fc.assert(
         fc.property(
-          fc.array(
-            fc.tuple(actionTypeArb, fc.oneof(createWorkItemRequestArb, updateWorkItemRequestArb)),
-            { minLength: 1, maxLength: 10 }
-          ),
+          fc.array(fc.tuple(actionTypeArb, fc.oneof(createWorkItemRequestArb, updateWorkItemRequestArb)), {
+            minLength: 1,
+            maxLength: 10,
+          }),
           (actions) => {
             // Clear queue before test
             service.clearQueue();
@@ -164,66 +154,106 @@ describe('OfflineService - Property Tests', () => {
             });
 
             return true;
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
     it('should maintain action order in queue', () => {
       fc.assert(
-        fc.property(
-          fc.array(createWorkItemRequestArb, { minLength: 2, maxLength: 10 }),
-          (payloads) => {
-            // Clear queue before test
-            service.clearQueue();
+        fc.property(fc.array(createWorkItemRequestArb, { minLength: 2, maxLength: 10 }), (payloads) => {
+          // Clear queue before test
+          service.clearQueue();
 
-            // Queue actions in order
-            const actionIds: string[] = [];
-            payloads.forEach((payload) => {
-              const id = service.queueAction(QueuedActionType.CreateWorkItem, payload);
-              actionIds.push(id);
-            });
+          // Queue actions in order
+          const actionIds: string[] = [];
+          payloads.forEach((payload) => {
+            const id = service.queueAction(QueuedActionType.CreateWorkItem, payload);
+            actionIds.push(id);
+          });
 
-            // Verify actions are in the same order
-            const queuedActions = service.queuedActions();
-            queuedActions.forEach((action, index) => {
-              expect(action.id).toBe(actionIds[index]);
-            });
+          // Verify actions are in the same order
+          const queuedActions = service.queuedActions();
+          queuedActions.forEach((action, index) => {
+            expect(action.id).toBe(actionIds[index]);
+          });
 
-            return true;
-          }
-        ),
-        { numRuns: 100 }
+          return true;
+        }),
+        { numRuns: 100 },
       );
     });
 
     it('should execute all queued actions when syncing', async () => {
       fc.assert(
-        fc.asyncProperty(
-          fc.array(createWorkItemRequestArb, { minLength: 1, maxLength: 5 }),
-          async (payloads) => {
-            // Clear queue before test
-            service.clearQueue();
+        fc.asyncProperty(fc.array(createWorkItemRequestArb, { minLength: 1, maxLength: 5 }), async (payloads) => {
+          // Clear queue before test
+          service.clearQueue();
 
-            // Queue all actions
-            payloads.forEach((payload) => {
-              service.queueAction(QueuedActionType.CreateWorkItem, payload);
+          // Queue all actions
+          payloads.forEach((payload) => {
+            service.queueAction(QueuedActionType.CreateWorkItem, payload);
+          });
+
+          const initialQueueLength = service.queueLength();
+          expect(initialQueueLength).toBe(payloads.length);
+
+          // Trigger sync
+          const syncPromise = service.syncQueuedActions();
+
+          // Mock API responses for all actions
+          payloads.forEach((payload, index) => {
+            const req = httpMock.expectOne(`${baseUrl}/workitems`);
+            expect(req.request.method).toBe('POST');
+            expect(req.request.body).toMatchObject(payload);
+
+            // Respond with success
+            req.flush({
+              id: `work-item-${index}`,
+              ...payload,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+              created_by: 'test-user',
+              updated_by: 'test-user',
             });
+          });
 
-            const initialQueueLength = service.queueLength();
-            expect(initialQueueLength).toBe(payloads.length);
+          // Wait for sync to complete
+          await syncPromise;
 
-            // Trigger sync
-            const syncPromise = service.syncQueuedActions();
+          // Verify queue is empty after successful sync
+          expect(service.queueLength()).toBe(0);
+          expect(service.hasPendingActions()).toBe(false);
 
-            // Mock API responses for all actions
-            payloads.forEach((payload, index) => {
-              const req = httpMock.expectOne(`${baseUrl}/workitems`);
-              expect(req.request.method).toBe('POST');
-              expect(req.request.body).toMatchObject(payload);
+          return true;
+        }),
+        { numRuns: 50 }, // Reduced runs for async tests
+      );
+    });
 
-              // Respond with success
+    it('should preserve failed actions in queue for retry', async () => {
+      fc.assert(
+        fc.asyncProperty(fc.array(createWorkItemRequestArb, { minLength: 2, maxLength: 5 }), async (payloads) => {
+          // Clear queue before test
+          service.clearQueue();
+
+          // Queue all actions
+          payloads.forEach((payload) => {
+            service.queueAction(QueuedActionType.CreateWorkItem, payload);
+          });
+
+          const _initialQueueLength = service.queueLength();
+
+          // Trigger sync
+          const syncPromise = service.syncQueuedActions();
+
+          // Mock API responses - make some fail
+          payloads.forEach((payload, index) => {
+            const req = httpMock.expectOne(`${baseUrl}/workitems`);
+
+            if (index % 2 === 0) {
+              // Success for even indices
               req.flush({
                 id: `work-item-${index}`,
                 ...payload,
@@ -232,80 +262,31 @@ describe('OfflineService - Property Tests', () => {
                 created_by: 'test-user',
                 updated_by: 'test-user',
               });
-            });
+            } else {
+              // Failure for odd indices
+              req.flush({ error: 'Server error' }, { status: 500, statusText: 'Server Error' });
+            }
+          });
 
-            // Wait for sync to complete
-            await syncPromise;
+          // Wait for sync to complete
+          await syncPromise;
 
-            // Verify queue is empty after successful sync
-            expect(service.queueLength()).toBe(0);
-            expect(service.hasPendingActions()).toBe(false);
+          // Calculate expected failed actions
+          const expectedFailedCount = Math.ceil(payloads.length / 2);
 
-            return true;
-          }
-        ),
-        { numRuns: 50 } // Reduced runs for async tests
-      );
-    });
+          // Verify failed actions remain in queue
+          expect(service.queueLength()).toBe(expectedFailedCount);
 
-    it('should preserve failed actions in queue for retry', async () => {
-      fc.assert(
-        fc.asyncProperty(
-          fc.array(createWorkItemRequestArb, { minLength: 2, maxLength: 5 }),
-          async (payloads) => {
-            // Clear queue before test
-            service.clearQueue();
+          // Verify retry count is incremented for failed actions
+          const queuedActions = service.queuedActions();
+          queuedActions.forEach((action) => {
+            expect(action.retryCount).toBeGreaterThan(0);
+            expect(action.retryCount).toBeLessThanOrEqual(action.maxRetries);
+          });
 
-            // Queue all actions
-            payloads.forEach((payload) => {
-              service.queueAction(QueuedActionType.CreateWorkItem, payload);
-            });
-
-            const _initialQueueLength = service.queueLength();
-
-            // Trigger sync
-            const syncPromise = service.syncQueuedActions();
-
-            // Mock API responses - make some fail
-            payloads.forEach((payload, index) => {
-              const req = httpMock.expectOne(`${baseUrl}/workitems`);
-
-              if (index % 2 === 0) {
-                // Success for even indices
-                req.flush({
-                  id: `work-item-${index}`,
-                  ...payload,
-                  created_at: new Date().toISOString(),
-                  updated_at: new Date().toISOString(),
-                  created_by: 'test-user',
-                  updated_by: 'test-user',
-                });
-              } else {
-                // Failure for odd indices
-                req.flush({ error: 'Server error' }, { status: 500, statusText: 'Server Error' });
-              }
-            });
-
-            // Wait for sync to complete
-            await syncPromise;
-
-            // Calculate expected failed actions
-            const expectedFailedCount = Math.ceil(payloads.length / 2);
-
-            // Verify failed actions remain in queue
-            expect(service.queueLength()).toBe(expectedFailedCount);
-
-            // Verify retry count is incremented for failed actions
-            const queuedActions = service.queuedActions();
-            queuedActions.forEach((action) => {
-              expect(action.retryCount).toBeGreaterThan(0);
-              expect(action.retryCount).toBeLessThanOrEqual(action.maxRetries);
-            });
-
-            return true;
-          }
-        ),
-        { numRuns: 30 } // Reduced runs for async tests with failures
+          return true;
+        }),
+        { numRuns: 30 }, // Reduced runs for async tests with failures
       );
     });
 
@@ -345,88 +326,80 @@ describe('OfflineService - Property Tests', () => {
 
           return true;
         }),
-        { numRuns: 30 } // Reduced runs for async tests
+        { numRuns: 30 }, // Reduced runs for async tests
       );
     });
 
     it('should preserve queue in local storage', () => {
       fc.assert(
-        fc.property(
-          fc.array(createWorkItemRequestArb, { minLength: 1, maxLength: 5 }),
-          (payloads) => {
-            // Clear queue before test
-            service.clearQueue();
+        fc.property(fc.array(createWorkItemRequestArb, { minLength: 1, maxLength: 5 }), (payloads) => {
+          // Clear queue before test
+          service.clearQueue();
 
-            // Queue all actions
-            payloads.forEach((payload) => {
-              service.queueAction(QueuedActionType.CreateWorkItem, payload);
-            });
+          // Queue all actions
+          payloads.forEach((payload) => {
+            service.queueAction(QueuedActionType.CreateWorkItem, payload);
+          });
 
-            const queueLength = service.queueLength();
+          const queueLength = service.queueLength();
 
-            // The effect that saves to storage runs asynchronously
-            // We need to flush the effects by accessing the signal
-            TestBed.flushEffects();
+          // The effect that saves to storage runs asynchronously
+          // We need to flush the effects by accessing the signal
+          TestBed.flushEffects();
 
-            // Verify queue is saved to local storage
-            const storedQueue = localStorageService.get<QueuedAction[]>('sprint-management-offline-queue');
-            expect(storedQueue).toBeTruthy();
-            expect(storedQueue?.length).toBe(queueLength);
+          // Verify queue is saved to local storage
+          const storedQueue = localStorageService.get<QueuedAction[]>('sprint-management-offline-queue');
+          expect(storedQueue).toBeTruthy();
+          expect(storedQueue?.length).toBe(queueLength);
 
-            return true;
-          }
-        ),
-        { numRuns: 100 }
+          return true;
+        }),
+        { numRuns: 100 },
       );
     });
 
     it('should handle empty queue gracefully', async () => {
-      // Clear queue and all local storage for this namespace
+      // Clear queue - flush effects to ensure any pending storage writes are settled
       service.clearQueue();
-      localStorageService.clearNamespace();
+      TestBed.flushEffects();
 
       expect(service.queueLength()).toBe(0);
       expect(service.hasPendingActions()).toBe(false);
 
-      // Sync should complete without errors
-      await service.syncQueuedActions();
-
-      expect(service.queueLength()).toBe(0);
+      // Sync should complete without errors when queue is empty
+      await expect(service.syncQueuedActions()).resolves.toBeUndefined();
     });
 
     it('should allow removing specific actions from queue', () => {
       fc.assert(
-        fc.property(
-          fc.array(createWorkItemRequestArb, { minLength: 3, maxLength: 10 }),
-          (payloads) => {
-            // Clear queue before test
-            service.clearQueue();
+        fc.property(fc.array(createWorkItemRequestArb, { minLength: 3, maxLength: 10 }), (payloads) => {
+          // Clear queue before test
+          service.clearQueue();
 
-            // Queue all actions
-            const actionIds: string[] = [];
-            payloads.forEach((payload) => {
-              const id = service.queueAction(QueuedActionType.CreateWorkItem, payload);
-              actionIds.push(id);
-            });
+          // Queue all actions
+          const actionIds: string[] = [];
+          payloads.forEach((payload) => {
+            const id = service.queueAction(QueuedActionType.CreateWorkItem, payload);
+            actionIds.push(id);
+          });
 
-            const initialLength = service.queueLength();
+          const initialLength = service.queueLength();
 
-            // Remove a random action
-            const indexToRemove = Math.floor(Math.random() * actionIds.length);
-            const idToRemove = actionIds[indexToRemove];
-            service.removeAction(idToRemove);
+          // Remove a random action
+          const indexToRemove = Math.floor(Math.random() * actionIds.length);
+          const idToRemove = actionIds[indexToRemove];
+          service.removeAction(idToRemove);
 
-            // Verify action is removed
-            expect(service.queueLength()).toBe(initialLength - 1);
+          // Verify action is removed
+          expect(service.queueLength()).toBe(initialLength - 1);
 
-            const queuedActions = service.queuedActions();
-            const removedAction = queuedActions.find((a) => a.id === idToRemove);
-            expect(removedAction).toBeUndefined();
+          const queuedActions = service.queuedActions();
+          const removedAction = queuedActions.find((a) => a.id === idToRemove);
+          expect(removedAction).toBeUndefined();
 
-            return true;
-          }
-        ),
-        { numRuns: 100 }
+          return true;
+        }),
+        { numRuns: 100 },
       );
     });
   });

@@ -30,6 +30,8 @@ describe('PageSprintCreateComponent - Property-Based Tests', () => {
         // Generate an end date that is before or equal to start date
         fc.integer({ min: -365, max: 0 }), // Days offset (negative or zero)
         (startDate, daysOffset) => {
+          // Skip invalid dates (fast-check can generate NaN dates)
+          fc.pre(!isNaN(startDate.getTime()));
           // Create form with date range validator
           const fb = new FormBuilder();
           const form = fb.group(
@@ -37,13 +39,10 @@ describe('PageSprintCreateComponent - Property-Based Tests', () => {
               name: ['Test Sprint', [Validators.required]],
               description: ['Test Description'],
               start_date: [startDate, [Validators.required]],
-              end_date: [
-                new Date(startDate.getTime() + daysOffset * 24 * 60 * 60 * 1000),
-                [Validators.required],
-              ],
+              end_date: [new Date(startDate.getTime() + daysOffset * 24 * 60 * 60 * 1000), [Validators.required]],
               goal: [''],
             },
-            { validators: dateRangeValidator }
+            { validators: dateRangeValidator },
           );
 
           // Trigger validation
@@ -52,9 +51,9 @@ describe('PageSprintCreateComponent - Property-Based Tests', () => {
           // Verify validation fails
           expect(form.hasError('dateRange')).toBe(true);
           expect(form.valid).toBe(false);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -78,13 +77,10 @@ describe('PageSprintCreateComponent - Property-Based Tests', () => {
               name: ['Test Sprint', [Validators.required]],
               description: ['Test Description'],
               start_date: [startDate, [Validators.required]],
-              end_date: [
-                new Date(startDate.getTime() + daysOffset * 24 * 60 * 60 * 1000),
-                [Validators.required],
-              ],
+              end_date: [new Date(startDate.getTime() + daysOffset * 24 * 60 * 60 * 1000), [Validators.required]],
               goal: [''],
             },
-            { validators: dateRangeValidator }
+            { validators: dateRangeValidator },
           );
 
           // Trigger validation
@@ -93,9 +89,9 @@ describe('PageSprintCreateComponent - Property-Based Tests', () => {
           // Verify validation passes (no dateRange error)
           expect(form.hasError('dateRange')).toBe(false);
           expect(form.valid).toBe(true);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -110,14 +106,12 @@ describe('PageSprintCreateComponent - Property-Based Tests', () => {
         fc.record({
           name: fc.option(fc.string(), { nil: undefined }),
           description: fc.string(),
-          start_date: fc.option(
-            fc.date({ min: new Date('2020-01-01'), max: new Date('2030-12-31') }),
-            { nil: undefined }
-          ),
-          end_date: fc.option(
-            fc.date({ min: new Date('2020-01-01'), max: new Date('2030-12-31') }),
-            { nil: undefined }
-          ),
+          start_date: fc.option(fc.date({ min: new Date('2020-01-01'), max: new Date('2030-12-31') }), {
+            nil: undefined,
+          }),
+          end_date: fc.option(fc.date({ min: new Date('2020-01-01'), max: new Date('2030-12-31') }), {
+            nil: undefined,
+          }),
           goal: fc.string(),
         }),
         (formData) => {
@@ -136,7 +130,7 @@ describe('PageSprintCreateComponent - Property-Based Tests', () => {
               end_date: [formData.end_date, [Validators.required]],
               goal: [formData.goal],
             },
-            { validators: dateRangeValidator }
+            { validators: dateRangeValidator },
           );
 
           // Trigger validation
@@ -144,9 +138,9 @@ describe('PageSprintCreateComponent - Property-Based Tests', () => {
 
           // Verify validation fails
           expect(form.valid).toBe(false);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 });

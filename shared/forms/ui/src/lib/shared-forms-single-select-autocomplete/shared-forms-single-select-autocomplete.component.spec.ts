@@ -16,19 +16,13 @@ describe('SharedFormsSingleSelectAutocompleteComponent', () => {
   ];
 
   const mockSearchFn = (query: string) => {
-    const filtered = mockOptions.filter((opt) =>
-      opt.name.toLowerCase().includes(query.toLowerCase())
-    );
+    const filtered = mockOptions.filter((opt) => opt.name.toLowerCase().includes(query.toLowerCase()));
     return of(filtered).pipe(delay(100));
   };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        SharedFormsSingleSelectAutocompleteComponent,
-        ReactiveFormsModule,
-        NoopAnimationsModule,
-      ],
+      imports: [SharedFormsSingleSelectAutocompleteComponent, ReactiveFormsModule, NoopAnimationsModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedFormsSingleSelectAutocompleteComponent);

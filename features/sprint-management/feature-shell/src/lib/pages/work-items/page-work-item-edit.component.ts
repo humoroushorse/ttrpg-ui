@@ -1,21 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { MatCardModule } from '@angular/material/card';
@@ -33,7 +18,11 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { getErrorMessage } from '@ttrpg-ui/features/sprint-management/util';
 import { SharedFormsSingleSelectAutocompleteComponent } from '@ttrpg-ui/shared/forms/ui';
 
-import { WorkItemStore, ProjectStore, SprintManagementApiService } from '@ttrpg-ui/features/sprint-management/data-access';
+import {
+  WorkItemStore,
+  ProjectStore,
+  SprintManagementApiService,
+} from '@ttrpg-ui/features/sprint-management/data-access';
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 
 const { WorkItemType, WorkItemStatus, WorkItemPriority } = SprintModels.WorkItem;
@@ -131,7 +120,7 @@ export class PageWorkItemEditComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.workItemForm.get('type')?.valueChanges.subscribe(type => {
+    this.workItemForm.get('type')?.valueChanges.subscribe((type) => {
       this.typeSignal.set(type);
       const parentControl = this.workItemForm.get('parent_id');
       if (type === WorkItemType.Epic) {
@@ -153,9 +142,7 @@ export class PageWorkItemEditComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.title.setTitle(
-      `Sprint Management | Edit Work Item | ${this.sharedCoreService.appTitle}`
-    );
+    this.title.setTitle(`Sprint Management | Edit Work Item | ${this.sharedCoreService.appTitle}`);
     this.meta.updateTag({
       name: 'description',
       content: 'Edit an existing work item in the sprint management system.',
@@ -191,11 +178,7 @@ export class PageWorkItemEditComponent implements OnInit, OnDestroy {
       } else {
         const error = this.workItemStore.error();
         if (error) {
-          this.snackBar.open(
-            getErrorMessage(error, 'Failed to load work item'),
-            'Close',
-            { duration: 5000 }
-          );
+          this.snackBar.open(getErrorMessage(error, 'Failed to load work item'), 'Close', { duration: 5000 });
           this.router.navigate(['/work-items']);
         }
       }
@@ -203,9 +186,7 @@ export class PageWorkItemEditComponent implements OnInit, OnDestroy {
   }
 
   private populateForm(workItem: WorkItem): void {
-    const cachedData = this.sharedLocalStorageService.get<any>(
-      this.FORM_CACHE_KEY
-    );
+    const cachedData = this.sharedLocalStorageService.get<any>(this.FORM_CACHE_KEY);
 
     if (cachedData) {
       this.workItemForm.patchValue(cachedData);
@@ -214,11 +195,9 @@ export class PageWorkItemEditComponent implements OnInit, OnDestroy {
       }
       this.workItemForm.markAsPristine();
 
-      this.snackBar.open(
-        'Draft changes restored. You can continue editing or discard the draft.',
-        'Dismiss',
-        { duration: 5000 }
-      );
+      this.snackBar.open('Draft changes restored. You can continue editing or discard the draft.', 'Dismiss', {
+        duration: 5000,
+      });
     } else {
       this.workItemForm.patchValue({
         title: workItem.title,
@@ -277,11 +256,7 @@ export class PageWorkItemEditComponent implements OnInit, OnDestroy {
   public async onSubmit(): Promise<void> {
     if (this.workItemForm.invalid) {
       this.workItemForm.markAllAsTouched();
-      this.snackBar.open(
-        'Please fill in all required fields correctly',
-        'Close',
-        { duration: 5000 }
-      );
+      this.snackBar.open('Please fill in all required fields correctly', 'Close', { duration: 5000 });
       return;
     }
 
@@ -325,11 +300,9 @@ export class PageWorkItemEditComponent implements OnInit, OnDestroy {
       this.router.navigate(['/work-items', this.workItemId]);
     } catch (error) {
       console.error('Failed to update work item:', error);
-      this.snackBar.open(
-        error instanceof Error ? error.message : 'Failed to update work item',
-        'Close',
-        { duration: 5000 }
-      );
+      this.snackBar.open(error instanceof Error ? error.message : 'Failed to update work item', 'Close', {
+        duration: 5000,
+      });
     } finally {
       this.isSubmitting.set(false);
     }
@@ -348,9 +321,7 @@ export class PageWorkItemEditComponent implements OnInit, OnDestroy {
   }
 
   public searchSprints = (query: string): Observable<Sprint[]> => {
-    return this.sprintApiService.searchSprints(query).pipe(
-      map(response => response.items)
-    );
+    return this.sprintApiService.searchSprints(query).pipe(map((response) => response.items));
   };
 
   public getSprintDisplayName = (sprint: Sprint | null): string => {

@@ -1,6 +1,6 @@
 <div class="burndown-chart">
   <!-- Header -->
-  <div class="flex items-center justify-between mb-4">
+  <div class="mb-4 flex items-center justify-between">
     <h3 class="text-lg font-semibold text-gray-800">Sprint Burndown Chart</h3>
     <div class="flex items-center gap-2">
       <mat-icon [class]="'text-2xl ' + getStatusColor()">{{ getStatusIcon() }}</mat-icon>
@@ -11,23 +11,23 @@
   </div>
 
   <!-- Legend -->
-  <div class="flex items-center gap-4 mb-4 text-sm">
+  <div class="mb-4 flex items-center gap-4 text-sm">
     <div class="flex items-center gap-2">
-      <div class="w-4 h-0.5 bg-blue-500"></div>
+      <div class="h-0.5 w-4 bg-blue-500"></div>
       <span class="text-gray-700">Ideal Burndown</span>
     </div>
     <div class="flex items-center gap-2">
-      <div class="w-4 h-0.5 bg-green-600"></div>
+      <div class="h-0.5 w-4 bg-green-600"></div>
       <span class="text-gray-700">Actual Burndown</span>
     </div>
   </div>
 
   <!-- Chart Container -->
-  <div class="chart-container bg-white rounded-lg border border-gray-200 p-4">
+  <div class="chart-container rounded-lg border border-gray-200 bg-white p-4">
     @if (dataPoints().length === 0) {
-      <div class="flex items-center justify-center h-64 text-gray-500">
+      <div class="flex h-64 items-center justify-center text-gray-500">
         <div class="text-center">
-          <mat-icon class="text-6xl mb-2">show_chart</mat-icon>
+          <mat-icon class="mb-2 text-6xl">show_chart</mat-icon>
           <p>No burndown data available</p>
         </div>
       </div>
@@ -109,12 +109,7 @@
         <!-- Y-axis labels -->
         <g class="y-axis-labels">
           @for (label of yAxisLabels(); track label.value) {
-            <text
-              [attr.x]="padding() - 10"
-              [attr.y]="label.y + 5"
-              text-anchor="end"
-              class="axis-label"
-            >
+            <text [attr.x]="padding() - 10" [attr.y]="label.y + 5" text-anchor="end" class="axis-label">
               {{ label.value }}
             </text>
           }
@@ -123,12 +118,7 @@
         <!-- X-axis labels -->
         <g class="x-axis-labels">
           @for (label of xAxisLabels(); track label.label) {
-            <text
-              [attr.x]="label.x"
-              [attr.y]="padding() + innerHeight() + 25"
-              text-anchor="middle"
-              class="axis-label"
-            >
+            <text [attr.x]="label.x" [attr.y]="padding() + innerHeight() + 25" text-anchor="middle" class="axis-label">
               {{ label.label }}
             </text>
           }
@@ -160,19 +150,19 @@
 
   <!-- Summary -->
   @if (dataPoints().length > 0) {
-    <div class="summary mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+    <div class="summary mt-4 rounded-lg border border-gray-200 bg-gray-50 p-3">
       <div class="grid grid-cols-3 gap-4 text-sm">
         <div>
           <span class="text-gray-600">Start:</span>
-          <span class="font-semibold text-gray-900 ml-2">{{ formatDate(startDate()) }}</span>
+          <span class="ml-2 font-semibold text-gray-900">{{ formatDate(startDate()) }}</span>
         </div>
         <div>
           <span class="text-gray-600">End:</span>
-          <span class="font-semibold text-gray-900 ml-2">{{ formatDate(endDate()) }}</span>
+          <span class="ml-2 font-semibold text-gray-900">{{ formatDate(endDate()) }}</span>
         </div>
         <div>
           <span class="text-gray-600">Total Work:</span>
-          <span class="font-semibold text-gray-900 ml-2">{{ totalWork() }}</span>
+          <span class="ml-2 font-semibold text-gray-900">{{ totalWork() }}</span>
         </div>
       </div>
     </div>

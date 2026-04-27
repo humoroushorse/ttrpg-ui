@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -56,9 +49,7 @@ export class PageProjectsListComponent implements OnInit {
   public pagination = computed(() => this.projectStore.pagination());
 
   ngOnInit(): void {
-    this.title.setTitle(
-      `Sprint Management | Projects | ${this.sharedCoreService.appTitle}`
-    );
+    this.title.setTitle(`Sprint Management | Projects | ${this.sharedCoreService.appTitle}`);
     this.meta.updateTag({
       name: 'description',
       content: 'Manage projects for organizing work items.',
@@ -98,7 +89,7 @@ export class PageProjectsListComponent implements OnInit {
     event.stopPropagation();
 
     const confirmed = confirm(
-      `Are you sure you want to delete project "${projectName}"? This will not delete work items, but they will lose their project association.`
+      `Are you sure you want to delete project "${projectName}"? This will not delete work items, but they will lose their project association.`,
     );
 
     if (!confirmed) return;
@@ -111,6 +102,6 @@ export class PageProjectsListComponent implements OnInit {
   }
 
   toggleView(): void {
-    this.currentView.update(view => view === 'grid' ? 'list' : 'grid');
+    this.currentView.update((view) => (view === 'grid' ? 'list' : 'grid'));
   }
 }

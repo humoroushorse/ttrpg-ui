@@ -36,13 +36,7 @@ describe('SharedLocalStorageService - SSR Compatibility', () => {
     fc.assert(
       fc.property(
         fc.string({ minLength: 1, maxLength: 50 }), // key
-        fc.oneof(
-          fc.string(),
-          fc.integer(),
-          fc.boolean(),
-          fc.object(),
-          fc.array(fc.string())
-        ), // value
+        fc.oneof(fc.string(), fc.integer(), fc.boolean(), fc.object(), fc.array(fc.string())), // value
         (key, value) => {
           // Create service with server platform (no localStorage)
           TestBed.resetTestingModule();
@@ -68,9 +62,9 @@ describe('SharedLocalStorageService - SSR Compatibility', () => {
           expect(() => serverService.hasKey(key)).not.toThrow();
           expect(() => serverService.remove(key)).not.toThrow();
           expect(() => serverService.clearNamespace()).not.toThrow();
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -87,14 +81,9 @@ describe('SharedLocalStorageService - SSR Compatibility', () => {
           fc.record({
             operation: fc.constantFrom('set', 'get', 'remove', 'hasKey'),
             key: fc.string({ minLength: 1, maxLength: 20 }),
-            value: fc.oneof(
-              fc.string(),
-              fc.integer(),
-              fc.boolean(),
-              fc.object({ maxDepth: 2 })
-            ),
+            value: fc.oneof(fc.string(), fc.integer(), fc.boolean(), fc.object({ maxDepth: 2 })),
           }),
-          { minLength: 1, maxLength: 20 }
+          { minLength: 1, maxLength: 20 },
         ),
         (operations) => {
           // Setup browser context service
@@ -167,9 +156,9 @@ describe('SharedLocalStorageService - SSR Compatibility', () => {
           const browserFinalState = browserService.getAll();
           const serverFinalState = serverService.getAll();
           expect(browserFinalState).toEqual(serverFinalState);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 });

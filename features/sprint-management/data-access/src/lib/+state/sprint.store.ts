@@ -1,19 +1,7 @@
 import { computed, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withMethods,
-  withState,
-} from '@ngrx/signals';
-import {
-  addEntity,
-  removeEntity,
-  setAllEntities,
-  updateEntity,
-  withEntities,
-} from '@ngrx/signals/entities';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { addEntity, removeEntity, setAllEntities, updateEntity, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { SharedModels } from '@ttrpg-ui/shared/models';
@@ -76,23 +64,20 @@ export const SprintStore = signalStore(
                   setPagination(response.page, response.page_size, response.total),
                   setLoaded(true),
                   setLoading(false),
-                  setError(null, null)
+                  setError(null, null),
                 );
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to load sprints'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to load sprints'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     loadSprint: rxMethod<string>(
@@ -107,23 +92,20 @@ export const SprintStore = signalStore(
                   addEntity(sprint),
                   setSelectedEntity(sprint),
                   setLoading(false),
-                  setError(null, null)
+                  setError(null, null),
                 );
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to load sprint'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to load sprint'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     create: rxMethod<CreateSprintRequest>(
@@ -133,27 +115,19 @@ export const SprintStore = signalStore(
           apiService.createSprint(request).pipe(
             tapResponse({
               next: (sprint) => {
-                patchState(
-                  store,
-                  addEntity(sprint),
-                  setLoading(false),
-                  setError(null, null)
-                );
+                patchState(store, addEntity(sprint), setLoading(false), setError(null, null));
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to create sprint'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to create sprint'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     update: rxMethod<UpdateSprintRequest>(
@@ -165,25 +139,15 @@ export const SprintStore = signalStore(
           apiService.updateSprint(request.id, request).pipe(
             tapResponse({
               next: (sprint) => {
-                patchState(
-                  store,
-                  updateEntity({ id: sprint.id, changes: sprint }),
-                  setError(null, null)
-                );
+                patchState(store, updateEntity({ id: sprint.id, changes: sprint }), setError(null, null));
               },
               error: (error: any) => {
-                patchState(
-                  store,
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to update sprint'
-                  )
-                );
+                patchState(store, setError(error.message, error.error?.detail || 'Failed to update sprint'));
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     delete: rxMethod<string>(
@@ -193,27 +157,19 @@ export const SprintStore = signalStore(
           apiService.deleteSprint(id).pipe(
             tapResponse({
               next: () => {
-                patchState(
-                  store,
-                  removeEntity(id),
-                  setLoading(false),
-                  setError(null, null)
-                );
+                patchState(store, removeEntity(id), setLoading(false), setError(null, null));
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to delete sprint'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to delete sprint'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     startSprint: rxMethod<string>(
@@ -227,23 +183,20 @@ export const SprintStore = signalStore(
                   store,
                   updateEntity({ id: sprint.id, changes: sprint }),
                   setLoading(false),
-                  setError(null, null)
+                  setError(null, null),
                 );
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to start sprint'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to start sprint'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     completeSprint: rxMethod<string>(
@@ -257,23 +210,20 @@ export const SprintStore = signalStore(
                   store,
                   updateEntity({ id: sprint.id, changes: sprint }),
                   setLoading(false),
-                  setError(null, null)
+                  setError(null, null),
                 );
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to complete sprint'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to complete sprint'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     setFilters: (filters: FilterState) => {
@@ -319,5 +269,5 @@ export const SprintStore = signalStore(
         pagination: { ...store.pagination(), currentPage: 1 },
       });
     },
-  }))
+  })),
 );

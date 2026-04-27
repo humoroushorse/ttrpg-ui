@@ -1,17 +1,7 @@
 import { inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
-import {
-  patchState,
-  signalStore,
-  withMethods,
-  withState,
-} from '@ngrx/signals';
-import {
-  addEntity,
-  removeEntity,
-  setAllEntities,
-  withEntities,
-} from '@ngrx/signals/entities';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { addEntity, removeEntity, setAllEntities, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { SharedModels } from '@ttrpg-ui/shared/models';
@@ -21,13 +11,7 @@ import { SprintManagementApiService } from '../service/sprint-management-api.ser
 type Dependency = SprintModels.Dependency.Dependency;
 type DependencyType = SprintModels.Dependency.DependencyType;
 
-const {
-  getBaseStateDefault,
-  setError,
-  setLoaded,
-  setLoading,
-  withComputedBase,
-} = SharedModels.Store;
+const { getBaseStateDefault, setError, setLoaded, setLoading, withComputedBase } = SharedModels.Store;
 
 export const DependencyStore = signalStore(
   { providedIn: 'root' },
@@ -47,23 +31,20 @@ export const DependencyStore = signalStore(
                   setAllEntities(dependencies),
                   setLoaded(true),
                   setLoading(false),
-                  setError(null, null)
+                  setError(null, null),
                 );
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to load dependencies'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to load dependencies'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     createDependency: rxMethod<{
@@ -77,27 +58,19 @@ export const DependencyStore = signalStore(
           apiService.createDependency(workItemId, targetId, type).pipe(
             tapResponse({
               next: (dependency) => {
-                patchState(
-                  store,
-                  addEntity(dependency),
-                  setLoading(false),
-                  setError(null, null)
-                );
+                patchState(store, addEntity(dependency), setLoading(false), setError(null, null));
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to create dependency'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to create dependency'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     deleteDependency: rxMethod<{ workItemId: string; dependencyId: string }>(
@@ -107,31 +80,23 @@ export const DependencyStore = signalStore(
           apiService.deleteDependency(workItemId, dependencyId).pipe(
             tapResponse({
               next: () => {
-                patchState(
-                  store,
-                  removeEntity(dependencyId),
-                  setLoading(false),
-                  setError(null, null)
-                );
+                patchState(store, removeEntity(dependencyId), setLoading(false), setError(null, null));
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to delete dependency'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to delete dependency'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     clearDependencies: () => {
       patchState(store, setAllEntities([] as Dependency[]));
     },
-  }))
+  })),
 );

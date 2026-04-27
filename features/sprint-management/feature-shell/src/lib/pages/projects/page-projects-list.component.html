@@ -1,8 +1,12 @@
 <div class="p-4">
-  <div class="flex items-center justify-between mb-6">
+  <div class="mb-6 flex items-center justify-between">
     <h1>Projects</h1>
     <div class="flex items-center gap-4">
-      <button mat-icon-button (click)="toggleView()" [matTooltip]="currentView() === 'grid' ? 'List View' : 'Grid View'">
+      <button
+        mat-icon-button
+        (click)="toggleView()"
+        [matTooltip]="currentView() === 'grid' ? 'List View' : 'Grid View'"
+      >
         <mat-icon>{{ currentView() === 'grid' ? 'view_list' : 'view_module' }}</mat-icon>
       </button>
       <button mat-raised-button color="primary" (click)="onCreateClicked()" matTooltip="Create new project">
@@ -36,14 +40,14 @@
           @for (project of projects(); track project.id) {
             <mat-card class="project-card" (click)="onProjectClicked(project.id)">
               <mat-card-header>
-                <span class="project-key-badge px-3 py-1 mat-caption mb-2">{{ project.key }}</span>
+                <span class="project-key-badge mat-caption mb-2 px-3 py-1">{{ project.key }}</span>
                 <mat-card-title>{{ project.name }}</mat-card-title>
               </mat-card-header>
               <mat-card-content>
                 @if (project.description) {
                   <p class="project-description mat-body-2 opacity-60">{{ project.description }}</p>
                 }
-                <div class="flex gap-4 mt-3">
+                <div class="mt-3 flex gap-4">
                   <div class="flex items-center gap-1">
                     <mat-icon>confirmation_number</mat-icon>
                     <span class="mat-body-2">Next: {{ project.key }}-{{ project.current_counter + 1 }}</span>
@@ -59,7 +63,12 @@
                   <mat-icon>edit</mat-icon>
                   Edit
                 </button>
-                <button mat-button color="warn" (click)="onDeleteClicked(project.id, project.name, $event)" matTooltip="Delete project">
+                <button
+                  mat-button
+                  color="warn"
+                  (click)="onDeleteClicked(project.id, project.name, $event)"
+                  matTooltip="Delete project"
+                >
                   <mat-icon>delete</mat-icon>
                   Delete
                 </button>
@@ -74,8 +83,8 @@
           @for (project of projects(); track project.id) {
             <mat-card class="project-list-item" (click)="onProjectClicked(project.id)">
               <div class="flex items-center gap-4 p-4">
-                <div class="flex items-center gap-4 flex-1">
-                  <span class="project-key-badge px-3 py-1 mat-caption">{{ project.key }}</span>
+                <div class="flex flex-1 items-center gap-4">
+                  <span class="project-key-badge mat-caption px-3 py-1">{{ project.key }}</span>
                   <div>
                     <h3>{{ project.name }}</h3>
                     @if (project.description) {
@@ -83,15 +92,22 @@
                     }
                   </div>
                 </div>
-                <div class="flex flex-col items-end gap-1 min-w-36">
-                  <span class="next-ticket mat-body-2 font-medium">Next: {{ project.key }}-{{ project.current_counter + 1 }}</span>
+                <div class="flex min-w-36 flex-col items-end gap-1">
+                  <span class="next-ticket mat-body-2 font-medium"
+                    >Next: {{ project.key }}-{{ project.current_counter + 1 }}</span
+                  >
                   <span class="mat-caption opacity-60">{{ project.created_at | date: 'short' }}</span>
                 </div>
                 <div class="flex gap-1">
                   <button mat-icon-button (click)="onEditClicked(project.id, $event)" matTooltip="Edit">
                     <mat-icon>edit</mat-icon>
                   </button>
-                  <button mat-icon-button color="warn" (click)="onDeleteClicked(project.id, project.name, $event)" matTooltip="Delete">
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="onDeleteClicked(project.id, project.name, $event)"
+                    matTooltip="Delete"
+                  >
                     <mat-icon>delete</mat-icon>
                   </button>
                 </div>

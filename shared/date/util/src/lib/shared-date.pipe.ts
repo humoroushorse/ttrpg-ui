@@ -26,7 +26,7 @@ export class SharedDatePipe implements PipeTransform {
     value: Date | string | number | null | undefined,
     format?: string,
     timezone?: string,
-    locale?: string
+    locale?: string,
   ): string | null {
     if (!value) {
       return null;

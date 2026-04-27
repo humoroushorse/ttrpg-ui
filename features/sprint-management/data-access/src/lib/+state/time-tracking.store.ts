@@ -1,32 +1,14 @@
 import { computed, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withMethods,
-  withState,
-} from '@ngrx/signals';
-import {
-  addEntity,
-  removeEntity,
-  setAllEntities,
-  updateEntity,
-  withEntities,
-} from '@ngrx/signals/entities';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { addEntity, removeEntity, setAllEntities, updateEntity, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { SharedModels } from '@ttrpg-ui/shared/models';
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 import { SprintManagementApiService } from '../service/sprint-management-api.service';
 
-const {
-  getBaseStateDefault,
-  setError,
-  setLoaded,
-  setLoading,
-  withComputedBase,
-} = SharedModels.Store;
+const { getBaseStateDefault, setError, setLoaded, setLoading, withComputedBase } = SharedModels.Store;
 
 type TimeEntry = SprintModels.TimeTracking.TimeEntry;
 type CreateTimeEntryRequest = SprintModels.TimeTracking.CreateTimeEntryRequest;
@@ -68,37 +50,26 @@ export const TimeTrackingStore = signalStore(
           patchState(store, setLoading(true), {
             currentWorkItemId: workItemId,
             estimatedHours,
-          })
+          }),
         ),
         switchMap(({ workItemId }) =>
           apiService.getTimeEntries(workItemId).pipe(
             tapResponse({
               next: (entries) => {
-                const sorted = [...entries].sort(
-                  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-                );
-                patchState(
-                  store,
-                  setAllEntities(sorted),
-                  setLoaded(true),
-                  setLoading(false),
-                  setError(null, null)
-                );
+                const sorted = [...entries].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+                patchState(store, setAllEntities(sorted), setLoaded(true), setLoading(false), setError(null, null));
               },
               error: (error: any) => {
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to load time entries'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to load time entries'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     addTimeEntry: rxMethod<CreateTimeEntryRequest>(
@@ -120,39 +91,27 @@ export const TimeTrackingStore = signalStore(
           apiService.createTimeEntry(request).pipe(
             tapResponse({
               next: (entry) => {
-                const tempId = store
-                  .ids()
-                  .find((id) => (id as string).startsWith('temp-'));
+                const tempId = store.ids().find((id) => (id as string).startsWith('temp-'));
                 if (tempId) {
                   patchState(store, removeEntity(tempId));
                 }
-                patchState(
-                  store,
-                  addEntity(entry),
-                  setLoading(false),
-                  setError(null, null)
-                );
+                patchState(store, addEntity(entry), setLoading(false), setError(null, null));
               },
               error: (error: any) => {
-                const tempId = store
-                  .ids()
-                  .find((id) => (id as string).startsWith('temp-'));
+                const tempId = store.ids().find((id) => (id as string).startsWith('temp-'));
                 if (tempId) {
                   patchState(store, removeEntity(tempId));
                 }
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to add time entry'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to add time entry'),
                 );
               },
-            })
-          )
-        )
-      )
+            }),
+          ),
+        ),
+      ),
     ),
 
     updateTimeEntry: rxMethod<{ workItemId: string; request: UpdateTimeEntryRequest }>(
@@ -164,11 +123,7 @@ export const TimeTrackingStore = signalStore(
           if (request.hours !== undefined) changes.hours = request.hours;
           if (request.description !== undefined) changes.description = request.description;
           if (request.date !== undefined) changes.date = request.date;
-          patchState(
-            store,
-            updateEntity({ id: request.id, changes }),
-            setLoading(true)
-          );
+          patchState(store, updateEntity({ id: request.id, changes }), setLoading(true));
         }),
         switchMap(({ workItemId, request }) => {
           const originalEntity = store.entityMap()[request.id];
@@ -179,29 +134,23 @@ export const TimeTrackingStore = signalStore(
                   store,
                   updateEntity({ id: entry.id, changes: entry }),
                   setLoading(false),
-                  setError(null, null)
+                  setError(null, null),
                 );
               },
               error: (error: any) => {
                 if (originalEntity) {
-                  patchState(
-                    store,
-                    updateEntity({ id: request.id, changes: originalEntity })
-                  );
+                  patchState(store, updateEntity({ id: request.id, changes: originalEntity }));
                 }
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to update time entry'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to update time entry'),
                 );
               },
-            })
+            }),
           );
-        })
-      )
+        }),
+      ),
     ),
 
     deleteTimeEntry: rxMethod<{ workItemId: string; entryId: string }>(
@@ -214,11 +163,7 @@ export const TimeTrackingStore = signalStore(
           return apiService.deleteTimeEntry(workItemId, entryId).pipe(
             tapResponse({
               next: () => {
-                patchState(
-                  store,
-                  setLoading(false),
-                  setError(null, null)
-                );
+                patchState(store, setLoading(false), setError(null, null));
               },
               error: (error: any) => {
                 if (originalEntity) {
@@ -227,24 +172,17 @@ export const TimeTrackingStore = signalStore(
                 patchState(
                   store,
                   setLoading(false),
-                  setError(
-                    error.message,
-                    error.error?.detail || 'Failed to delete time entry'
-                  )
+                  setError(error.message, error.error?.detail || 'Failed to delete time entry'),
                 );
               },
-            })
+            }),
           );
-        })
-      )
+        }),
+      ),
     ),
 
     clearTimeEntries: () => {
-      patchState(
-        store,
-        setAllEntities([] as TimeEntry[]),
-        { currentWorkItemId: null, estimatedHours: null }
-      );
+      patchState(store, setAllEntities([] as TimeEntry[]), { currentWorkItemId: null, estimatedHours: null });
     },
-  }))
+  })),
 );

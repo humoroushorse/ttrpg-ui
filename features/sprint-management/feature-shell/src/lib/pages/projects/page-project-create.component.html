@@ -1,4 +1,4 @@
-<div class="p-4 max-w-3xl mx-auto">
+<div class="mx-auto max-w-3xl p-4">
   <div class="mb-6">
     <h1>Create Project</h1>
   </div>
@@ -8,12 +8,7 @@
       <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
         <mat-form-field class="w-full">
           <mat-label>Project Key</mat-label>
-          <input
-            matInput
-            formControlName="key"
-            placeholder="DND"
-            maxlength="10"
-          />
+          <input matInput formControlName="key" placeholder="DND" maxlength="10" />
           <mat-hint>3-10 uppercase alphanumeric characters (e.g., DND, PROJ)</mat-hint>
           @if (projectForm.get('key')?.hasError('required') && projectForm.get('key')?.touched) {
             <mat-error>Project key is required</mat-error>
@@ -28,12 +23,7 @@
 
         <mat-form-field class="w-full">
           <mat-label>Project Name</mat-label>
-          <input
-            matInput
-            formControlName="name"
-            placeholder="D&D Campaign"
-            maxlength="255"
-          />
+          <input matInput formControlName="name" placeholder="D&D Campaign" maxlength="255" />
           @if (projectForm.get('name')?.hasError('required') && projectForm.get('name')?.touched) {
             <mat-error>Project name is required</mat-error>
           }
@@ -41,25 +31,20 @@
 
         <mat-form-field class="w-full">
           <mat-label>Description</mat-label>
-          <textarea
-            matInput
-            formControlName="description"
-            placeholder="Project description..."
-            rows="4"
-          ></textarea>
+          <textarea matInput formControlName="description" placeholder="Project description..." rows="4"></textarea>
         </mat-form-field>
 
         <mat-form-field class="w-full">
           <mat-label>Starting Ticket Number</mat-label>
-          <input
-            matInput
-            type="number"
-            formControlName="starting_number"
-            placeholder="1"
-            min="1"
-          />
-          <mat-hint>First ticket will be {{ projectForm.get('key')?.value || 'KEY' }}-{{ projectForm.get('starting_number')?.value || 1 }}</mat-hint>
-          @if (projectForm.get('starting_number')?.hasError('required') && projectForm.get('starting_number')?.touched) {
+          <input matInput type="number" formControlName="starting_number" placeholder="1" min="1" />
+          <mat-hint
+            >First ticket will be {{ projectForm.get('key')?.value || 'KEY' }}-{{
+              projectForm.get('starting_number')?.value || 1
+            }}</mat-hint
+          >
+          @if (
+            projectForm.get('starting_number')?.hasError('required') && projectForm.get('starting_number')?.touched
+          ) {
             <mat-error>Starting number is required</mat-error>
           }
           @if (projectForm.get('starting_number')?.hasError('min')) {
@@ -67,7 +52,7 @@
           }
         </mat-form-field>
 
-        <div class="flex justify-end gap-4 mt-4">
+        <div class="mt-4 flex justify-end gap-4">
           <button mat-button type="button" (click)="onCancel()">Cancel</button>
           <button mat-raised-button color="primary" type="submit" [disabled]="projectForm.invalid">
             <mat-icon>save</mat-icon>

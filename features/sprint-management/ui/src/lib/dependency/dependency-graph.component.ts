@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  input,
-  output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -39,14 +33,7 @@ export interface DependencyNode {
 @Component({
   selector: 'lib-dependency-graph',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
-    MatChipsModule,
-  ],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule, MatChipsModule],
   templateUrl: './dependency-graph.component.html',
   styleUrl: './dependency-graph.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -115,9 +102,7 @@ export class DependencyGraphComponent {
     return this.dependencyNodes().filter((node) => node.isInCircularDependency);
   });
 
-  detectCircularDependencies(
-    nodes: Map<string, DependencyNode>
-  ): Set<string> {
+  detectCircularDependencies(nodes: Map<string, DependencyNode>): Set<string> {
     const circularNodes = new Set<string>();
     const visited = new Set<string>();
     const recursionStack = new Set<string>();
@@ -184,9 +169,7 @@ export class DependencyGraphComponent {
 
   getDependency(sourceId: string, targetId: string): Dependency | undefined {
     return this.dependencies().find(
-      (dep) =>
-        dep.source_work_item_id === sourceId &&
-        dep.target_work_item_id === targetId
+      (dep) => dep.source_work_item_id === sourceId && dep.target_work_item_id === targetId,
     );
   }
 

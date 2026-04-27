@@ -18,8 +18,7 @@ import { SprintManagementApiService } from '../service/sprint-management-api.ser
 import { WebSocketService } from '../service/websocket.service';
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 
-const SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN =
-  SprintModels.Service.SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN;
+const SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN = SprintModels.Service.SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN;
 
 type TimeEntry = SprintModels.TimeTracking.TimeEntry;
 
@@ -68,14 +67,12 @@ describe('TimeTrackingStore - Property-Based Tests (Property 2)', () => {
     fc.assert(
       fc.property(
         fc.float({ min: Math.fround(0.01), max: Math.fround(1000), noNaN: true }),
-        fc.array(
-          fc.float({ min: Math.fround(0.01), max: Math.fround(100), noNaN: true }),
-          { minLength: 1, maxLength: 20 }
-        ),
+        fc.array(fc.float({ min: Math.fround(0.01), max: Math.fround(100), noNaN: true }), {
+          minLength: 1,
+          maxLength: 20,
+        }),
         (estimatedHours, hoursArray) => {
-          const entries = hoursArray.map((h, i) =>
-            makeTimeEntry({ id: `te-${i}`, hours: h })
-          );
+          const entries = hoursArray.map((h, i) => makeTimeEntry({ id: `te-${i}`, hours: h }));
 
           vi.spyOn(apiService, 'getTimeEntries').mockReturnValue(of(entries));
           store.loadTimeEntries({ workItemId: 'wi-prop', estimatedHours });
@@ -90,23 +87,21 @@ describe('TimeTrackingStore - Property-Based Tests (Property 2)', () => {
             expect(summary.logged_hours).toBeCloseTo(expectedLogged, 3);
             expect(summary.remaining_hours).toBeCloseTo(expectedRemaining, 3);
           }
-        }
+        },
       ),
-      { numRuns: 200 }
+      { numRuns: 200 },
     );
   });
 
   it('logged_hours is always the sum of all entry hours', () => {
     fc.assert(
       fc.property(
-        fc.array(
-          fc.float({ min: Math.fround(0.01), max: Math.fround(100), noNaN: true }),
-          { minLength: 0, maxLength: 20 }
-        ),
+        fc.array(fc.float({ min: Math.fround(0.01), max: Math.fround(100), noNaN: true }), {
+          minLength: 0,
+          maxLength: 20,
+        }),
         (hoursArray) => {
-          const entries = hoursArray.map((h, i) =>
-            makeTimeEntry({ id: `te-${i}`, hours: h })
-          );
+          const entries = hoursArray.map((h, i) => makeTimeEntry({ id: `te-${i}`, hours: h }));
 
           vi.spyOn(apiService, 'getTimeEntries').mockReturnValue(of(entries));
           store.loadTimeEntries({ workItemId: 'wi-sum', estimatedHours: 100 });
@@ -117,23 +112,21 @@ describe('TimeTrackingStore - Property-Based Tests (Property 2)', () => {
           if (summary) {
             expect(summary.logged_hours).toBeCloseTo(expectedLogged, 3);
           }
-        }
+        },
       ),
-      { numRuns: 200 }
+      { numRuns: 200 },
     );
   });
 
   it('remaining_hours is null when estimated_hours is null', () => {
     fc.assert(
       fc.property(
-        fc.array(
-          fc.float({ min: Math.fround(0.01), max: Math.fround(100), noNaN: true }),
-          { minLength: 1, maxLength: 10 }
-        ),
+        fc.array(fc.float({ min: Math.fround(0.01), max: Math.fround(100), noNaN: true }), {
+          minLength: 1,
+          maxLength: 10,
+        }),
         (hoursArray) => {
-          const entries = hoursArray.map((h, i) =>
-            makeTimeEntry({ id: `te-${i}`, hours: h })
-          );
+          const entries = hoursArray.map((h, i) => makeTimeEntry({ id: `te-${i}`, hours: h }));
 
           vi.spyOn(apiService, 'getTimeEntries').mockReturnValue(of(entries));
           store.loadTimeEntries({ workItemId: 'wi-null', estimatedHours: null });
@@ -143,9 +136,9 @@ describe('TimeTrackingStore - Property-Based Tests (Property 2)', () => {
             expect(summary.remaining_hours).toBeNull();
             expect(summary.estimated_hours).toBeNull();
           }
-        }
+        },
       ),
-      { numRuns: 200 }
+      { numRuns: 200 },
     );
   });
 });

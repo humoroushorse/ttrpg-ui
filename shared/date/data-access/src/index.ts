@@ -1,1 +1,1 @@
-export * from "./lib/shared-date.service";
+export * from './lib/shared-date.service';

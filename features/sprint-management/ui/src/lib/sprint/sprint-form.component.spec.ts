@@ -15,10 +15,7 @@ describe('SprintFormComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SprintFormComponent, NoopAnimationsModule],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SprintFormComponent);

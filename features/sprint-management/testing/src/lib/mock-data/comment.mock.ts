@@ -4,10 +4,7 @@
  * Provides mock data generators for comments.
  */
 
-import {
-  Comment,
-  CommentWithAuthor,
-} from '@ttrpg-ui/features/sprint-management/models';
+import { Comment, CommentWithAuthor } from '@ttrpg-ui/features/sprint-management/models';
 import { generateMockId, createMockUser } from './work-item.mock';
 
 /**
@@ -31,9 +28,7 @@ export function createMockComment(overrides?: Partial<Comment>): Comment {
 /**
  * Create a mock comment with author information
  */
-export function createMockCommentWithAuthor(
-  overrides?: Partial<CommentWithAuthor>
-): CommentWithAuthor {
+export function createMockCommentWithAuthor(overrides?: Partial<CommentWithAuthor>): CommentWithAuthor {
   const comment = createMockComment(overrides);
   const author = overrides?.author || createMockUser({ id: comment.author_id });
 
@@ -55,7 +50,7 @@ export function createMockComments(count: number, overrides?: Partial<Comment>):
  */
 export function createMockCommentsWithAuthors(
   count: number,
-  overrides?: Partial<CommentWithAuthor>
+  overrides?: Partial<CommentWithAuthor>,
 ): CommentWithAuthor[] {
   return Array.from({ length: count }, () => createMockCommentWithAuthor(overrides));
 }
@@ -63,10 +58,7 @@ export function createMockCommentsWithAuthors(
 /**
  * Create a comment with specific timestamp
  */
-export function createMockCommentWithTimestamp(
-  timestamp: Date,
-  overrides?: Partial<Comment>
-): Comment {
+export function createMockCommentWithTimestamp(timestamp: Date, overrides?: Partial<Comment>): Comment {
   return createMockComment({
     created_at: timestamp.toISOString(),
     updated_at: timestamp.toISOString(),
@@ -102,7 +94,10 @@ export function createMockCommentWithMarkdown(overrides?: Partial<Comment>): Com
  * Create a comment with long content
  */
 export function createMockLongComment(overrides?: Partial<Comment>): Comment {
-  const longContent = Array.from({ length: 10 }, (_, i) => `Paragraph ${i + 1}: Lorem ipsum dolor sit amet, consectetur adipiscing elit.`).join('\n\n');
+  const longContent = Array.from(
+    { length: 10 },
+    (_, i) => `Paragraph ${i + 1}: Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
+  ).join('\n\n');
 
   return createMockComment({
     content: longContent,
@@ -133,10 +128,7 @@ export function createMockWhitespaceComment(overrides?: Partial<Comment>): Comme
 /**
  * Create comments for a specific work item
  */
-export function createMockCommentsForWorkItem(
-  workItemId: string,
-  count: number
-): Comment[] {
+export function createMockCommentsForWorkItem(workItemId: string, count: number): Comment[] {
   return createMockComments(count, { work_item_id: workItemId });
 }
 

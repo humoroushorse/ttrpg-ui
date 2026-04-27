@@ -12,7 +12,8 @@ module.exports = {
       recommended: true,
     },
     messages: {
-      noTailwindTypography: 'Avoid Tailwind typography class "{{className}}". Use design tokens (var(--g-typography-*)) in SCSS instead.',
+      noTailwindTypography:
+        'Avoid Tailwind typography class "{{className}}". Use design tokens (var(--g-typography-*)) in SCSS instead.',
     },
     schema: [],
   },

@@ -34,9 +34,7 @@ describe('TagChipComponent', () => {
     fixture.componentRef.setInput('removable', true);
     fixture.detectChanges();
 
-    const removeButton = fixture.nativeElement.querySelector(
-      'button[matChipRemove]'
-    ) as HTMLButtonElement;
+    const removeButton = fixture.nativeElement.querySelector('button[matChipRemove]') as HTMLButtonElement;
     expect(removeButton).toBeTruthy();
 
     removeButton.click();
@@ -47,9 +45,7 @@ describe('TagChipComponent', () => {
     fixture.componentRef.setInput('removable', false);
     fixture.detectChanges();
 
-    const removeButton = fixture.nativeElement.querySelector(
-      'button[matChipRemove]'
-    );
+    const removeButton = fixture.nativeElement.querySelector('button[matChipRemove]');
     expect(removeButton).toBeFalsy();
   });
 });

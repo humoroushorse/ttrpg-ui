@@ -111,7 +111,7 @@ export class SharedLocalStorageService {
     if (!storage) {
       // Clear memory storage except persistent keys
       const persistentPrefix = `${this.config.namespace}.persistent.`;
-      Object.keys(this.memoryStorage).forEach(key => {
+      Object.keys(this.memoryStorage).forEach((key) => {
         if (!key.startsWith(persistentPrefix)) {
           delete this.memoryStorage[key];
         }
@@ -131,7 +131,7 @@ export class SharedLocalStorageService {
       }
     }
 
-    keysToRemove.forEach(key => storage.removeItem(key));
+    keysToRemove.forEach((key) => storage.removeItem(key));
   }
 
   hasKey(key: string): boolean {

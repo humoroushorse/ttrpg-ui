@@ -3,16 +3,10 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { signal } from '@angular/core';
 
-import {
-  SprintModels,
-} from '@ttrpg-ui/features/sprint-management/models';
+import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 
 const SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN = SprintModels.Service.SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN;
-const {
-  WorkItemType,
-  WorkItemStatus,
-  WorkItemPriority,
-} = SprintModels.WorkItem;
+const { WorkItemType, WorkItemStatus, WorkItemPriority } = SprintModels.WorkItem;
 const { SprintStatus } = SprintModels.Sprint;
 const { DependencyType } = SprintModels.Dependency;
 const { FilterType, FilterCondition } = SprintModels.Filter;
@@ -1078,4 +1072,3 @@ describe('SprintManagementApiService', () => {
     });
   });
 });
-

@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  computed,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,12 +23,7 @@ export interface VelocityDataPoint {
 @Component({
   selector: 'lib-sprint-velocity-chart',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatIconModule,
-    MatTooltipModule,
-  ],
+  imports: [CommonModule, MatCardModule, MatIconModule, MatTooltipModule],
   templateUrl: './sprint-velocity-chart.component.html',
   styleUrl: './sprint-velocity-chart.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -64,8 +54,8 @@ export class SprintVelocityChartComponent {
     const points = this.dataPoints();
     if (points.length === 0) return 100;
 
-    const maxCompleted = Math.max(...points.map(p => p.completedStoryPoints));
-    const maxTotal = Math.max(...points.map(p => p.totalStoryPoints));
+    const maxCompleted = Math.max(...points.map((p) => p.completedStoryPoints));
+    const maxTotal = Math.max(...points.map((p) => p.totalStoryPoints));
     const max = Math.max(maxCompleted, maxTotal);
 
     return Math.ceil(max * 1.1); // Add 10% padding
@@ -115,9 +105,8 @@ export class SprintVelocityChartComponent {
         sprintName: point.sprintName,
         completedStoryPoints: point.completedStoryPoints,
         totalStoryPoints: point.totalStoryPoints,
-        completionPercentage: point.totalStoryPoints > 0
-          ? Math.round((point.completedStoryPoints / point.totalStoryPoints) * 100)
-          : 0,
+        completionPercentage:
+          point.totalStoryPoints > 0 ? Math.round((point.completedStoryPoints / point.totalStoryPoints) * 100) : 0,
       };
     });
   });

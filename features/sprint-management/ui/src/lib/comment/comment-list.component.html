@@ -1,7 +1,7 @@
 <div class="comment-list">
   <!-- Loading state -->
   @if (loading()) {
-    <div class="flex justify-center items-center py-8">
+    <div class="flex items-center justify-center py-8">
       <mat-icon class="animate-spin">refresh</mat-icon>
       <span class="ml-2">Loading comments...</span>
     </div>
@@ -9,8 +9,8 @@
 
   <!-- Empty state -->
   @else if (sortedComments().length === 0) {
-    <div class="text-center py-8 text-gray-500">
-      <mat-icon class="text-4xl mb-2">comment</mat-icon>
+    <div class="py-8 text-center text-gray-500">
+      <mat-icon class="mb-2 text-4xl">comment</mat-icon>
       <p>No comments yet</p>
       <p class="text-sm">Be the first to comment!</p>
     </div>
@@ -23,16 +23,18 @@
         <mat-card class="comment-card">
           <mat-card-content>
             <!-- Comment header -->
-            <div class="flex justify-between items-start mb-3">
+            <div class="mb-3 flex items-start justify-between">
               <div class="flex items-center gap-2">
                 <!-- Author avatar placeholder -->
-                <div class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-semibold">
+                <div
+                  class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-sm font-semibold text-white"
+                >
                   {{ getAuthorName(comment).charAt(0).toUpperCase() }}
                 </div>
 
                 <!-- Author and timestamp -->
                 <div>
-                  <div class="font-semibold text-sm">
+                  <div class="text-sm font-semibold">
                     {{ getAuthorName(comment) }}
                   </div>
                   <div class="text-xs text-gray-500">

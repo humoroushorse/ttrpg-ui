@@ -49,32 +49,18 @@
             <!-- End date filter -->
             <mat-form-field>
               <mat-label>End Date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="endPicker"
-                formControlName="end_date"
-                placeholder="Select end date"
-              />
+              <input matInput [matDatepicker]="endPicker" formControlName="end_date" placeholder="Select end date" />
               <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
               <mat-datepicker #endPicker></mat-datepicker>
             </mat-form-field>
           </div>
 
           <div class="filter-actions">
-            <button
-              mat-raised-button
-              color="primary"
-              type="button"
-              (click)="applyFilters()"
-            >
+            <button mat-raised-button color="primary" type="button" (click)="applyFilters()">
               <mat-icon>search</mat-icon>
               Apply Filters
             </button>
-            <button
-              mat-button
-              type="button"
-              (click)="clearFilters()"
-            >
+            <button mat-button type="button" (click)="clearFilters()">
               <mat-icon>clear</mat-icon>
               Clear Filters
             </button>
@@ -123,9 +109,7 @@
                   <span class="audit-log-action">
                     <strong>{{ formatAction(log.action) }}</strong>
                   </span>
-                  <span class="audit-log-user">
-                    by {{ getUserName(log) }}
-                  </span>
+                  <span class="audit-log-user"> by {{ getUserName(log) }} </span>
                 </div>
 
                 <!-- Timestamp -->

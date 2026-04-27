@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -50,9 +44,7 @@ export class PageProjectDetailComponent implements OnInit {
   project = signal<Project | null>(null);
 
   ngOnInit(): void {
-    this.title.setTitle(
-      `Sprint Management | Project Details | ${this.sharedCoreService.appTitle}`
-    );
+    this.title.setTitle(`Sprint Management | Project Details | ${this.sharedCoreService.appTitle}`);
     this.meta.updateTag({
       name: 'description',
       content: 'View project details and work items.',

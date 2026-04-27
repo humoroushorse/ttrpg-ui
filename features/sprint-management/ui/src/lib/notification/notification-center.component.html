@@ -15,8 +15,13 @@
 <!-- Notification Dropdown Menu -->
 <mat-menu #notificationMenu="matMenu" class="notification-menu" xPosition="before">
   <!-- Header -->
-  <div class="notification-header px-4 py-3 flex items-center justify-between" (click)="$event.stopPropagation()" (keyup)="$event.stopPropagation()" tabindex="0">
-    <h3 class="text-lg font-semibold m-0">Notifications</h3>
+  <div
+    class="notification-header flex items-center justify-between px-4 py-3"
+    (click)="$event.stopPropagation()"
+    (keyup)="$event.stopPropagation()"
+    tabindex="0"
+  >
+    <h3 class="m-0 text-lg font-semibold">Notifications</h3>
     @if (hasNotifications()) {
       <div class="flex gap-2">
         @if (unreadCount() > 0) {
@@ -53,19 +58,19 @@
           [ngClass]="getNotificationClass(notification)"
           (click)="onNotificationClick(notification)"
         >
-          <div class="flex items-start gap-3 w-full">
+          <div class="flex w-full items-start gap-3">
             <!-- Icon -->
             <mat-icon [class.text-primary]="!notification.is_read">
               {{ getNotificationIcon(notification.type) }}
             </mat-icon>
 
             <!-- Content -->
-            <div class="flex-1 min-w-0">
-              <div class="font-medium text-sm">{{ notification.title }}</div>
-              <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+            <div class="min-w-0 flex-1">
+              <div class="text-sm font-medium">{{ notification.title }}</div>
+              <div class="mt-1 text-xs text-gray-600 dark:text-gray-400">
                 {{ notification.message }}
               </div>
-              <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+              <div class="mt-1 text-xs text-gray-500 dark:text-gray-500">
                 {{ formatTimestamp(notification.created_at) }}
               </div>
             </div>
@@ -86,7 +91,7 @@
       }
     } @else {
       <div class="notification-empty px-4 py-8 text-center text-gray-500">
-        <mat-icon class="text-4xl mb-2">notifications_none</mat-icon>
+        <mat-icon class="mb-2 text-4xl">notifications_none</mat-icon>
         <p class="text-sm">No notifications</p>
       </div>
     }

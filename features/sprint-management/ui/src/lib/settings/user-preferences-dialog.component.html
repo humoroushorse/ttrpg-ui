@@ -14,10 +14,7 @@
             <h3 class="section-title">Appearance</h3>
             <mat-form-field class="full-width">
               <mat-label>Theme</mat-label>
-              <mat-select
-                [value]="preferences().theme"
-                (selectionChange)="updateTheme($event.value)"
-              >
+              <mat-select [value]="preferences().theme" (selectionChange)="updateTheme($event.value)">
                 @for (theme of availableThemes(); track theme.path) {
                   <mat-option [value]="theme.path">
                     {{ theme.viewValue }}
@@ -33,10 +30,7 @@
             <h3 class="section-title">Language</h3>
             <mat-form-field class="full-width">
               <mat-label>Language</mat-label>
-              <mat-select
-                [value]="preferences().language"
-                (selectionChange)="updateLanguage($event.value)"
-              >
+              <mat-select [value]="preferences().language" (selectionChange)="updateLanguage($event.value)">
                 @for (lang of availableLanguages; track lang.code) {
                   <mat-option [value]="lang.code">
                     {{ lang.name }}
@@ -145,9 +139,7 @@
               >
                 Enable desktop notifications
               </mat-slide-toggle>
-              <p class="option-description">
-                Show browser notifications for important updates
-              </p>
+              <p class="option-description">Show browser notifications for important updates</p>
             </div>
 
             <div class="toggle-option">
@@ -157,9 +149,7 @@
               >
                 Enable in-app notifications
               </mat-slide-toggle>
-              <p class="option-description">
-                Show notifications in the notification center
-              </p>
+              <p class="option-description">Show notifications in the notification center</p>
             </div>
 
             <div class="toggle-option">
@@ -230,9 +220,7 @@
               >
                 High contrast mode
               </mat-slide-toggle>
-              <p class="option-description">
-                Increase contrast for better visibility
-              </p>
+              <p class="option-description">Increase contrast for better visibility</p>
             </div>
 
             <div class="toggle-option">
@@ -242,9 +230,7 @@
               >
                 Reduce motion
               </mat-slide-toggle>
-              <p class="option-description">
-                Minimize animations and transitions
-              </p>
+              <p class="option-description">Minimize animations and transitions</p>
             </div>
 
             <div class="toggle-option">
@@ -254,9 +240,7 @@
               >
                 Large fonts
               </mat-slide-toggle>
-              <p class="option-description">
-                Increase font size throughout the application
-              </p>
+              <p class="option-description">Increase font size throughout the application</p>
             </div>
 
             <div class="toggle-option">
@@ -266,9 +250,7 @@
               >
                 Enable keyboard shortcuts
               </mat-slide-toggle>
-              <p class="option-description">
-                Use keyboard shortcuts for common actions
-              </p>
+              <p class="option-description">Use keyboard shortcuts for common actions</p>
             </div>
           </div>
         </div>
@@ -281,39 +263,18 @@
             <h3 class="section-title">Data Management</h3>
 
             <div class="action-buttons">
-              <button
-                mat-stroked-button
-                color="primary"
-                (click)="exportPreferences()"
-                class="action-button"
-              >
+              <button mat-stroked-button color="primary" (click)="exportPreferences()" class="action-button">
                 <mat-icon>download</mat-icon>
                 Export Preferences
               </button>
 
-              <button
-                mat-stroked-button
-                color="primary"
-                (click)="fileInput.click()"
-                class="action-button"
-              >
+              <button mat-stroked-button color="primary" (click)="fileInput.click()" class="action-button">
                 <mat-icon>upload</mat-icon>
                 Import Preferences
               </button>
-              <input
-                #fileInput
-                type="file"
-                accept=".json"
-                (change)="importPreferences($event)"
-                style="display: none"
-              />
+              <input #fileInput type="file" accept=".json" (change)="importPreferences($event)" style="display: none" />
 
-              <button
-                mat-stroked-button
-                color="warn"
-                (click)="resetToDefaults()"
-                class="action-button"
-              >
+              <button mat-stroked-button color="warn" (click)="resetToDefaults()" class="action-button">
                 <mat-icon>restore</mat-icon>
                 Reset to Defaults
               </button>
@@ -322,12 +283,8 @@
 
           <div class="preference-section">
             <h3 class="section-title">Information</h3>
-            <p class="info-text">
-              <strong>Last Updated:</strong> {{ preferences().lastUpdated | date: 'medium' }}
-            </p>
-            <p class="info-text">
-              Preferences are stored locally in your browser and will persist across sessions.
-            </p>
+            <p class="info-text"><strong>Last Updated:</strong> {{ preferences().lastUpdated | date: 'medium' }}</p>
+            <p class="info-text">Preferences are stored locally in your browser and will persist across sessions.</p>
           </div>
         </div>
       </mat-tab>
@@ -336,13 +293,6 @@
 
   <mat-dialog-actions align="end" class="dialog-actions">
     <button mat-button (click)="cancel()">Cancel</button>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="save()"
-      [disabled]="!hasChanges()"
-    >
-      Save Changes
-    </button>
+    <button mat-raised-button color="primary" (click)="save()" [disabled]="!hasChanges()">Save Changes</button>
   </mat-dialog-actions>
 </div>

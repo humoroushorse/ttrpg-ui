@@ -20,9 +20,7 @@ export interface WebSocketMessage {
 })
 export class WebSocketService {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly serviceConfig: SprintManagementApiServiceConfig = inject(
-    SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN
-  );
+  private readonly serviceConfig: SprintManagementApiServiceConfig = inject(SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN);
 
   private socket: WebSocket | null = null;
   private messageSubject = new Subject<WebSocketMessage>();
@@ -119,17 +117,12 @@ export class WebSocketService {
     }
   }
 
-
   getMessagesByType(type: string): Observable<WebSocketMessage> {
-    return this.messages$.pipe(
-      filter((msg) => msg.type === type)
-    );
+    return this.messages$.pipe(filter((msg) => msg.type === type));
   }
 
   getMessagesByRoom(room: string): Observable<WebSocketMessage> {
-    return this.messages$.pipe(
-      filter((msg) => msg.room === room)
-    );
+    return this.messages$.pipe(filter((msg) => msg.room === room));
   }
 
   isConnected(): boolean {

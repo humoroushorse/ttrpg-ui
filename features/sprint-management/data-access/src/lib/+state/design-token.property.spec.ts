@@ -51,14 +51,14 @@ describe('Property 7: No Tailwind color/typography classes in templates', () => 
             '<p class="description">',
             '<div class="grid grid-cols-3">',
           ),
-          { minLength: 1, maxLength: 5 }
+          { minLength: 1, maxLength: 5 },
         ),
         (htmlParts) => {
           const html = htmlParts.join('\n');
           expect(hasTailwindViolation(html)).toBe(false);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -80,9 +80,9 @@ describe('Property 7: No Tailwind color/typography classes in templates', () => 
         (colorClass, prefix) => {
           const html = `<div class="${prefix} ${colorClass}">content</div>`;
           expect(hasTailwindViolation(html)).toBe(true);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -106,9 +106,9 @@ describe('Property 7: No Tailwind color/typography classes in templates', () => 
         (typographyClass) => {
           const html = `<span class="${typographyClass}">text</span>`;
           expect(hasTailwindViolation(html)).toBe(true);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 });
@@ -129,52 +129,37 @@ describe('Property 8: Design token usage — no hardcoded colors in SCSS', () =>
             'fill: var(--g-color-on-primary);',
             '--g-color-primary: #6750a4;',
           ),
-          { minLength: 1, maxLength: 5 }
+          { minLength: 1, maxLength: 5 },
         ),
         (scssParts) => {
           const scss = `.component {\n  ${scssParts.join('\n  ')}\n}`;
           expect(hasHardcodedColor(scss)).toBe(false);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
   it('SCSS with hardcoded hex colors returns true', () => {
     fc.assert(
-      fc.property(
-        fc.constantFrom(
-          '#757575',
-          '#ff0000',
-          '#abc',
-          '#1a2b3c',
-          '#ffffff',
-          '#000000ff',
-        ),
-        (hexColor) => {
-          const scss = `.component { color: ${hexColor}; }`;
-          expect(hasHardcodedColor(scss)).toBe(true);
-        }
-      ),
-      { numRuns: 100 }
+      fc.property(fc.constantFrom('#757575', '#ff0000', '#abc', '#1a2b3c', '#ffffff', '#000000ff'), (hexColor) => {
+        const scss = `.component { color: ${hexColor}; }`;
+        expect(hasHardcodedColor(scss)).toBe(true);
+      }),
+      { numRuns: 100 },
     );
   });
 
   it('SCSS with hardcoded rgb/rgba colors returns true', () => {
     fc.assert(
       fc.property(
-        fc.constantFrom(
-          'rgb(117, 117, 117)',
-          'rgba(0, 0, 0, 0.5)',
-          'rgb(255, 0, 0)',
-          'rgba(100, 200, 50, 1)',
-        ),
+        fc.constantFrom('rgb(117, 117, 117)', 'rgba(0, 0, 0, 0.5)', 'rgb(255, 0, 0)', 'rgba(100, 200, 50, 1)'),
         (rgbColor) => {
           const scss = `.component { color: ${rgbColor}; }`;
           expect(hasHardcodedColor(scss)).toBe(true);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 });
@@ -196,74 +181,59 @@ describe('Property 11: No requirement reference comments in code', () => {
             '// NOTE: this is intentional',
             'const x = 1; // inline comment',
           ),
-          { minLength: 1, maxLength: 5 }
+          { minLength: 1, maxLength: 5 },
         ),
         (codeParts) => {
           const code = codeParts.join('\n');
           expect(hasRequirementComment(code)).toBe(false);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
   it('code with "Requirement X.Y" single-line comments returns true', () => {
     fc.assert(
-      fc.property(
-        fc.integer({ min: 1, max: 20 }),
-        fc.integer({ min: 1, max: 20 }),
-        (major, minor) => {
-          const code = `// Requirement ${major}.${minor}: some description`;
-          expect(hasRequirementComment(code)).toBe(true);
-        }
-      ),
-      { numRuns: 100 }
+      fc.property(fc.integer({ min: 1, max: 20 }), fc.integer({ min: 1, max: 20 }), (major, minor) => {
+        const code = `// Requirement ${major}.${minor}: some description`;
+        expect(hasRequirementComment(code)).toBe(true);
+      }),
+      { numRuns: 100 },
     );
   });
 
   it('code with "Req X.Y" single-line comments returns true', () => {
     fc.assert(
-      fc.property(
-        fc.integer({ min: 1, max: 20 }),
-        fc.integer({ min: 1, max: 20 }),
-        (major, minor) => {
-          const code = `// Req ${major}.${minor}: some description`;
-          expect(hasRequirementComment(code)).toBe(true);
-        }
-      ),
-      { numRuns: 100 }
+      fc.property(fc.integer({ min: 1, max: 20 }), fc.integer({ min: 1, max: 20 }), (major, minor) => {
+        const code = `// Req ${major}.${minor}: some description`;
+        expect(hasRequirementComment(code)).toBe(true);
+      }),
+      { numRuns: 100 },
     );
   });
 
   it('code with normal comments (no requirement references) returns false', () => {
     fc.assert(
       fc.property(
-        fc.string({ minLength: 1, maxLength: 50 }).filter(
-          (s) =>
-            !/\b(Requirement|Req)\s+\d+\.\d+/i.test(s) &&
-            !s.includes('//') &&
-            !s.includes('/*')
-        ),
+        fc
+          .string({ minLength: 1, maxLength: 50 })
+          .filter((s) => !/\b(Requirement|Req)\s+\d+\.\d+/i.test(s) && !s.includes('//') && !s.includes('/*')),
         (commentText) => {
           const code = `// ${commentText}`;
           expect(hasRequirementComment(code)).toBe(false);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
   it('code with block comments containing requirement references returns true', () => {
     fc.assert(
-      fc.property(
-        fc.integer({ min: 1, max: 20 }),
-        fc.integer({ min: 1, max: 20 }),
-        (major, minor) => {
-          const code = `/* Requirement ${major}.${minor}: some description */`;
-          expect(hasRequirementComment(code)).toBe(true);
-        }
-      ),
-      { numRuns: 100 }
+      fc.property(fc.integer({ min: 1, max: 20 }), fc.integer({ min: 1, max: 20 }), (major, minor) => {
+        const code = `/* Requirement ${major}.${minor}: some description */`;
+        expect(hasRequirementComment(code)).toBe(true);
+      }),
+      { numRuns: 100 },
     );
   });
 });

@@ -4,11 +4,7 @@
  * Provides mock data generators for sprints.
  */
 
-import {
-  Sprint,
-  SprintStatus,
-  SprintWithMetrics,
-} from '@ttrpg-ui/features/sprint-management/models';
+import { Sprint, SprintStatus, SprintWithMetrics } from '@ttrpg-ui/features/sprint-management/models';
 import { generateMockId } from './work-item.mock';
 
 /**
@@ -41,9 +37,7 @@ export function createMockSprint(overrides?: Partial<Sprint>): Sprint {
 /**
  * Create a mock sprint with metrics
  */
-export function createMockSprintWithMetrics(
-  overrides?: Partial<SprintWithMetrics>
-): SprintWithMetrics {
+export function createMockSprintWithMetrics(overrides?: Partial<SprintWithMetrics>): SprintWithMetrics {
   const sprint = createMockSprint(overrides);
 
   return {
@@ -137,11 +131,7 @@ export function createMockSprintsWithVariedStatuses(): Sprint[] {
 /**
  * Create a sprint with specific date range
  */
-export function createMockSprintWithDateRange(
-  startDate: Date,
-  endDate: Date,
-  overrides?: Partial<Sprint>
-): Sprint {
+export function createMockSprintWithDateRange(startDate: Date, endDate: Date, overrides?: Partial<Sprint>): Sprint {
   return createMockSprint({
     start_date: startDate.toISOString(),
     end_date: endDate.toISOString(),

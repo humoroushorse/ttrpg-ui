@@ -5,12 +5,7 @@
         <mat-icon class="mr-2">schedule</mat-icon>
         <span>Time Tracking</span>
       </div>
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="onLogTimeClick()"
-        [disabled]="disabled()"
-      >
+      <button mat-raised-button color="primary" (click)="onLogTimeClick()" [disabled]="disabled()">
         <mat-icon>add</mat-icon>
         Log Time
       </button>
@@ -19,7 +14,7 @@
 
   <mat-card-content>
     <div class="time-summary">
-      <div class="grid grid-cols-3 gap-4 mb-3">
+      <div class="mb-3 grid grid-cols-3 gap-4">
         <div class="time-stat">
           <div class="time-stat-label">Estimated</div>
           <div class="time-stat-value time-stat-value--estimated">
@@ -78,9 +73,7 @@
     <mat-divider></mat-divider>
 
     <div class="time-entries">
-      <h4 class="time-entries-title">
-        Time Entries ({{ storeEntries().length }})
-      </h4>
+      <h4 class="time-entries-title">Time Entries ({{ storeEntries().length }})</h4>
 
       <lib-time-entry-list
         [entries]="storeEntries()"

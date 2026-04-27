@@ -9,7 +9,7 @@ export const EMPTY_VALUE = '--';
  */
 export function displayValue(
   value: string | number | null | undefined | unknown[],
-  fallback = EMPTY_VALUE
+  fallback = EMPTY_VALUE,
 ): { text: string; isEmpty: boolean } {
   if (value === null || value === undefined) {
     return { text: fallback, isEmpty: true };

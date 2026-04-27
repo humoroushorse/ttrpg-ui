@@ -4,11 +4,7 @@
  * Provides mock data generators for work item dependencies.
  */
 
-import {
-  Dependency,
-  DependencyType,
-  DependencyWithWorkItems,
-} from '@ttrpg-ui/features/sprint-management/models';
+import { Dependency, DependencyType, DependencyWithWorkItems } from '@ttrpg-ui/features/sprint-management/models';
 import { generateMockId, createMockWorkItem } from './work-item.mock';
 
 /**
@@ -33,7 +29,7 @@ export function createMockDependency(overrides?: Partial<Dependency>): Dependenc
  * Create a mock dependency with work items
  */
 export function createMockDependencyWithWorkItems(
-  overrides?: Partial<DependencyWithWorkItems>
+  overrides?: Partial<DependencyWithWorkItems>,
 ): DependencyWithWorkItems {
   const dependency = createMockDependency(overrides);
   const sourceWorkItem = overrides?.source_work_item || createMockWorkItem({ id: dependency.source_work_item_id });
@@ -59,7 +55,7 @@ export function createMockDependencies(count: number, overrides?: Partial<Depend
 export function createMockBlocksDependency(
   sourceId: string,
   targetId: string,
-  overrides?: Partial<Dependency>
+  overrides?: Partial<Dependency>,
 ): Dependency {
   return createMockDependency({
     source_work_item_id: sourceId,
@@ -75,7 +71,7 @@ export function createMockBlocksDependency(
 export function createMockBlockedByDependency(
   sourceId: string,
   targetId: string,
-  overrides?: Partial<Dependency>
+  overrides?: Partial<Dependency>,
 ): Dependency {
   return createMockDependency({
     source_work_item_id: sourceId,
@@ -92,9 +88,7 @@ export function createMockDependencyChain(workItemIds: string[]): Dependency[] {
   const dependencies: Dependency[] = [];
 
   for (let i = 0; i < workItemIds.length - 1; i++) {
-    dependencies.push(
-      createMockBlocksDependency(workItemIds[i], workItemIds[i + 1])
-    );
+    dependencies.push(createMockBlocksDependency(workItemIds[i], workItemIds[i + 1]));
   }
 
   return dependencies;
@@ -113,15 +107,11 @@ export function createMockCircularDependencies(workItemIds: string[]): Dependenc
 
   // Create chain
   for (let i = 0; i < workItemIds.length - 1; i++) {
-    dependencies.push(
-      createMockBlocksDependency(workItemIds[i], workItemIds[i + 1])
-    );
+    dependencies.push(createMockBlocksDependency(workItemIds[i], workItemIds[i + 1]));
   }
 
   // Close the circle
-  dependencies.push(
-    createMockBlocksDependency(workItemIds[workItemIds.length - 1], workItemIds[0])
-  );
+  dependencies.push(createMockBlocksDependency(workItemIds[workItemIds.length - 1], workItemIds[0]));
 
   return dependencies;
 }
@@ -132,7 +122,7 @@ export function createMockCircularDependencies(workItemIds: string[]): Dependenc
 export function createMockDependenciesForWorkItem(
   workItemId: string,
   count: number,
-  type: DependencyType = DependencyType.Blocks
+  type: DependencyType = DependencyType.Blocks,
 ): Dependency[] {
   return Array.from({ length: count }, (_, index) => {
     const targetId = `target-${index + 1}`;
@@ -169,10 +159,7 @@ export function createMockDependencyGraph(): Dependency[] {
 /**
  * Create bidirectional dependencies (A blocks B, B blocked by A)
  */
-export function createMockBidirectionalDependencies(
-  workItemId1: string,
-  workItemId2: string
-): Dependency[] {
+export function createMockBidirectionalDependencies(workItemId1: string, workItemId2: string): Dependency[] {
   return [
     createMockBlocksDependency(workItemId1, workItemId2),
     createMockBlockedByDependency(workItemId2, workItemId1),
@@ -182,10 +169,7 @@ export function createMockBidirectionalDependencies(
 /**
  * Create dependencies with varied types
  */
-export function createMockDependenciesWithVariedTypes(
-  sourceId: string,
-  targetIds: string[]
-): Dependency[] {
+export function createMockDependenciesWithVariedTypes(sourceId: string, targetIds: string[]): Dependency[] {
   return targetIds.map((targetId, index) => {
     const type = index % 2 === 0 ? DependencyType.Blocks : DependencyType.BlockedBy;
     return createMockDependency({

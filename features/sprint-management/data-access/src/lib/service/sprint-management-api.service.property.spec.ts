@@ -3,9 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import * as fc from 'fast-check';
 import { SprintManagementApiService } from './sprint-management-api.service';
-import {
-  SprintModels,
-} from '@ttrpg-ui/features/sprint-management/models';
+import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 
 const SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN = SprintModels.Service.SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN;
 const { WorkItemType, WorkItemStatus } = SprintModels.WorkItem;
@@ -45,12 +43,7 @@ describe('SprintManagementApiService - Property Tests', () => {
 
   describe('Property 19: Export Respects Filters and Sorting', () => {
     // Arbitraries for generating test data
-    const filterTypeArb = fc.constantFrom(
-      FilterType.Text,
-      FilterType.Number,
-      FilterType.Date,
-      FilterType.Set
-    );
+    const filterTypeArb = fc.constantFrom(FilterType.Text, FilterType.Number, FilterType.Date, FilterType.Set);
 
     const filterConditionArb = fc.constantFrom(
       FilterCondition.Equals,
@@ -59,7 +52,7 @@ describe('SprintManagementApiService - Property Tests', () => {
       FilterCondition.StartsWith,
       FilterCondition.EndsWith,
       FilterCondition.LessThan,
-      FilterCondition.GreaterThan
+      FilterCondition.GreaterThan,
     );
 
     const filterModelArb = fc.record({
@@ -70,7 +63,7 @@ describe('SprintManagementApiService - Property Tests', () => {
         fc.string(),
         fc.integer(),
         fc.constantFrom(WorkItemType.Story, WorkItemType.Defect, WorkItemType.Epic),
-        fc.constantFrom(WorkItemStatus.Backlog, WorkItemStatus.Todo, WorkItemStatus.InProgress)
+        fc.constantFrom(WorkItemStatus.Backlog, WorkItemStatus.Todo, WorkItemStatus.InProgress),
       ),
     }) as fc.Arbitrary<FilterModel>;
 
@@ -117,7 +110,7 @@ describe('SprintManagementApiService - Property Tests', () => {
 
           return true;
         }),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -151,7 +144,7 @@ describe('SprintManagementApiService - Property Tests', () => {
 
           return true;
         }),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -178,7 +171,7 @@ describe('SprintManagementApiService - Property Tests', () => {
 
           return true;
         }),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -213,9 +206,9 @@ describe('SprintManagementApiService - Property Tests', () => {
             req.flush(new Blob(['csv data'], { type: 'text/csv' }));
 
             return true;
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });

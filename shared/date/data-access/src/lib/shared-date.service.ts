@@ -32,7 +32,11 @@ export class SharedDateService {
     { value: DateFormat.Short, label: 'Short', example: '1/12/26, 12:00 AM' },
     { value: DateFormat.Medium, label: 'Medium', example: 'Jan 12, 2026, 12:00:00 AM' },
     { value: DateFormat.Long, label: 'Long', example: 'January 12, 2026 at 12:00:00 AM MST' },
-    { value: DateFormat.Full, label: 'Full', example: 'Monday, January 12, 2026 at 12:00:00 AM Mountain Standard Time' },
+    {
+      value: DateFormat.Full,
+      label: 'Full',
+      example: 'Monday, January 12, 2026 at 12:00:00 AM Mountain Standard Time',
+    },
     { value: DateFormat.ShortDate, label: 'Short Date', example: '1/12/26' },
     { value: DateFormat.MediumDate, label: 'Medium Date', example: 'Jan 12, 2026' },
     { value: DateFormat.LongDate, label: 'Long Date', example: 'January 12, 2026' },
@@ -85,7 +89,7 @@ export class SharedDateService {
       // TODO: Remove 'as any' when migrating to ES2023 - 'language' will be properly typed
       const languages = Intl.supportedValuesOf('language' as any);
       const locales = Intl.getCanonicalLocales(languages);
-      
+
       return locales.map((locale) => ({
         code: locale,
         name: this.getLocaleName(locale),

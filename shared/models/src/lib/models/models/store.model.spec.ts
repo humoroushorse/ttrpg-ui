@@ -1,10 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import * as fc from 'fast-check';
-import {
-  getDefaultPaginationState,
-  setPagination,
-  withComputedPagination,
-} from './store.model';
+import { getDefaultPaginationState, setPagination, withComputedPagination } from './store.model';
 import { signalStore, withState } from '@ngrx/signals';
 
 describe('Store Model - Pagination', () => {
@@ -36,7 +32,7 @@ describe('Store Model - Pagination', () => {
                 totalPages: expectedTotalPages,
               },
             }),
-            withComputedPagination()
+            withComputedPagination(),
           );
 
           // Instantiate the store directly without TestBed
@@ -60,12 +56,12 @@ describe('Store Model - Pagination', () => {
           // Property 5: endIndex calculation
           const expectedEndIndex = Math.min(
             paginationInput.currentPage * paginationInput.pageSize,
-            paginationInput.totalItems
+            paginationInput.totalItems,
           );
           expect(store.endIndex()).toBe(expectedEndIndex);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -92,9 +88,9 @@ describe('Store Model - Pagination', () => {
           expect(result.pagination.pageSize).toBe(pageSize);
           expect(result.pagination.totalItems).toBe(totalItems);
           expect(result.pagination.totalPages).toBe(expectedTotalPages);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -153,14 +149,14 @@ describe('Store Model - Pagination Reset', () => {
             field: fc.constantFrom('status', 'priority', 'type', 'assignee'),
             value: fc.string(),
           }),
-          { minLength: 0, maxLength: 5 }
+          { minLength: 0, maxLength: 5 },
         ),
         fc.array(
           fc.record({
             field: fc.constantFrom('created_at', 'updated_at', 'title'),
             direction: fc.constantFrom('asc', 'desc'),
           }),
-          { minLength: 0, maxLength: 3 }
+          { minLength: 0, maxLength: 3 },
         ),
         (paginationState, filters, sorts) => {
           const totalPages = Math.ceil(paginationState.totalItems / paginationState.pageSize);
@@ -177,7 +173,7 @@ describe('Store Model - Pagination Reset', () => {
               filters: { filters } as FilterState,
               sorts: { sorts } as SortState,
             }),
-            withComputedPagination()
+            withComputedPagination(),
           );
 
           const store = new TestStore();
@@ -198,7 +194,7 @@ describe('Store Model - Pagination Reset', () => {
               filters: { filters: updatedFilters } as FilterState,
               sorts: { sorts } as SortState,
             }),
-            withComputedPagination()
+            withComputedPagination(),
           );
 
           const storeAfterFilter = new StoreAfterFilterChange();
@@ -219,16 +215,16 @@ describe('Store Model - Pagination Reset', () => {
               filters: { filters } as FilterState,
               sorts: { sorts: updatedSorts } as SortState,
             }),
-            withComputedPagination()
+            withComputedPagination(),
           );
 
           const storeAfterSort = new StoreAfterSortChange();
 
           // Property: After sort change, currentPage should be 1
           expect(storeAfterSort.pagination().currentPage).toBe(1);
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 });

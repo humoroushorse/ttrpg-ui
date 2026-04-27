@@ -66,7 +66,7 @@ export function expectHttpRequest<T>(
   httpMock: HttpTestingController,
   method: string,
   url: string,
-  responseData: T
+  responseData: T,
 ): void {
   const req = httpMock.expectOne(url);
   expect(req.request.method).toBe(method);
@@ -81,7 +81,7 @@ export function expectHttpRequestError(
   method: string,
   url: string,
   errorMessage: string,
-  status = 500
+  status = 500,
 ): void {
   const req = httpMock.expectOne(url);
   expect(req.request.method).toBe(method);
@@ -91,11 +91,7 @@ export function expectHttpRequestError(
 /**
  * Create a mock paginated response
  */
-export function createMockPaginatedResponse<T>(
-  items: T[],
-  page = 1,
-  pageSize = 25
-): PaginatedResponse<T> {
+export function createMockPaginatedResponse<T>(items: T[], page = 1, pageSize = 25): PaginatedResponse<T> {
   return {
     items,
     total: items.length,
@@ -108,9 +104,7 @@ export function createMockPaginatedResponse<T>(
 /**
  * Create a mock API service with predefined responses
  */
-export function createMockApiService<T extends Record<string, any>>(
-  methods: Partial<T>
-): T {
+export function createMockApiService<T extends Record<string, any>>(methods: Partial<T>): T {
   const mockService: any = {};
 
   for (const [key, value] of Object.entries(methods)) {
@@ -127,9 +121,7 @@ export function createMockApiService<T extends Record<string, any>>(
 /**
  * Create a mock API service that returns errors
  */
-export function createMockApiServiceWithErrors<T extends Record<string, any>>(
-  errorMessage = 'API Error'
-): T {
+export function createMockApiServiceWithErrors<T extends Record<string, any>>(errorMessage = 'API Error'): T {
   return new Proxy({} as T, {
     get: () => () => throwError(() => new Error(errorMessage)),
   });
@@ -156,12 +148,7 @@ export function mockHttpError(message: string, status = 500): Observable<never> 
 /**
  * Assert HTTP request was made with correct parameters
  */
-export function assertHttpRequest(
-  httpMock: HttpTestingController,
-  method: string,
-  url: string,
-  body?: any
-): void {
+export function assertHttpRequest(httpMock: HttpTestingController, method: string, url: string, body?: any): void {
   const req = httpMock.expectOne(url);
   expect(req.request.method).toBe(method);
 
@@ -178,7 +165,7 @@ export function assertHttpRequest(
 export function assertHttpRequestParams(
   httpMock: HttpTestingController,
   url: string,
-  params: Record<string, string>
+  params: Record<string, string>,
 ): void {
   const req = httpMock.expectOne((request) => request.url === url);
 
@@ -195,7 +182,7 @@ export function assertHttpRequestParams(
 export function assertHttpRequestHeaders(
   httpMock: HttpTestingController,
   url: string,
-  headers: Record<string, string>
+  headers: Record<string, string>,
 ): void {
   const req = httpMock.expectOne(url);
 
@@ -209,22 +196,15 @@ export function assertHttpRequestHeaders(
 /**
  * Flush all pending HTTP requests
  */
-export function flushAllHttpRequests(
-  httpMock: HttpTestingController,
-  responseData: any = {}
-): void {
+export function flushAllHttpRequests(httpMock: HttpTestingController, responseData: any = {}): void {
   const requests = httpMock.match(() => true);
-  requests.forEach(req => req.flush(responseData));
+  requests.forEach((req) => req.flush(responseData));
 }
 
 /**
  * Create a spy for service method
  */
-export function spyOnServiceMethod<T>(
-  service: any,
-  methodName: string,
-  returnValue?: T
-): any {
+export function spyOnServiceMethod<T>(service: any, methodName: string, returnValue?: T): any {
   const spy = vi.fn();
 
   if (returnValue !== undefined) {
@@ -239,10 +219,7 @@ export function spyOnServiceMethod<T>(
 /**
  * Wait for observable to complete
  */
-export async function waitForObservable<T>(
-  observable: Observable<T>,
-  timeout = 5000
-): Promise<T> {
+export async function waitForObservable<T>(observable: Observable<T>, timeout = 5000): Promise<T> {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
       reject(new Error('Observable timeout'));
@@ -264,10 +241,7 @@ export async function waitForObservable<T>(
 /**
  * Assert observable emits value
  */
-export async function assertObservableEmits<T>(
-  observable: Observable<T>,
-  expectedValue: T
-): Promise<void> {
+export async function assertObservableEmits<T>(observable: Observable<T>, expectedValue: T): Promise<void> {
   const value = await waitForObservable(observable);
   expect(value).toEqual(expectedValue);
 }
@@ -275,10 +249,7 @@ export async function assertObservableEmits<T>(
 /**
  * Assert observable throws error
  */
-export async function assertObservableThrows(
-  observable: Observable<any>,
-  expectedError?: string
-): Promise<void> {
+export async function assertObservableThrows(observable: Observable<any>, expectedError?: string): Promise<void> {
   try {
     await waitForObservable(observable);
     throw new Error('Expected observable to throw error');
@@ -292,11 +263,8 @@ export async function assertObservableThrows(
 /**
  * Create a mock HTTP response with delay
  */
-export function mockHttpSuccessWithDelay<T>(
-  data: T,
-  delayMs: number
-): Observable<T> {
-  return new Observable(subscriber => {
+export function mockHttpSuccessWithDelay<T>(data: T, delayMs: number): Observable<T> {
+  return new Observable((subscriber) => {
     setTimeout(() => {
       subscriber.next(data);
       subscriber.complete();
@@ -307,11 +275,7 @@ export function mockHttpSuccessWithDelay<T>(
 /**
  * Mock WebSocket message
  */
-export function createMockWebSocketMessage(
-  type: string,
-  data: any,
-  userId = 'user-1'
-): any {
+export function createMockWebSocketMessage(type: string, data: any, userId = 'user-1'): any {
   return {
     type,
     data,
@@ -323,20 +287,14 @@ export function createMockWebSocketMessage(
 /**
  * Assert service method was called with arguments
  */
-export function assertServiceMethodCalled(
-  spy: any,
-  expectedArgs: any[]
-): void {
+export function assertServiceMethodCalled(spy: any, expectedArgs: any[]): void {
   expect(spy).toHaveBeenCalledWith(...expectedArgs);
 }
 
 /**
  * Assert service method was called n times
  */
-export function assertServiceMethodCallCount(
-  spy: any,
-  expectedCount: number
-): void {
+export function assertServiceMethodCallCount(spy: any, expectedCount: number): void {
   expect(spy).toHaveBeenCalledTimes(expectedCount);
 }
 
@@ -344,5 +302,5 @@ export function assertServiceMethodCallCount(
  * Reset all service method spies
  */
 export function resetServiceSpies(...spies: any[]): void {
-  spies.forEach(spy => spy.mockClear());
+  spies.forEach((spy) => spy.mockClear());
 }

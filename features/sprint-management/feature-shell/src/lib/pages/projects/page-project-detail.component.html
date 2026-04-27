@@ -1,5 +1,5 @@
-<div class="p-4 max-w-6xl mx-auto">
-  <div class="flex items-center justify-between mb-6">
+<div class="mx-auto max-w-6xl p-4">
+  <div class="mb-6 flex items-center justify-between">
     <div class="flex items-center gap-4">
       <button mat-icon-button (click)="onBack()" matTooltip="Back to projects">
         <mat-icon>arrow_back</mat-icon>
@@ -36,22 +36,22 @@
 
         <div class="detail-section py-4">
           <h3>Ticket Numbering</h3>
-          <div class="grid gap-4 mt-3" style="grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr))">
-            <div class="stat-item flex items-center gap-3 p-3 rounded-lg">
+          <div class="mt-3 grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr))">
+            <div class="stat-item flex items-center gap-3 rounded-lg p-3">
               <mat-icon>confirmation_number</mat-icon>
               <div>
                 <span class="mat-caption opacity-60">Next Ticket</span>
                 <p class="mat-subtitle-1 mb-0">{{ project()?.key }}-{{ (project()?.current_counter ?? 0) + 1 }}</p>
               </div>
             </div>
-            <div class="stat-item flex items-center gap-3 p-3 rounded-lg">
+            <div class="stat-item flex items-center gap-3 rounded-lg p-3">
               <mat-icon>start</mat-icon>
               <div>
                 <span class="mat-caption opacity-60">Starting Number</span>
                 <p class="mat-subtitle-1 mb-0">{{ project()?.starting_number }}</p>
               </div>
             </div>
-            <div class="stat-item flex items-center gap-3 p-3 rounded-lg">
+            <div class="stat-item flex items-center gap-3 rounded-lg p-3">
               <mat-icon>tag</mat-icon>
               <div>
                 <span class="mat-caption opacity-60">Total Tickets</span>
@@ -63,7 +63,7 @@
 
         <div class="detail-section py-4">
           <h3>Metadata</h3>
-          <div class="grid gap-4 mt-3" style="grid-template-columns: repeat(auto-fit, minmax(15.625rem, 1fr))">
+          <div class="mt-3 grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(15.625rem, 1fr))">
             <div>
               <span class="mat-caption opacity-60">Created By</span>
               <p class="mat-body-2 mb-0">{{ project()?.created_by }}</p>

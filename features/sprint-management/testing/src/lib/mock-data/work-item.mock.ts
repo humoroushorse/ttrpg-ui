@@ -78,9 +78,7 @@ export function createMockWorkItem(overrides?: Partial<WorkItem>): WorkItem {
 /**
  * Create a mock work item with relations
  */
-export function createMockWorkItemWithRelations(
-  overrides?: Partial<WorkItemWithRelations>
-): WorkItemWithRelations {
+export function createMockWorkItemWithRelations(overrides?: Partial<WorkItemWithRelations>): WorkItemWithRelations {
   const workItem = createMockWorkItem(overrides);
 
   return {
@@ -195,12 +193,7 @@ export function createMockWorkItemsWithVariedStatuses(): WorkItem[] {
  * Create a collection of work items with various types
  */
 export function createMockWorkItemsWithVariedTypes(): WorkItem[] {
-  return [
-    createMockStory(),
-    createMockTask(),
-    createMockBug(),
-    createMockEpic(),
-  ];
+  return [createMockStory(), createMockTask(), createMockBug(), createMockEpic()];
 }
 
 /**

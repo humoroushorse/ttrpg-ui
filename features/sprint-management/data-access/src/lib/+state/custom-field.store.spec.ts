@@ -17,7 +17,12 @@ const mockFields: CustomFieldDefinition[] = [
   { key: 'story_category', label: 'Story Category', type: CustomFieldType.Select, options: ['Frontend', 'Backend'] },
   { key: 'complexity_score', label: 'Complexity Score', type: CustomFieldType.Number, placeholder: '1-10' },
   { key: 'due_date_override', label: 'Due Date Override', type: CustomFieldType.Date },
-  { key: 'affected_components', label: 'Affected Components', type: CustomFieldType.MultiSelect, options: ['Auth', 'API'] },
+  {
+    key: 'affected_components',
+    label: 'Affected Components',
+    type: CustomFieldType.MultiSelect,
+    options: ['Auth', 'API'],
+  },
   { key: 'needs_review', label: 'Needs Design Review', type: CustomFieldType.Checkbox, defaultValue: false },
   { key: 'external_ticket', label: 'External Ticket ID', type: CustomFieldType.Text, placeholder: 'e.g. JIRA-1234' },
 ];
@@ -75,7 +80,7 @@ describe('CustomFieldStore', () => {
 
     it('should set error on load failure', () => {
       vi.spyOn(apiService, 'getCustomFieldDefinitions').mockReturnValue(
-        throwError(() => ({ message: 'Network error', error: {} }))
+        throwError(() => ({ message: 'Network error', error: {} })),
       );
 
       store.loadCustomFields();

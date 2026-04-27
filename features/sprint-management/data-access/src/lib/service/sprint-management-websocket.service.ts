@@ -123,10 +123,7 @@ export class SprintManagementWebSocketService {
               throw error;
             }
 
-            const delay = Math.min(
-              this.baseReconnectDelay * Math.pow(2, retryCount - 1),
-              30000
-            );
+            const delay = Math.min(this.baseReconnectDelay * Math.pow(2, retryCount - 1), 30000);
 
             return timer(delay);
           },
@@ -135,7 +132,7 @@ export class SprintManagementWebSocketService {
           console.error('WebSocket: Fatal error', error);
           this.connected.set(false);
           return EMPTY;
-        })
+        }),
       )
       .subscribe();
   }

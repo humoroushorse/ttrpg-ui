@@ -1,4 +1,4 @@
-<div class="p-4 max-w-7xl mx-auto">
+<div class="mx-auto max-w-7xl p-4">
   @if (loading()) {
     <div class="flex flex-col items-center justify-center gap-4 py-12">
       <mat-spinner></mat-spinner>
@@ -9,11 +9,16 @@
   @if (!loading() && workItem(); as item) {
     <div class="flex flex-col">
       <div class="flex items-start gap-4">
-        <button mat-icon-button (click)="onBackClicked()" matTooltip="Back to work items" aria-label="Back to work items">
+        <button
+          mat-icon-button
+          (click)="onBackClicked()"
+          matTooltip="Back to work items"
+          aria-label="Back to work items"
+        >
           <mat-icon>arrow_back</mat-icon>
         </button>
 
-        <div class="flex-1 flex flex-col gap-3">
+        <div class="flex flex-1 flex-col gap-3">
           <div class="flex items-center gap-3">
             <mat-icon [class]="'type-icon ' + item.type.toLowerCase()">{{ getTypeIcon(item.type) }}</mat-icon>
             <h1>{{ item.title }}</h1>
@@ -51,7 +56,7 @@
 
       <mat-tab-group class="mt-4" (selectedIndexChange)="onTabChange($event)">
         <mat-tab label="Details">
-          <div class="p-4 flex flex-col gap-4">
+          <div class="flex flex-col gap-4 p-4">
             <mat-card>
               <mat-card-header><mat-card-title>Description</mat-card-title></mat-card-header>
               <mat-card-content>
@@ -59,7 +64,7 @@
               </mat-card-content>
             </mat-card>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
               <mat-card>
                 <mat-card-header><mat-card-title>Basic Information</mat-card-title></mat-card-header>
                 <mat-card-content>
@@ -113,15 +118,21 @@
                 <mat-card-content>
                   <div class="detail-row flex justify-between py-2">
                     <span class="mat-body-2">Story Points</span>
-                    <span [class.empty-value]="item.story_points | isEmptyValue">{{ item.story_points ?? 'Not estimated' }}</span>
+                    <span [class.empty-value]="item.story_points | isEmptyValue">{{
+                      item.story_points ?? 'Not estimated'
+                    }}</span>
                   </div>
                   <div class="detail-row flex justify-between py-2">
                     <span class="mat-body-2">Estimated Hours</span>
-                    <span [class.empty-value]="item.estimated_hours | isEmptyValue">{{ item.estimated_hours ?? 'Not estimated' }}</span>
+                    <span [class.empty-value]="item.estimated_hours | isEmptyValue">{{
+                      item.estimated_hours ?? 'Not estimated'
+                    }}</span>
                   </div>
                   <div class="detail-row flex justify-between py-2">
                     <span class="mat-body-2">Actual Hours</span>
-                    <span [class.empty-value]="item.actual_hours | isEmptyValue">{{ item.actual_hours ?? 'Not tracked' }}</span>
+                    <span [class.empty-value]="item.actual_hours | isEmptyValue">{{
+                      item.actual_hours ?? 'Not tracked'
+                    }}</span>
                   </div>
                 </mat-card-content>
               </mat-card>
@@ -131,14 +142,18 @@
                 <mat-card-content>
                   <div class="detail-row flex justify-between py-2">
                     <span class="mat-body-2">Created By</span>
-                    <span [class.empty-value]="item.created_by | isEmptyValue">{{ item.created_by | displayValue }}</span>
+                    <span [class.empty-value]="item.created_by | isEmptyValue">{{
+                      item.created_by | displayValue
+                    }}</span>
                   </div>
                   <div class="detail-row flex justify-between py-2">
                     <span class="mat-body-2">Created At</span><span>{{ formatDate(item.created_at) }}</span>
                   </div>
                   <div class="detail-row flex justify-between py-2">
                     <span class="mat-body-2">Updated By</span>
-                    <span [class.empty-value]="item.updated_by | isEmptyValue">{{ item.updated_by | displayValue }}</span>
+                    <span [class.empty-value]="item.updated_by | isEmptyValue">{{
+                      item.updated_by | displayValue
+                    }}</span>
                   </div>
                   <div class="detail-row flex justify-between py-2">
                     <span class="mat-body-2">Updated At</span><span>{{ formatDate(item.updated_at) }}</span>
@@ -166,7 +181,8 @@
                 <mat-card-content>
                   @for (field of Object.keys(item.custom_fields); track field) {
                     <div class="detail-row flex justify-between py-2">
-                      <span class="mat-body-2">{{ field }}</span><span>{{ item.custom_fields[field] }}</span>
+                      <span class="mat-body-2">{{ field }}</span
+                      ><span>{{ item.custom_fields[field] }}</span>
                     </div>
                   }
                 </mat-card-content>
@@ -198,7 +214,7 @@
         </mat-tab>
 
         <mat-tab label="Dependencies">
-          <div class="p-4 flex flex-col gap-4">
+          <div class="flex flex-col gap-4 p-4">
             @if (dependencyStore.loading()) {
               <div class="flex flex-col items-center justify-center gap-4 py-12">
                 <mat-spinner diameter="40"></mat-spinner>
@@ -214,11 +230,11 @@
                 </mat-card-header>
                 <mat-card-content>
                   @if (blocksDependencies().length === 0) {
-                    <p class="text-center py-8 opacity-60">This work item does not block any other items.</p>
+                    <p class="py-8 text-center opacity-60">This work item does not block any other items.</p>
                   } @else {
                     <div class="flex flex-col gap-2">
                       @for (dep of blocksDependencies(); track dep.id) {
-                        <div class="dependency-item flex items-center gap-2 p-3 rounded border border-solid">
+                        <div class="dependency-item flex items-center gap-2 rounded border border-solid p-3">
                           <mat-icon>arrow_forward</mat-icon>
                           <span>{{ dep.target_work_item_id }}</span>
                         </div>
@@ -237,11 +253,11 @@
                 </mat-card-header>
                 <mat-card-content>
                   @if (blockedByDependencies().length === 0) {
-                    <p class="text-center py-8 opacity-60">This work item is not blocked by any other items.</p>
+                    <p class="py-8 text-center opacity-60">This work item is not blocked by any other items.</p>
                   } @else {
                     <div class="flex flex-col gap-2">
                       @for (dep of blockedByDependencies(); track dep.id) {
-                        <div class="dependency-item blocked flex items-center gap-2 p-3 rounded border border-solid">
+                        <div class="dependency-item blocked flex items-center gap-2 rounded border border-solid p-3">
                           <mat-icon>arrow_back</mat-icon>
                           <span>{{ dep.source_work_item_id }}</span>
                         </div>
@@ -255,7 +271,7 @@
         </mat-tab>
 
         <mat-tab label="Comments">
-          <div class="p-4 flex flex-col gap-4">
+          <div class="flex flex-col gap-4 p-4">
             @if (commentStore.loading()) {
               <div class="flex flex-col items-center justify-center gap-4 py-12">
                 <mat-spinner diameter="40"></mat-spinner>
@@ -264,7 +280,7 @@
             } @else if (comments().length === 0) {
               <mat-card>
                 <mat-card-content>
-                  <p class="text-center py-8 opacity-60">No comments yet. Be the first to comment!</p>
+                  <p class="py-8 text-center opacity-60">No comments yet. Be the first to comment!</p>
                 </mat-card-content>
               </mat-card>
             } @else {
@@ -273,7 +289,7 @@
                   <mat-card>
                     <mat-card-header>
                       <mat-card-title>
-                        <div class="flex items-center justify-between w-full">
+                        <div class="flex w-full items-center justify-between">
                           <span>{{ comment.author_id }}</span>
                           <span class="mat-caption opacity-60">{{ formatDate(comment.created_at) }}</span>
                         </div>
@@ -282,7 +298,7 @@
                     <mat-card-content>
                       <p class="whitespace-pre-wrap">{{ comment.content }}</p>
                       @if (comment.updated_at !== comment.created_at) {
-                        <p class="flex items-center gap-1 mt-2 opacity-60">
+                        <p class="mt-2 flex items-center gap-1 opacity-60">
                           <mat-icon>edit</mat-icon>
                           <span class="mat-caption">Edited {{ formatDate(comment.updated_at) }}</span>
                         </p>

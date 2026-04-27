@@ -32,15 +32,9 @@ describe('Filter and Sort Serialization - Property-Based Tests', () => {
               field: fc.string({ minLength: 1, maxLength: 50 }),
               type: fc.constantFrom(...Object.values(FilterType)),
               condition: fc.constantFrom(...Object.values(FilterCondition)),
-              value: fc.oneof(
-                fc.string(),
-                fc.integer(),
-                fc.boolean(),
-                fc.array(fc.string()),
-                fc.constant(null)
-              ),
+              value: fc.oneof(fc.string(), fc.integer(), fc.boolean(), fc.array(fc.string()), fc.constant(null)),
             }),
-            { maxLength: 10 }
+            { maxLength: 10 },
           ),
           operator: fc.constantFrom('AND' as const, 'OR' as const),
         }),
@@ -57,9 +51,9 @@ describe('Filter and Sort Serialization - Property-Based Tests', () => {
             expect(deserialized.filters[index].condition).toBe(filter.condition);
             expect(deserialized.filters[index].value).toEqual(filter.value);
           });
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 
@@ -73,7 +67,7 @@ describe('Filter and Sort Serialization - Property-Based Tests', () => {
               direction: fc.constantFrom(...Object.values(SortDirection)),
               priority: fc.integer({ min: 1, max: 10 }),
             }),
-            { maxLength: 5 }
+            { maxLength: 5 },
           ),
         }),
         (sortState: SortState) => {
@@ -87,9 +81,9 @@ describe('Filter and Sort Serialization - Property-Based Tests', () => {
             expect(deserialized.sorts[index].direction).toBe(sort.direction);
             expect(deserialized.sorts[index].priority).toBe(sort.priority);
           });
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     );
   });
 

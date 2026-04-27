@@ -6,7 +6,7 @@ services:
       context: ../..
       dockerfile: apps/sprint-management/deploy/Dockerfile
     ports:
-      - "4204:80"
+      - '4204:80'
     environment:
       # Nginx configuration
       - NGINX_PORT=80

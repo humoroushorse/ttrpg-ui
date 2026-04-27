@@ -24,10 +24,7 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 import { SprintBoardComponent } from '@ttrpg-ui/features/sprint-management/ui';
 
-import {
-  SprintStore,
-  WorkItemStore,
-} from '@ttrpg-ui/features/sprint-management/data-access';
+import { SprintStore, WorkItemStore } from '@ttrpg-ui/features/sprint-management/data-access';
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 
 const { SprintStatus } = SprintModels.Sprint;
@@ -71,14 +68,14 @@ export class PageBoardComponent implements OnInit {
   // Active sprint (status = Active)
   public activeSprint = computed(() => {
     const sprints = this.sprintStore.entities();
-    const active = sprints.find(s => s.status === SprintStatus.Active);
+    const active = sprints.find((s) => s.status === SprintStatus.Active);
     return active || null;
   });
 
   public availableSprints = computed(() => {
-    return this.sprintStore.entities().filter(
-      s => s.status === SprintStatus.Active || s.status === SprintStatus.Planning
-    );
+    return this.sprintStore
+      .entities()
+      .filter((s) => s.status === SprintStatus.Active || s.status === SprintStatus.Planning);
   });
 
   public currentSprint = computed(() => {
@@ -91,9 +88,7 @@ export class PageBoardComponent implements OnInit {
     const sprintId = this.selectedSprintId();
     if (!sprintId) return [];
 
-    return this.workItemStore.entities().filter(
-      item => item.sprint_id === sprintId
-    );
+    return this.workItemStore.entities().filter((item) => item.sprint_id === sprintId);
   });
 
   public loading = computed(() => {
@@ -125,9 +120,7 @@ export class PageBoardComponent implements OnInit {
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    this.title.setTitle(
-      `Sprint Management | Board | ${this.sharedCoreService.appTitle}`
-    );
+    this.title.setTitle(`Sprint Management | Board | ${this.sharedCoreService.appTitle}`);
     this.meta.updateTag({
       name: 'description',
       content: 'Sprint board - Manage work items with drag and drop.',

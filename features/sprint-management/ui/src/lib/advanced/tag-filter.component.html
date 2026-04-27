@@ -3,25 +3,17 @@
     <div class="tag-filter__header">
       <span class="tag-filter__label">Filter by Tags</span>
       @if (selectedTags().length > 0) {
-        <button
-          mat-button
-          class="tag-filter__clear"
-          (click)="clearAll()"
-          aria-label="Clear tag filters">
-          Clear
-        </button>
+        <button mat-button class="tag-filter__clear" (click)="clearAll()" aria-label="Clear tag filters">Clear</button>
       }
     </div>
-    <mat-chip-listbox
-      class="tag-filter__chips"
-      [multiple]="true"
-      aria-label="Tag filter options">
+    <mat-chip-listbox class="tag-filter__chips" [multiple]="true" aria-label="Tag filter options">
       @for (tagItem of availableTags(); track tagItem.tag) {
         <mat-chip-option
           [selected]="isSelected(tagItem.tag)"
           (click)="toggleTag(tagItem.tag)"
           [attr.aria-label]="tagItem.tag + ' (' + tagItem.count + ' items)'"
-          class="tag-filter__chip">
+          class="tag-filter__chip"
+        >
           {{ tagItem.tag }}
           <span class="tag-filter__count">({{ tagItem.count }})</span>
         </mat-chip-option>

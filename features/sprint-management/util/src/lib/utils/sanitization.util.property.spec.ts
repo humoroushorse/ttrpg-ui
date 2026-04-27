@@ -2,12 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { describe, it, expect, beforeEach } from 'vitest';
 import * as fc from 'fast-check';
-import {
-  sanitizeHtml,
-  sanitizeMarkdown,
-  sanitizeUrl,
-  sanitizeApiResponse,
-} from './sanitization.util';
+import { sanitizeHtml, sanitizeMarkdown, sanitizeUrl, sanitizeApiResponse } from './sanitization.util';
 
 describe('Sanitization Utilities - Property Tests', () => {
   let sanitizer: DomSanitizer;
@@ -66,9 +61,9 @@ describe('Sanitization Utilities - Property Tests', () => {
             expect(sanitized).not.toMatch(/<iframe[^>]*>/i);
             expect(sanitized).not.toMatch(/<object[^>]*>/i);
             expect(sanitized).not.toMatch(/<embed[^>]*>/i);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -105,33 +100,27 @@ describe('Sanitization Utilities - Property Tests', () => {
             }
 
             expect(sanitized).not.toMatch(/on\w+\s*=/i);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
     it('should neutralize javascript URLs', () => {
       fc.assert(
-        fc.property(
-          fc.oneof(
-            fc.constant('javascript:alert(1)'),
-            fc.constant('javascript:void(0)'),
-          ),
-          (maliciousUrl) => {
-            // Act: Sanitize the URL
-            const sanitized = sanitizeUrl(maliciousUrl, sanitizer);
+        fc.property(fc.oneof(fc.constant('javascript:alert(1)'), fc.constant('javascript:void(0)')), (maliciousUrl) => {
+          // Act: Sanitize the URL
+          const sanitized = sanitizeUrl(maliciousUrl, sanitizer);
 
-            // Assert: javascript: URLs should be neutralized with "unsafe:" prefix
-            const hasJavascript = sanitized.toLowerCase().includes('javascript:');
+          // Assert: javascript: URLs should be neutralized with "unsafe:" prefix
+          const hasJavascript = sanitized.toLowerCase().includes('javascript:');
 
-            if (hasJavascript) {
-              // If javascript: is present, it should be prefixed with unsafe:
-              expect(sanitized).toMatch(/unsafe:javascript:/i);
-            }
+          if (hasJavascript) {
+            // If javascript: is present, it should be prefixed with unsafe:
+            expect(sanitized).toMatch(/unsafe:javascript:/i);
           }
-        ),
-        { numRuns: 100 }
+        }),
+        { numRuns: 100 },
       );
     });
 
@@ -151,19 +140,12 @@ describe('Sanitization Utilities - Property Tests', () => {
               fc.constant('<script>alert("XSS")</script>'),
               fc.constant('<img src=x onerror="alert(1)">'),
             ),
-            description: fc.oneof(
-              fc.string(),
-              fc.constant('<script>document.cookie</script>'),
-            ),
+            description: fc.oneof(fc.string(), fc.constant('<script>document.cookie</script>')),
             safeField: fc.string(),
           }),
           (apiResponse) => {
             // Act: Sanitize API response
-            const sanitized = sanitizeApiResponse(
-              apiResponse,
-              sanitizer,
-              ['content', 'description']
-            );
+            const sanitized = sanitizeApiResponse(apiResponse, sanitizer, ['content', 'description']);
 
             // Assert: Specified fields should be sanitized
             if (typeof sanitized.content === 'string') {
@@ -179,20 +161,16 @@ describe('Sanitization Utilities - Property Tests', () => {
             expect(sanitized.id).toBe(apiResponse.id);
             expect(sanitized.title).toBe(apiResponse.title);
             expect(sanitized.safeField).toBe(apiResponse.safeField);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
     it('should handle empty/null inputs safely', () => {
       fc.assert(
         fc.property(
-          fc.oneof(
-            fc.constant(''),
-            fc.constant(null as any),
-            fc.constant(undefined as any),
-          ),
+          fc.oneof(fc.constant(''), fc.constant(null as any), fc.constant(undefined as any)),
           (emptyInput) => {
             // Act & Assert: Should not throw and return empty string
             expect(() => sanitizeHtml(emptyInput, sanitizer)).not.toThrow();
@@ -203,9 +181,9 @@ describe('Sanitization Utilities - Property Tests', () => {
 
             expect(() => sanitizeUrl(emptyInput, sanitizer)).not.toThrow();
             expect(sanitizeUrl(emptyInput, sanitizer)).toBe('');
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -235,9 +213,9 @@ describe('Sanitization Utilities - Property Tests', () => {
               expect(sanitized).toContain('Item 1');
               expect(sanitized).toContain('Item 2');
             }
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
 
@@ -257,9 +235,9 @@ describe('Sanitization Utilities - Property Tests', () => {
             // Assert: Should not contain any script tags or event handlers
             expect(sanitized).not.toMatch(/<script[^>]*>/i);
             expect(sanitized).not.toMatch(/on\w+\s*=/i);
-          }
+          },
         ),
-        { numRuns: 100 }
+        { numRuns: 100 },
       );
     });
   });

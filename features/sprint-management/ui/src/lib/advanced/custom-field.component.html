@@ -43,10 +43,7 @@
           [value]="currentValue()"
           (dateChange)="onDateChange($event)"
         />
-        <mat-datepicker-toggle
-          matIconSuffix
-          [for]="picker"
-        ></mat-datepicker-toggle>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
         @if (fieldDefinition().helpText) {
           <mat-hint>{{ fieldDefinition().helpText }}</mat-hint>

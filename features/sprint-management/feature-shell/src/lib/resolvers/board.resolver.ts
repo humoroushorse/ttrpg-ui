@@ -27,9 +27,11 @@ export const boardResolver: ResolveFn<void> = () => {
 
   // Wait for loaded
   return new Promise<void>((resolve) => {
-    toObservable(sprintStore.loaded).pipe(
-      filter(loaded => loaded === true),
-      take(1)
-    ).subscribe(() => resolve());
+    toObservable(sprintStore.loaded)
+      .pipe(
+        filter((loaded) => loaded === true),
+        take(1),
+      )
+      .subscribe(() => resolve());
   });
 };

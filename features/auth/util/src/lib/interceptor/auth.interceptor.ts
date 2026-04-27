@@ -50,12 +50,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       if (isRefreshing) {
         console.debug('[AuthInterceptor] Refresh already in progress, queuing request:', req.url);
         return refreshTokenSubject.pipe(
-          filter(token => token !== null),
+          filter((token) => token !== null),
           take(1),
           switchMap(() => {
             console.debug('[AuthInterceptor] Retrying queued request after refresh:', req.url);
             return next(req);
-          })
+          }),
         );
       }
 
@@ -86,9 +86,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           console.error('[AuthInterceptor] Token refresh failed:', refreshError);
           authService.forceLogout();
           return throwError(() => refreshError);
-        })
+        }),
       );
-    })
+    }),
   );
 };
 

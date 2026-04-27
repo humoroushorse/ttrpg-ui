@@ -10,7 +10,6 @@ export interface SprintManagementApiServiceConfig {
   initialized: Signal<boolean>;
 }
 
-export const SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN =
-  new InjectionToken<SprintManagementApiServiceConfig>(
-    'Sprint Management API Service Config'
-  );
+export const SPRINT_MANAGEMENT_API_SERVICE_CONFIG_TOKEN = new InjectionToken<SprintManagementApiServiceConfig>(
+  'Sprint Management API Service Config',
+);

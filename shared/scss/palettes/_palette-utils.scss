@@ -9,10 +9,13 @@
   // Create neutral-variant from neutral (M3 requirement)
   $neutral-variant: $neutral;
 
-  @return map.merge($colors, (
-    secondary: $secondary,
-    neutral: $neutral,
-    neutral-variant: $neutral-variant,
-    error: $error,
-  ));
+  @return map.merge(
+    $colors,
+    (
+      secondary: $secondary,
+      neutral: $neutral,
+      neutral-variant: $neutral-variant,
+      error: $error,
+    )
+  );
 }

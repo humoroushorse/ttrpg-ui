@@ -12,7 +12,8 @@ module.exports = {
       recommended: true,
     },
     messages: {
-      noRequirementComment: 'Remove requirement reference comment "{{comment}}". Code should be self-documenting without requirement IDs.',
+      noRequirementComment:
+        'Remove requirement reference comment "{{comment}}". Code should be self-documenting without requirement IDs.',
     },
     schema: [],
   },
@@ -21,10 +22,7 @@ module.exports = {
     const sourceCode = context.getSourceCode();
 
     // Regex patterns for requirement references
-    const requirementPatterns = [
-      /\b(Requirement|Req|REQ)[\s-]?\d+\.\d+\b/i,
-      /\b(Requirement|Req|REQ)[\s-]?\d+\b/i,
-    ];
+    const requirementPatterns = [/\b(Requirement|Req|REQ)[\s-]?\d+\.\d+\b/i, /\b(Requirement|Req|REQ)[\s-]?\d+\b/i];
 
     return {
       Program() {

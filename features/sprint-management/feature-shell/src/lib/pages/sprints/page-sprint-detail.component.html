@@ -1,6 +1,6 @@
-<div class="p-4 max-w-7xl mx-auto">
+<div class="mx-auto max-w-7xl p-4">
   @if (loading()) {
-    <div class="flex flex-col items-center justify-center min-h-[400px] gap-4">
+    <div class="flex min-h-[400px] flex-col items-center justify-center gap-4">
       <mat-spinner></mat-spinner>
       <p>Loading sprint details...</p>
     </div>
@@ -22,7 +22,12 @@
             </button>
           }
           @if (canCompleteSprint()) {
-            <button mat-raised-button color="accent" (click)="onCompleteSprintClicked()" matTooltip="Complete this sprint">
+            <button
+              mat-raised-button
+              color="accent"
+              (click)="onCompleteSprintClicked()"
+              matTooltip="Complete this sprint"
+            >
               <mat-icon>check_circle</mat-icon>
               Complete Sprint
             </button>
@@ -42,7 +47,7 @@
       <mat-card>
         <mat-card-header><mat-card-title>Sprint Information</mat-card-title></mat-card-header>
         <mat-card-content>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div class="flex flex-col gap-1">
               <span class="mat-caption">Status</span>
               <mat-chip [color]="getStatusColor(sprint.status)" highlighted>{{ sprint.status }}</mat-chip>
@@ -84,49 +89,49 @@
         <mat-card-header><mat-card-title>Sprint Progress</mat-card-title></mat-card-header>
         <mat-card-content>
           <div class="mb-6">
-            <div class="flex justify-between items-center mb-2">
+            <div class="mb-2 flex items-center justify-between">
               <span class="mat-body-2">Completion: {{ completionPercentage() }}%</span>
               <span class="mat-body-2">{{ completedItems() }} / {{ totalItems() }} items</span>
             </div>
             <mat-progress-bar mode="determinate" [value]="completionPercentage()" color="primary"></mat-progress-bar>
           </div>
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            <div class="metric-card flex items-center gap-3 p-4 rounded-lg">
+          <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+            <div class="metric-card flex items-center gap-3 rounded-lg p-4">
               <mat-icon color="primary">assignment</mat-icon>
               <div>
                 <div class="mat-headline-6">{{ totalItems() }}</div>
                 <span class="mat-caption">Total Items</span>
               </div>
             </div>
-            <div class="metric-card flex items-center gap-3 p-4 rounded-lg">
+            <div class="metric-card flex items-center gap-3 rounded-lg p-4">
               <mat-icon color="accent">check_circle</mat-icon>
               <div>
                 <div class="mat-headline-6">{{ completedItems() }}</div>
                 <span class="mat-caption">Completed</span>
               </div>
             </div>
-            <div class="metric-card flex items-center gap-3 p-4 rounded-lg">
+            <div class="metric-card flex items-center gap-3 rounded-lg p-4">
               <mat-icon color="primary">hourglass_empty</mat-icon>
               <div>
                 <div class="mat-headline-6">{{ inProgressItems() }}</div>
                 <span class="mat-caption">In Progress</span>
               </div>
             </div>
-            <div class="metric-card flex items-center gap-3 p-4 rounded-lg">
+            <div class="metric-card flex items-center gap-3 rounded-lg p-4">
               <mat-icon color="warn">block</mat-icon>
               <div>
                 <div class="mat-headline-6">{{ blockedItems() }}</div>
                 <span class="mat-caption">Blocked</span>
               </div>
             </div>
-            <div class="metric-card flex items-center gap-3 p-4 rounded-lg">
+            <div class="metric-card flex items-center gap-3 rounded-lg p-4">
               <mat-icon>pending</mat-icon>
               <div>
                 <div class="mat-headline-6">{{ remainingItems() }}</div>
                 <span class="mat-caption">Remaining</span>
               </div>
             </div>
-            <div class="metric-card flex items-center gap-3 p-4 rounded-lg">
+            <div class="metric-card flex items-center gap-3 rounded-lg p-4">
               <mat-icon color="primary">stars</mat-icon>
               <div>
                 <div class="mat-headline-6">{{ completedStoryPoints() }} / {{ totalStoryPoints() }}</div>
@@ -139,13 +144,15 @@
 
       <!-- Work Items Card -->
       <mat-card>
-        <mat-card-header><mat-card-title>Work Items ({{ sprintWorkItems().length }})</mat-card-title></mat-card-header>
+        <mat-card-header
+          ><mat-card-title>Work Items ({{ sprintWorkItems().length }})</mat-card-title></mat-card-header
+        >
         <mat-card-content>
           <mat-tab-group>
             <mat-tab label="Board">
               <ng-template matTabContent>
                 @if (sprintWorkItems().length === 0) {
-                  <div class="flex flex-col items-center justify-center py-12 gap-4">
+                  <div class="flex flex-col items-center justify-center gap-4 py-12">
                     <mat-icon>inbox</mat-icon>
                     <p>No work items in this sprint</p>
                   </div>
@@ -161,7 +168,7 @@
             <mat-tab label="List">
               <ng-template matTabContent>
                 @if (sprintWorkItems().length === 0) {
-                  <div class="flex flex-col items-center justify-center py-12 gap-4">
+                  <div class="flex flex-col items-center justify-center gap-4 py-12">
                     <mat-icon>inbox</mat-icon>
                     <p>No work items in this sprint</p>
                   </div>
@@ -169,7 +176,7 @@
                   <div class="flex flex-col gap-2">
                     @for (item of sprintWorkItems(); track item.id) {
                       <div
-                        class="work-item-row flex items-center justify-between p-4 border border-solid rounded-lg cursor-pointer transition-colors"
+                        class="work-item-row flex cursor-pointer items-center justify-between rounded-lg border border-solid p-4 transition-colors"
                         (click)="onWorkItemClicked(item.id)"
                         (keyup.enter)="onWorkItemClicked(item.id)"
                         (keyup.space)="onWorkItemClicked(item.id)"
@@ -177,13 +184,23 @@
                         role="button"
                         [attr.aria-label]="'View work item: ' + item.title"
                       >
-                        <div class="flex flex-col gap-2 flex-1">
+                        <div class="flex flex-1 flex-col gap-2">
                           <div class="flex items-center gap-2 font-semibold">
-                            <mat-icon>{{ item.type === 'story' ? 'book' : item.type === 'defect' ? 'bug_report' : item.type === 'epic' ? 'flag' : 'work' }}</mat-icon>
+                            <mat-icon>{{
+                              item.type === 'story'
+                                ? 'book'
+                                : item.type === 'defect'
+                                  ? 'bug_report'
+                                  : item.type === 'epic'
+                                    ? 'flag'
+                                    : 'work'
+                            }}</mat-icon>
                             {{ item.title }}
                           </div>
                           <div class="flex items-center gap-3">
-                            <mat-chip [color]="getWorkItemStatusColor(item.status)" highlighted>{{ item.status }}</mat-chip>
+                            <mat-chip [color]="getWorkItemStatusColor(item.status)" highlighted>{{
+                              item.status
+                            }}</mat-chip>
                             <span class="mat-caption">{{ item.type }}</span>
                             <span class="mat-caption">Priority: {{ item.priority }}</span>
                             @if (item.story_points) {
@@ -206,7 +223,7 @@
       <mat-card>
         <mat-card-header><mat-card-title>Metadata</mat-card-title></mat-card-header>
         <mat-card-content>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div class="flex flex-col gap-1">
               <span class="mat-caption">Created By</span>
               <span>{{ sprint.created_by }}</span>
@@ -230,7 +247,7 @@
   }
 
   @if (!loading() && !sprint()) {
-    <div class="flex flex-col items-center justify-center min-h-[400px] gap-4 text-center">
+    <div class="flex min-h-[400px] flex-col items-center justify-center gap-4 text-center">
       <mat-icon color="warn">error</mat-icon>
       <h2>Sprint Not Found</h2>
       <p>The sprint you're looking for doesn't exist or has been deleted.</p>
