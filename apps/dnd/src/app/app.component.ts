@@ -60,10 +60,8 @@ export class AppComponent {
     this.authService.postSessionLogout();
   }
 
-  public toolbarHeight$$ = this.sharedCoreService.getToolbarHeight();
-
-  public sidnavHeight$$ = computed<string>(() => {
-    return `calc(100dvh - ${this.toolbarHeight$$()}px)`;
+  public sidnavHeight = computed<string>(() => {
+    return `calc(100dvh - ${this.toolbarHeight()}px)`;
   });
 
   filterRoutes(routes: SharedSidenavRouterItem[]): SharedSidenavRouterItem[] {

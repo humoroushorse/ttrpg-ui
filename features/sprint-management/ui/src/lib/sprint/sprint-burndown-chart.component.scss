@@ -1,0 +1,73 @@
+.burndown-chart {
+  width: 100%;
+}
+
+.chart-container {
+  overflow-x: auto;
+}
+
+.burndown-svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.axis-label {
+  fill: var(--g-color-on-surface-variant);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.axis-title {
+  fill: var(--g-color-on-surface);
+  font-weight: 600;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.ideal-line {
+  transition: stroke-width 0.2s ease-in-out;
+
+  &:hover {
+    stroke-width: 3;
+  }
+}
+
+.actual-line {
+  transition: stroke-width 0.2s ease-in-out;
+
+  &:hover {
+    stroke-width: 4;
+  }
+}
+
+.data-point {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    r: 7;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  }
+}
+
+.grid-lines line {
+  opacity: 0.5;
+}
+
+.summary {
+  background: linear-gradient(to right, var(--g-color-surface-variant), var(--g-color-surface-dim));
+}
+
+.status-ahead {
+  color: var(--g-color-secondary);
+}
+
+.status-behind {
+  color: var(--g-color-error);
+}
+
+.status-on-track {
+  color: var(--g-color-primary);
+}
+
+.status-unknown {
+  color: var(--g-color-on-surface-variant);
+}

@@ -135,7 +135,7 @@
           } @else if (column.cellDataType === 'date') {
             {{ getValue(column, rowData) | date: 'medium' }}
           } @else {
-            @if (getValue(column, rowData, false).length > 50) {
+            @if (getValue(column, rowData, false)?.length > 50) {
               <div [matTooltip]="getValue(column, rowData)">
                 <span>{{ getValue(column, rowData) | slice: 0 : 50 }}</span>
                 <span>...</span>
@@ -173,9 +173,9 @@
 <mat-divider></mat-divider>
 <mat-paginator
   [length]="dataSource.data.length"
-  [pageSize]="selectedPageSize$$()"
-  [pageSizeOptions]="pageSizeOptions$$()"
-  [showFirstLastButtons]="showFirstLastButtons$$()"
+  [pageSize]="selectedPageSize()"
+  [pageSizeOptions]="pageSizeOptions()"
+  [showFirstLastButtons]="showFirstLastButtons()"
   (page)="onPage($event)"
   aria-label="Select page data results"
 ></mat-paginator>

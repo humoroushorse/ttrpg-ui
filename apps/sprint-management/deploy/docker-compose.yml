@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  sprint-management:
+    build:
+      context: ../..
+      dockerfile: apps/sprint-management/deploy/Dockerfile
+    ports:
+      - "4204:80"
+    environment:
+      # Nginx configuration
+      - NGINX_PORT=80
+
+      # API configuration
+      - APP_SPRINT_MANAGEMENT__API_BASE_PATH=/sprint-management-api
+      - APP_SPRINT_MANAGEMENT__API_URL=http://backend:8003
+    networks:
+      - sprint-management-network
+
+networks:
+  sprint-management-network:
+    driver: bridge

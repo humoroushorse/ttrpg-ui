@@ -1,0 +1,40 @@
+:host {
+  display: inline-block;
+}
+
+.status-badge {
+  font-size: var(--g-font-size-xs);
+  font-weight: var(--g-font-weight-medium);
+  height: 24px;
+  padding: 0 var(--g-spacing-sm);
+
+  &.status-done {
+    background-color: var(--g-color-secondary-container);
+    color: var(--g-color-on-secondary-container);
+  }
+
+  &.status-in-progress {
+    background-color: var(--g-color-primary-container);
+    color: var(--g-color-on-primary-container);
+  }
+
+  &.status-in-review {
+    background-color: var(--g-color-primary-container);
+    color: var(--g-color-on-primary-container);
+  }
+
+  &.status-todo {
+    background-color: var(--g-color-surface-variant);
+    color: var(--g-color-on-surface-variant);
+  }
+
+  &.status-backlog {
+    background-color: var(--g-color-surface-variant);
+    color: var(--g-color-on-surface-variant);
+  }
+
+  &.status-default {
+    background-color: var(--g-color-surface-variant);
+    color: var(--g-color-on-surface-variant);
+  }
+}

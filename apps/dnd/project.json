@@ -28,13 +28,23 @@
         "styles": [
           "apps/dnd/src/styles.scss",
           {
-            "input": "shared/scss/themes/default-theme-light.scss",
+            "input": "shared/scss/themes/default-theme-light/default-theme-light.scss",
             "bundleName": "default-theme-light",
             "inject": false
           },
           {
-            "input": "shared/scss/themes/default-theme-dark.scss",
+            "input": "shared/scss/themes/default-theme-dark/default-theme-dark.scss",
             "bundleName": "default-theme-dark",
+            "inject": false
+          },
+          {
+            "input": "shared/scss/themes/teal-theme-light/teal-theme-light.scss",
+            "bundleName": "teal-theme-light",
+            "inject": false
+          },
+          {
+            "input": "shared/scss/themes/teal-theme-dark/teal-theme-dark.scss",
+            "bundleName": "teal-theme-dark",
             "inject": false
           }
         ],

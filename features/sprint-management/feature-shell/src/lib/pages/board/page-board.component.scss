@@ -1,0 +1,118 @@
+.board-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--mat-app-background-color);
+  contain: layout;
+}
+
+.board-header {
+  background: var(--mat-card-background-color);
+  border-bottom: 1px solid var(--mat-divider-color);
+  padding: 1rem 1.5rem;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sprint-selector {
+  min-width: 18.75rem; // 300px
+  margin: 0;
+
+  .active-badge {
+    margin-left: 0.5rem;
+    padding: 0.125rem 0.5rem;
+    background: var(--mat-badge-background-color);
+    color: var(--mat-badge-text-color);
+    border-radius: 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 500;
+  }
+}
+
+.sprint-info-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: var(--mat-app-surface-variant);
+  border-radius: 0.5rem;
+}
+
+.sprint-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  .sprint-name {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .sprint-dates,
+  .sprint-goal {
+    color: var(--mat-app-on-surface-variant);
+    font-size: 0.875rem;
+  }
+
+  .sprint-goal {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-style: italic;
+  }
+}
+
+.sprint-stats {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--mat-app-on-surface-variant);
+    font-size: 0.875rem;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem; // 64px
+  gap: 1rem;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem; // 64px
+  text-align: center;
+  gap: 1rem;
+  contain: layout style paint;
+  content-visibility: auto;
+  color: var(--mat-app-on-surface-variant);
+}
+
+.board-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem; // 64px
+}

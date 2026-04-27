@@ -1,0 +1,31 @@
+@if (links().length === 0) {
+  <p class="link-list__empty">No links yet.</p>
+} @else {
+  @for (type of Object.keys(groupedLinks); track type) {
+    <div class="link-group">
+      <div class="link-group__header">
+        <mat-icon class="link-group__icon">{{ linkTypeIcons[type] }}</mat-icon>
+        <span class="link-group__label">{{ linkTypeLabels[type] }}</span>
+      </div>
+      <div class="link-group__items">
+        @for (link of groupedLinks[type]; track link.id) {
+          <div class="link-item">
+            <mat-icon class="link-item__icon">open_in_new</mat-icon>
+            <a class="link-item__target" [routerLink]="['/work-items', getLinkedItemId(link)]">
+              {{ getLinkedItemId(link) }}
+            </a>
+            <button
+              mat-icon-button
+              class="link-item__delete"
+              (click)="onDeleteLink(link.id)"
+              [matTooltip]="'Remove link'"
+              aria-label="Remove link"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+}

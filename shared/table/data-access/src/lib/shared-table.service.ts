@@ -7,29 +7,29 @@ import { SharedLocalStorageService } from '@ttrpg-ui/shared/local-storage/data-a
 export class SharedTableService {
   private readonly sharedLocalStorageService = inject(SharedLocalStorageService);
 
-  private pageSizeOptions$$ = signal<number[]>([10, 25, 100]);
+  private pageSizeOptions = signal<number[]>([10, 25, 100]);
 
-  public selectedPageSize$$ = signal<number>(this.getSelectedPageSize());
+  public selectedPageSize = signal<number>(this.getSelectedPageSize());
 
-  public showFirstLastButtons$$ = signal<boolean>(true);
+  public showFirstLastButtons = signal<boolean>(true);
 
-  private filterDebounceTime$$ = signal<number>(300);
+  private filterDebounceTime = signal<number>(300);
 
   getPageSizeOptions(): Signal<number[]> {
-    return this.pageSizeOptions$$.asReadonly();
+    return this.pageSizeOptions.asReadonly();
   }
 
   getFilterDebounceTime(): Signal<number> {
-    return this.filterDebounceTime$$.asReadonly();
+    return this.filterDebounceTime.asReadonly();
   }
 
   public setSelectedPageSize(pageSize: number) {
-    this.selectedPageSize$$.set(pageSize);
-    this.sharedLocalStorageService.set<number>('SharedTableService.selectedPageSize$$', pageSize);
+    this.selectedPageSize.set(pageSize);
+    this.sharedLocalStorageService.set<number>('SharedTableService.selectedPageSize', pageSize);
   }
 
   private getSelectedPageSize(): number {
-    const storagePageSize = this.sharedLocalStorageService.get<number>('SharedTableService.selectedPageSize$$');
-    return storagePageSize ?? this.pageSizeOptions$$()[0];
+    const storagePageSize = this.sharedLocalStorageService.get<number>('SharedTableService.selectedPageSize');
+    return storagePageSize ?? this.pageSizeOptions()[0];
   }
 }

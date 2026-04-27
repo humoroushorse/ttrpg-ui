@@ -1,0 +1,87 @@
+/**
+ * Notification Center Component Styles
+ */
+
+:host {
+  display: inline-block;
+  // Inherit toolbar contrast color when inside the toolbar
+  color: inherit;
+
+  // Override Material icon button color token to match toolbar
+  --mat-icon-button-icon-color: currentColor;
+  --mat-icon-color: currentColor;
+}
+
+.notification-menu {
+  max-width: 400px;
+  min-width: 320px;
+}
+
+.notification-header {
+  background-color: var(--mat-menu-container-color);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+
+  h3 {
+    margin: 0;
+  }
+}
+
+.notification-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  height: auto !important;
+  padding: 12px 16px !important;
+  white-space: normal !important;
+  line-height: 1.4 !important;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  &.notification-unread {
+    background-color: rgba(63, 81, 181, 0.08);
+
+    &:hover {
+      background-color: rgba(63, 81, 181, 0.12);
+    }
+  }
+
+  .notification-dismiss {
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  &:hover .notification-dismiss {
+    opacity: 1;
+  }
+}
+
+.notification-empty {
+  mat-icon {
+    opacity: 0.5;
+  }
+}
+
+// Dark theme adjustments
+:host-context(.dark-theme) {
+  .notification-header {
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .notification-item {
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.04);
+    }
+
+    &.notification-unread {
+      background-color: rgba(63, 81, 181, 0.15);
+
+      &:hover {
+        background-color: rgba(63, 81, 181, 0.2);
+      }
+    }
+  }
+}

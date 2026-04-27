@@ -1,0 +1,10 @@
+.date-range-error {
+  padding: 0.5rem;
+  background-color: color-mix(in srgb, var(--mat-sys-error) 10%, transparent);
+  border-radius: 0.25rem;
+}
+
+.button-spinner {
+  display: inline-block;
+  margin-right: 0.5rem;
+}

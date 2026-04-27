@@ -1,0 +1,24 @@
+<div class="work-item-dialog">
+  <!-- Dialog Header -->
+  <div mat-dialog-title class="work-item-dialog__header">
+    <h2 class="work-item-dialog__title">{{ title() }}</h2>
+    <button
+      mat-icon-button
+      (click)="close()"
+      aria-label="Close dialog"
+      matTooltip="Close">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Dialog Content -->
+  <mat-dialog-content>
+    <lib-work-item-form
+      [workItem]="workItem()"
+      [initialData]="dialogData.initialData ?? null"
+      [loading]="loading()"
+      (formSubmitted)="onFormSubmit($event)"
+      (cancelled)="onCancel()">
+    </lib-work-item-form>
+  </mat-dialog-content>
+</div>

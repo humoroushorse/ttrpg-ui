@@ -1,0 +1,337 @@
+<div class="p-4 max-w-7xl mx-auto">
+  @if (loading()) {
+    <div class="flex flex-col items-center justify-center gap-4 py-12">
+      <mat-spinner></mat-spinner>
+      <p>Loading work item...</p>
+    </div>
+  }
+
+  @if (!loading() && workItem(); as item) {
+    <div class="flex flex-col">
+      <div class="flex items-start gap-4">
+        <button mat-icon-button (click)="onBackClicked()" matTooltip="Back to work items" aria-label="Back to work items">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+
+        <div class="flex-1 flex flex-col gap-3">
+          <div class="flex items-center gap-3">
+            <mat-icon [class]="'type-icon ' + item.type.toLowerCase()">{{ getTypeIcon(item.type) }}</mat-icon>
+            <h1>{{ item.title }}</h1>
+          </div>
+          <mat-chip-set aria-label="Work item metadata">
+            <mat-chip [color]="getStatusColor(item.status)" highlighted>{{ item.status }}</mat-chip>
+            <mat-chip [color]="getPriorityColor(item.priority)" highlighted>{{ item.priority }}</mat-chip>
+            <mat-chip>{{ item.type }}</mat-chip>
+            @if (isBlocked()) {
+              <mat-chip color="warn" highlighted>
+                <mat-icon>block</mat-icon>
+                Blocked
+              </mat-chip>
+            }
+          </mat-chip-set>
+        </div>
+
+        @if (authService.getUserTokenDecoded()()) {
+          <div class="flex gap-2">
+            <button mat-raised-button color="primary" (click)="onEditClicked()" aria-label="Edit work item">
+              <mat-icon>edit</mat-icon>
+              Edit
+            </button>
+            <button mat-stroked-button (click)="onCloneClicked()" aria-label="Clone work item">
+              <mat-icon>content_copy</mat-icon>
+              Clone
+            </button>
+            <button mat-raised-button color="warn" (click)="onDeleteClicked()" aria-label="Delete work item">
+              <mat-icon>delete</mat-icon>
+              Delete
+            </button>
+          </div>
+        }
+      </div>
+
+      <mat-tab-group class="mt-4" (selectedIndexChange)="onTabChange($event)">
+        <mat-tab label="Details">
+          <div class="p-4 flex flex-col gap-4">
+            <mat-card>
+              <mat-card-header><mat-card-title>Description</mat-card-title></mat-card-header>
+              <mat-card-content>
+                <p class="whitespace-pre-wrap">{{ item.description || 'No description provided' }}</p>
+              </mat-card-content>
+            </mat-card>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <mat-card>
+                <mat-card-header><mat-card-title>Basic Information</mat-card-title></mat-card-header>
+                <mat-card-content>
+                  <div class="detail-row flex justify-between py-2">
+                    <span class="mat-body-2">ID</span><span>{{ item.id }}</span>
+                  </div>
+                  <div class="detail-row flex justify-between py-2">
+                    <span class="mat-body-2">Type</span><span>{{ item.type }}</span>
+                  </div>
+                  <div class="detail-row flex justify-between py-2">
+                    <span class="mat-body-2">Status</span><span>{{ item.status }}</span>
+                  </div>
+                  <div class="detail-row flex justify-between py-2">
+                    <span class="mat-body-2">Priority</span><span>{{ item.priority }}</span>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+
+              <mat-card>
+                <mat-card-header><mat-card-title>Assignment</mat-card-title></mat-card-header>
+                <mat-card-content>
+                  <div class="detail-row flex justify-between py-2">
+                    <span class="mat-body-2">Assignee</span>
+                    @if (item.assignee_id) {
+                      <a [routerLink]="['/users', item.assignee_id]">{{ item.assignee_id }}</a>
+                    } @else {
+                      <span class="empty-value">--</span>
+                    }
+                  </div>
+                  <div class="detail-row flex justify-between py-2">
+                    <span class="mat-body-2">Sprint</span>
+                    @if (item.sprint_id) {
+                      <a [routerLink]="['/sprints', item.sprint_id]">{{ item.sprint_id }}</a>
+                    } @else {
+                      <span class="empty-value">--</span>
+                    }
+                  </div>
+                  <div class="detail-row flex justify-between py-2">
+                    <span class="mat-body-2">Parent</span>
+                    @if (item.parent_id) {
+                      <a [routerLink]="['/work-items', item.parent_id]">{{ item.parent_id }}</a>
+                    } @else {
+                      <span class="empty-value">--</span>
+                    }
+                  </div>
+                </mat-card-content>
+              </mat-card>
+
+              <mat-card>
+                <mat-card-header><mat-card-title>Estimation</mat-card-title></mat-card-header>
+                <mat-card-content>
+                  <div class="detail-row flex justify-between py-2">
+                    <span class="mat-body-2">Story Points</span>
+                    <span [class.empty-value]="item.story_points | isEmptyValue">{{ item.story_points ?? 'Not estimated' }}</span>
+                  </div>
+                  <div class="detail-row flex justify-between py-2">
+                    <span class="mat-body-2">Estimated Hours</span>
+                    <span [class.empty-value]="item.estimated_hours | isEmptyValue">{{ item.estimated_hours ?? 'Not estimated' }}</span>
+                  </div>
+                  <div class="detail-row flex justify-between py-2">
+                    <span class="mat-body-2">Actual Hours</span>
+                    <span [class.empty-value]="item.actual_hours | isEmptyValue">{{ item.actual_hours ?? 'Not tracked' }}</span>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+
+              <mat-card>
+                <mat-card-header><mat-card-title>Metadata</mat-card-title></mat-card-header>
+                <mat-card-content>
+                  <div class="detail-row flex justify-between py-2">
+                    <span class="mat-body-2">Created By</span>
+                    <span [class.empty-value]="item.created_by | isEmptyValue">{{ item.created_by | displayValue }}</span>
+                  </div>
+                  <div class="detail-row flex justify-between py-2">
+                    <span class="mat-body-2">Created At</span><span>{{ formatDate(item.created_at) }}</span>
+                  </div>
+                  <div class="detail-row flex justify-between py-2">
+                    <span class="mat-body-2">Updated By</span>
+                    <span [class.empty-value]="item.updated_by | isEmptyValue">{{ item.updated_by | displayValue }}</span>
+                  </div>
+                  <div class="detail-row flex justify-between py-2">
+                    <span class="mat-body-2">Updated At</span><span>{{ formatDate(item.updated_at) }}</span>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+
+            @if (item.tags && item.tags.length > 0) {
+              <mat-card>
+                <mat-card-header><mat-card-title>Tags</mat-card-title></mat-card-header>
+                <mat-card-content>
+                  <div class="detail-tags" aria-label="Work item tags">
+                    @for (tag of item.tags; track tag) {
+                      <lib-tag-chip [tag]="tag" [removable]="false" />
+                    }
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            }
+
+            @if (item.custom_fields && Object.keys(item.custom_fields).length > 0) {
+              <mat-card>
+                <mat-card-header><mat-card-title>Custom Fields</mat-card-title></mat-card-header>
+                <mat-card-content>
+                  @for (field of Object.keys(item.custom_fields); track field) {
+                    <div class="detail-row flex justify-between py-2">
+                      <span class="mat-body-2">{{ field }}</span><span>{{ item.custom_fields[field] }}</span>
+                    </div>
+                  }
+                </mat-card-content>
+              </mat-card>
+            }
+
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title class="flex items-center gap-2">
+                  <mat-icon>link</mat-icon>
+                  Links
+                </mat-card-title>
+                <div mat-card-avatar class="flex items-center">
+                  <button mat-stroked-button (click)="onAddLinkClicked()" aria-label="Add link">
+                    <mat-icon>add</mat-icon>
+                    Add Link
+                  </button>
+                </div>
+              </mat-card-header>
+              <mat-card-content>
+                <lib-work-item-link-list
+                  [links]="workItemLinkStore.entities()"
+                  [currentWorkItemId]="workItemId() ?? ''"
+                  (linkDeleted)="onDeleteLink($event)"
+                />
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Dependencies">
+          <div class="p-4 flex flex-col gap-4">
+            @if (dependencyStore.loading()) {
+              <div class="flex flex-col items-center justify-center gap-4 py-12">
+                <mat-spinner diameter="40"></mat-spinner>
+                <p>Loading dependencies...</p>
+              </div>
+            } @else {
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title class="flex items-center gap-2">
+                    <mat-icon>block</mat-icon>
+                    Blocks ({{ blocksDependencies().length }})
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  @if (blocksDependencies().length === 0) {
+                    <p class="text-center py-8 opacity-60">This work item does not block any other items.</p>
+                  } @else {
+                    <div class="flex flex-col gap-2">
+                      @for (dep of blocksDependencies(); track dep.id) {
+                        <div class="dependency-item flex items-center gap-2 p-3 rounded border border-solid">
+                          <mat-icon>arrow_forward</mat-icon>
+                          <span>{{ dep.target_work_item_id }}</span>
+                        </div>
+                      }
+                    </div>
+                  }
+                </mat-card-content>
+              </mat-card>
+
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title class="flex items-center gap-2">
+                    <mat-icon>block</mat-icon>
+                    Blocked By ({{ blockedByDependencies().length }})
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  @if (blockedByDependencies().length === 0) {
+                    <p class="text-center py-8 opacity-60">This work item is not blocked by any other items.</p>
+                  } @else {
+                    <div class="flex flex-col gap-2">
+                      @for (dep of blockedByDependencies(); track dep.id) {
+                        <div class="dependency-item blocked flex items-center gap-2 p-3 rounded border border-solid">
+                          <mat-icon>arrow_back</mat-icon>
+                          <span>{{ dep.source_work_item_id }}</span>
+                        </div>
+                      }
+                    </div>
+                  }
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Comments">
+          <div class="p-4 flex flex-col gap-4">
+            @if (commentStore.loading()) {
+              <div class="flex flex-col items-center justify-center gap-4 py-12">
+                <mat-spinner diameter="40"></mat-spinner>
+                <p>Loading comments...</p>
+              </div>
+            } @else if (comments().length === 0) {
+              <mat-card>
+                <mat-card-content>
+                  <p class="text-center py-8 opacity-60">No comments yet. Be the first to comment!</p>
+                </mat-card-content>
+              </mat-card>
+            } @else {
+              <div class="flex flex-col gap-4">
+                @for (comment of comments(); track comment.id) {
+                  <mat-card>
+                    <mat-card-header>
+                      <mat-card-title>
+                        <div class="flex items-center justify-between w-full">
+                          <span>{{ comment.author_id }}</span>
+                          <span class="mat-caption opacity-60">{{ formatDate(comment.created_at) }}</span>
+                        </div>
+                      </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <p class="whitespace-pre-wrap">{{ comment.content }}</p>
+                      @if (comment.updated_at !== comment.created_at) {
+                        <p class="flex items-center gap-1 mt-2 opacity-60">
+                          <mat-icon>edit</mat-icon>
+                          <span class="mat-caption">Edited {{ formatDate(comment.updated_at) }}</span>
+                        </p>
+                      }
+                    </mat-card-content>
+                  </mat-card>
+                }
+              </div>
+            }
+          </div>
+        </mat-tab>
+
+        <mat-tab label="History">
+          <div class="history-tab-content">
+            <lib-audit-log-list
+              [logs]="auditLogs()"
+              [loading]="auditLogStore.loading()"
+              [showFilters]="true"
+              (filterChange)="onAuditLogFilterChange($event)"
+            />
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  }
+
+  @if (!loading() && !workItem() && error()) {
+    <mat-card class="mt-8">
+      <mat-card-content>
+        <div class="flex flex-col items-center justify-center gap-4 py-12">
+          <mat-icon color="warn">error</mat-icon>
+          <h2>Failed to load work item</h2>
+          <p>{{ error() }}</p>
+          <button mat-raised-button color="primary" (click)="onBackClicked()">Back to Work Items</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  @if (!loading() && !workItem() && !error()) {
+    <mat-card class="mt-8">
+      <mat-card-content>
+        <div class="flex flex-col items-center justify-center gap-4 py-12">
+          <mat-icon color="warn">search_off</mat-icon>
+          <h2>Work item not found</h2>
+          <p>The work item you're looking for doesn't exist or has been deleted.</p>
+          <button mat-raised-button color="primary" (click)="onBackClicked()">Back to Work Items</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

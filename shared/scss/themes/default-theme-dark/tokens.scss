@@ -1,0 +1,60 @@
+// Default Dark Theme - Design Tokens (CSS Custom Properties)
+// These tokens are used by both Material and Tailwind
+
+@use '../../palettes/purple' as purple-palette;
+@use '../../palettes/neutral' as neutral-palette;
+@use '../../palettes/red' as red-palette;
+@use '../../palettes/blue' as blue-palette;
+@use '../../palettes/orange' as orange-palette;
+
+:root {
+  // Primary color tokens
+  --g-color-primary: #{purple-palette.color(80)};
+  --g-color-primary-container: #{purple-palette.color(30)};
+  --g-color-on-primary: #{purple-palette.color(20)};
+  --g-color-on-primary-container: #{purple-palette.color(90)};
+
+  // Secondary color tokens
+  --g-color-secondary: #{neutral-palette.color(80)};
+  --g-color-secondary-container: #{neutral-palette.color(30)};
+  --g-color-on-secondary: #{neutral-palette.color(20)};
+  --g-color-on-secondary-container: #{neutral-palette.color(90)};
+
+  // Error color tokens
+  --g-color-error: #{red-palette.color(80)};
+  --g-color-error-container: #{red-palette.color(30)};
+  --g-color-on-error: #{red-palette.color(20)};
+  --g-color-on-error-container: #{red-palette.color(90)};
+
+  // Info color tokens (blue)
+  --g-color-info: #{blue-palette.color(80)};
+  --g-color-info-container: #{blue-palette.color(30)};
+  --g-color-on-info: #{blue-palette.color(20)};
+  --g-color-on-info-container: #{blue-palette.color(90)};
+
+  // Warning color tokens (orange)
+  --g-color-warning: #{orange-palette.color(80)};
+  --g-color-warning-container: #{orange-palette.color(30)};
+  --g-color-on-warning: #{orange-palette.color(20)};
+  --g-color-on-warning-container: #{orange-palette.color(90)};
+
+  // Surface color tokens
+  --g-color-surface: #{neutral-palette.color(10)};
+  --g-color-surface-variant: #{neutral-palette.color(30)};
+  --g-color-surface-dim: #{neutral-palette.color(6)};
+  --g-color-surface-bright: #{neutral-palette.color(24)};
+  --g-color-on-surface: #{neutral-palette.color(90)};
+  --g-color-on-surface-variant: #{neutral-palette.color(80)};
+
+  // Background color tokens
+  --g-color-background: #{neutral-palette.color(10)};
+  --g-color-on-background: #{neutral-palette.color(90)};
+
+  // Outline color tokens
+  --g-color-outline: #{neutral-palette.color(60)};
+  --g-color-outline-variant: #{neutral-palette.color(30)};
+
+  // Shadow & Scrim
+  --g-color-shadow: #{neutral-palette.color(0)};
+  --g-color-scrim: #{neutral-palette.color(0)};
+}

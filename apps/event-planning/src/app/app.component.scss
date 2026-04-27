@@ -1,12 +1,24 @@
 .component-toolbar {
-  background-color: var(--primary-color);
-  color: var(--primary-on-container);
+  background-color: var(--g-color-primary);
+  color: var(--g-color-on-primary);
 
-  mat-icon {
-    color: var(--primary-on-container) !important;
+  --mat-icon-button-icon-color: var(--g-color-on-primary);
+  --mat-icon-color: var(--g-color-on-primary);
+
+  mat-icon,
+  button,
+  a,
+  span {
+    color: inherit;
   }
 }
 
+.component-toolbar [mat-icon-button] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .component-error {
-  color: var(--error-color) !important;
+  color: var(--g-color-error) !important;
 }

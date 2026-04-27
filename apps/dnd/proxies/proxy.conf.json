@@ -1,6 +1,6 @@
 {
   "/ttrpg-dnd-api": {
-    "target": "http://localhost:8001/api/v1",
+    "target": "http://localhost:8001",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",

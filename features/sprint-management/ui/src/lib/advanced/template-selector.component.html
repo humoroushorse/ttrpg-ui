@@ -1,0 +1,46 @@
+<div class="template-selector-container">
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>
+      <mat-icon class="inline-block align-middle mr-1">description</mat-icon>
+      Select Template
+    </mat-label>
+    <mat-select
+      [placeholder]="placeholder()"
+      [value]="selectedTemplate()"
+      [disabled]="loading()"
+      (selectionChange)="onTemplateChange($event)"
+    >
+      @if (showNoneOption()) {
+        <mat-option [value]="null">
+          <span class="template-option-none">None (Blank)</span>
+        </mat-option>
+      }
+      @for (template of templates(); track template.id) {
+        <mat-option [value]="template">
+          <div class="template-option-content">
+            <div class="template-option-text">
+              <div class="template-option-title">{{ template.name }}</div>
+              @if (template.description) {
+                <div class="template-option-description">
+                  {{ template.description }}
+                </div>
+              }
+            </div>
+            @if (template.type) {
+              <span class="template-option-badge">
+                {{ template.type }}
+              </span>
+            }
+          </div>
+        </mat-option>
+      }
+    </mat-select>
+    @if (helpText()) {
+      <mat-hint>{{ helpText() }}</mat-hint>
+    }
+  </mat-form-field>
+
+  @if (selectedTemplate()) {
+    <lib-template-preview [template]="selectedTemplate()!" />
+  }
+</div>

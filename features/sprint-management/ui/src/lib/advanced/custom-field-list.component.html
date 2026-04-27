@@ -1,0 +1,9 @@
+<div class="custom-field-list">
+  @for (field of fieldDefinitions(); track field.key) {
+    <lib-custom-field
+      [fieldDefinition]="field"
+      [value]="getValueForField(field.key)"
+      (valueChange)="onFieldValueChange($event)"
+    />
+  }
+</div>

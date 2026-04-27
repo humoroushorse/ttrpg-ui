@@ -1,0 +1,109 @@
+:host {
+  display: block;
+}
+
+.template-selector-container {
+  width: 100%;
+}
+
+.template-option-none {
+  color: var(--g-color-on-surface-variant);
+}
+
+.template-option-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.template-option-text {
+  flex: 1;
+}
+
+.template-option-title {
+  font-weight: var(--g-font-weight-medium);
+}
+
+.template-option-description {
+  font-size: var(--g-font-size-xs);
+  color: var(--g-color-on-surface-variant);
+}
+
+.template-option-badge {
+  margin-left: var(--g-spacing-sm);
+  padding: var(--g-spacing-xs) var(--g-spacing-sm);
+  font-size: var(--g-font-size-xs);
+  border-radius: 4px;
+  background-color: var(--g-color-primary-container);
+  color: var(--g-color-on-primary-container);
+}
+
+.template-preview {
+  margin-top: var(--g-spacing-sm);
+  padding: var(--g-spacing-md);
+  background-color: var(--g-color-surface-variant);
+  border-radius: 8px;
+  border: 1px solid var(--g-color-outline);
+  animation: fadeIn 0.2s ease-in;
+}
+
+.template-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--g-spacing-sm);
+}
+
+.template-preview-title {
+  font-size: var(--g-font-size-sm);
+  font-weight: var(--g-font-weight-semibold);
+  color: var(--g-color-on-surface);
+}
+
+.template-preview-clear {
+  font-size: var(--g-font-size-xs);
+  color: var(--g-color-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  &:hover {
+    color: var(--g-color-primary-variant);
+    text-decoration: underline;
+  }
+}
+
+.template-preview-content {
+  font-size: var(--g-font-size-sm);
+}
+
+.template-preview-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--g-spacing-xs);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.template-preview-label {
+  color: var(--g-color-on-surface-variant);
+  width: 96px;
+}
+
+.template-preview-value {
+  font-weight: var(--g-font-weight-medium);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

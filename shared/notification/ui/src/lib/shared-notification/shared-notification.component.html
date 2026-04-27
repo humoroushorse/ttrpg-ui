@@ -27,7 +27,7 @@
     @if(description(); as description) {
       <div>{{description}}</div>
     }
-    @if(descriptionHtml(); as descriptionHtml) {
+    @if(sanitizedDescriptionHtml(); as descriptionHtml) {
       <div [innerHTML]="descriptionHtml"></div>
     }
     @if(descriptionJson(); as descriptionJson) {

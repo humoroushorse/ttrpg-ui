@@ -1,0 +1,348 @@
+<div class="preferences-dialog">
+  <h2 mat-dialog-title class="flex items-center gap-2">
+    <mat-icon>settings</mat-icon>
+    <span>User Preferences</span>
+  </h2>
+
+  <mat-dialog-content class="preferences-content">
+    <mat-tab-group animationDuration="0ms">
+      <!-- General Tab -->
+      <mat-tab label="General">
+        <div class="tab-content">
+          <!-- Theme Selection -->
+          <div class="preference-section">
+            <h3 class="section-title">Appearance</h3>
+            <mat-form-field class="full-width">
+              <mat-label>Theme</mat-label>
+              <mat-select
+                [value]="preferences().theme"
+                (selectionChange)="updateTheme($event.value)"
+              >
+                @for (theme of availableThemes(); track theme.path) {
+                  <mat-option [value]="theme.path">
+                    {{ theme.viewValue }}
+                  </mat-option>
+                }
+              </mat-select>
+              <mat-icon matPrefix>palette</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <!-- Language Selection -->
+          <div class="preference-section">
+            <h3 class="section-title">Language</h3>
+            <mat-form-field class="full-width">
+              <mat-label>Language</mat-label>
+              <mat-select
+                [value]="preferences().language"
+                (selectionChange)="updateLanguage($event.value)"
+              >
+                @for (lang of availableLanguages; track lang.code) {
+                  <mat-option [value]="lang.code">
+                    {{ lang.name }}
+                  </mat-option>
+                }
+              </mat-select>
+              <mat-icon matPrefix>language</mat-icon>
+            </mat-form-field>
+            <p class="hint-text">
+              <mat-icon class="hint-icon">info</mat-icon>
+              Language changes will take effect after page reload
+            </p>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Display Tab -->
+      <mat-tab label="Display">
+        <div class="tab-content">
+          <!-- View Modes -->
+          <div class="preference-section">
+            <h3 class="section-title">Default View Modes</h3>
+
+            <mat-form-field class="full-width">
+              <mat-label>Work Items View</mat-label>
+              <mat-select
+                [value]="preferences().display.workItemsViewMode"
+                (selectionChange)="updateDisplay({ workItemsViewMode: $event.value })"
+              >
+                @for (mode of viewModes; track mode.value) {
+                  <mat-option [value]="mode.value">
+                    {{ mode.label }}
+                  </mat-option>
+                }
+              </mat-select>
+              <mat-icon matPrefix>view_list</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field class="full-width">
+              <mat-label>Sprints View</mat-label>
+              <mat-select
+                [value]="preferences().display.sprintsViewMode"
+                (selectionChange)="updateDisplay({ sprintsViewMode: $event.value })"
+              >
+                @for (mode of viewModes; track mode.value) {
+                  <mat-option [value]="mode.value">
+                    {{ mode.label }}
+                  </mat-option>
+                }
+              </mat-select>
+              <mat-icon matPrefix>view_module</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <!-- Display Options -->
+          <div class="preference-section">
+            <h3 class="section-title">Display Options</h3>
+
+            <div class="toggle-option">
+              <mat-slide-toggle
+                [checked]="preferences().display.showCompletedItems"
+                (change)="updateDisplay({ showCompletedItems: $event.checked })"
+              >
+                Show completed items in lists
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-option">
+              <mat-slide-toggle
+                [checked]="preferences().display.compactMode"
+                (change)="updateDisplay({ compactMode: $event.checked })"
+              >
+                Compact mode (smaller rows/cards)
+              </mat-slide-toggle>
+            </div>
+
+            <mat-form-field class="full-width">
+              <mat-label>Items per page</mat-label>
+              <mat-select
+                [value]="preferences().display.itemsPerPage"
+                (selectionChange)="updateDisplay({ itemsPerPage: $event.value })"
+              >
+                @for (option of itemsPerPageOptions; track option) {
+                  <mat-option [value]="option">
+                    {{ option }}
+                  </mat-option>
+                }
+              </mat-select>
+              <mat-icon matPrefix>format_list_numbered</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Notifications Tab -->
+      <mat-tab label="Notifications">
+        <div class="tab-content">
+          <!-- Notification Channels -->
+          <div class="preference-section">
+            <h3 class="section-title">Notification Channels</h3>
+
+            <div class="toggle-option">
+              <mat-slide-toggle
+                [checked]="preferences().notifications.enableDesktop"
+                (change)="updateNotifications({ enableDesktop: $event.checked })"
+              >
+                Enable desktop notifications
+              </mat-slide-toggle>
+              <p class="option-description">
+                Show browser notifications for important updates
+              </p>
+            </div>
+
+            <div class="toggle-option">
+              <mat-slide-toggle
+                [checked]="preferences().notifications.enableInApp"
+                (change)="updateNotifications({ enableInApp: $event.checked })"
+              >
+                Enable in-app notifications
+              </mat-slide-toggle>
+              <p class="option-description">
+                Show notifications in the notification center
+              </p>
+            </div>
+
+            <div class="toggle-option">
+              <mat-slide-toggle
+                [checked]="preferences().notifications.enableSound"
+                (change)="updateNotifications({ enableSound: $event.checked })"
+              >
+                Enable notification sounds
+              </mat-slide-toggle>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <!-- Notification Types -->
+          <div class="preference-section">
+            <h3 class="section-title">Notification Types</h3>
+
+            <div class="toggle-option">
+              <mat-slide-toggle
+                [checked]="preferences().notifications.workItemUpdates"
+                (change)="updateNotifications({ workItemUpdates: $event.checked })"
+              >
+                Work item updates
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-option">
+              <mat-slide-toggle
+                [checked]="preferences().notifications.sprintUpdates"
+                (change)="updateNotifications({ sprintUpdates: $event.checked })"
+              >
+                Sprint updates
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-option">
+              <mat-slide-toggle
+                [checked]="preferences().notifications.comments"
+                (change)="updateNotifications({ comments: $event.checked })"
+              >
+                New comments
+              </mat-slide-toggle>
+            </div>
+
+            <div class="toggle-option">
+              <mat-slide-toggle
+                [checked]="preferences().notifications.mentions"
+                (change)="updateNotifications({ mentions: $event.checked })"
+              >
+                Mentions
+              </mat-slide-toggle>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Accessibility Tab -->
+      <mat-tab label="Accessibility">
+        <div class="tab-content">
+          <div class="preference-section">
+            <h3 class="section-title">Accessibility Options</h3>
+
+            <div class="toggle-option">
+              <mat-slide-toggle
+                [checked]="preferences().accessibility.highContrast"
+                (change)="updateAccessibility({ highContrast: $event.checked })"
+              >
+                High contrast mode
+              </mat-slide-toggle>
+              <p class="option-description">
+                Increase contrast for better visibility
+              </p>
+            </div>
+
+            <div class="toggle-option">
+              <mat-slide-toggle
+                [checked]="preferences().accessibility.reduceMotion"
+                (change)="updateAccessibility({ reduceMotion: $event.checked })"
+              >
+                Reduce motion
+              </mat-slide-toggle>
+              <p class="option-description">
+                Minimize animations and transitions
+              </p>
+            </div>
+
+            <div class="toggle-option">
+              <mat-slide-toggle
+                [checked]="preferences().accessibility.largeFonts"
+                (change)="updateAccessibility({ largeFonts: $event.checked })"
+              >
+                Large fonts
+              </mat-slide-toggle>
+              <p class="option-description">
+                Increase font size throughout the application
+              </p>
+            </div>
+
+            <div class="toggle-option">
+              <mat-slide-toggle
+                [checked]="preferences().accessibility.keyboardShortcuts"
+                (change)="updateAccessibility({ keyboardShortcuts: $event.checked })"
+              >
+                Enable keyboard shortcuts
+              </mat-slide-toggle>
+              <p class="option-description">
+                Use keyboard shortcuts for common actions
+              </p>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Advanced Tab -->
+      <mat-tab label="Advanced">
+        <div class="tab-content">
+          <div class="preference-section">
+            <h3 class="section-title">Data Management</h3>
+
+            <div class="action-buttons">
+              <button
+                mat-stroked-button
+                color="primary"
+                (click)="exportPreferences()"
+                class="action-button"
+              >
+                <mat-icon>download</mat-icon>
+                Export Preferences
+              </button>
+
+              <button
+                mat-stroked-button
+                color="primary"
+                (click)="fileInput.click()"
+                class="action-button"
+              >
+                <mat-icon>upload</mat-icon>
+                Import Preferences
+              </button>
+              <input
+                #fileInput
+                type="file"
+                accept=".json"
+                (change)="importPreferences($event)"
+                style="display: none"
+              />
+
+              <button
+                mat-stroked-button
+                color="warn"
+                (click)="resetToDefaults()"
+                class="action-button"
+              >
+                <mat-icon>restore</mat-icon>
+                Reset to Defaults
+              </button>
+            </div>
+          </div>
+
+          <div class="preference-section">
+            <h3 class="section-title">Information</h3>
+            <p class="info-text">
+              <strong>Last Updated:</strong> {{ preferences().lastUpdated | date: 'medium' }}
+            </p>
+            <p class="info-text">
+              Preferences are stored locally in your browser and will persist across sessions.
+            </p>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button (click)="cancel()">Cancel</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="save()"
+      [disabled]="!hasChanges()"
+    >
+      Save Changes
+    </button>
+  </mat-dialog-actions>
+</div>

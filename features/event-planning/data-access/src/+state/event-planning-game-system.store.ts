@@ -8,7 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedNotificationService } from '@ttrpg-ui/shared/notification/data-access';
 import { switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { EMPTY } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 
@@ -66,7 +66,7 @@ export const EventPlanningGameSystemStore = signalStore(
       ),
       get: rxMethod<string | null>(
         switchMap((id) => {
-          if (!id) return of(null);
+          if (!id) return EMPTY;
           patchState(store, SharedModels.Store.setLoading(true), SharedModels.Store.setError(null, null));
           return storeService.get(id).pipe(
             tapResponse({

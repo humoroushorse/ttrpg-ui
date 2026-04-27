@@ -1,0 +1,9 @@
+.work-item-row {
+  &:hover {
+    background: var(--mat-app-surface-variant);
+  }
+}
+
+.metric-card {
+  background: var(--mat-app-surface-variant);
+}

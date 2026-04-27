@@ -1,0 +1,103 @@
+:host {
+  display: block;
+}
+
+.template-preview {
+  padding: var(--g-spacing-md);
+  background-color: var(--g-color-surface-variant);
+  border-radius: 8px;
+  border: 1px solid var(--g-color-outline);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: var(--g-spacing-sm);
+    margin-bottom: var(--g-spacing-sm);
+  }
+
+  &__icon {
+    font-size: var(--g-font-size-base);
+    width: 20px;
+    height: 20px;
+    color: var(--g-color-primary);
+  }
+
+  &__name {
+    font-size: var(--g-font-size-sm);
+    font-weight: var(--g-font-weight-semibold);
+    color: var(--g-color-on-surface);
+    flex: 1;
+  }
+
+  &__type-badge {
+    font-size: var(--g-font-size-xs);
+    padding: 2px var(--g-spacing-sm);
+    border-radius: 4px;
+    background-color: var(--g-color-primary-container);
+    color: var(--g-color-on-primary-container);
+  }
+
+  &__description {
+    font-size: var(--g-font-size-sm);
+    color: var(--g-color-on-surface-variant);
+    margin: 0 0 var(--g-spacing-sm) 0;
+  }
+
+  &__defaults {
+    display: flex;
+    flex-direction: column;
+    gap: var(--g-spacing-xs);
+  }
+
+  &__row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--g-spacing-sm);
+  }
+
+  &__label {
+    font-size: var(--g-font-size-xs);
+    color: var(--g-color-on-surface-variant);
+    min-width: 88px;
+    padding-top: 2px;
+  }
+
+  &__value {
+    font-size: var(--g-font-size-sm);
+    font-weight: var(--g-font-weight-medium);
+    color: var(--g-color-on-surface);
+
+    &--priority {
+      text-transform: capitalize;
+    }
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--g-spacing-xs);
+  }
+
+  &__tag {
+    font-size: var(--g-font-size-xs);
+    padding: 2px var(--g-spacing-sm);
+    border-radius: 12px;
+    background-color: var(--g-color-secondary-container);
+    color: var(--g-color-on-secondary-container);
+  }
+
+  &__fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--g-spacing-xs);
+  }
+
+  &__field {
+    font-size: var(--g-font-size-xs);
+    padding: 2px var(--g-spacing-sm);
+    border-radius: 4px;
+    background-color: var(--g-color-surface);
+    color: var(--g-color-on-surface-variant);
+    border: 1px solid var(--g-color-outline-variant);
+  }
+}

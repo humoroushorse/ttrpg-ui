@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  sprint-management-app:
+    build:
+      context: ../../..
+      dockerfile: apps/sprint-management/deploy/Dockerfile
+    container_name: sprint-management-test
+    ports:
+      - "8080:80"
+    environment:
+      # Nginx configuration
+      - NGINX_PORT=80
+
+      # API configuration
+      - APP_SPRINT_MANAGEMENT__API_BASE_PATH=/sprint-management-api
+      - APP_SPRINT_MANAGEMENT__API_URL=http://backend:8003
+    networks:
+      - sprint-management-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Mock backend service for testing (optional)
+  # Uncomment if you want to test with a mock backend
+  # backend:
+  #   image: mockserver/mockserver:latest
+  #   container_name: sprint-management-backend-mock
+  #   ports:
+  #     - "8003:1080"
+  #   environment:
+  #     - MOCKSERVER_INITIALIZATION_JSON_PATH=/config/mockserver.json
+  #   networks:
+  #     - sprint-management-network
+
+networks:
+  sprint-management-network:
+    driver: bridge
+
+# Volume for persistent data (if needed)
+volumes:
+  app-data:

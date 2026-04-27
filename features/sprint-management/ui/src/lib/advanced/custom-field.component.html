@@ -1,0 +1,110 @@
+<div class="custom-field-container">
+  @switch (fieldDefinition().type) {
+    @case (CustomFieldType.Text) {
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ fieldDefinition().label }}</mat-label>
+        <input
+          matInput
+          type="text"
+          [placeholder]="fieldDefinition().placeholder || ''"
+          [required]="fieldDefinition().required || false"
+          [value]="currentValue()"
+          (input)="onValueChange($event)"
+        />
+        @if (fieldDefinition().helpText) {
+          <mat-hint>{{ fieldDefinition().helpText }}</mat-hint>
+        }
+      </mat-form-field>
+    }
+    @case (CustomFieldType.Number) {
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ fieldDefinition().label }}</mat-label>
+        <input
+          matInput
+          type="number"
+          [placeholder]="fieldDefinition().placeholder || ''"
+          [required]="fieldDefinition().required || false"
+          [value]="currentValue()"
+          (input)="onValueChange($event)"
+        />
+        @if (fieldDefinition().helpText) {
+          <mat-hint>{{ fieldDefinition().helpText }}</mat-hint>
+        }
+      </mat-form-field>
+    }
+    @case (CustomFieldType.Date) {
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ fieldDefinition().label }}</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          [placeholder]="fieldDefinition().placeholder || ''"
+          [required]="fieldDefinition().required || false"
+          [value]="currentValue()"
+          (dateChange)="onDateChange($event)"
+        />
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        @if (fieldDefinition().helpText) {
+          <mat-hint>{{ fieldDefinition().helpText }}</mat-hint>
+        }
+      </mat-form-field>
+    }
+    @case (CustomFieldType.Select) {
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ fieldDefinition().label }}</mat-label>
+        <mat-select
+          [placeholder]="fieldDefinition().placeholder || ''"
+          [required]="fieldDefinition().required || false"
+          [value]="currentValue()"
+          (selectionChange)="onSelectChange($event)"
+        >
+          @for (option of fieldDefinition().options; track option) {
+            <mat-option [value]="option">{{ option }}</mat-option>
+          }
+        </mat-select>
+        @if (fieldDefinition().helpText) {
+          <mat-hint>{{ fieldDefinition().helpText }}</mat-hint>
+        }
+      </mat-form-field>
+    }
+    @case (CustomFieldType.MultiSelect) {
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ fieldDefinition().label }}</mat-label>
+        <mat-select
+          multiple
+          [placeholder]="fieldDefinition().placeholder || ''"
+          [required]="fieldDefinition().required || false"
+          [value]="currentValue() || []"
+          (selectionChange)="onSelectChange($event)"
+        >
+          @for (option of fieldDefinition().options; track option) {
+            <mat-option [value]="option">{{ option }}</mat-option>
+          }
+        </mat-select>
+        @if (fieldDefinition().helpText) {
+          <mat-hint>{{ fieldDefinition().helpText }}</mat-hint>
+        }
+      </mat-form-field>
+    }
+    @case (CustomFieldType.Checkbox) {
+      <div class="checkbox-field">
+        <mat-checkbox
+          [checked]="currentValue() || false"
+          [required]="fieldDefinition().required || false"
+          (change)="onCheckboxChange($event)"
+        >
+          {{ fieldDefinition().label }}
+        </mat-checkbox>
+        @if (fieldDefinition().helpText) {
+          <div class="checkbox-help-text">
+            {{ fieldDefinition().helpText }}
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

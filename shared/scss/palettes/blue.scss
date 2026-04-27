@@ -1,0 +1,27 @@
+// Blue Color Palette
+// Material Design 3 blue scale with contrast colors
+
+@use 'sass:map';
+
+$colors: (
+  0: #000000,
+  10: #001d36,
+  20: #003258,
+  25: #003e6a,
+  30: #004a7c,
+  35: #00568f,
+  40: #0062a2,
+  50: #007ac9,
+  60: #3e93e1,
+  70: #5eadfd,
+  80: #a0c9ff,
+  90: #d0e4ff,
+  95: #e8f2ff,
+  98: #f7f9ff,
+  99: #fcfcff,
+  100: #ffffff,
+);
+
+@function color($shade) {
+  @return map.get($colors, $shade);
+}

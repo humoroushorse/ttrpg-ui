@@ -1,0 +1,21 @@
+.component-toolbar {
+  background-color: var(--g-color-primary);
+  color: var(--g-color-on-primary);
+
+  --mat-icon-button-icon-color: var(--g-color-on-primary);
+  --mat-icon-color: var(--g-color-on-primary);
+
+  mat-icon,
+  button,
+  a,
+  span {
+    color: inherit;
+  }
+}
+
+// mat-toolbar stretches its children; icon buttons need to be self-centered
+.component-toolbar [mat-icon-button] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,43 @@
+@use 'shared/scss/tokens/typography-classes' as typo;
+
+.tag-filter {
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--g-spacing-sm, 0.5rem);
+  }
+
+  &__label {
+    @include typo.text-label;
+    color: var(--g-color-on-surface, inherit);
+  }
+
+  &__clear {
+    @include typo.text-body-sm;
+    color: var(--g-color-primary, inherit);
+    padding: 0;
+    min-width: unset;
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--g-spacing-xs, 0.25rem);
+  }
+
+  &__chip {
+    @include typo.text-chip;
+  }
+
+  &__count {
+    @include typo.text-caption;
+    color: var(--g-color-on-surface-variant, inherit);
+    margin-left: var(--g-spacing-xs, 0.25rem);
+  }
+
+  &__empty {
+    @include typo.text-body-sm;
+    color: var(--g-color-on-surface-variant, inherit);
+  }
+}

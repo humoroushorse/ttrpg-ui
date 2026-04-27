@@ -1,0 +1,93 @@
+<mat-card class="time-tracking-card">
+  <mat-card-header>
+    <mat-card-title class="flex items-center justify-between">
+      <div class="flex items-center">
+        <mat-icon class="mr-2">schedule</mat-icon>
+        <span>Time Tracking</span>
+      </div>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="onLogTimeClick()"
+        [disabled]="disabled()"
+      >
+        <mat-icon>add</mat-icon>
+        Log Time
+      </button>
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="time-summary">
+      <div class="grid grid-cols-3 gap-4 mb-3">
+        <div class="time-stat">
+          <div class="time-stat-label">Estimated</div>
+          <div class="time-stat-value time-stat-value--estimated">
+            {{ formatHours(activeSummary()?.estimated_hours) }}
+          </div>
+        </div>
+        <div class="time-stat">
+          <div class="time-stat-label">Logged</div>
+          <div class="time-stat-value time-stat-value--logged">
+            {{ formatHours(activeSummary()?.logged_hours) }}
+          </div>
+        </div>
+        <div class="time-stat">
+          <div class="time-stat-label">Remaining</div>
+          <div
+            class="time-stat-value"
+            [class.time-stat-value--remaining-positive]="remainingHours() !== null && remainingHours()! > 0"
+            [class.time-stat-value--remaining-negative]="remainingHours() !== null && remainingHours()! < 0"
+            [class.time-stat-value--remaining-null]="remainingHours() === null"
+          >
+            {{ formatHours(remainingHours()) }}
+          </div>
+        </div>
+      </div>
+
+      @if (activeSummary()?.estimated_hours) {
+        <div class="progress-container">
+          <mat-progress-bar
+            mode="determinate"
+            [value]="progressPercentage()"
+            [color]="progressColor()"
+          ></mat-progress-bar>
+          <div class="progress-label">
+            {{ progressPercentage() }}% Complete
+            @if (progressPercentage() > 100) {
+              <span class="progress-over-budget">(Over Budget)</span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (showForm()) {
+      <mat-divider></mat-divider>
+      <div class="time-entry-form-container">
+        <lib-time-entry-form
+          [workItemId]="workItemId()"
+          [entry]="editingEntry()"
+          [loading]="storeLoading()"
+          (submitEntry)="onFormSubmitted($event)"
+          (cancelEdit)="onFormCancelled()"
+        />
+      </div>
+    }
+
+    <mat-divider></mat-divider>
+
+    <div class="time-entries">
+      <h4 class="time-entries-title">
+        Time Entries ({{ storeEntries().length }})
+      </h4>
+
+      <lib-time-entry-list
+        [entries]="storeEntries()"
+        [loading]="storeLoading()"
+        (editEntry)="onEditEntry($event)"
+        (deleteEntry)="onDeleteEntry($event)"
+      />
+    </div>
+  </mat-card-content>
+</mat-card>

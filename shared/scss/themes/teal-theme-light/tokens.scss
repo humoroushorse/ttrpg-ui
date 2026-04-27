@@ -1,0 +1,45 @@
+// Teal Light Theme - Design Tokens (CSS Custom Properties)
+// These tokens are used by both Material and Tailwind
+
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+:root {
+  // Primary color tokens (cyan palette)
+  --g-color-primary: #{map.get(mat.$cyan-palette, 40)};
+  --g-color-primary-container: #{map.get(mat.$cyan-palette, 90)};
+  --g-color-on-primary: #{map.get(mat.$cyan-palette, 100)};
+  --g-color-on-primary-container: #{map.get(mat.$cyan-palette, 10)};
+
+  // Secondary color tokens (azure palette)
+  --g-color-secondary: #{map.get(mat.$azure-palette, 40)};
+  --g-color-secondary-container: #{map.get(mat.$azure-palette, 90)};
+  --g-color-on-secondary: #{map.get(mat.$azure-palette, 100)};
+  --g-color-on-secondary-container: #{map.get(mat.$azure-palette, 10)};
+
+  // Error color tokens
+  --g-color-error: #ba1a1a;
+  --g-color-error-container: #ffdad6;
+  --g-color-on-error: #ffffff;
+  --g-color-on-error-container: #410002;
+
+  // Surface color tokens (neutral grays)
+  --g-color-surface: #f9f9f9;
+  --g-color-surface-variant: #e2e2e2;
+  --g-color-surface-dim: #dadada;
+  --g-color-surface-bright: #f9f9f9;
+  --g-color-on-surface: #1c1c1c;
+  --g-color-on-surface-variant: #454545;
+
+  // Background color tokens
+  --g-color-background: #f9f9f9;
+  --g-color-on-background: #1c1c1c;
+
+  // Outline color tokens
+  --g-color-outline: #767676;
+  --g-color-outline-variant: #c6c6c6;
+
+  // Shadow & Scrim
+  --g-color-shadow: #000000;
+  --g-color-scrim: #000000;
+}

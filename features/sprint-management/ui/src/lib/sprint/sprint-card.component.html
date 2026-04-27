@@ -1,0 +1,83 @@
+<mat-card
+  class="sprint-card"
+  (click)="onCardClick()"
+  role="button"
+  tabindex="0"
+  [attr.aria-label]="'Sprint: ' + sprint().name"
+>
+  <mat-card-header class="sprint-card__header">
+    <div class="sprint-card__header-content">
+      <mat-card-title class="sprint-card__title">
+        {{ sprint().name }}
+      </mat-card-title>
+      <mat-card-subtitle class="sprint-card__subtitle">
+        {{ formatDate(sprint().start_date) }} - {{ formatDate(sprint().end_date) }}
+      </mat-card-subtitle>
+    </div>
+    <div class="sprint-card__status-container">
+      <span [class]="'sprint-card__status-badge ' + getStatusColor()">
+        <mat-icon class="sprint-card__status-icon">{{ getStatusIcon() }}</mat-icon>
+        {{ sprint().status }}
+      </span>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content class="sprint-card__content">
+    @if (sprint().description) {
+      <p class="sprint-card__description">
+        {{ sprint().description }}
+      </p>
+    }
+
+    @if (sprint().goal) {
+      <div class="sprint-card__goal">
+        <span class="sprint-card__goal-label">Goal:</span>
+        <p class="sprint-card__goal-text">
+          {{ sprint().goal }}
+        </p>
+      </div>
+    }
+
+    @if (hasMetrics() && metrics()) {
+      <div class="sprint-card__progress">
+        <div class="sprint-card__progress-header">
+          <span class="sprint-card__progress-label">Progress</span>
+          <span class="sprint-card__progress-percentage">
+            {{ progressPercentage() }}%
+          </span>
+        </div>
+        <mat-progress-bar
+          mode="determinate"
+          [value]="progressPercentage()"
+          [color]="getProgressColor()"
+        ></mat-progress-bar>
+        <div class="sprint-card__progress-details">
+          <span>{{ metrics()!.completed_items }} / {{ metrics()!.total_items }} items</span>
+          @if (metrics()!.total_story_points > 0) {
+            <span>{{ metrics()!.completed_story_points }} / {{ metrics()!.total_story_points }} points</span>
+          }
+        </div>
+      </div>
+    }
+  </mat-card-content>
+
+  <mat-card-actions class="sprint-card__actions">
+    <button
+      mat-button
+      color="primary"
+      (click)="onViewClick($event)"
+      aria-label="View sprint details"
+    >
+      <mat-icon>visibility</mat-icon>
+      View
+    </button>
+    <button
+      mat-button
+      (click)="onEditClick($event)"
+      aria-label="Edit sprint"
+    >
+      <mat-icon>edit</mat-icon>
+      Edit
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sprint-management-config
+data:
+  APP_SPRINT_MANAGEMENT__API_BASE_PATH: "/sprint-management-api"
+  APP_SPRINT_MANAGEMENT__API_URL: "http://backend-service:8003"
+  AUTH_BASE_URL: "/auth-api"
+  PORT: "4000"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sprint-management
+  labels:
+    app: sprint-management
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sprint-management
+  template:
+    metadata:
+      labels:
+        app: sprint-management
+    spec:
+      containers:
+        - name: sprint-management
+          image: sprint-management:latest
+          ports:
+            - containerPort: 4000
+          # Environment variables injected from ConfigMap
+          # These are read at runtime by server.ts and injected into the HTML
+          envFrom:
+            - configMapRef:
+                name: sprint-management-config
+          # Or use individual env vars for more control:
+          # env:
+          #   - name: APP_SPRINT_MANAGEMENT__API_BASE_PATH
+          #     valueFrom:
+          #       configMapKeyRef:
+          #         name: sprint-management-config
+          #         key: APP_SPRINT_MANAGEMENT__API_BASE_PATH
+          #   - name: APP_SPRINT_MANAGEMENT__API_URL
+          #     valueFrom:
+          #       configMapKeyRef:
+          #         name: sprint-management-config
+          #         key: APP_SPRINT_MANAGEMENT__API_URL
+          #   - name: AUTH_BASE_URL
+          #     valueFrom:
+          #       configMapKeyRef:
+          #         name: sprint-management-config
+          #         key: AUTH_BASE_URL
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 4000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 4000
+            initialDelaySeconds: 5
+            periodSeconds: 5

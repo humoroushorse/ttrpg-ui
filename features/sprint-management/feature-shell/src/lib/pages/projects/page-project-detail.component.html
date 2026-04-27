@@ -1,0 +1,88 @@
+<div class="p-4 max-w-6xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center gap-4">
+      <button mat-icon-button (click)="onBack()" matTooltip="Back to projects">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>Project Details</h1>
+    </div>
+    <button mat-raised-button color="primary" (click)="onEdit()">
+      <mat-icon>edit</mat-icon>
+      Edit Project
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="flex flex-col items-center justify-center gap-4 py-16">
+      <mat-spinner></mat-spinner>
+      <p>Loading project...</p>
+    </div>
+  } @else if (project()) {
+    <mat-card class="mb-6">
+      <mat-card-content>
+        <div class="detail-section py-4">
+          <span class="project-key-badge px-4 py-1.5">{{ project()?.key }}</span>
+          <h2>{{ project()?.name }}</h2>
+        </div>
+
+        <div class="detail-section py-4">
+          <h3>Description</h3>
+          @if (project()?.description) {
+            <p>{{ project()?.description }}</p>
+          } @else {
+            <p class="italic opacity-60">No description provided</p>
+          }
+        </div>
+
+        <div class="detail-section py-4">
+          <h3>Ticket Numbering</h3>
+          <div class="grid gap-4 mt-3" style="grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr))">
+            <div class="stat-item flex items-center gap-3 p-3 rounded-lg">
+              <mat-icon>confirmation_number</mat-icon>
+              <div>
+                <span class="mat-caption opacity-60">Next Ticket</span>
+                <p class="mat-subtitle-1 mb-0">{{ project()?.key }}-{{ (project()?.current_counter ?? 0) + 1 }}</p>
+              </div>
+            </div>
+            <div class="stat-item flex items-center gap-3 p-3 rounded-lg">
+              <mat-icon>start</mat-icon>
+              <div>
+                <span class="mat-caption opacity-60">Starting Number</span>
+                <p class="mat-subtitle-1 mb-0">{{ project()?.starting_number }}</p>
+              </div>
+            </div>
+            <div class="stat-item flex items-center gap-3 p-3 rounded-lg">
+              <mat-icon>tag</mat-icon>
+              <div>
+                <span class="mat-caption opacity-60">Total Tickets</span>
+                <p class="mat-subtitle-1 mb-0">{{ project()?.current_counter }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section py-4">
+          <h3>Metadata</h3>
+          <div class="grid gap-4 mt-3" style="grid-template-columns: repeat(auto-fit, minmax(15.625rem, 1fr))">
+            <div>
+              <span class="mat-caption opacity-60">Created By</span>
+              <p class="mat-body-2 mb-0">{{ project()?.created_by }}</p>
+            </div>
+            <div>
+              <span class="mat-caption opacity-60">Created At</span>
+              <p class="mat-body-2 mb-0">{{ project()?.created_at | date: 'medium' }}</p>
+            </div>
+            <div>
+              <span class="mat-caption opacity-60">Updated By</span>
+              <p class="mat-body-2 mb-0">{{ project()?.updated_by }}</p>
+            </div>
+            <div>
+              <span class="mat-caption opacity-60">Updated At</span>
+              <p class="mat-body-2 mb-0">{{ project()?.updated_at | date: 'medium' }}</p>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

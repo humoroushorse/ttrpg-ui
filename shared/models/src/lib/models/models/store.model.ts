@@ -51,3 +51,62 @@ export function withComputedBase<T>() {
     }),
   }));
 }
+
+// Pagination Support
+
+export interface PaginationState {
+  currentPage: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+}
+
+export const getDefaultPaginationState = (): PaginationState => ({
+  currentPage: 1,
+  pageSize: 25,
+  totalItems: 0,
+  totalPages: 0,
+});
+
+export function setPagination(
+  currentPage: number,
+  pageSize: number,
+  totalItems: number
+): { pagination: PaginationState } {
+  const totalPages = Math.ceil(totalItems / pageSize);
+  return { pagination: { currentPage, pageSize, totalItems, totalPages } };
+}
+
+export interface BaseStateWithPagination<T> extends BaseState<T> {
+  pagination: PaginationState;
+}
+
+export const getBaseStateWithPaginationDefault = <T>(): BaseStateWithPagination<T> => ({
+  ...getBaseStateDefault<T>(),
+  pagination: getDefaultPaginationState(),
+});
+
+export function withComputedPagination() {
+  return withComputed(({ pagination }: any) => ({
+    hasNextPage: computed<boolean>(() => {
+      const p = (<Signal<PaginationState>>pagination)();
+      return p.currentPage < p.totalPages;
+    }),
+    hasPreviousPage: computed<boolean>(() => {
+      const p = (<Signal<PaginationState>>pagination)();
+      return p.currentPage > 1;
+    }),
+    pageCount: computed<number>(() => {
+      const p = (<Signal<PaginationState>>pagination)();
+      return p.totalPages;
+    }),
+    startIndex: computed<number>(() => {
+      const p = (<Signal<PaginationState>>pagination)();
+      return (p.currentPage - 1) * p.pageSize + 1;
+    }),
+    endIndex: computed<number>(() => {
+      const p = (<Signal<PaginationState>>pagination)();
+      return Math.min(p.currentPage * p.pageSize, p.totalItems);
+    }),
+  }));
+}

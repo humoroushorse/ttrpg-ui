@@ -1,0 +1,42 @@
+.velocity-chart-card {
+  margin: 1rem 0;
+}
+
+.chart-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.velocity-chart {
+  display: block;
+  margin: 0 auto;
+
+  .bar-completed {
+    transition: fill 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  .bar-total {
+    opacity: 0.5;
+  }
+}
+
+.trend-increasing {
+  color: var(--g-color-secondary);
+}
+
+.trend-decreasing {
+  color: var(--g-color-error);
+}
+
+.trend-stable {
+  color: var(--g-color-primary);
+}
+
+.trend-unknown {
+  color: var(--g-color-on-surface-variant);
+}

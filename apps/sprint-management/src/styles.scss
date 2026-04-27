@@ -1,0 +1,32 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* stylelint-disable scss/at-rule-no-unknown */
+// @tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* stylelint-enable scss/at-rule-no-unknown */
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+
+  /* Use system fonts as fallback to prevent layout shift while Roboto loads */
+  font-family:
+    Roboto,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+}
+
+/* Prevent layout shift from Material Icons loading */
+.material-icons {
+  font-display: swap;
+}

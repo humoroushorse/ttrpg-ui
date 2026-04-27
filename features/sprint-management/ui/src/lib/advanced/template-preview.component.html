@@ -1,0 +1,44 @@
+<div class="template-preview">
+  <div class="template-preview__header">
+    <mat-icon class="template-preview__icon">description</mat-icon>
+    <span class="template-preview__name">{{ template().name }}</span>
+    <span class="template-preview__type-badge">{{ template().type }}</span>
+  </div>
+
+  @if (template().description) {
+    <p class="template-preview__description">{{ template().description }}</p>
+  }
+
+  <div class="template-preview__defaults">
+    @if (template().defaultPriority) {
+      <div class="template-preview__row">
+        <span class="template-preview__label">Priority</span>
+        <span class="template-preview__value template-preview__value--priority">
+          {{ template().defaultPriority }}
+        </span>
+      </div>
+    }
+
+    @if (template().defaultTags?.length) {
+      <div class="template-preview__row">
+        <span class="template-preview__label">Tags</span>
+        <div class="template-preview__tags">
+          @for (tag of template().defaultTags; track tag) {
+            <span class="template-preview__tag">{{ tag }}</span>
+          }
+        </div>
+      </div>
+    }
+
+    @if (template().customFields?.length) {
+      <div class="template-preview__row">
+        <span class="template-preview__label">Custom Fields</span>
+        <div class="template-preview__fields">
+          @for (field of template().customFields; track field.key) {
+            <span class="template-preview__field">{{ field.label }}</span>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

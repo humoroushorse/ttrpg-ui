@@ -1,0 +1,143 @@
+.preferences-dialog {
+  min-width: 600px;
+  max-width: 800px;
+
+  h2[mat-dialog-title] {
+    margin: 0;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  }
+}
+
+.preferences-content {
+  padding: 0 !important;
+  min-height: 500px;
+  max-height: 70vh;
+}
+
+.tab-content {
+  padding: 24px;
+}
+
+.preference-section {
+  margin-bottom: 32px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 16px 0;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.toggle-option {
+  margin-bottom: 16px;
+
+  mat-slide-toggle {
+    display: block;
+  }
+}
+
+.option-description {
+  margin: 4px 0 0 48px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.hint-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 0 0;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.6);
+
+  .hint-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.action-button {
+  justify-content: flex-start;
+  text-align: left;
+
+  mat-icon {
+    margin-right: 8px;
+  }
+}
+
+.info-text {
+  margin: 8px 0;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+
+  strong {
+    color: rgba(0, 0, 0, 0.87);
+  }
+}
+
+.dialog-actions {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  margin: 0;
+}
+
+// Dark theme support
+@media (prefers-color-scheme: dark) {
+  .preferences-dialog {
+    h2[mat-dialog-title] {
+      border-bottom-color: rgba(255, 255, 255, 0.12);
+    }
+  }
+
+  .section-title {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .option-description,
+  .hint-text,
+  .info-text {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .info-text strong {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .dialog-actions {
+    border-top-color: rgba(255, 255, 255, 0.12);
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .preferences-dialog {
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .preferences-content {
+    max-height: 60vh;
+  }
+
+  .tab-content {
+    padding: 16px;
+  }
+}
