@@ -1,0 +1,57 @@
+// Ocean Dark Theme - Design Tokens (CSS Custom Properties)
+// Deep ocean-inspired dark theme using blue/teal tones
+
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+:root {
+  // Primary color tokens (blue palette)
+  --g-color-primary: #{map.get(mat.$azure-palette, 80)};
+  --g-color-primary-container: #{map.get(mat.$azure-palette, 30)};
+  --g-color-on-primary: #{map.get(mat.$azure-palette, 20)};
+  --g-color-on-primary-container: #{map.get(mat.$azure-palette, 90)};
+
+  // Secondary color tokens (cyan palette)
+  --g-color-secondary: #{map.get(mat.$cyan-palette, 80)};
+  --g-color-secondary-container: #{map.get(mat.$cyan-palette, 30)};
+  --g-color-on-secondary: #{map.get(mat.$cyan-palette, 20)};
+  --g-color-on-secondary-container: #{map.get(mat.$cyan-palette, 90)};
+
+  // Error color tokens
+  --g-color-error: #ffb4ab;
+  --g-color-error-container: #93000a;
+  --g-color-on-error: #690005;
+  --g-color-on-error-container: #ffdad6;
+
+  // Info color tokens (same as primary for ocean theme)
+  --g-color-info: #{map.get(mat.$azure-palette, 80)};
+  --g-color-info-container: #{map.get(mat.$azure-palette, 30)};
+  --g-color-on-info: #{map.get(mat.$azure-palette, 20)};
+  --g-color-on-info-container: #{map.get(mat.$azure-palette, 90)};
+
+  // Warning color tokens
+  --g-color-warning: #ffb951;
+  --g-color-warning-container: #5c3a00;
+  --g-color-on-warning: #3d2600;
+  --g-color-on-warning-container: #ffddb3;
+
+  // Surface color tokens (deep ocean blues)
+  --g-color-surface: #0a1628;
+  --g-color-surface-variant: #1a2d4a;
+  --g-color-surface-dim: #060e1a;
+  --g-color-surface-bright: #1e3355;
+  --g-color-on-surface: #c8dff5;
+  --g-color-on-surface-variant: #9ab8d8;
+
+  // Background color tokens
+  --g-color-background: #0a1628;
+  --g-color-on-background: #c8dff5;
+
+  // Outline color tokens
+  --g-color-outline: #4a7aaa;
+  --g-color-outline-variant: #1a2d4a;
+
+  // Shadow & Scrim
+  --g-color-shadow: #000000;
+  --g-color-scrim: #000000;
+}

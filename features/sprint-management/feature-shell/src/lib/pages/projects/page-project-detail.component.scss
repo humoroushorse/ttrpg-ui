@@ -1,0 +1,21 @@
+.project-key-badge {
+  display: inline-block;
+  background: var(--primary-color);
+  color: var(--primary-on-container);
+  border-radius: 1.25rem;
+  letter-spacing: 0.5px;
+}
+
+.detail-section {
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--mat-divider-color);
+  }
+}
+
+.stat-item {
+  background: var(--mat-app-surface-variant);
+
+  mat-icon {
+    color: var(--primary-color);
+  }
+}

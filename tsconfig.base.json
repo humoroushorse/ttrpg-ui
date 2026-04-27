@@ -8,9 +8,9 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2015",
+    "target": "ES2022",
     "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "lib": ["DOM", "ES2022", "ES2022.Intl"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "allowSyntheticDefaultImports": true,
@@ -58,7 +58,18 @@
       "@ttrpg-ui/shared/theme/data-access": ["shared/theme/data-access/src/index.ts"],
       "@ttrpg-ui/shared/theme/models": ["shared/theme/models/src/index.ts"],
       "@ttrpg-ui/shared/theme/ui": ["shared/theme/ui/src/index.ts"],
-      "@ttrpg-ui/shared/util": ["shared/util/src/index.ts"]
+      "@ttrpg-ui/shared/util": ["shared/util/src/index.ts"],
+      "@ttrpg-ui/features/sprint-management/data-access": ["features/sprint-management/data-access/src/index.ts"],
+      "@ttrpg-ui/features/sprint-management/feature-shell": ["features/sprint-management/feature-shell/src/index.ts"],
+      "@ttrpg-ui/features/sprint-management/models": ["features/sprint-management/models/src/index.ts"],
+      "@ttrpg-ui/features/sprint-management/ui": ["features/sprint-management/ui/src/index.ts"],
+      "@ttrpg-ui/features/sprint-management/util": ["features/sprint-management/util/src/index.ts"],
+      "@ttrpg-ui/features/sprint-management/testing": ["features/sprint-management/testing/src/index.ts"],
+      "@ttrpg-ui/shared/keyboard-shortcut/data-access": ["shared/keyboard-shortcut/data-access/src/index.ts"],
+      "@ttrpg-ui/shared/keyboard-shortcut/ui": ["shared/keyboard-shortcut/ui/src/index.ts"],
+      "@ttrpg-ui/shared/date/data-access": ["shared/date/data-access/src/index.ts"],
+      "@ttrpg-ui/shared/date/util": ["shared/date/util/src/index.ts"],
+      "@ttrpg-ui/shared/date/models": ["shared/date/models/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

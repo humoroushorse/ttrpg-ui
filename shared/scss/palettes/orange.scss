@@ -1,0 +1,27 @@
+// Orange Color Palette
+// Material Design 3 orange scale with contrast colors
+
+@use 'sass:map';
+
+$colors: (
+  0: #000000,
+  10: #331100,
+  20: #4d1c00,
+  25: #5e2400,
+  30: #6f2c00,
+  35: #803500,
+  40: #923f00,
+  50: #b65100,
+  60: #d96500,
+  70: #ff8c3a,
+  80: #ffb68e,
+  90: #ffdcc5,
+  95: #ffede5,
+  98: #fff8f5,
+  99: #fffbff,
+  100: #ffffff,
+);
+
+@function color($shade) {
+  @return map.get($colors, $shade);
+}

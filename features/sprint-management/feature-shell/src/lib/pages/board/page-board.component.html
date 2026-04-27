@@ -1,0 +1,91 @@
+<div class="board-page">
+  <!-- Header -->
+  <div class="board-header">
+    <div class="header-content">
+      <h1>
+        <mat-icon>dashboard</mat-icon>
+        Sprint Board
+      </h1>
+
+      <div class="header-actions">
+        <!-- Sprint Selector -->
+        @if (availableSprints().length > 0) {
+          <mat-form-field class="sprint-selector">
+            <mat-label>Select Sprint</mat-label>
+            <mat-select [value]="selectedSprintId()" (selectionChange)="onSprintChange($event.value)">
+              @for (sprint of availableSprints(); track sprint.id) {
+                <mat-option [value]="sprint.id">
+                  {{ sprint.name }}
+                  @if (sprint.status === SprintStatus.Active) {
+                    <span class="active-badge">Active</span>
+                  }
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+
+        @if (currentSprint()) {
+          <button mat-button (click)="onViewSprintDetails()" matTooltip="View sprint details">
+            <mat-icon>info</mat-icon>
+            Sprint Details
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Sprint Info Bar -->
+    @if (currentSprint(); as sprint) {
+      <div class="sprint-info-bar">
+        <div class="sprint-info">
+          <span class="sprint-name">{{ sprint.name }}</span>
+          <span class="sprint-dates">
+            {{ sprint.start_date | date: 'MMM d' }} - {{ sprint.end_date | date: 'MMM d, y' }}
+          </span>
+          @if (sprint.goal) {
+            <span class="sprint-goal">
+              <mat-icon>flag</mat-icon>
+              {{ sprint.goal }}
+            </span>
+          }
+        </div>
+        <div class="sprint-stats">
+          <span class="stat">
+            <mat-icon>assignment</mat-icon>
+            {{ sprintWorkItems().length }} items
+          </span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Board Content -->
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Loading board...</p>
+    </div>
+  } @else {
+    @if (!currentSprint()) {
+      <div class="empty-state">
+        <mat-icon>inbox</mat-icon>
+        <h2>No Active Sprint</h2>
+        <p>There are no active sprints. Start a sprint to use the board.</p>
+        <button mat-raised-button color="primary" routerLink="/sprints">Go to Sprints</button>
+      </div>
+    } @else if (sprintWorkItems().length === 0) {
+      <div class="empty-state">
+        <mat-icon>inbox</mat-icon>
+        <h2>No Work Items</h2>
+        <p>This sprint doesn't have any work items yet.</p>
+        <button mat-raised-button color="primary" routerLink="/work-items">Add Work Items</button>
+      </div>
+    } @else {
+      <lib-sprint-board
+        [workItems]="sprintWorkItems()"
+        (workItemClicked)="onWorkItemClicked($event)"
+        (workItemStatusChanged)="onWorkItemStatusChanged($event)"
+      />
+    }
+  }
+</div>

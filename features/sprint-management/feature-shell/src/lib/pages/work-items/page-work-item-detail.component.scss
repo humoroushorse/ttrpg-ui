@@ -1,0 +1,16 @@
+.detail-row {
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--mat-divider-color);
+  }
+}
+
+.dependency-item {
+  &.blocked {
+    background: color-mix(in srgb, var(--mat-sys-error) 8%, transparent);
+    border-color: color-mix(in srgb, var(--mat-sys-error) 30%, transparent);
+  }
+}
+
+.history-tab-content {
+  padding: 1rem 0;
+}

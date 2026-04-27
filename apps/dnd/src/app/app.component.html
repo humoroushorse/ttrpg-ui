@@ -22,7 +22,7 @@
   </div>
 </mat-toolbar>
 
-<mat-sidenav-container [style.height]="sidnavHeight$$()" autosize>
+<mat-sidenav-container [style.height]="sidnavHeight()" autosize>
   <!-- @if (userTokenDecoded()) { -->
   <mat-sidenav #drawer [mode]="sidenavMode()" [opened]="sidenavOpened$()" class="w-72 max-w-72" role="navigation">
     <mat-nav-list aria-label="Main navigation">

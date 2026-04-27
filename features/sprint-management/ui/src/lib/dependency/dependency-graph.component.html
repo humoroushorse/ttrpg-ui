@@ -1,0 +1,243 @@
+<div class="dependency-graph-container">
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-icon class="loading-spinner">refresh</mat-icon>
+      <p>Loading dependencies...</p>
+    </div>
+  } @else if (dependencyNodes().length === 0) {
+    <div class="empty-state">
+      <mat-icon>link_off</mat-icon>
+      <p>No dependencies found</p>
+    </div>
+  } @else {
+    <!-- Circular Dependencies Warning -->
+    @if (circularDependencyNodes().length > 0) {
+      <mat-card class="warning-card">
+        <mat-card-content>
+          <div class="warning-header">
+            <mat-icon class="warning-icon">warning</mat-icon>
+            <h3>Circular Dependencies Detected</h3>
+          </div>
+          <p>
+            The following work items are part of circular dependency chains. This may cause blocking issues and should
+            be resolved.
+          </p>
+          <div class="circular-items">
+            @for (node of circularDependencyNodes(); track node.workItem.id) {
+              <mat-chip
+                class="circular-chip"
+                [matTooltip]="node.workItem.title"
+                (click)="onWorkItemClick(node)"
+                (keyup.enter)="onWorkItemClick(node)"
+                (keyup.space)="onWorkItemClick(node)"
+                tabindex="0"
+                role="button"
+              >
+                <mat-icon matChipAvatar>warning</mat-icon>
+                {{ node.workItem.title }}
+              </mat-chip>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    <!-- Dependency Graph Visualization -->
+    <div class="graph-sections">
+      <!-- Blocking Items Section -->
+      @if (blockingNodes().length > 0) {
+        <mat-card class="graph-section">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>lock</mat-icon>
+              Blocking Items ({{ blockingNodes().length }})
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="nodes-grid">
+              @for (node of blockingNodes(); track node.workItem.id) {
+                <div
+                  [class]="getNodeClass(node)"
+                  [matTooltip]="getNodeTooltip(node)"
+                  (click)="onWorkItemClick(node)"
+                  (keyup.enter)="onWorkItemClick(node)"
+                  (keyup.space)="onWorkItemClick(node)"
+                  tabindex="0"
+                  role="button"
+                >
+                  <div class="node-header">
+                    <mat-icon [class.circular-icon]="node.isInCircularDependency">
+                      {{ getNodeIcon(node) }}
+                    </mat-icon>
+                    <span class="node-title">{{ node.workItem.title }}</span>
+                  </div>
+                  <div class="node-details">
+                    <span class="node-status">{{ node.workItem.status }}</span>
+                    <span class="node-priority">{{ node.workItem.priority }}</span>
+                  </div>
+                  @if (node.blocks.length > 0) {
+                    <div class="node-relationships">
+                      <div class="relationship-label">
+                        <mat-icon>arrow_forward</mat-icon>
+                        Blocks:
+                      </div>
+                      <div class="related-items">
+                        @for (blockedId of node.blocks; track blockedId) {
+                          @if (getWorkItemById(blockedId); as blockedItem) {
+                            <button
+                              mat-stroked-button
+                              class="related-item-btn"
+                              [matTooltip]="blockedItem.title"
+                              (click)="
+                                onWorkItemClick({
+                                  workItem: blockedItem,
+                                  blocks: [],
+                                  blockedBy: [],
+                                  isInCircularDependency: false,
+                                });
+                                $event.stopPropagation()
+                              "
+                            >
+                              {{ blockedItem.title }}
+                            </button>
+                          }
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+
+      <!-- Blocked Items Section -->
+      @if (blockedNodes().length > 0) {
+        <mat-card class="graph-section">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>block</mat-icon>
+              Blocked Items ({{ blockedNodes().length }})
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="nodes-grid">
+              @for (node of blockedNodes(); track node.workItem.id) {
+                <div
+                  [class]="getNodeClass(node)"
+                  [matTooltip]="getNodeTooltip(node)"
+                  (click)="onWorkItemClick(node)"
+                  (keyup.enter)="onWorkItemClick(node)"
+                  (keyup.space)="onWorkItemClick(node)"
+                  tabindex="0"
+                  role="button"
+                >
+                  <div class="node-header">
+                    <mat-icon [class.circular-icon]="node.isInCircularDependency">
+                      {{ getNodeIcon(node) }}
+                    </mat-icon>
+                    <span class="node-title">{{ node.workItem.title }}</span>
+                  </div>
+                  <div class="node-details">
+                    <span class="node-status">{{ node.workItem.status }}</span>
+                    <span class="node-priority">{{ node.workItem.priority }}</span>
+                  </div>
+                  @if (node.blockedBy.length > 0) {
+                    <div class="node-relationships">
+                      <div class="relationship-label">
+                        <mat-icon>arrow_back</mat-icon>
+                        Blocked by:
+                      </div>
+                      <div class="related-items">
+                        @for (blockerId of node.blockedBy; track blockerId) {
+                          @if (getWorkItemById(blockerId); as blockerItem) {
+                            <button
+                              mat-stroked-button
+                              class="related-item-btn"
+                              [matTooltip]="blockerItem.title"
+                              (click)="
+                                onWorkItemClick({
+                                  workItem: blockerItem,
+                                  blocks: [],
+                                  blockedBy: [],
+                                  isInCircularDependency: false,
+                                });
+                                $event.stopPropagation()
+                              "
+                            >
+                              {{ blockerItem.title }}
+                            </button>
+                          }
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+
+    <!-- All Dependencies List -->
+    <mat-card class="dependencies-list">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>link</mat-icon>
+          All Dependencies ({{ dependencies().length }})
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="dependency-items">
+          @for (dep of dependencies(); track dep.id) {
+            @if (getWorkItemById(dep.source_work_item_id); as sourceItem) {
+              @if (getWorkItemById(dep.target_work_item_id); as targetItem) {
+                <div class="dependency-item">
+                  <div class="dependency-source">
+                    <button
+                      mat-button
+                      (click)="
+                        onWorkItemClick({
+                          workItem: sourceItem,
+                          blocks: [],
+                          blockedBy: [],
+                          isInCircularDependency: false,
+                        })
+                      "
+                    >
+                      {{ sourceItem.title }}
+                    </button>
+                  </div>
+                  <div class="dependency-arrow">
+                    <mat-icon>arrow_forward</mat-icon>
+                    <span class="dependency-type">{{ dep.dependency_type }}</span>
+                  </div>
+                  <div class="dependency-target">
+                    <button
+                      mat-button
+                      (click)="
+                        onWorkItemClick({
+                          workItem: targetItem,
+                          blocks: [],
+                          blockedBy: [],
+                          isInCircularDependency: false,
+                        })
+                      "
+                    >
+                      {{ targetItem.title }}
+                    </button>
+                  </div>
+                  <button mat-icon-button color="warn" matTooltip="Remove dependency" (click)="onRemoveDependency(dep)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              }
+            }
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

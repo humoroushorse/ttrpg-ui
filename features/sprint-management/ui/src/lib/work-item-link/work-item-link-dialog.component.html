@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>Add Work Item Link</h2>
+
+<mat-dialog-content>
+  <lib-work-item-link-form
+    [sourceWorkItemId]="sourceWorkItemId()"
+    [loading]="loading()"
+    (formSubmitted)="onFormSubmit($event)"
+    (cancelled)="onCancel()"
+  />
+</mat-dialog-content>

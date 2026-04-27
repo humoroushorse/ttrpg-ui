@@ -1,0 +1,7 @@
+tunnel: sprint-management-tunnel
+credentials-file: /etc/cloudflared/credentials.json
+
+ingress:
+  - hostname: sprint-management.example.com
+    service: http://localhost:80
+  - service: http_status:404

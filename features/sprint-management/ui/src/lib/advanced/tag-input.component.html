@@ -1,0 +1,29 @@
+<div class="tag-input">
+  <mat-form-field class="tag-input__field" appearance="outline">
+    <mat-label>Tags</mat-label>
+    <mat-chip-grid #chipGrid aria-label="Work item tags">
+      @for (tag of currentTags(); track tag) {
+        <mat-chip-row [removable]="true" (removed)="removeTag(tag)" class="tag-input__chip">
+          {{ tag }}
+          <button matChipRemove [attr.aria-label]="'Remove tag ' + tag">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
+      }
+    </mat-chip-grid>
+    <input
+      #tagInputEl
+      [placeholder]="placeholder()"
+      [formControl]="tagInputControl"
+      [matChipInputFor]="chipGrid"
+      [matAutocomplete]="auto"
+      (keydown)="onInputKeydown($event)"
+      aria-label="Tag input"
+    />
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onAutocompleteSelected($event)">
+      @for (tag of filteredTags(); track tag) {
+        <mat-option [value]="tag">{{ tag }}</mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+</div>

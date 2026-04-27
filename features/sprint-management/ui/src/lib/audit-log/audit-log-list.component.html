@@ -1,0 +1,152 @@
+<div class="audit-log-list-container">
+  <!-- Filters section -->
+  @if (showFilters()) {
+    <mat-card class="filters-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>filter_list</mat-icon>
+          Filter History
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="filterForm" class="filter-form">
+          <div class="filter-row">
+            <!-- User filter -->
+            <mat-form-field>
+              <mat-label>User</mat-label>
+              <mat-select formControlName="user_id">
+                <mat-option [value]="null">All Users</mat-option>
+                @for (userId of uniqueUsers(); track userId) {
+                  <mat-option [value]="userId">User {{ userId }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <!-- Action filter -->
+            <mat-form-field>
+              <mat-label>Action</mat-label>
+              <mat-select formControlName="action">
+                <mat-option [value]="null">All Actions</mat-option>
+                @for (action of auditActions; track action) {
+                  <mat-option [value]="action">{{ formatAction(action) }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <!-- Start date filter -->
+            <mat-form-field>
+              <mat-label>Start Date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="startPicker"
+                formControlName="start_date"
+                placeholder="Select start date"
+              />
+              <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+              <mat-datepicker #startPicker></mat-datepicker>
+            </mat-form-field>
+
+            <!-- End date filter -->
+            <mat-form-field>
+              <mat-label>End Date</mat-label>
+              <input matInput [matDatepicker]="endPicker" formControlName="end_date" placeholder="Select end date" />
+              <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+              <mat-datepicker #endPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="filter-actions">
+            <button mat-raised-button color="primary" type="button" (click)="applyFilters()">
+              <mat-icon>search</mat-icon>
+              Apply Filters
+            </button>
+            <button mat-button type="button" (click)="clearFilters()">
+              <mat-icon>clear</mat-icon>
+              Clear Filters
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Loading state -->
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-icon class="loading-icon">history</mat-icon>
+      <p>Loading history...</p>
+    </div>
+  }
+
+  <!-- Empty state -->
+  @if (!loading() && sortedLogs().length === 0) {
+    <mat-card class="empty-state-card">
+      <mat-card-content>
+        <mat-icon>history</mat-icon>
+        <p>No history available.</p>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Audit log entries -->
+  @if (!loading() && sortedLogs().length > 0) {
+    <div class="audit-log-entries">
+      @for (log of sortedLogs(); track log.id) {
+        <mat-card class="audit-log-card" [class.status-change-card]="isStatusChange(log)">
+          <mat-card-content>
+            <div class="audit-log-item">
+              <!-- Action icon -->
+              <div class="audit-log-icon">
+                <mat-icon [color]="getActionColor(log.action)">
+                  {{ getActionIcon(log.action) }}
+                </mat-icon>
+              </div>
+
+              <!-- Log details -->
+              <div class="audit-log-details">
+                <!-- Header with action and user -->
+                <div class="audit-log-header">
+                  <span class="audit-log-action">
+                    <strong>{{ formatAction(log.action) }}</strong>
+                  </span>
+                  <span class="audit-log-user"> by {{ getUserName(log) }} </span>
+                </div>
+
+                <!-- Timestamp -->
+                <div class="audit-log-timestamp">
+                  <mat-icon class="timestamp-icon">schedule</mat-icon>
+                  {{ formatTimestamp(log.timestamp) }}
+                </div>
+
+                <!-- Changes -->
+                @if (hasChanges(log)) {
+                  <div class="audit-log-changes">
+                    <mat-divider></mat-divider>
+                    <div class="changes-header">
+                      <mat-icon>change_circle</mat-icon>
+                      <span>Changes:</span>
+                    </div>
+                    <div class="changes-list">
+                      @for (change of getChangesEntries(log); track change.key) {
+                        <div class="change-item">
+                          <span class="change-key">{{ change.key }}:</span>
+                          @if (change.isSimple) {
+                            <span class="change-new-value">{{ change.newValue }}</span>
+                          } @else {
+                            <span class="change-old-value">{{ change.oldValue }}</span>
+                            <span class="change-arrow">→</span>
+                            <span class="change-new-value">{{ change.newValue }}</span>
+                          }
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

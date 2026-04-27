@@ -1,0 +1,50 @@
+// Default Dark Theme - Typography Overrides
+// Material Design 3 typography system
+
+$dark-typography: (
+  // Font families
+  brand-family: 'Roboto',
+  plain-family: 'Roboto',
+
+  // Font weights
+  bold-weight: 700,
+  medium-weight: 500,
+  regular-weight: 400
+);
+
+// Typography scale tokens (CSS custom properties)
+// These are used by both Material and custom components
+:root {
+  // Font families
+  --g-font-family-base: 'Roboto', 'Helvetica Neue', sans-serif;
+  --g-font-family-mono: 'Roboto Mono', 'Courier New', monospace;
+
+  // Font sizes (Material Design 3 scale)
+  --g-font-size-xs: 0.75rem; // 12px
+  --g-font-size-sm: 0.875rem; // 14px
+  --g-font-size-base: 1rem; // 16px
+  --g-font-size-lg: 1.125rem; // 18px
+  --g-font-size-xl: 1.25rem; // 20px
+  --g-font-size-2xl: 1.5rem; // 24px
+  --g-font-size-3xl: 1.875rem; // 30px
+  --g-font-size-4xl: 2.25rem; // 36px
+  --g-font-size-5xl: 3rem; // 48px
+
+  // Font weights
+  --g-font-weight-light: 300;
+  --g-font-weight-normal: 400;
+  --g-font-weight-medium: 500;
+  --g-font-weight-semibold: 600;
+  --g-font-weight-bold: 700;
+
+  // Line heights
+  --g-line-height-tight: 1.25;
+  --g-line-height-normal: 1.5;
+  --g-line-height-relaxed: 1.75;
+  --g-line-height-loose: 2;
+
+  // Letter spacing
+  --g-letter-spacing-tight: -0.025em;
+  --g-letter-spacing-normal: 0;
+  --g-letter-spacing-wide: 0.025em;
+}

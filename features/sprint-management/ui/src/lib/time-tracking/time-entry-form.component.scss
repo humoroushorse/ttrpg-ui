@@ -1,0 +1,39 @@
+:host {
+  display: block;
+}
+
+.time-entry-form {
+  width: 100%;
+
+  &__fields {
+    display: flex;
+    gap: var(--g-spacing-md);
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+    }
+  }
+
+  &__date-field {
+    flex: 1;
+  }
+
+  &__hours-field {
+    width: 120px;
+
+    @media (max-width: 480px) {
+      width: 100%;
+    }
+  }
+
+  &__description-field {
+    width: 100%;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--g-spacing-sm);
+    margin-top: var(--g-spacing-sm);
+  }
+}

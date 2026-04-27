@@ -1,0 +1,21 @@
+// Palette Utilities
+// Shared functions for converting palettes to Material 3 format
+
+@use 'sass:map';
+
+// Convert a palette to Material 3 format with required nested palettes
+// M3 requires: primary colors + nested secondary, neutral, neutral-variant, error
+@function to-m3-palette($colors, $secondary, $neutral, $error) {
+  // Create neutral-variant from neutral (M3 requirement)
+  $neutral-variant: $neutral;
+
+  @return map.merge(
+    $colors,
+    (
+      secondary: $secondary,
+      neutral: $neutral,
+      neutral-variant: $neutral-variant,
+      error: $error,
+    )
+  );
+}

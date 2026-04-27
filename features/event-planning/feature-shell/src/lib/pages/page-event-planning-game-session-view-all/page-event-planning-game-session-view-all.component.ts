@@ -27,7 +27,7 @@ import { UserAvatarListComponent } from '@ttrpg-ui/features/user/ui';
     CommonModule,
     SharedAngularMaterialTableComponent,
     GameSessionCardListComponent,
-    UserAvatarListComponent,
+    UserAvatarListComponent, // used dynamically in columnDefs as a table cell component // used dynamically in columnDefs as a table cell component
     MatCardModule,
     MatDialogModule,
     MatButtonModule,

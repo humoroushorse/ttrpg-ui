@@ -1,0 +1,175 @@
+{
+  "name": "sprint-management",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/sprint-management/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/sprint-management",
+        "index": "apps/sprint-management/src/index.html",
+        "browser": "apps/sprint-management/src/main.ts",
+        "polyfills": [],
+        "tsConfig": "apps/sprint-management/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "stylePreprocessorOptions": {
+          "includePaths": ["."]
+        },
+        "assets": [
+          "apps/sprint-management/src/robots.txt",
+          "apps/sprint-management/src/sitemap.xml",
+          {
+            "glob": "app.config.template.json",
+            "input": "apps/sprint-management/src/assets",
+            "output": "/assets"
+          },
+          "apps/sprint-management/src/assets",
+          {
+            "glob": "**/*",
+            "input": "apps/sprint-management/public"
+          }
+        ],
+        "styles": [
+          "apps/sprint-management/src/styles.scss",
+          {
+            "input": "shared/scss/themes/default-theme-light/default-theme-light.scss",
+            "bundleName": "default-theme-light",
+            "inject": false
+          },
+          {
+            "input": "shared/scss/themes/default-theme-dark/default-theme-dark.scss",
+            "bundleName": "default-theme-dark",
+            "inject": false
+          },
+          {
+            "input": "shared/scss/themes/teal-theme-light/teal-theme-light.scss",
+            "bundleName": "teal-theme-light",
+            "inject": false
+          },
+          {
+            "input": "shared/scss/themes/teal-theme-dark/teal-theme-dark.scss",
+            "bundleName": "teal-theme-dark",
+            "inject": false
+          }
+        ],
+        "scripts": [],
+        "server": "apps/sprint-management/src/main.server.ts",
+        "ssr": {
+          "entry": "apps/sprint-management/src/server.ts"
+        },
+        "outputMode": "server"
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "2mb",
+              "maximumError": "3mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "10kb",
+              "maximumError": "20kb"
+            }
+          ],
+          "outputHashing": "all",
+          "serviceWorker": "apps/sprint-management/ngsw-config.json",
+          "optimization": {
+            "scripts": true,
+            "styles": {
+              "minify": true,
+              "inlineCritical": true
+            },
+            "fonts": {
+              "inline": true
+            }
+          },
+          "namedChunks": false,
+          "extractLicenses": true,
+          "sourceMap": false
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular/build:dev-server",
+      "options": {
+        "port": 4204,
+        "proxyConfig": "apps/sprint-management/proxies/proxy.conf.json"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "sprint-management:build:production"
+        },
+        "development": {
+          "buildTarget": "sprint-management:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "continuous": true
+    },
+    "serve-ssr": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/apps/sprint-management/server/server.mjs",
+        "cwd": ".",
+        "readyWhen": "Node Express server listening"
+      },
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
+    },
+    "extract-i18n": {
+      "executor": "@angular/build:extract-i18n",
+      "options": {
+        "buildTarget": "sprint-management:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "config": "apps/sprint-management/vite.config.mts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "sprint-management:build",
+        "port": 4204,
+        "staticFilePath": "dist/apps/sprint-management/browser",
+        "spa": true
+      },
+      "continuous": true
+    },
+    "docker-build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker build -f apps/sprint-management/deploy/Dockerfile -t sprint-management:latest ."
+      }
+    },
+    "docker-push": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker push sprint-management:latest"
+      },
+      "dependsOn": ["docker-build"]
+    }
+  }
+}

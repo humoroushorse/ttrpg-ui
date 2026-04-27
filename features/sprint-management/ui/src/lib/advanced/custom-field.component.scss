@@ -1,0 +1,18 @@
+:host {
+  display: block;
+}
+
+.custom-field-container {
+  margin-bottom: 16px;
+}
+
+.checkbox-field {
+  padding: 8px 0;
+}
+
+.checkbox-help-text {
+  font-size: var(--g-font-size-sm);
+  color: var(--g-color-on-surface-variant);
+  margin-top: var(--g-spacing-xs);
+  margin-left: 32px;
+}

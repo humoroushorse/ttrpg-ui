@@ -1,0 +1,111 @@
+<div class="sprint-progress">
+  <div class="sprint-progress__header">
+    <h3 class="sprint-progress__title">Sprint Progress</h3>
+    <div class="sprint-progress__health">
+      <mat-icon [class]="'sprint-progress__health-icon ' + getHealthIconColor()">{{ getHealthIcon() }}</mat-icon>
+      <span [class]="'sprint-progress__health-text ' + getHealthIconColor()">
+        {{ getHealthStatus() }}
+      </span>
+    </div>
+  </div>
+
+  <div class="sprint-progress__overall">
+    <div class="sprint-progress__overall-header">
+      <span class="sprint-progress__overall-label">Overall Completion</span>
+      <span class="sprint-progress__overall-percentage">{{ completionPercentage() }}%</span>
+    </div>
+    <mat-progress-bar
+      mode="determinate"
+      [value]="completionPercentage()"
+      [color]="getProgressColor()"
+      class="sprint-progress__progress-bar sprint-progress__progress-bar--large"
+    ></mat-progress-bar>
+  </div>
+
+  @if (showDetails()) {
+    <div class="sprint-progress__metrics">
+      <div class="sprint-progress__metric sprint-progress__metric--total">
+        <div class="sprint-progress__metric-header">
+          <mat-icon>list</mat-icon>
+          <span class="sprint-progress__metric-label">Total</span>
+        </div>
+        <div class="sprint-progress__metric-value">{{ sprint().total_items }}</div>
+        <div class="sprint-progress__metric-unit">items</div>
+      </div>
+
+      <div class="sprint-progress__metric sprint-progress__metric--completed">
+        <div class="sprint-progress__metric-header">
+          <mat-icon>check_circle</mat-icon>
+          <span class="sprint-progress__metric-label">Completed</span>
+        </div>
+        <div class="sprint-progress__metric-value">{{ sprint().completed_items }}</div>
+        <div class="sprint-progress__metric-unit">{{ completionPercentage() }}%</div>
+      </div>
+
+      <div class="sprint-progress__metric sprint-progress__metric--in-progress">
+        <div class="sprint-progress__metric-header">
+          <mat-icon>pending</mat-icon>
+          <span class="sprint-progress__metric-label">In Progress</span>
+        </div>
+        <div class="sprint-progress__metric-value">{{ sprint().in_progress_items }}</div>
+        <div class="sprint-progress__metric-unit">{{ inProgressPercentage() }}%</div>
+      </div>
+
+      <div class="sprint-progress__metric sprint-progress__metric--blocked">
+        <div class="sprint-progress__metric-header">
+          <mat-icon>block</mat-icon>
+          <span class="sprint-progress__metric-label">Blocked</span>
+        </div>
+        <div class="sprint-progress__metric-value">{{ sprint().blocked_items }}</div>
+        <div class="sprint-progress__metric-unit">{{ blockedPercentage() }}%</div>
+      </div>
+    </div>
+
+    @if (sprint().total_story_points > 0) {
+      <div class="sprint-progress__story-points">
+        <div class="sprint-progress__story-points-header">
+          <mat-icon>stars</mat-icon>
+          <span class="sprint-progress__story-points-title">Story Points</span>
+        </div>
+        <div class="sprint-progress__story-points-info">
+          <span class="sprint-progress__story-points-text">
+            {{ sprint().completed_story_points }} / {{ sprint().total_story_points }} points
+          </span>
+          <span class="sprint-progress__story-points-percentage">{{ storyPointsPercentage() }}%</span>
+        </div>
+        <mat-progress-bar
+          mode="determinate"
+          [value]="storyPointsPercentage()"
+          color="accent"
+          class="sprint-progress__progress-bar sprint-progress__progress-bar--small"
+        ></mat-progress-bar>
+        <div class="sprint-progress__story-points-remaining">{{ remainingStoryPoints() }} points remaining</div>
+      </div>
+    }
+
+    @if (sprint().velocity !== null && sprint().velocity !== undefined) {
+      <div class="sprint-progress__velocity">
+        <div class="sprint-progress__velocity-content">
+          <div class="sprint-progress__velocity-header">
+            <mat-icon>speed</mat-icon>
+            <span class="sprint-progress__velocity-label">Velocity</span>
+          </div>
+          <div class="sprint-progress__velocity-value">
+            {{ sprint().velocity }}
+            <span class="sprint-progress__velocity-unit">pts/sprint</span>
+          </div>
+        </div>
+      </div>
+    }
+  }
+
+  <div class="sprint-progress__summary">
+    <p class="sprint-progress__summary-text">
+      <span class="sprint-progress__summary-highlight">{{ remainingItems() }}</span> of
+      <span class="sprint-progress__summary-highlight">{{ sprint().total_items }}</span> items remaining
+      @if (sprint().blocked_items > 0) {
+        <span class="sprint-progress__summary-warning"> ({{ sprint().blocked_items }} blocked) </span>
+      }
+    </p>
+  </div>
+</div>

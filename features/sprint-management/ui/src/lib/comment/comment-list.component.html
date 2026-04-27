@@ -1,0 +1,82 @@
+<div class="comment-list">
+  <!-- Loading state -->
+  @if (loading()) {
+    <div class="flex items-center justify-center py-8">
+      <mat-icon class="animate-spin">refresh</mat-icon>
+      <span class="ml-2">Loading comments...</span>
+    </div>
+  }
+
+  <!-- Empty state -->
+  @else if (sortedComments().length === 0) {
+    <div class="py-8 text-center text-gray-500">
+      <mat-icon class="mb-2 text-4xl">comment</mat-icon>
+      <p>No comments yet</p>
+      <p class="text-sm">Be the first to comment!</p>
+    </div>
+  }
+
+  <!-- Comments list -->
+  @else {
+    <div class="space-y-4">
+      @for (comment of sortedComments(); track comment.id) {
+        <mat-card class="comment-card">
+          <mat-card-content>
+            <!-- Comment header -->
+            <div class="mb-3 flex items-start justify-between">
+              <div class="flex items-center gap-2">
+                <!-- Author avatar placeholder -->
+                <div
+                  class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-sm font-semibold text-white"
+                >
+                  {{ getAuthorName(comment).charAt(0).toUpperCase() }}
+                </div>
+
+                <!-- Author and timestamp -->
+                <div>
+                  <div class="text-sm font-semibold">
+                    {{ getAuthorName(comment) }}
+                  </div>
+                  <div class="text-xs text-gray-500">
+                    {{ formatTimestamp(comment.created_at) }}
+                    @if (comment.updated_at !== comment.created_at) {
+                      <span class="ml-1">(edited)</span>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action buttons -->
+              <div class="flex gap-1">
+                @if (canEdit(comment)) {
+                  <button
+                    mat-icon-button
+                    (click)="onEditClick(comment)"
+                    matTooltip="Edit comment"
+                    aria-label="Edit comment"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                }
+                @if (canDelete(comment)) {
+                  <button
+                    mat-icon-button
+                    (click)="onDeleteClick(comment)"
+                    matTooltip="Delete comment"
+                    aria-label="Delete comment"
+                    class="text-red-600"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                }
+              </div>
+            </div>
+
+            <!-- Comment content with sanitized markdown -->
+            <div class="comment-content prose prose-sm max-w-none" [innerHTML]="sanitizeContent(comment.content)"></div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

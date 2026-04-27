@@ -1,0 +1,136 @@
+// Reusable typography utility classes and mixins
+//
+// IN TEMPLATES: Apply classes directly
+//   <h2 class="g-text-title">...</h2>
+//
+// IN COMPONENT SCSS: Use mixins
+//   @use 'shared/scss/tokens/typography-classes' as typo;
+//   .my-title { @include typo.text-title; }
+
+// ── Mixins (for component SCSS) ──────────────────────────────────────────────
+
+@mixin text-h1 {
+  font-size: var(--g-font-size-3xl);
+  font-weight: var(--g-font-weight-bold);
+  line-height: var(--g-line-height-tight);
+}
+
+@mixin text-h2 {
+  font-size: var(--g-font-size-2xl);
+  font-weight: var(--g-font-weight-semibold);
+  line-height: var(--g-line-height-tight);
+}
+
+@mixin text-h3 {
+  font-size: var(--g-font-size-xl);
+  font-weight: var(--g-font-weight-semibold);
+  line-height: var(--g-line-height-tight);
+}
+
+@mixin text-h4 {
+  font-size: var(--g-font-size-lg);
+  font-weight: var(--g-font-weight-semibold);
+  line-height: var(--g-line-height-normal);
+}
+
+@mixin text-title {
+  font-size: var(--g-font-size-xl);
+  font-weight: var(--g-font-weight-semibold);
+  line-height: var(--g-line-height-tight);
+}
+
+@mixin text-title-lg {
+  font-size: var(--g-font-size-2xl);
+  font-weight: var(--g-font-weight-semibold);
+  line-height: var(--g-line-height-tight);
+}
+
+@mixin text-body {
+  font-size: var(--g-font-size-base);
+  font-weight: var(--g-font-weight-normal);
+  line-height: var(--g-line-height-normal);
+}
+
+@mixin text-body-sm {
+  font-size: var(--g-font-size-sm);
+  font-weight: var(--g-font-weight-normal);
+  line-height: var(--g-line-height-normal);
+}
+
+@mixin text-body-strong {
+  font-size: var(--g-font-size-base);
+  font-weight: var(--g-font-weight-semibold);
+  line-height: var(--g-line-height-normal);
+}
+
+@mixin text-label {
+  font-size: var(--g-font-size-sm);
+  font-weight: var(--g-font-weight-medium);
+  line-height: var(--g-line-height-normal);
+}
+
+@mixin text-label-sm {
+  font-size: var(--g-font-size-xs);
+  font-weight: var(--g-font-weight-medium);
+  line-height: var(--g-line-height-normal);
+}
+
+@mixin text-caption {
+  font-size: var(--g-font-size-xs);
+  font-weight: var(--g-font-weight-normal);
+  line-height: var(--g-line-height-normal);
+}
+
+@mixin text-chip {
+  font-size: var(--g-font-size-xs);
+  font-weight: var(--g-font-weight-medium);
+  line-height: var(--g-line-height-tight);
+}
+
+// ── Global utility classes (for templates) ───────────────────────────────────
+
+.g-text-h1 {
+  @include text-h1;
+}
+.g-text-h2 {
+  @include text-h2;
+}
+.g-text-h3 {
+  @include text-h3;
+}
+.g-text-h4 {
+  @include text-h4;
+}
+.g-text-title {
+  @include text-title;
+}
+.g-text-title-lg {
+  @include text-title-lg;
+}
+.g-text-body {
+  @include text-body;
+}
+.g-text-body-sm {
+  @include text-body-sm;
+}
+.g-text-body-strong {
+  @include text-body-strong;
+}
+.g-text-label {
+  @include text-label;
+}
+.g-text-label-sm {
+  @include text-label-sm;
+}
+.g-text-caption {
+  @include text-caption;
+}
+.g-text-chip {
+  @include text-chip;
+}
+
+// Empty/null value display — applied when a field has no meaningful value
+.empty-value {
+  font-style: italic;
+  opacity: 0.5;
+}

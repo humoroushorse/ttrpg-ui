@@ -1,0 +1,93 @@
+<div class="sprint-board">
+  @for (column of columns; track column.id) {
+    <div class="board-column">
+      <div class="column-header">
+        <div class="column-title">
+          <mat-icon>{{ column.icon }}</mat-icon>
+          <span>{{ column.title }}</span>
+          <span class="item-count">{{ getColumnItems(column.id).length }}</span>
+        </div>
+      </div>
+
+      <div
+        class="column-content"
+        cdkDropList
+        [cdkDropListData]="getColumnItems(column.id)"
+        [id]="column.id"
+        [cdkDropListConnectedTo]="getConnectedLists(column.id)"
+        (cdkDropListDropped)="onDrop($event, column.id)"
+      >
+        @for (item of getColumnItems(column.id); track item.id) {
+          <div
+            class="work-item-card"
+            [ngClass]="'type-' + item.type"
+            cdkDrag
+            [cdkDragData]="item"
+            (click)="onWorkItemClick(item.id)"
+            (keyup.enter)="onWorkItemClick(item.id)"
+            (keyup.space)="onWorkItemClick(item.id)"
+            tabindex="0"
+            role="button"
+          >
+            <div class="card-header">
+              <div class="card-type">
+                <mat-icon class="type-icon">{{ getTypeIcon(item.type) }}</mat-icon>
+                <span class="ticket-number">{{
+                  item.project_key && item.ticket_number
+                    ? item.project_key + '-' + item.ticket_number
+                    : item.ticket_number
+                      ? '#' + item.ticket_number
+                      : item.type
+                }}</span>
+              </div>
+              @if (item.priority) {
+                <mat-chip class="priority-chip" [color]="getPriorityColor(item.priority)" highlighted>
+                  {{ item.priority }}
+                </mat-chip>
+              }
+            </div>
+
+            <div class="card-title">
+              {{ item.title }}
+            </div>
+
+            @if (item.description) {
+              <div class="card-description">
+                {{ item.description }}
+              </div>
+            }
+
+            <div class="card-footer">
+              @if (item.story_points) {
+                <div class="story-points" matTooltip="Story Points">
+                  <mat-icon>stars</mat-icon>
+                  <span>{{ item.story_points }}</span>
+                </div>
+              }
+              @if (item.assignee_id) {
+                <div class="assignee" [matTooltip]="'Assigned to ' + item.assignee_id">
+                  <mat-icon>person</mat-icon>
+                  <span>{{ item.assignee_id }}</span>
+                </div>
+              }
+            </div>
+
+            <!-- Custom drag preview -->
+            <div *cdkDragPreview class="drag-preview">
+              <div class="preview-title">{{ item.title }}</div>
+              <div class="preview-type">{{ item.type }}</div>
+            </div>
+
+            <!-- Placeholder shown in original position -->
+            <div *cdkDragPlaceholder class="drag-placeholder"></div>
+          </div>
+        } @empty {
+          <div class="empty-column">
+            <mat-icon>inbox</mat-icon>
+            <span>No items</span>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

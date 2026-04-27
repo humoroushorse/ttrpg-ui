@@ -1,0 +1,211 @@
+<div class="mx-auto max-w-[1400px] p-4">
+  <!-- Header -->
+  <div class="mb-4 flex items-center">
+    <h1 class="flex-1">Sprints</h1>
+    <div class="flex gap-2">
+      <button
+        mat-icon-button
+        matTooltip="Card View"
+        [class.text-primary]="currentView() === 'card'"
+        (click)="currentView.set('card')"
+        aria-label="Card view"
+      >
+        <mat-icon>view_module</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        matTooltip="Table View"
+        [class.text-primary]="currentView() === 'table'"
+        (click)="currentView.set('table')"
+        aria-label="Table view"
+      >
+        <mat-icon>view_list</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <section class="mb-4 flex flex-col gap-4">
+    <mat-card>
+      <div class="flex flex-col gap-4 p-4">
+        <mat-form-field class="w-full">
+          <mat-label>Search sprints</mat-label>
+          <input
+            matInput
+            [formControl]="searchControl"
+            placeholder="Search by name or description..."
+            aria-label="Search sprints"
+          />
+          <mat-icon matPrefix>search</mat-icon>
+          @if (searchControl.value) {
+            <button matSuffix mat-icon-button (click)="searchControl.setValue('')" aria-label="Clear search">
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </mat-form-field>
+
+        <div class="flex flex-wrap gap-4">
+          <mat-form-field class="filter-field">
+            <mat-label>Status</mat-label>
+            <mat-select [formControl]="statusFilter" multiple>
+              @for (status of sprintStatuses; track status) {
+                <mat-option [value]="status">{{ status }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        @if (activeFilters().length > 0) {
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="mat-body-2">Active Filters:</span>
+            <mat-chip-set aria-label="Active filters">
+              @for (filter of activeFilters(); track filter.field + filter.value) {
+                <mat-chip (removed)="removeFilter(filter)" [removable]="true">
+                  {{ filter.label }}
+                  <button matChipRemove aria-label="Remove filter"><mat-icon>cancel</mat-icon></button>
+                </mat-chip>
+              }
+            </mat-chip-set>
+            <button mat-button color="warn" (click)="clearAllFilters()" aria-label="Clear all filters">
+              Clear All Filters
+            </button>
+          </div>
+        }
+      </div>
+    </mat-card>
+
+    <div class="flex items-center gap-4">
+      <div class="flex-1"></div>
+      @if (sprintStore.sorts().sorts.length > 0) {
+        <button mat-button color="primary" (click)="clearAllSorting()" aria-label="Clear all sorting">
+          <mat-icon>clear</mat-icon>
+          Clear Sorting
+        </button>
+      }
+      @if (authService.getUserTokenDecoded()()) {
+        <button
+          mat-raised-button
+          color="primary"
+          type="button"
+          (click)="openCreateSprintDialog()"
+          aria-label="Create new sprint"
+        >
+          <mat-icon>add</mat-icon>
+          Create Sprint
+        </button>
+      } @else {
+        <div matTooltip="Log in to create a new sprint">
+          <button mat-raised-button type="button" disabled>
+            <mat-icon>add</mat-icon>
+            Create Sprint
+          </button>
+        </div>
+      }
+    </div>
+  </section>
+
+  @if (sprintStore.loading()) {
+    <div class="flex items-center justify-center p-8">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+  }
+
+  @if (sprintStore.error() && !sprintStore.loading()) {
+    <mat-card class="error-card">
+      <div class="flex items-center gap-4 p-4">
+        <mat-icon color="warn">error</mat-icon>
+        <div class="flex-1">
+          <h3>Error Loading Sprints</h3>
+          <p>{{ sprintStore.errorSummary() || sprintStore.error() }}</p>
+        </div>
+        <button mat-raised-button color="primary" (click)="loadSprints()">Retry</button>
+      </div>
+    </mat-card>
+  }
+
+  @if (!sprintStore.loading() && !sprintStore.error()) {
+    @if (currentView() === 'table') {
+      <mat-card>
+        <lib-shared-angular-material-table
+          [tableHeader]="'Sprints'"
+          [columnDefs]="columnDefs"
+          [data]="sprintStore.entities() || []"
+          (columnDefsChange)="onColumnDefsChange($event)"
+          (resetColumnDefsClicked)="onResetColumnDefsClicked()"
+          (rowDoubleClicked)="onRowDoubleClicked($event)"
+        ></lib-shared-angular-material-table>
+        <mat-paginator
+          [length]="sprintStore.pagination().totalItems"
+          [pageSize]="sprintStore.pagination().pageSize"
+          [pageIndex]="sprintStore.pagination().currentPage - 1"
+          [pageSizeOptions]="[10, 25, 50, 100]"
+          (page)="onPageChange($event)"
+          aria-label="Select page"
+        ></mat-paginator>
+      </mat-card>
+    } @else {
+      <cdk-virtual-scroll-viewport itemSize="250" class="sprints-viewport" style="height: 600px">
+        <div class="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 lg:grid-cols-3">
+          @for (sprint of sprintStore.entities(); track sprint.id) {
+            <mat-card class="sprint-card cursor-pointer" (click)="onRowDoubleClicked(sprint)">
+              <mat-card-header>
+                <mat-card-title>{{ sprint.name }}</mat-card-title>
+                <mat-card-subtitle>
+                  <span class="status-badge" [ngClass]="getStatusClass(sprint.status)">{{ sprint.status }}</span>
+                </mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="flex flex-col gap-2">
+                  <div class="flex items-center gap-2">
+                    <mat-icon>calendar_today</mat-icon>
+                    <span class="mat-body-2"
+                      >{{ formatDate(sprint.start_date) }} - {{ formatDate(sprint.end_date) }}</span
+                    >
+                  </div>
+                  @if (sprint.goal) {
+                    <div class="flex items-start gap-2">
+                      <mat-icon>flag</mat-icon>
+                      <p class="mat-body-2 line-clamp-2">{{ sprint.goal }}</p>
+                    </div>
+                  }
+                  @if (sprint.description) {
+                    <p class="mat-body-2 mt-2 line-clamp-3">{{ sprint.description }}</p>
+                  }
+                </div>
+              </mat-card-content>
+              <mat-card-actions class="flex justify-end">
+                <button
+                  mat-button
+                  color="primary"
+                  (click)="onRowDoubleClicked(sprint); $event.stopPropagation()"
+                  aria-label="View sprint details"
+                >
+                  View Details
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          } @empty {
+            <div class="col-span-full p-8 text-center">
+              <mat-icon>inbox</mat-icon>
+              <p class="mt-4">No sprints found</p>
+              <p class="mat-body-2">Try adjusting your filters or create a new sprint</p>
+            </div>
+          }
+        </div>
+      </cdk-virtual-scroll-viewport>
+
+      @if (sprintStore.entities().length > 0) {
+        <mat-card class="mt-4">
+          <mat-paginator
+            [length]="sprintStore.pagination().totalItems"
+            [pageSize]="sprintStore.pagination().pageSize"
+            [pageIndex]="sprintStore.pagination().currentPage - 1"
+            [pageSizeOptions]="[10, 25, 50, 100]"
+            (page)="onPageChange($event)"
+            aria-label="Select page"
+          ></mat-paginator>
+        </mat-card>
+      }
+    }
+  }
+</div>

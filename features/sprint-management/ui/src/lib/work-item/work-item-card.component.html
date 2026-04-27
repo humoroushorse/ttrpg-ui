@@ -1,0 +1,80 @@
+<mat-card
+  class="work-item-card"
+  [ngClass]="'work-item-card--type-' + workItem().type"
+  (click)="onCardClick()"
+  [attr.aria-label]="'Work item: ' + workItem().title"
+>
+  <mat-card-header class="work-item-card__header">
+    <div class="work-item-card__header-content">
+      <div class="work-item-card__type-info">
+        <mat-icon [matTooltip]="workItem().type" class="work-item-card__type-icon">
+          {{ getTypeIcon() }}
+        </mat-icon>
+        @if (getTicketNumber()) {
+          <span class="work-item-card__ticket-number">{{ getTicketNumber() }}</span>
+        }
+      </div>
+
+      <mat-card-title class="work-item-card__title">
+        {{ workItem().title }}
+      </mat-card-title>
+    </div>
+
+    <mat-chip [class]="'work-item-card__status-badge ' + getStatusColor()">
+      {{ workItem().status }}
+    </mat-chip>
+  </mat-card-header>
+
+  <mat-card-content class="work-item-card__content">
+    @if (workItem().description) {
+      <p class="work-item-card__description">
+        {{ workItem().description }}
+      </p>
+    }
+
+    <div class="work-item-card__metadata">
+      <div class="work-item-card__metadata-item">
+        <mat-icon [class]="'work-item-card__priority-icon ' + getPriorityColor()">flag</mat-icon>
+        <span>{{ workItem().priority }}</span>
+      </div>
+
+      @if (workItem().story_points) {
+        <div class="work-item-card__metadata-item">
+          <mat-icon>functions</mat-icon>
+          <span>{{ workItem().story_points }} pts</span>
+        </div>
+      }
+
+      @if (workItem().assignee_id) {
+        <div class="work-item-card__metadata-item">
+          <mat-icon>person</mat-icon>
+          <span>Assigned</span>
+        </div>
+      }
+
+      @if (workItem().estimated_hours !== null) {
+        <div class="work-item-card__metadata-item">
+          <mat-icon>schedule</mat-icon>
+          <span>{{ formatHours(workItem().actual_hours) }} / {{ formatHours(workItem().estimated_hours) }}</span>
+        </div>
+      }
+    </div>
+
+    @if (workItem().tags && workItem().tags.length > 0) {
+      <div class="work-item-card__tags">
+        @for (tag of workItem().tags; track tag) {
+          <lib-tag-chip [tag]="tag" [removable]="false" />
+        }
+      </div>
+    }
+  </mat-card-content>
+
+  <mat-card-actions class="work-item-card__actions">
+    <button mat-icon-button (click)="onViewClick($event)" matTooltip="View details" aria-label="View work item details">
+      <mat-icon>visibility</mat-icon>
+    </button>
+    <button mat-icon-button (click)="onEditClick($event)" matTooltip="Edit" aria-label="Edit work item">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

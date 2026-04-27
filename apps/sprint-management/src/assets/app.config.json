@@ -1,0 +1,5 @@
+{
+  "APP_SPRINT_MANAGEMENT__API_BASE_PATH": "/sprint-management-api",
+  "APP_SPRINT_MANAGEMENT__API_URL": "http://localhost:8003",
+  "AUTH_BASE_URL": "/auth-api"
+}

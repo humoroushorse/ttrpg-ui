@@ -1,0 +1,27 @@
+// Purple Color Palette
+// Material Design 3 purple scale with contrast colors
+
+@use 'sass:map';
+
+$colors: (
+  0: #000000,
+  10: #22005d,
+  20: #381e72,
+  25: #432b7e,
+  30: #4f378a,
+  35: #5b4397,
+  40: #6750a4,
+  50: #8069bf,
+  60: #9a83db,
+  70: #b69df7,
+  80: #cfbcff,
+  90: #e9ddff,
+  95: #f6eeff,
+  98: #fdf7ff,
+  99: #fffbff,
+  100: #ffffff,
+);
+
+@function color($shade) {
+  @return map.get($colors, $shade);
+}

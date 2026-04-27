@@ -1,0 +1,99 @@
+<!-- Notification Bell Button with Badge -->
+<button
+  mat-icon-button
+  [matMenuTriggerFor]="notificationMenu"
+  [matBadge]="unreadCount()"
+  [matBadgeHidden]="unreadCount() === 0"
+  matBadgeColor="warn"
+  matBadgeSize="small"
+  aria-label="Notifications"
+  matTooltip="Notifications"
+>
+  <mat-icon>notifications</mat-icon>
+</button>
+
+<!-- Notification Dropdown Menu -->
+<mat-menu #notificationMenu="matMenu" class="notification-menu" xPosition="before">
+  <!-- Header -->
+  <div
+    class="notification-header flex items-center justify-between px-4 py-3"
+    (click)="$event.stopPropagation()"
+    (keyup)="$event.stopPropagation()"
+    tabindex="0"
+  >
+    <h3 class="m-0 text-lg font-semibold">Notifications</h3>
+    @if (hasNotifications()) {
+      <div class="flex gap-2">
+        @if (unreadCount() > 0) {
+          <button
+            mat-icon-button
+            (click)="onMarkAllAsRead()"
+            matTooltip="Mark all as read"
+            aria-label="Mark all as read"
+          >
+            <mat-icon>done_all</mat-icon>
+          </button>
+        }
+        <button
+          mat-icon-button
+          (click)="onDismissAll()"
+          matTooltip="Dismiss all"
+          aria-label="Dismiss all notifications"
+        >
+          <mat-icon>clear_all</mat-icon>
+        </button>
+      </div>
+    }
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <!-- Notification List -->
+  <div class="notification-list">
+    @if (hasNotifications()) {
+      @for (notification of sortedNotifications(); track notification.id) {
+        <button
+          mat-menu-item
+          class="notification-item"
+          [ngClass]="getNotificationClass(notification)"
+          (click)="onNotificationClick(notification)"
+        >
+          <div class="flex w-full items-start gap-3">
+            <!-- Icon -->
+            <mat-icon [class.text-primary]="!notification.is_read">
+              {{ getNotificationIcon(notification.type) }}
+            </mat-icon>
+
+            <!-- Content -->
+            <div class="min-w-0 flex-1">
+              <div class="text-sm font-medium">{{ notification.title }}</div>
+              <div class="mt-1 text-xs text-gray-600 dark:text-gray-400">
+                {{ notification.message }}
+              </div>
+              <div class="mt-1 text-xs text-gray-500 dark:text-gray-500">
+                {{ formatTimestamp(notification.created_at) }}
+              </div>
+            </div>
+
+            <!-- Dismiss Button -->
+            <button
+              mat-icon-button
+              class="notification-dismiss"
+              (click)="onDismissNotification($event, notification.id)"
+              matTooltip="Dismiss"
+              aria-label="Dismiss notification"
+            >
+              <mat-icon class="text-sm">close</mat-icon>
+            </button>
+          </div>
+        </button>
+        <mat-divider></mat-divider>
+      }
+    } @else {
+      <div class="notification-empty px-4 py-8 text-center text-gray-500">
+        <mat-icon class="mb-2 text-4xl">notifications_none</mat-icon>
+        <p class="text-sm">No notifications</p>
+      </div>
+    }
+  </div>
+</mat-menu>

@@ -1,0 +1,54 @@
+<div class="time-entry-list">
+  @if (loading()) {
+    <div class="time-entry-list__loading">
+      <mat-icon class="animate-spin">refresh</mat-icon>
+      <span>Loading time entries...</span>
+    </div>
+  } @else if (sortedEntries().length === 0) {
+    <div class="time-entry-list__empty">
+      <mat-icon class="time-entry-list__empty-icon">timer_off</mat-icon>
+      <p class="time-entry-list__empty-text">No time entries logged yet</p>
+    </div>
+  } @else {
+    <div class="time-entry-list__entries">
+      @for (entry of sortedEntries(); track entry.id) {
+        <div class="time-entry-list__item">
+          <div class="time-entry-list__item-content">
+            <div class="time-entry-list__item-details">
+              <div class="time-entry-list__item-header">
+                <mat-icon class="time-entry-list__item-icon">schedule</mat-icon>
+                <span class="time-entry-list__item-date">{{ formatDate(entry.date) }}</span>
+              </div>
+              @if (entry.description) {
+                <div class="time-entry-list__item-description">{{ entry.description }}</div>
+              }
+            </div>
+            <div class="time-entry-list__item-right">
+              <div class="time-entry-list__item-hours">{{ entry.hours }}h</div>
+              @if (canModify(entry)) {
+                <div class="time-entry-list__item-actions">
+                  <button
+                    mat-icon-button
+                    (click)="onEditClick(entry)"
+                    matTooltip="Edit entry"
+                    aria-label="Edit time entry"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    (click)="onDeleteClick(entry)"
+                    matTooltip="Delete entry"
+                    aria-label="Delete time entry"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

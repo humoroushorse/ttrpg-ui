@@ -1,0 +1,16 @@
+.link-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-spacing-md);
+  padding: var(--g-spacing-md);
+
+  &__field {
+    width: 100%;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--g-spacing-sm);
+  }
+}

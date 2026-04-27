@@ -1,0 +1,12 @@
+@use 'shared/scss/tokens/typography-classes' as typo;
+
+:host {
+  display: inline-block;
+}
+
+.tag-chip {
+  @include typo.text-chip;
+  height: 28px;
+  padding: 0 var(--g-spacing-sm, 10px);
+  margin: var(--g-spacing-xs, 2px);
+}

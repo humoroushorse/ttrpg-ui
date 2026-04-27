@@ -1,0 +1,66 @@
+.comment-form {
+  width: 100%;
+
+  .mat-mdc-form-field-textarea-control {
+    resize: vertical;
+  }
+}
+
+.preview-container {
+  background-color: var(--g-color-surface-variant);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+
+  :deep(p) {
+    margin-bottom: 0.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  :deep(code) {
+    background-color: var(--g-color-surface-dim);
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+  }
+
+  :deep(pre) {
+    background-color: var(--g-color-surface-dim);
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    overflow-x: auto;
+  }
+
+  :deep(blockquote) {
+    border-left: 4px solid var(--g-color-outline);
+    padding-left: 1rem;
+    margin-left: 0;
+    color: var(--g-color-on-surface-variant);
+  }
+
+  :deep(ul),
+  :deep(ol) {
+    margin-left: 1.5rem;
+  }
+
+  :deep(a) {
+    color: var(--g-color-info);
+    text-decoration: underline;
+
+    &:hover {
+      color: var(--g-color-primary);
+    }
+  }
+
+  :deep(h1),
+  :deep(h2),
+  :deep(h3),
+  :deep(h4),
+  :deep(h5),
+  :deep(h6) {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+}

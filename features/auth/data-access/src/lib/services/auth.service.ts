@@ -6,20 +6,7 @@ import {
   UserIdToken,
 } from '@ttrpg-ui/features/auth/models';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import {
-  BehaviorSubject,
-  catchError,
-  debounceTime,
-  interval,
-  map,
-  Observable,
-  of,
-  startWith,
-  switchMap,
-  take,
-  tap,
-  throwError,
-} from 'rxjs';
+import { catchError, interval, map, Observable, of, startWith, take, tap, throwError } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { RegisterUserInput } from 'features/auth/models/src/lib/models/models';
@@ -30,26 +17,7 @@ import { UserModels } from '@ttrpg-ui/features/user/models';
   providedIn: 'root',
 })
 export class AuthService {
-  private periodicSessionRefresh() {
-    const tokenTimeRemaining = this.tokenTimeRemaining();
-    if (tokenTimeRemaining.refresh <= 0) {
-      this.deleteAuthInfo(false);
-      // this.sharedNotificationService.openSnackBar("You have been logged out because your token expired!")
-      return;
-    }
-    const timeRemaining =
-      tokenTimeRemaining.auth > this.refreshTokenAtSecondsRemaining
-        ? (tokenTimeRemaining.auth - this.refreshTokenAtSecondsRemaining) * 1000
-        : 0;
-    setTimeout(
-      () => {
-        this.postSessionRefreshTrigger.next(true);
-      },
-      Math.max(timeRemaining, 10000),
-    );
-  }
-
-  public postSessionRefreshTrigger = new BehaviorSubject<boolean>(false);
+  // Removed proactive refresh - now handled by HTTP interceptor on 401 errors
 
   private readonly router = inject(Router);
 
@@ -81,8 +49,6 @@ export class AuthService {
 
   private userTokenDecoded = signal<UserIdToken | null>(this.getUserToken());
 
-  // public readonly refreshTokenAtSecondsRemaining = 150; // 2.5 minutes
-
   public readonly refreshTokenAtSecondsRemaining = 30;
 
   // NOTE: this will read from cookies every second (while in use)
@@ -95,26 +61,10 @@ export class AuthService {
   );
 
   readonly authInfoKey = 'AuthService.userTokenDecoded';
+  private readonly redirectUrlKey = 'redirectUrl';
 
   constructor() {
-    // this.startTimer()
     this.userTokenDecoded.set(this.getUserToken());
-    this.postSessionRefreshTrigger
-      .pipe(
-        debounceTime(1000), // max 1 query per second
-        switchMap(() => {
-          if (!this.getUserToken()) {
-            return of(null);
-          }
-          return this._postSessionRefresh();
-        }),
-      )
-      .subscribe((next) => {
-        this.userTokenDecoded.set(this.getUserToken(next?.id_token));
-        this.sharedLocalStorageService.set(this.authInfoKey, next);
-        this.periodicSessionRefresh();
-      });
-    // this.userTokenDecoded.set(this.getUserToken());
   }
 
   public _postSessionLogin(username: string, password: string) {
@@ -137,8 +87,16 @@ export class AuthService {
         const expirationDate = new Date();
         expirationDate.setSeconds(expirationDate.getSeconds() + expiresInSeconds);
         this.sharedLocalStorageService.set<AuthResponse>(this.authInfoKey, next);
-        this.postSessionRefreshTrigger.next(true);
-        if (next) this.router.navigate(this.alreadyLoggedInGuardRedirectRoute());
+
+        // Check if there's a redirect URL stored BEFORE any navigation
+        const redirectUrl = this.getRedirectUrl();
+
+        if (redirectUrl) {
+          this.clearRedirectUrl();
+          this.router.navigateByUrl(redirectUrl);
+        } else {
+          this.router.navigate(this.alreadyLoggedInGuardRedirectRoute());
+        }
       },
     });
   }
@@ -158,16 +116,43 @@ export class AuthService {
     if (routeToLogin) this.router.navigate(this.authGuardAuthAppLoginRoute());
   }
 
+  public forceLogout() {
+    this.deleteAuthInfo();
+  }
+
+  public setRedirectUrl(url: string): void {
+    this.sharedLocalStorageService.setPersistent(this.redirectUrlKey, url);
+  }
+
+  public getRedirectUrl(): string | null {
+    return this.sharedLocalStorageService.getPersistent<string>(this.redirectUrlKey);
+  }
+
+  public clearRedirectUrl(): void {
+    this.sharedLocalStorageService.removePersistent(this.redirectUrlKey);
+  }
+
   public _postSessionRefresh() {
     return this.http.post<AuthResponse>(`${this.apiBaseUrl()}/auth/session/refresh`, {}).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.message.toLocaleLowerCase().includes('token is not active')) {
-          this.deleteAuthInfo(false);
+        // Silently handle 404 errors (endpoint not found) - don't throw
+        if (error.status === 404) {
+          console.warn('Auth refresh endpoint not available:', error.message);
+          return of(null as any);
         }
+
+        // For 401 errors, the refresh token is invalid - return null so interceptor logs out
+        if (error.status === 401) {
+          console.warn('Refresh token invalid or expired, logging out');
+          return of(null as any);
+        }
+
         return throwError(() => error);
       }),
       tap((next) => {
-        this.userTokenDecoded.set(this.getUserToken(next.id_token));
+        if (next) {
+          this.userTokenDecoded.set(this.getUserToken(next.id_token));
+        }
       }),
     );
   }
@@ -208,20 +193,25 @@ export class AuthService {
     if (!token) {
       const cookieAuthResponse = this.getAuthResponse();
       const tokenTimeRemaining = this.tokenTimeRemaining(cookieAuthResponse);
-      if (!cookieAuthResponse) return null;
+
+      if (!cookieAuthResponse) {
+        return null;
+      }
+
       if (tokenTimeRemaining.refresh <= 0) {
         this.deleteAuthInfo(false);
         return null;
       }
-      if (tokenTimeRemaining.auth <= 0) {
-        this.postSessionRefreshTrigger.next(true);
-      }
+
+      // Don't proactively refresh - let backend 401 trigger refresh via interceptor
       token = cookieAuthResponse.id_token;
     }
+
     try {
       const decoded = jwtDecode<UserIdToken>(token);
       return decoded;
-    } catch {
+    } catch (error) {
+      console.error('[AuthService] Failed to decode token:', error);
       return null;
     }
   }
@@ -272,13 +262,11 @@ export class AuthService {
   }
 
   getCurrentUser(): Observable<UserModels.Schemas.UserSchema | null> {
-    const currentUserId = this.getUserTokenDecoded()()?.sub;
-    if (!currentUserId) return of(null);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
     return this.http
-      .get<UserModels.Schemas.UserSchema>(`${this.authGuardAuthAppBaseRoute()}/user/${currentUserId}`, {
+      .get<UserModels.Schemas.UserSchema>(`${this.apiBaseUrl()}/auth/user`, {
         headers,
         observe: 'response',
       })
@@ -286,13 +274,11 @@ export class AuthService {
   }
 
   updateCurrentUser(body: UserModels.Schemas.PutUserInput): Observable<UserModels.Schemas.UserSchema | null> {
-    const currentUserId = this.getUserTokenDecoded()()?.sub;
-    if (!currentUserId) return of(null);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
     return this.http
-      .put<UserModels.Schemas.UserSchema>(`${this.authGuardAuthAppBaseRoute()}/user/${currentUserId}`, body, {
+      .put<UserModels.Schemas.UserSchema>(`${this.apiBaseUrl()}/auth/user`, body, {
         headers,
         observe: 'response',
       })

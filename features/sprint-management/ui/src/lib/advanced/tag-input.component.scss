@@ -1,0 +1,11 @@
+@use 'shared/scss/tokens/typography-classes' as typo;
+
+.tag-input {
+  &__field {
+    width: 100%;
+  }
+
+  &__chip {
+    @include typo.text-chip;
+  }
+}

@@ -1,0 +1,212 @@
+<mat-card class="velocity-chart-card">
+  <mat-card-header>
+    <mat-card-title class="flex items-center gap-2">
+      <mat-icon>bar_chart</mat-icon>
+      <span>Sprint Velocity</span>
+    </mat-card-title>
+    <mat-card-subtitle> Completed story points per sprint </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Velocity Metrics -->
+    <div class="mb-6 flex flex-wrap gap-4">
+      <div class="flex flex-col">
+        <span class="text-sm text-gray-600">Average Velocity</span>
+        <span class="text-2xl font-bold">{{ averageVelocity() }}</span>
+        <span class="text-xs text-gray-500">story points/sprint</span>
+      </div>
+
+      <div class="flex flex-col">
+        <span class="text-sm text-gray-600">Total Completed</span>
+        <span class="text-2xl font-bold">{{ totalCompleted() }}</span>
+        <span class="text-xs text-gray-500">story points</span>
+      </div>
+
+      <div class="flex flex-col">
+        <span class="text-sm text-gray-600">Trend</span>
+        <div class="flex items-center gap-2">
+          <mat-icon [ngClass]="getTrendColor()">{{ getTrendIcon() }}</mat-icon>
+          <span class="text-lg font-medium" [ngClass]="getTrendColor()">
+            {{ getTrendText() }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    @if (dataPoints().length > 0) {
+      <div class="chart-container">
+        <svg [attr.width]="chartWidth()" [attr.height]="chartHeight()" class="velocity-chart">
+          <!-- Y-axis -->
+          <line
+            [attr.x1]="padding()"
+            [attr.y1]="padding()"
+            [attr.x2]="padding()"
+            [attr.y2]="padding() + innerHeight()"
+            stroke="#666"
+            stroke-width="2"
+          />
+
+          <!-- X-axis -->
+          <line
+            [attr.x1]="padding()"
+            [attr.y1]="padding() + innerHeight()"
+            [attr.x2]="padding() + innerWidth()"
+            [attr.y2]="padding() + innerHeight()"
+            stroke="#666"
+            stroke-width="2"
+          />
+
+          <!-- Y-axis labels -->
+          @for (label of yAxisLabels(); track label.value) {
+            <g>
+              <line
+                [attr.x1]="padding() - 5"
+                [attr.y1]="label.y"
+                [attr.x2]="padding()"
+                [attr.y2]="label.y"
+                stroke="#666"
+                stroke-width="1"
+              />
+              <text [attr.x]="padding() - 10" [attr.y]="label.y + 5" text-anchor="end" class="fill-gray-600 text-xs">
+                {{ label.value }}
+              </text>
+              <!-- Grid line -->
+              <line
+                [attr.x1]="padding()"
+                [attr.y1]="label.y"
+                [attr.x2]="padding() + innerWidth()"
+                [attr.y2]="label.y"
+                stroke="#e0e0e0"
+                stroke-width="1"
+                stroke-dasharray="4,4"
+              />
+            </g>
+          }
+
+          <!-- Bars -->
+          @for (bar of bars(); track bar.sprintName) {
+            <g>
+              <!-- Total story points bar (background) -->
+              <rect
+                [attr.x]="bar.x"
+                [attr.y]="bar.totalY"
+                [attr.width]="bar.width"
+                [attr.height]="bar.totalHeight"
+                fill="#e0e0e0"
+                class="bar-total"
+              />
+
+              <!-- Completed story points bar (foreground) -->
+              <rect
+                [attr.x]="bar.x"
+                [attr.y]="bar.completedY"
+                [attr.width]="bar.width"
+                [attr.height]="bar.completedHeight"
+                fill="#4caf50"
+                class="bar-completed"
+                [matTooltip]="
+                  bar.sprintName +
+                  ': ' +
+                  bar.completedStoryPoints +
+                  ' / ' +
+                  bar.totalStoryPoints +
+                  ' (' +
+                  bar.completionPercentage +
+                  '%)'
+                "
+              />
+
+              <!-- Value label on top of bar -->
+              <text
+                [attr.x]="bar.x + bar.width / 2"
+                [attr.y]="bar.completedY - 5"
+                text-anchor="middle"
+                class="fill-gray-700 text-xs font-medium"
+              >
+                {{ bar.completedStoryPoints }}
+              </text>
+            </g>
+          }
+
+          <!-- X-axis labels -->
+          @for (label of xAxisLabels(); track label.label) {
+            <text
+              [attr.x]="label.x"
+              [attr.y]="padding() + innerHeight() + 20"
+              text-anchor="middle"
+              class="fill-gray-600 text-xs"
+              [matTooltip]="label.label"
+            >
+              {{ label.label }}
+            </text>
+          }
+
+          <!-- Y-axis label -->
+          <text
+            [attr.x]="padding() - 40"
+            [attr.y]="padding() + innerHeight() / 2"
+            text-anchor="middle"
+            [attr.transform]="'rotate(-90, ' + (padding() - 40) + ', ' + (padding() + innerHeight() / 2) + ')'"
+            class="fill-gray-700 text-sm font-medium"
+          >
+            Story Points
+          </text>
+
+          <!-- X-axis label -->
+          <text
+            [attr.x]="padding() + innerWidth() / 2"
+            [attr.y]="padding() + innerHeight() + 45"
+            text-anchor="middle"
+            class="fill-gray-700 text-sm font-medium"
+          >
+            Sprint
+          </text>
+
+          <!-- Average velocity line -->
+          <line
+            [attr.x1]="padding()"
+            [attr.y1]="padding() + innerHeight() - (averageVelocity() * innerHeight()) / maxY()"
+            [attr.x2]="padding() + innerWidth()"
+            [attr.y2]="padding() + innerHeight() - (averageVelocity() * innerHeight()) / maxY()"
+            stroke="#ff9800"
+            stroke-width="2"
+            stroke-dasharray="8,4"
+          />
+
+          <!-- Average velocity label -->
+          <text
+            [attr.x]="padding() + innerWidth() - 5"
+            [attr.y]="padding() + innerHeight() - (averageVelocity() * innerHeight()) / maxY() - 5"
+            text-anchor="end"
+            class="fill-orange-600 text-xs font-medium"
+          >
+            Avg: {{ averageVelocity() }}
+          </text>
+        </svg>
+      </div>
+
+      <!-- Legend -->
+      <div class="mt-4 flex flex-wrap justify-center gap-4">
+        <div class="flex items-center gap-2">
+          <div class="h-4 w-4 bg-green-500"></div>
+          <span class="text-sm">Completed Story Points</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="h-4 w-4 bg-gray-300"></div>
+          <span class="text-sm">Total Story Points</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="h-1 w-4 bg-orange-500"></div>
+          <span class="text-sm">Average Velocity</span>
+        </div>
+      </div>
+    } @else {
+      <div class="flex flex-col items-center justify-center p-8">
+        <mat-icon class="text-6xl text-gray-400">bar_chart</mat-icon>
+        <p class="mt-4 text-lg text-gray-600">No velocity data available</p>
+        <p class="text-sm text-gray-500">Complete some sprints to see velocity metrics</p>
+      </div>
+    }
+  </mat-card-content>
+</mat-card>

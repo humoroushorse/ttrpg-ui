@@ -1,0 +1,173 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="work-item-form">
+  @if (!workItem()) {
+    <div class="form-template-selector">
+      <lib-template-selector
+        (templateSelected)="onTemplateSelected($event)"
+        aria-label="Select a template to pre-fill form values"
+      />
+    </div>
+  }
+
+  <div class="form-grid">
+    <!-- Title -->
+    <mat-form-field class="col-span-2">
+      <mat-label>Title</mat-label>
+      <input
+        matInput
+        formControlName="title"
+        placeholder="Enter work item title"
+        required
+        aria-label="Work item title"
+      />
+      @if (form.get('title')?.invalid && form.get('title')?.touched) {
+        <mat-error>{{ getErrorMessage('title') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Type -->
+    <mat-form-field>
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="type" required aria-label="Work item type">
+        @for (type of workItemTypes; track type) {
+          <mat-option [value]="type">{{ type }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('type')?.invalid && form.get('type')?.touched) {
+        <mat-error>{{ getErrorMessage('type') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Status -->
+    <mat-form-field>
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status" required aria-label="Work item status">
+        @for (status of workItemStatuses; track status) {
+          <mat-option [value]="status">{{ status }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('status')?.invalid && form.get('status')?.touched) {
+        <mat-error>{{ getErrorMessage('status') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Priority -->
+    <mat-form-field>
+      <mat-label>Priority</mat-label>
+      <mat-select formControlName="priority" required aria-label="Work item priority">
+        @for (priority of workItemPriorities; track priority) {
+          <mat-option [value]="priority">{{ priority }}</mat-option>
+        }
+      </mat-select>
+      @if (form.get('priority')?.invalid && form.get('priority')?.touched) {
+        <mat-error>{{ getErrorMessage('priority') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Story Points -->
+    <mat-form-field>
+      <mat-label>Story Points</mat-label>
+      <input matInput type="number" formControlName="story_points" placeholder="0" min="0" aria-label="Story points" />
+      @if (form.get('story_points')?.invalid && form.get('story_points')?.touched) {
+        <mat-error>{{ getErrorMessage('story_points') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Estimated Hours -->
+    <mat-form-field>
+      <mat-label>Estimated Hours</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="estimated_hours"
+        placeholder="0"
+        min="0"
+        aria-label="Estimated hours"
+      />
+      @if (form.get('estimated_hours')?.invalid && form.get('estimated_hours')?.touched) {
+        <mat-error>{{ getErrorMessage('estimated_hours') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Assignee ID (placeholder - would be a user selector in real app) -->
+    <mat-form-field>
+      <mat-label>Assignee ID</mat-label>
+      <input matInput formControlName="assignee_id" placeholder="Enter assignee ID" aria-label="Assignee ID" />
+    </mat-form-field>
+
+    <!-- Sprint ID (placeholder - would be a sprint selector in real app) -->
+    <mat-form-field>
+      <mat-label>Sprint ID</mat-label>
+      <input matInput formControlName="sprint_id" placeholder="Enter sprint ID" aria-label="Sprint ID" />
+    </mat-form-field>
+
+    <!-- Parent ID (placeholder - would be a work item selector in real app) -->
+    @if (isParentRequired()) {
+      <mat-form-field>
+        <mat-label>Parent Epic ID</mat-label>
+        <input
+          matInput
+          formControlName="parent_id"
+          placeholder="Enter parent Epic ID"
+          required
+          aria-label="Parent Epic ID"
+        />
+        <mat-hint>Story and Defect must be linked to an Epic</mat-hint>
+        @if (form.get('parent_id')?.invalid && form.get('parent_id')?.touched) {
+          <mat-error>{{ getErrorMessage('parent_id') }}</mat-error>
+        }
+      </mat-form-field>
+    }
+
+    <!-- Description -->
+    <mat-form-field class="col-span-2">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        placeholder="Enter work item description"
+        rows="4"
+        required
+        aria-label="Work item description"
+      ></textarea>
+      @if (form.get('description')?.invalid && form.get('description')?.touched) {
+        <mat-error>{{ getErrorMessage('description') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Tags -->
+    <div class="col-span-2">
+      <lib-tag-input
+        [availableTags]="availableTags()"
+        [currentTags]="tags()"
+        (tagAdded)="addTag($event)"
+        (tagRemoved)="removeTag($event)"
+        aria-label="Work item tags"
+      />
+    </div>
+
+    <!-- Custom Fields -->
+    @if (customFieldDefinitions().length > 0) {
+      <div class="col-span-2">
+        <lib-custom-field-list
+          [fieldDefinitions]="customFieldDefinitions()"
+          [values]="customFields()"
+          (valuesChange)="customFields.set($event)"
+        />
+      </div>
+    }
+  </div>
+
+  <!-- Form Actions -->
+  <div class="form-actions">
+    <button mat-stroked-button type="button" (click)="onCancel()" [disabled]="loading()" aria-label="Cancel">
+      Cancel
+    </button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="loading()" aria-label="Save work item">
+      @if (loading()) {
+        <span>Saving...</span>
+      } @else {
+        <span>{{ workItem() ? 'Update' : 'Create' }}</span>
+      }
+    </button>
+  </div>
+</form>

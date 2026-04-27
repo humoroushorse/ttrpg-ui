@@ -1,0 +1,15 @@
+:host {
+  display: inline-block;
+  width: 100%;
+}
+
+.autocomplete-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+input {
+  flex: 1;
+}

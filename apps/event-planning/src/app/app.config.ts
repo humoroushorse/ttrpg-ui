@@ -25,6 +25,8 @@ import { AuthInterceptors } from '@ttrpg-ui/features/auth/util';
 const themes: AppTheme[] = [
   { viewValue: 'dark', path: 'default-theme-dark.css', isDark: true },
   { viewValue: 'light', path: 'default-theme-light.css', isDark: false },
+  { viewValue: 'teal-dark', path: 'teal-theme-dark.css', isDark: true },
+  { viewValue: 'teal-light', path: 'teal-theme-light.css', isDark: false },
 ];
 
 export const appConfig: ApplicationConfig = {

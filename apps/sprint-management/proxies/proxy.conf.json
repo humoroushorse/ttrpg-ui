@@ -1,0 +1,20 @@
+{
+  "/auth-api": {
+    "target": "http://localhost:8081",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/auth-api": ""
+    }
+  },
+  "/sprint-management-api": {
+    "target": "http://localhost:8003",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/sprint-management-api": "/api/v1"
+    }
+  }
+}

@@ -43,8 +43,6 @@ export class AppComponent {
 
   public appTitle = this.sharedCoreService.appTitle;
 
-  public toolbarHeight = this.sharedCoreService.getToolbarHeight();
-
   public sidenavOpened$ = this.sharedCoreService.getSidenavOpened();
 
   sidenavMode = this.sharedCoreService.sidenavMode;
@@ -61,10 +59,10 @@ export class AppComponent {
     this.authService.postSessionLogout();
   }
 
-  public toolbarHeight$$ = this.sharedCoreService.getToolbarHeight();
+  public toolbarHeight = this.sharedCoreService.getToolbarHeight();
 
-  public sidnavHeight$$ = computed<string>(() => {
-    return `calc(100dvh - ${this.toolbarHeight$$()}px)`;
+  public sidnavHeight = computed<string>(() => {
+    return `calc(100dvh - ${this.toolbarHeight()}px)`;
   });
 
   filterRoutes(routes: SharedSidenavRouterItem[]): SharedSidenavRouterItem[] {

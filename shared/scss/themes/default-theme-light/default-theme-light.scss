@@ -1,0 +1,36 @@
+// Default Light Theme
+// Purple-based color scheme for light mode
+
+@use '@angular/material' as mat;
+@use './tokens';
+@use '../../tokens/tokens' as global-tokens;
+
+@include mat.core();
+
+// Use Material's built-in purple palette for now
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$violet-palette,
+      tertiary: mat.$violet-palette,
+    ),
+    typography: (
+      plain-family: Roboto,
+      brand-family: Roboto,
+      bold-weight: 700,
+      medium-weight: 500,
+      regular-weight: 400,
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
+
+// Apply theme to all components
+:root {
+  @include mat.all-component-themes($light-theme);
+}
+
+@include mat.typography-hierarchy($light-theme);

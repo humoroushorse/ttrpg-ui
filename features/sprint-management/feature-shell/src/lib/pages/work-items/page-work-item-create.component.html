@@ -1,0 +1,225 @@
+<div class="mx-auto max-w-4xl p-4">
+  <div class="mb-6 flex items-center justify-between">
+    <div>
+      <h1>Create Work Item</h1>
+      <p>Add a new work item to the sprint management system</p>
+    </div>
+    <button mat-icon-button (click)="onCancel()" matTooltip="Back to list" aria-label="Back to work items list">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="workItemForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+        <mat-form-field class="w-full">
+          <mat-label>Title *</mat-label>
+          <input
+            matInput
+            formControlName="title"
+            placeholder="Enter work item title"
+            required
+            aria-label="Work item title"
+          />
+          @if (workItemForm.get('title')?.invalid) {
+            <mat-error>{{ getErrorMessage('title') }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+          <mat-label>Description</mat-label>
+          <textarea
+            matInput
+            formControlName="description"
+            placeholder="Enter work item description"
+            rows="4"
+            aria-label="Work item description"
+          ></textarea>
+        </mat-form-field>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <mat-form-field>
+            <mat-label>Type *</mat-label>
+            <mat-select formControlName="type" required aria-label="Work item type">
+              @for (type of workItemTypes; track type) {
+                <mat-option [value]="type">{{ type }}</mat-option>
+              }
+            </mat-select>
+            @if (workItemForm.get('type')?.invalid) {
+              <mat-error>{{ getErrorMessage('type') }}</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Status *</mat-label>
+            <mat-select formControlName="status" required aria-label="Work item status">
+              @for (status of workItemStatuses; track status) {
+                <mat-option [value]="status">{{ status }}</mat-option>
+              }
+            </mat-select>
+            @if (workItemForm.get('status')?.invalid) {
+              <mat-error>{{ getErrorMessage('status') }}</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Priority *</mat-label>
+            <mat-select formControlName="priority" required aria-label="Work item priority">
+              @for (priority of workItemPriorities; track priority) {
+                <mat-option [value]="priority">{{ priority }}</mat-option>
+              }
+            </mat-select>
+            @if (workItemForm.get('priority')?.invalid) {
+              <mat-error>{{ getErrorMessage('priority') }}</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <mat-form-field>
+            <mat-label>Project *</mat-label>
+            <mat-select formControlName="project_id" aria-label="Project" required>
+              @for (project of projectStore.entities(); track project.id) {
+                <mat-option [value]="project.id">{{ project.key }} - {{ project.name }}</mat-option>
+              }
+            </mat-select>
+            @if (workItemForm.get('project_id')?.hasError('required') && workItemForm.get('project_id')?.touched) {
+              <mat-error>Project is required</mat-error>
+            }
+            <mat-hint>Required for automatic ticket numbering (e.g., DND-1, SPRINT-2)</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Sprint</mat-label>
+            <lib-shared-forms-single-select-autocomplete
+              formControlName="sprint_id"
+              placeholder="Search for a sprint"
+              [searchFn]="searchSprints"
+              [viewValueAccessorFn]="getSprintDisplayName"
+              [valueAccessorFn]="getSprintId"
+              [minSearchLength]="2"
+              aria-label="Sprint"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <mat-form-field>
+            <mat-label>Assignee</mat-label>
+            <input matInput formControlName="assignee_id" placeholder="Enter assignee ID" aria-label="Assignee ID" />
+          </mat-form-field>
+
+          @if (isParentRequired()) {
+            <mat-form-field>
+              <mat-label>Parent Epic *</mat-label>
+              <input
+                matInput
+                formControlName="parent_id"
+                placeholder="Enter parent Epic ID"
+                required
+                aria-label="Parent Epic ID"
+              />
+              <mat-hint>Story and Defect must be linked to an Epic</mat-hint>
+              @if (workItemForm.get('parent_id')?.invalid) {
+                <mat-error>{{ getErrorMessage('parent_id') }}</mat-error>
+              }
+            </mat-form-field>
+          }
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <mat-form-field>
+            <mat-label>Story Points</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="story_points"
+              placeholder="Enter story points"
+              min="0"
+              aria-label="Story points"
+            />
+            @if (workItemForm.get('story_points')?.invalid) {
+              <mat-error>{{ getErrorMessage('story_points') }}</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Estimated Hours</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="estimated_hours"
+              placeholder="Enter estimated hours"
+              min="0"
+              aria-label="Estimated hours"
+            />
+            @if (workItemForm.get('estimated_hours')?.invalid) {
+              <mat-error>{{ getErrorMessage('estimated_hours') }}</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div>
+          <p class="mat-body-2 mb-2 block">Tags</p>
+          <div class="mb-2 flex gap-2">
+            <mat-form-field class="flex-1">
+              <mat-label>Add Tag</mat-label>
+              <input
+                matInput
+                [(ngModel)]="tagInput"
+                [ngModelOptions]="{ standalone: true }"
+                placeholder="Enter tag name"
+                (keyup.enter)="addTag()"
+                aria-label="Tag input"
+              />
+            </mat-form-field>
+            <button mat-raised-button type="button" (click)="addTag()" [disabled]="!tagInput()" aria-label="Add tag">
+              <mat-icon>add</mat-icon>
+              Add
+            </button>
+          </div>
+          <mat-chip-set aria-label="Work item tags">
+            @for (tag of tags(); track tag) {
+              <mat-chip (removed)="removeTag(tag)" [removable]="true">
+                {{ tag }}
+                <button matChipRemove [attr.aria-label]="'Remove ' + tag"><mat-icon>cancel</mat-icon></button>
+              </mat-chip>
+            }
+          </mat-chip-set>
+        </div>
+
+        <div class="flex items-center justify-between border-t border-solid pt-4">
+          <button
+            mat-button
+            type="button"
+            (click)="clearCachedFormData()"
+            [disabled]="isSubmitting()"
+            aria-label="Clear draft"
+          >
+            <mat-icon>delete_outline</mat-icon>
+            Clear Draft
+          </button>
+          <div class="flex gap-2">
+            <button mat-button type="button" (click)="onCancel()" [disabled]="isSubmitting()" aria-label="Cancel">
+              Cancel
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="workItemForm.invalid || isSubmitting()"
+              aria-label="Create work item"
+            >
+              @if (isSubmitting()) {
+                <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+                Creating...
+              } @else {
+                Create Work Item
+              }
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

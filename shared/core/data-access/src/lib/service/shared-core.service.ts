@@ -1,4 +1,5 @@
-import { computed, inject, Injectable, Signal, signal } from '@angular/core';
+import { computed, inject, Injectable, PLATFORM_ID, Signal, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { SharedCoreServiceConfig, SHARED_CORE_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/core/models';
 import { debounceTime, fromEvent } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -8,10 +9,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class SharedCoreService {
   private readonly config: SharedCoreServiceConfig = inject(SHARED_CORE_SERVICE_CONFIG_TOKEN);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
 
-  private readonly pageHeight = signal<number>(window.innerHeight);
+  private readonly pageHeight = signal<number>(this.isBrowser ? window.innerHeight : 0);
 
-  private readonly pageWidth = signal<number>(window.innerWidth);
+  private readonly pageWidth = signal<number>(this.isBrowser ? window.innerWidth : 0);
 
   private readonly toolbarHeight = computed<number>(() => {
     // defults of the mat-toolbar anyways (v18)
@@ -30,12 +33,14 @@ export class SharedCoreService {
   });
 
   constructor() {
-    fromEvent(window, 'resize')
-      .pipe(takeUntilDestroyed(), debounceTime(300))
-      .subscribe(() => {
-        this.pageHeight.set(window.innerHeight);
-        this.pageWidth.set(window.innerWidth);
-      });
+    if (this.isBrowser) {
+      fromEvent(window, 'resize')
+        .pipe(takeUntilDestroyed(), debounceTime(300))
+        .subscribe(() => {
+          this.pageHeight.set(window.innerHeight);
+          this.pageWidth.set(window.innerWidth);
+        });
+    }
   }
 
   toggleSidenavIfModeOver(): void {

@@ -1,4 +1,7 @@
 import nx from '@nx/eslint-plugin';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 export default [
   ...nx.configs['flat/base'],
@@ -9,6 +12,16 @@ export default [
   },
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+    plugins: {
+      'ttrpg-custom': {
+        rules: {
+          'no-tailwind-colors': require('./scripts/eslint-rules/no-tailwind-colors.js'),
+          'no-tailwind-typography': require('./scripts/eslint-rules/no-tailwind-typography.js'),
+          'no-requirement-comments': require('./scripts/eslint-rules/no-requirement-comments.js'),
+          'no-tailwind-in-templates': require('./scripts/eslint-rules/no-tailwind-in-templates.js'),
+        },
+      },
+    },
     rules: {
       '@nx/enforce-module-boundaries': [
         'error',
@@ -32,6 +45,11 @@ export default [
           'caughtErrorsIgnorePattern': '^_',
         },
       ],
+      // Custom design token enforcement rules (set to warn for baseline)
+      'ttrpg-custom/no-tailwind-colors': 'warn',
+      'ttrpg-custom/no-tailwind-typography': 'warn',
+      'ttrpg-custom/no-requirement-comments': 'warn',
+      'ttrpg-custom/no-tailwind-in-templates': 'warn',
     },
   },
   {
@@ -41,14 +59,5 @@ export default [
   },
   {
     'ignores': ['**/vite.config.*.timestamp*', '**/vitest.config.*.timestamp*'],
-  },
-  {
-    'ignores': ['**/vite.config.*.timestamp*', '**/vitest.config.*.timestamp*'],
-  },
-  {
-    'ignores': ['**/vite.config.*.timestamp*', '**/vitest.config.*.timestamp*'],
-  },
-  {
-    ignores: ['**/vite.config.*.timestamp*', '**/vitest.config.*.timestamp*'],
   },
 ];

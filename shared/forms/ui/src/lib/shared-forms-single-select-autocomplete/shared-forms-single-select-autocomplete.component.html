@@ -1,0 +1,51 @@
+<div class="autocomplete-wrapper">
+  <input
+    #searchInput
+    type="text"
+    matInput
+    [formControl]="searchControl"
+    [matAutocomplete]="auto"
+    [placeholder]="placeholder"
+    [attr.data-testid]="dataTestId()"
+    (focus)="onFocusIn($event)"
+    (blur)="onFocusOut($event)"
+  />
+
+  @if (loading()) {
+    <mat-spinner matSuffix diameter="20"></mat-spinner>
+  }
+
+  @if (value && !disabled) {
+    <button
+      mat-icon-button
+      matSuffix
+      type="button"
+      (click)="clearSelection(); $event.stopPropagation()"
+      [attr.data-testid]="dataTestId() + '-clear'"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  }
+</div>
+
+<mat-autocomplete
+  #auto="matAutocomplete"
+  (optionSelected)="onOptionSelected($event)"
+  [displayWith]="getViewValueFn.bind(this)"
+>
+  @for (option of filteredOptions$ | async; track getValueFn(option)) {
+    <mat-option [value]="option" [attr.data-testid]="dataTestId() + '-option-' + getValueFn(option)">
+      {{ getViewValueFn(option) }}
+    </mat-option>
+  } @empty {
+    <mat-option disabled>
+      @if (searchControl.value && searchControl.value.length < minSearchLength()) {
+        Type at least {{ minSearchLength() }} characters to search
+      } @else if (loading()) {
+        Searching...
+      } @else {
+        No results found
+      }
+    </mat-option>
+  }
+</mat-autocomplete>

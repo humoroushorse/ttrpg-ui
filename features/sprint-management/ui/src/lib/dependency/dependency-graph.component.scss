@@ -1,0 +1,280 @@
+.dependency-graph-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.loading-container,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--g-color-on-surface-variant);
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Warning Card for Circular Dependencies
+.warning-card {
+  background-color: var(--g-color-warning-container);
+  border-left: 4px solid var(--g-color-warning);
+
+  .warning-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    .warning-icon {
+      color: var(--g-color-warning);
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+
+    h3 {
+      margin: 0;
+      color: var(--g-color-on-warning-container);
+    }
+  }
+
+  p {
+    margin: 0.5rem 0;
+    color: var(--g-color-on-warning-container);
+  }
+
+  .circular-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+
+    .circular-chip {
+      background-color: var(--g-color-warning);
+      cursor: pointer;
+      transition: background-color 0.2s;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      mat-icon {
+        color: var(--g-color-on-warning);
+      }
+    }
+  }
+}
+
+// Graph Sections
+.graph-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.graph-section {
+  .nodes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+}
+
+// Dependency Nodes
+.dependency-node {
+  border: 2px solid var(--g-color-outline-variant);
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: var(--g-color-surface);
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  &.current {
+    border-color: var(--g-color-info);
+    background-color: var(--g-color-info-container);
+  }
+
+  &.circular {
+    border-color: var(--g-color-warning);
+    background-color: var(--g-color-warning-container);
+  }
+
+  &.blocked {
+    border-color: var(--g-color-error);
+    background-color: var(--g-color-error-container);
+  }
+
+  &.blocking {
+    border-color: var(--g-color-warning);
+    background-color: var(--g-color-warning-container);
+  }
+
+  .node-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+
+      &.circular-icon {
+        color: var(--g-color-warning);
+      }
+    }
+
+    .node-title {
+      font-weight: 500;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .node-details {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    .node-status,
+    .node-priority {
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      background-color: var(--g-color-surface-variant);
+    }
+  }
+
+  .node-relationships {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--g-color-outline-variant);
+
+    .relationship-label {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--g-color-on-surface-variant);
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .related-items {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      .related-item-btn {
+        justify-content: flex-start;
+        text-align: left;
+        padding: 0.25rem 0.5rem;
+        min-height: 32px;
+        line-height: 1.2;
+      }
+    }
+  }
+}
+
+// Dependencies List
+.dependencies-list {
+  .dependency-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+
+    .dependency-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem;
+      border: 1px solid var(--g-color-outline-variant);
+      border-radius: 4px;
+      background-color: var(--g-color-surface-variant);
+
+      .dependency-source,
+      .dependency-target {
+        flex: 1;
+
+        button {
+          width: 100%;
+          justify-content: flex-start;
+          text-align: left;
+        }
+      }
+
+      .dependency-arrow {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        color: var(--g-color-on-surface-variant);
+
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+
+        .dependency-type {
+          text-transform: uppercase;
+        }
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .nodes-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dependency-item {
+    flex-direction: column;
+    align-items: stretch !important;
+
+    .dependency-arrow {
+      transform: rotate(90deg);
+    }
+  }
+}

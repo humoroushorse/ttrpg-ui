@@ -1,0 +1,68 @@
+<div class="comment-form">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <!-- Tabs for Write and Preview -->
+    <mat-tab-group [(selectedIndex)]="selectedTabIndex" class="mb-4" animationDuration="200ms">
+      <!-- Write Tab -->
+      <mat-tab label="Write">
+        <div class="pt-4">
+          <mat-form-field class="w-full">
+            <mat-label>Comment</mat-label>
+            <textarea
+              matInput
+              formControlName="content"
+              [placeholder]="placeholder()"
+              rows="6"
+              [disabled]="loading()"
+              aria-label="Comment content"
+            ></textarea>
+            @if (form.controls.content.invalid && form.controls.content.touched) {
+              <mat-error>{{ getContentErrorMessage() }}</mat-error>
+            }
+            <mat-hint>Markdown is supported</mat-hint>
+          </mat-form-field>
+
+          <!-- Markdown help -->
+          <div class="mb-4 flex flex-wrap gap-4 text-xs text-gray-500">
+            <span><strong>**bold**</strong></span>
+            <span><em>*italic*</em></span>
+            <span><code>`code`</code></span>
+            <span>[link](url)</span>
+            <span>> quote</span>
+            <span>- list</span>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Preview Tab -->
+      <mat-tab label="Preview">
+        <div class="pt-4">
+          @if (previewContent()) {
+            <div
+              class="preview-container prose prose-sm min-h-[150px] max-w-none rounded-md border border-gray-300 p-4"
+              [innerHTML]="sanitizeContent(previewContent())"
+            ></div>
+          } @else {
+            <div class="py-8 text-center text-gray-500">
+              <mat-icon class="mb-2 text-4xl">visibility_off</mat-icon>
+              <p>Nothing to preview</p>
+              <p class="text-sm">Write something in the Write tab to see a preview</p>
+            </div>
+          }
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <!-- Action buttons -->
+    <div class="flex justify-end gap-2">
+      @if (isEditMode()) {
+        <button mat-stroked-button type="button" (click)="onCancel()" [disabled]="loading()">Cancel</button>
+      }
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || loading()">
+        @if (loading()) {
+          <mat-icon class="mr-2 animate-spin">refresh</mat-icon>
+        }
+        {{ getSubmitButtonText() }}
+      </button>
+    </div>
+  </form>
+</div>

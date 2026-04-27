@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  sprint-management-ui:
+    build:
+      context: ../..
+      dockerfile: apps/sprint-management/deploy/Dockerfile
+    ports:
+      - '4204:4204'
+    environment:
+      - PORT=4204
+      - NODE_ENV=production
+      - BASE_HREF=/ttrpg/sprint-management/
+      - AUTH_API_TARGET=http://host.docker.internal:8081
+      - SPRINT_API_TARGET=http://host.docker.internal:8003
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'

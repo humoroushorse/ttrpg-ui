@@ -1,0 +1,73 @@
+// Default Dark Theme - Color Overrides
+// Purple-based color scheme for dark mode
+
+@use 'sass:map';
+@use '../../palettes/purple' as purple-palette;
+@use '../../palettes/neutral' as neutral-palette;
+@use '../../palettes/red' as red-palette;
+
+$dark-colors: (
+  // Primary colors (purple)
+  primary: purple-palette.color(80),
+  on-primary: purple-palette.color(20),
+  primary-container: purple-palette.color(30),
+  on-primary-container: purple-palette.color(90),
+  inverse-primary: purple-palette.color(40),
+  primary-fixed: purple-palette.color(90),
+  primary-fixed-dim: purple-palette.color(80),
+  on-primary-fixed: purple-palette.color(10),
+  on-primary-fixed-variant: purple-palette.color(30),
+  // Secondary colors (neutral)
+  secondary: neutral-palette.color(80),
+  on-secondary: neutral-palette.color(20),
+  secondary-container: neutral-palette.color(30),
+  on-secondary-container: neutral-palette.color(90),
+  secondary-fixed: neutral-palette.color(90),
+  secondary-fixed-dim: neutral-palette.color(80),
+  on-secondary-fixed: neutral-palette.color(10),
+  on-secondary-fixed-variant: neutral-palette.color(30),
+  // Tertiary colors (neutral-variant)
+  tertiary: neutral-palette.color(80),
+  on-tertiary: neutral-palette.color(20),
+  tertiary-container: neutral-palette.color(30),
+  on-tertiary-container: neutral-palette.color(90),
+  tertiary-fixed: neutral-palette.color(90),
+  tertiary-fixed-dim: neutral-palette.color(80),
+  on-tertiary-fixed: neutral-palette.color(10),
+  on-tertiary-fixed-variant: neutral-palette.color(30),
+  // Error colors (red)
+  error: red-palette.color(80),
+  error-container: red-palette.color(30),
+  on-error: red-palette.color(20),
+  on-error-container: red-palette.color(90),
+  // Surface colors (neutral)
+  background: neutral-palette.color(10),
+  on-background: neutral-palette.color(90),
+  surface: neutral-palette.color(10),
+  surface-dim: neutral-palette.color(6),
+  surface-bright: neutral-palette.color(24),
+  surface-container-lowest: neutral-palette.color(4),
+  surface-container-low: neutral-palette.color(10),
+  surface-container: neutral-palette.color(12),
+  surface-container-high: neutral-palette.color(17),
+  surface-container-highest: neutral-palette.color(22),
+  on-surface: neutral-palette.color(90),
+  surface-variant: neutral-palette.color(30),
+  on-surface-variant: neutral-palette.color(80),
+  // Neutral colors
+  neutral: neutral-palette.color(50),
+  neutral10: neutral-palette.color(10),
+  neutral-variant: neutral-palette.color(50),
+  neutral-variant20: neutral-palette.color(20),
+  // Inverse colors
+  inverse-surface: neutral-palette.color(90),
+  inverse-on-surface: neutral-palette.color(20),
+  inverse-secondary: neutral-palette.color(40),
+  inverse-tertiary: neutral-palette.color(40),
+  // Other
+  shadow: neutral-palette.color(0),
+  scrim: neutral-palette.color(0),
+  surface-tint: neutral-palette.color(80),
+  outline: neutral-palette.color(60),
+  outline-variant: neutral-palette.color(30)
+);

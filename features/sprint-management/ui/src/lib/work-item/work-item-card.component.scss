@@ -1,0 +1,178 @@
+@use 'shared/scss/tokens/typography-classes' as typo;
+
+.work-item-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border-left: 4px solid;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  &--type-epic {
+    border-left-color: var(--g-color-primary);
+  }
+
+  &--type-story {
+    border-left-color: var(--g-color-primary);
+  }
+
+  &--type-defect {
+    border-left-color: var(--g-color-error);
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding-bottom: 0;
+  }
+
+  &__header-content {
+    flex: 1;
+  }
+
+  &__type-info {
+    display: flex;
+    align-items: center;
+    gap: var(--g-spacing-sm);
+    margin-bottom: var(--g-spacing-sm);
+  }
+
+  &__type-icon {
+    @include typo.text-body;
+    color: var(--g-color-on-surface-variant);
+  }
+
+  &__ticket-number {
+    @include typo.text-label;
+    color: var(--g-color-on-surface);
+  }
+
+  &__title {
+    @include typo.text-body-strong;
+    color: var(--g-color-on-surface);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__status-badge {
+    @include typo.text-caption;
+  }
+
+  &__content {
+    flex: 1;
+    margin-top: var(--g-spacing-md);
+  }
+
+  &__description {
+    @include typo.text-body-sm;
+    color: var(--g-color-on-surface-variant);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: var(--g-spacing-md);
+  }
+
+  &__metadata {
+    display: flex;
+    align-items: center;
+    gap: var(--g-spacing-md);
+    @include typo.text-caption;
+    color: var(--g-color-on-surface-variant);
+  }
+
+  &__metadata-item {
+    display: flex;
+    align-items: center;
+    gap: var(--g-spacing-xs);
+
+    mat-icon {
+      @include typo.text-body-sm;
+      width: var(--g-font-size-sm);
+      height: var(--g-font-size-sm);
+    }
+  }
+
+  &__priority-icon {
+    @include typo.text-body-sm;
+    width: var(--g-font-size-sm);
+    height: var(--g-font-size-sm);
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--g-spacing-xs);
+    margin-top: var(--g-spacing-md);
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--g-spacing-sm);
+    padding-top: var(--g-spacing-sm);
+    margin-bottom: 0;
+  }
+}
+
+.status-done {
+  background-color: var(--g-color-secondary-container);
+  color: var(--g-color-on-secondary-container);
+}
+
+.status-in-progress {
+  background-color: var(--g-color-primary-container);
+  color: var(--g-color-on-primary-container);
+}
+
+.status-in-review {
+  background-color: var(--g-color-primary-container);
+  color: var(--g-color-on-primary-container);
+}
+
+.status-todo {
+  background-color: var(--g-color-surface-variant);
+  color: var(--g-color-on-surface-variant);
+}
+
+.status-backlog {
+  background-color: var(--g-color-surface-variant);
+  color: var(--g-color-on-surface-variant);
+}
+
+.status-default {
+  background-color: var(--g-color-surface-variant);
+  color: var(--g-color-on-surface-variant);
+}
+
+.priority-critical {
+  color: var(--g-color-error);
+}
+
+.priority-high {
+  color: var(--g-color-error);
+}
+
+.priority-medium {
+  color: var(--g-color-primary);
+}
+
+.priority-low {
+  color: var(--g-color-secondary);
+}
+
+.priority-default {
+  color: var(--g-color-on-surface-variant);
+}

@@ -19,7 +19,7 @@ import { MatSort, MatSortable, MatSortModule, SortDirection } from '@angular/mat
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { SharedTableService } from '@ttrpg-ui/shared/table/data-access';
 import { Subject, takeUntil } from 'rxjs';
-import { CdkDragDrop, CdkDrag, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDrag, CdkDropList, CdkDragPlaceholder, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { SharedTableToolsColumnSettingsComponent } from '../shared-table-tools-column-settings/shared-table-tools-column-settings.component';
@@ -52,6 +52,7 @@ import { debounceTime } from 'rxjs/operators';
     ScrollingModule,
     CdkDropList,
     CdkDrag,
+    CdkDragPlaceholder,
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
@@ -109,11 +110,11 @@ export class SharedAngularMaterialTableComponent<T> implements AfterViewInit, On
 
   dataSource = new MatTableDataSource<T>([]);
 
-  selectedPageSize$$ = this.sharedTableService.selectedPageSize$$;
+  selectedPageSize = this.sharedTableService.selectedPageSize;
 
-  showFirstLastButtons$$ = this.sharedTableService.showFirstLastButtons$$;
+  showFirstLastButtons = this.sharedTableService.showFirstLastButtons;
 
-  pageSizeOptions$$ = this.sharedTableService.getPageSizeOptions();
+  pageSizeOptions = this.sharedTableService.getPageSizeOptions();
 
   globalFilter = signal('');
 
@@ -136,11 +137,9 @@ export class SharedAngularMaterialTableComponent<T> implements AfterViewInit, On
   constructor() {
     effect(() => {
       this.dataSource.data = this.data() ?? [];
-      console.log(this.data());
     });
 
     effect(() => {
-      console.log('columnDefs changed', this.columnDefs());
       this.tableColumnDefs.set(this.columnDefs().sort(this.sortPinned));
     });
 
