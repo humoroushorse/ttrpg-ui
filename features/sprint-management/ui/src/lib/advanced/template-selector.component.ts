@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, OnInit, output, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,13 +14,12 @@ type WorkItemTemplate = SprintModels.Template.WorkItemTemplate;
   selector: 'lib-template-selector',
   standalone: true,
   imports: [
-    CommonModule,
     MatFormFieldModule,
     MatSelectModule,
     MatIconModule,
     MatTooltipModule,
-    TemplatePreviewComponent,
-  ],
+    TemplatePreviewComponent
+],
   templateUrl: './template-selector.component.html',
   styleUrl: './template-selector.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

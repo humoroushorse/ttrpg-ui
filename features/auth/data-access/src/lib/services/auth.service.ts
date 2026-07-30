@@ -7,12 +7,12 @@ import {
 } from '@ttrpg-ui/features/auth/models';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { catchError, interval, map, Observable, of, startWith, take, tap, throwError } from 'rxjs';
-import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { RegisterUserInput } from 'features/auth/models/src/lib/models/models';
 import { SharedNotificationService } from '@ttrpg-ui/shared/notification/data-access';
 import { SharedLocalStorageService } from '@ttrpg-ui/shared/local-storage/data-access';
 import { UserModels } from '@ttrpg-ui/features/user/models';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -208,7 +208,7 @@ export class AuthService {
     }
 
     try {
-      const decoded = jwtDecode<UserIdToken>(token);
+      const decoded = this.decodeJwt<UserIdToken>(token);
       return decoded;
     } catch (error) {
       console.error('[AuthService] Failed to decode token:', error);
@@ -283,5 +283,26 @@ export class AuthService {
         observe: 'response',
       })
       .pipe(map((r) => r.body));
+  }
+
+  private decodeJwt<T>(token: string): T {
+    const [, payload] = token.split('.');
+
+    if (!payload) {
+      throw new Error('Invalid JWT');
+    }
+
+    const base64 = payload
+      .replace(/-/g, '+')
+      .replace(/_/g, '/');
+
+    const json = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => `%${c.charCodeAt(0).toString(16).padStart(2, '0')}`)
+        .join('')
+    );
+
+    return JSON.parse(json) as T;
   }
 }

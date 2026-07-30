@@ -49,3 +49,7 @@ vite.config.*.timestamp*
 vitest.config.*.timestamp*
 
 .kiro/*
+
+.claude/worktrees
+.nx/polygraph
+.nx/self-healing

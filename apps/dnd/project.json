@@ -26,7 +26,7 @@
           }
         ],
         "styles": [
-          "apps/dnd/src/styles.scss",
+          "apps/dnd/src/styles.css",
           {
             "input": "shared/scss/themes/default-theme-light/default-theme-light.scss",
             "bundleName": "default-theme-light",
@@ -77,15 +77,23 @@
     "serve": {
       "executor": "@angular/build:dev-server",
       "options": {
-        "port": 4203,
-        "proxyConfig": "apps/dnd/proxies/proxy.conf.json"
+        "port": 4203
       },
       "configurations": {
         "production": {
           "buildTarget": "dnd:build:production"
         },
         "development": {
-          "buildTarget": "dnd:build:development"
+          "buildTarget": "dnd:build:development",
+          "proxyConfig": "apps/dnd/proxies/proxy.go.json"
+        },
+        "go": {
+          "buildTarget": "dnd:build:development",
+          "proxyConfig": "apps/dnd/proxies/proxy.go.json"
+        },
+        "py": {
+          "buildTarget": "dnd:build:development",
+          "proxyConfig": "apps/dnd/proxies/proxy.py.json"
         }
       },
       "defaultConfiguration": "development",

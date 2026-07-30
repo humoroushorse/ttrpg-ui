@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,7 +18,7 @@ type SprintWithMetrics = SprintModels.Sprint.SprintWithMetrics;
 @Component({
   selector: 'lib-sprint-progress',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatProgressBarModule, MatIconModule, MatTooltipModule],
+  imports: [MatCardModule, MatProgressBarModule, MatIconModule, MatTooltipModule],
   templateUrl: './sprint-progress.component.html',
   styleUrl: './sprint-progress.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

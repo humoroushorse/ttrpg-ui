@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   displayName: 'shared-core-util',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],

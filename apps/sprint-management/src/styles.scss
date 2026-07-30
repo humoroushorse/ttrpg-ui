@@ -26,7 +26,4 @@ body {
     sans-serif;
 }
 
-/* Prevent layout shift from Material Icons loading */
-.material-icons {
-  font-display: swap;
-}
+/* Material Icons font display behavior is controlled by the font loader */

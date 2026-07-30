@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -38,7 +38,6 @@ import { map } from 'rxjs/operators';
   selector: 'lib-page-work-item-create',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatCardModule,
@@ -51,8 +50,8 @@ import { map } from 'rxjs/operators';
     MatSnackBarModule,
     MatChipsModule,
     MatFormFieldModule,
-    SharedFormsSingleSelectAutocompleteComponent,
-  ],
+    SharedFormsSingleSelectAutocompleteComponent
+],
   templateUrl: './page-work-item-create.component.html',
   styleUrls: ['./page-work-item-create.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

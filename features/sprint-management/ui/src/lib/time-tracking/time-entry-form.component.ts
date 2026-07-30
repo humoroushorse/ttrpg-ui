@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, effect, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -17,15 +17,14 @@ type UpdateTimeEntryRequest = SprintModels.TimeTracking.UpdateTimeEntryRequest;
   selector: 'lib-time-entry-form',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatIconModule,
     MatDatepickerModule,
-    MatNativeDateModule,
-  ],
+    MatNativeDateModule
+],
   templateUrl: './time-entry-form.component.html',
   styleUrl: './time-entry-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

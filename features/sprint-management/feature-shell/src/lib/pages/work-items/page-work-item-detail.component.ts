@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { MatCardModule } from '@angular/material/card';
@@ -43,7 +43,6 @@ type WorkItemPriority = SprintModels.WorkItem.WorkItemPriority;
   selector: 'lib-page-work-item-detail',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -59,8 +58,8 @@ type WorkItemPriority = SprintModels.WorkItem.WorkItemPriority;
     AuditLogListComponent,
     DisplayValuePipe,
     IsEmptyValuePipe,
-    RouterLink,
-  ],
+    RouterLink
+],
   templateUrl: './page-work-item-detail.component.html',
   styleUrls: ['./page-work-item-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -9,7 +9,7 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -37,7 +37,6 @@ type WorkItemTemplate = SprintModels.Template.WorkItemTemplate;
   selector: 'lib-work-item-form',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -48,8 +47,8 @@ type WorkItemTemplate = SprintModels.Template.WorkItemTemplate;
     MatTooltipModule,
     TagInputComponent,
     CustomFieldListComponent,
-    TemplateSelectorComponent,
-  ],
+    TemplateSelectorComponent
+],
   templateUrl: './work-item-form.component.html',
   styleUrl: './work-item-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

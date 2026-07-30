@@ -66,7 +66,8 @@ export const appConfig: ApplicationConfig = {
         ({
           appConfig: appConfigService.appConfig,
           initialized: appConfigService.initialized,
-        }) as DndSpellModels.Service.DndSpellApiServiceConfig,
+        }),
+        // }) as DndSpellModels.Service.DndSpellApiServiceConfig,
       deps: [AppConfigService],
       // useValue: { baseUrl: '/ttrpg-dnd-api' },
     },

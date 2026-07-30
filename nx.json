@@ -12,30 +12,36 @@
     ],
     "sharedGlobals": []
   },
-  "targetDefaults": {
-    "@angular/build:application": {
+  "targetDefaults": [
+    {
       "cache": true,
       "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "inputs": ["production", "^production"],
+      "executor": "@angular/build:application"
     },
-    "@nx/eslint:lint": {
+    {
+      "executor": "@nx/eslint:lint",
       "cache": true,
       "inputs": [
         "default",
+        "^default",
         "{workspaceRoot}/.eslintrc.json",
         "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.mjs"
+        "{workspaceRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint-rules/**/*"
       ]
     },
-    "@nx/vitest:test": {
+    {
       "cache": true,
-      "inputs": ["default", "^production"]
+      "inputs": ["default", "^production"],
+      "executor": "@nx/vitest:test"
     },
-    "@nx/vite:test": {
+    {
       "cache": true,
-      "inputs": ["default", "^production"]
+      "inputs": ["default", "^production"],
+      "executor": "@nx/vitest:test"
     }
-  },
+  ],
   "plugins": [
     {
       "plugin": "@nx/playwright/plugin",
@@ -55,7 +61,7 @@
       "e2eTestRunner": "playwright",
       "linter": "eslint",
       "style": "scss",
-      "unitTestRunner": "vitest"
+      "unitTestRunner": "vitest-analog"
     },
     "@nx/angular:component": {
       "style": "scss",
@@ -117,7 +123,8 @@
     },
     "@nx/angular:library": {
       "linter": "eslint",
-      "unitTestRunner": "vitest"
+      "unitTestRunner": "vitest-analog"
     }
-  }
+  },
+  "analytics": true
 }

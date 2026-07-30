@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,7 +14,7 @@ import { sanitizeMarkdown } from '@ttrpg-ui/features/sprint-management/util';
 @Component({
   selector: 'lib-comment-list',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule, MatDividerModule],
+  imports: [MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule, MatDividerModule],
   templateUrl: './comment-list.component.html',
   styleUrl: './comment-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

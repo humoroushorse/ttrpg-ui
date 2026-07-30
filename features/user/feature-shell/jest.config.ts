@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   displayName: 'features-user-feature-shell',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],

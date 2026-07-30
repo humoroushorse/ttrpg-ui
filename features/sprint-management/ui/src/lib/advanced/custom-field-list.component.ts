@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
 import { CustomFieldComponent } from './custom-field.component';
 
@@ -9,7 +9,7 @@ type CustomFieldValue = SprintModels.CustomField.CustomFieldValue;
 @Component({
   selector: 'lib-custom-field-list',
   standalone: true,
-  imports: [CommonModule, CustomFieldComponent],
+  imports: [CustomFieldComponent],
   templateUrl: './custom-field-list.component.html',
   styleUrl: './custom-field-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

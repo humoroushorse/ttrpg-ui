@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { withState, signalStore, type, patchState, withMethods, withHooks } from '@ngrx/signals';
-import { setAllEntities, withEntities, addEntity } from '@ngrx/signals/entities';
+import { setAllEntities, withEntities, addEntity, removeEntity } from '@ngrx/signals/entities';
 import { SharedModels } from '@ttrpg-ui/shared/models';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -88,6 +88,30 @@ export const SpellsStore = signalStore(
                   SharedModels.Store.setLoading(false),
                 );
                 sharedNotificationService.openSnackBar(`Error creating ${store.entityNameSingle()}`, 'close');
+              },
+            }),
+          );
+        }),
+      ),
+      delete: rxMethod<StoreSchema>(
+        switchMap((entity) => {
+          patchState(store, SharedModels.Store.setLoading(true), SharedModels.Store.setError(null, null));
+          return storeService.delete(entity).pipe(
+            tapResponse({
+              next: (next) => {
+                if (next) {
+                  patchState(store, removeEntity(entity.id));
+                  sharedNotificationService.openSnackBar(`Deleted spell '${entity.name}'`, 'close');
+                }
+                patchState(store, SharedModels.Store.setLoading(false));
+              },
+              error: (error: HttpErrorResponse) => {
+                patchState(
+                  store,
+                  SharedModels.Store.setError(getErrorMessage(error), `Error deleting ${store.entityNamePlural()}`),
+                  SharedModels.Store.setLoading(false),
+                );
+                sharedNotificationService.openSnackBar(`Error deleting ${store.entityNamePlural()}`, 'close');
               },
             }),
           );

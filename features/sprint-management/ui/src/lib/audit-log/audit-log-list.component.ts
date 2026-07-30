@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,7 +23,6 @@ type AuditLogFilter = SprintModels.AuditLog.AuditLogFilter;
   selector: 'lib-audit-log-list',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -35,8 +34,8 @@ type AuditLogFilter = SprintModels.AuditLog.AuditLogFilter;
     MatDatepickerModule,
     MatInputModule,
     MatNativeDateModule,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
   templateUrl: './audit-log-list.component.html',
   styleUrl: './audit-log-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

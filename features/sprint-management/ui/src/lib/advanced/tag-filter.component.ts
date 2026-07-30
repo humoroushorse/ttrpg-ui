@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -13,7 +13,7 @@ export interface TagWithCount {
 @Component({
   selector: 'lib-tag-filter',
   standalone: true,
-  imports: [CommonModule, MatChipsModule, MatIconModule, MatBadgeModule, MatButtonModule],
+  imports: [MatChipsModule, MatIconModule, MatBadgeModule, MatButtonModule],
   templateUrl: './tag-filter.component.html',
   styleUrl: './tag-filter.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

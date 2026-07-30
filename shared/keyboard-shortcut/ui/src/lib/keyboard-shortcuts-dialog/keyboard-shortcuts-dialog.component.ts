@@ -1,5 +1,5 @@
 import { Component, inject, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,7 +19,7 @@ import { KeyboardShortcutService } from '@ttrpg-ui/shared/keyboard-shortcut/data
 @Component({
   selector: 'lib-keyboard-shortcuts-dialog',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatDividerModule],
+  imports: [MatDialogModule, MatButtonModule, MatIconModule, MatDividerModule],
   templateUrl: './keyboard-shortcuts-dialog.component.html',
   styleUrls: ['./keyboard-shortcuts-dialog.component.css'],
 })

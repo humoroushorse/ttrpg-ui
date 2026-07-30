@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   displayName: 'shared-table-ui',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],

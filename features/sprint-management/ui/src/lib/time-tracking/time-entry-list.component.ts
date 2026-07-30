@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -10,7 +10,7 @@ type TimeEntry = SprintModels.TimeTracking.TimeEntry;
 @Component({
   selector: 'lib-time-entry-list',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [MatButtonModule, MatIconModule, MatTooltipModule],
   templateUrl: './time-entry-list.component.html',
   styleUrl: './time-entry-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

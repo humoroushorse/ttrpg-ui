@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -24,7 +24,6 @@ type CustomFieldType = SprintModels.CustomField.CustomFieldType;
   selector: 'lib-custom-field',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -32,8 +31,8 @@ type CustomFieldType = SprintModels.CustomField.CustomFieldType;
     MatSelectModule,
     MatCheckboxModule,
     MatDatepickerModule,
-    MatNativeDateModule,
-  ],
+    MatNativeDateModule
+],
   templateUrl: './custom-field.component.html',
   styleUrl: './custom-field.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
