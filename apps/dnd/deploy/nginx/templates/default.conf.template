@@ -1,5 +1,5 @@
 server {
-    listen 80;
+    listen 8080;
     server_name dnd.server;  # Replace with domain or IP
 
     access_log  /var/log/nginx/dnd.server.access.log    main;
