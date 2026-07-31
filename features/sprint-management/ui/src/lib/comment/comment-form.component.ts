@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output, signal, effect, inject } from '@angular/core';
+import { Component, input, output, signal, effect, inject } from '@angular/core';
 
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,11 +23,10 @@ import { sanitizeMarkdown } from '@ttrpg-ui/features/sprint-management/util';
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    MatTabsModule
-],
+    MatTabsModule,
+  ],
   templateUrl: './comment-form.component.html',
   styleUrl: './comment-form.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentFormComponent {
   private readonly sanitizer = inject(DomSanitizer);

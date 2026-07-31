@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,7 +16,6 @@ export interface TagWithCount {
   imports: [MatChipsModule, MatIconModule, MatBadgeModule, MatButtonModule],
   templateUrl: './tag-filter.component.html',
   styleUrl: './tag-filter.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TagFilterComponent {
   availableTags = input<TagWithCount[]>([]);

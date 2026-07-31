@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -52,7 +51,6 @@ import { MatFormFieldControl } from '@angular/material/form-field';
   templateUrl: './shared-forms-single-select.component.html',
   styleUrl: './shared-forms-single-select.component.scss',
   providers: [{ provide: MatFormFieldControl, useExisting: SharedFormsSingleSelectComponent }],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFormsSingleSelectComponent implements ControlValueAccessor, OnDestroy {
   /*****************************************************************************

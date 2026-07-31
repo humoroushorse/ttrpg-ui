@@ -70,7 +70,7 @@
             </div>
             <div>
               <span class="mat-caption opacity-60">Created At</span>
-              <p class="mat-body-2 mb-0">{{ project()?.created_at | date: 'medium' }}</p>
+              <p class="mat-body-2 mb-0">{{ $safeNavigationMigration(project()?.created_at) | date: 'medium' }}</p>
             </div>
             <div>
               <span class="mat-caption opacity-60">Updated By</span>
@@ -78,7 +78,7 @@
             </div>
             <div>
               <span class="mat-caption opacity-60">Updated At</span>
-              <p class="mat-body-2 mb-0">{{ project()?.updated_at | date: 'medium' }}</p>
+              <p class="mat-body-2 mb-0">{{ $safeNavigationMigration(project()?.updated_at) | date: 'medium' }}</p>
             </div>
           </div>
         </div>

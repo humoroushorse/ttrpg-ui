@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, OnInit, signal, Type } from '@angular/core';
+import { Component, inject, OnInit, signal, Type } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedAngularMaterialTableComponent } from '@ttrpg-ui/shared/table/ui';
 import { TableModels } from '@ttrpg-ui/shared/table/models';
@@ -12,7 +12,7 @@ import { UserAvatarListComponent } from '@ttrpg-ui/features/user/ui';
 import { Meta, Title } from '@angular/platform-browser';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
 import { DndSpellModels } from '@ttrpg-ui/features/dnd/spells/models';
-import { SpellsStore } from '@ttrpg-ui/features/dnd/spells/data-access'
+import { SpellsStore } from '@ttrpg-ui/features/dnd/spells/data-access';
 import { DndSpellTableActionsComponent } from '@ttrpg-ui/features/dnd/spells/ui';
 import { Router } from '@angular/router';
 
@@ -30,9 +30,8 @@ import { Router } from '@angular/router';
   ],
   templateUrl: './page-dnd-spells-view-all.component.html',
   styleUrl: './page-dnd-spells-view-all.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageDndSpellsViewAllComponent {
+export class PageDndSpellsViewAllComponent implements OnInit {
   static uniqueId = 'PageDndSpellsViewAllComponent';
 
   private readonly meta = inject(Meta);
@@ -58,46 +57,193 @@ export class PageDndSpellsViewAllComponent {
     ) || 'table',
   );
 
-
   private defaultColumnDefs: TableModels.ColumnDef<DndSpellModels.Spells.SpellSchema>[] = [
     { field: 'id', headerName: 'ID', cellDataType: 'text', sortable: true, pinned: 'left', hide: true },
     { field: 'source_id', headerName: 'Source ID', cellDataType: 'text', sortable: true, hide: true },
     { field: 'name', headerName: 'Name', cellDataType: 'text', sortable: true, pinned: 'left', hide: false },
     { field: 'slug', headerName: 'Slug', cellDataType: 'text', sortable: true, pinned: undefined, hide: false },
-    { field: 'dnd_version', headerName: 'Version', cellDataType: 'text', sortable: true, pinned: undefined, hide: false },
-    { field: 'dnd_version_year', headerName: 'Version Year', cellDataType: 'number', sortable: true, pinned: undefined, hide: false },
-    { field: 'source_page', headerName: 'Source Page', cellDataType: 'number', sortable: true, pinned: undefined, hide: false },
+    {
+      field: 'dnd_version',
+      headerName: 'Version',
+      cellDataType: 'text',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+    },
+    {
+      field: 'dnd_version_year',
+      headerName: 'Version Year',
+      cellDataType: 'number',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+    },
+    {
+      field: 'source_page',
+      headerName: 'Source Page',
+      cellDataType: 'number',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+    },
     { field: 'level', headerName: 'Level', cellDataType: 'number', sortable: true, pinned: undefined, hide: false },
     { field: 'school', headerName: 'School', cellDataType: 'text', sortable: true, pinned: undefined, hide: false },
-    { field: 'is_ritual', headerName: 'Is Ritual', cellDataType: 'boolean', sortable: true, pinned: undefined, hide: false },
-    { field: 'is_unearthed_arcana', headerName: 'Is UA', cellDataType: 'boolean', sortable: true, pinned: undefined, hide: true },
-    { field: 'casting_time', headerName: 'Casting Time', cellDataType: 'text', sortable: true, pinned: undefined, hide: false },
+    {
+      field: 'is_ritual',
+      headerName: 'Is Ritual',
+      cellDataType: 'boolean',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+    },
+    {
+      field: 'is_unearthed_arcana',
+      headerName: 'Is UA',
+      cellDataType: 'boolean',
+      sortable: true,
+      pinned: undefined,
+      hide: true,
+    },
+    {
+      field: 'casting_time',
+      headerName: 'Casting Time',
+      cellDataType: 'text',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+    },
     { field: 'range', headerName: 'Range', cellDataType: 'text', sortable: true, pinned: undefined, hide: false },
-    { field: 'has_verbal_component', headerName: 'Has Verbal', cellDataType: 'boolean', sortable: true, pinned: undefined, hide: false },
-    { field: 'has_somantic_component', headerName: 'Has Somantic', cellDataType: 'boolean', sortable: true, pinned: undefined, hide: false },
-    { field: 'has_material_component', headerName: 'Has Material', cellDataType: 'boolean', sortable: true, pinned: undefined, hide: false },
-    { field: 'materials', headerName: 'Has Material', cellDataType: 'text', sortable: true, pinned: undefined, hide: false },
+    {
+      field: 'has_verbal_component',
+      headerName: 'Has Verbal',
+      cellDataType: 'boolean',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+    },
+    {
+      field: 'has_somantic_component',
+      headerName: 'Has Somantic',
+      cellDataType: 'boolean',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+    },
+    {
+      field: 'has_material_component',
+      headerName: 'Has Material',
+      cellDataType: 'boolean',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+    },
+    {
+      field: 'materials',
+      headerName: 'Has Material',
+      cellDataType: 'text',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+    },
 
-    { field: 'components', headerName: 'Components', cellDataType: 'text', sortable: true, pinned: undefined, hide: false, valueGetter: (spell: DndSpellModels.Spells.SpellSchema) => {
-      let components = [];
-      if (spell.has_verbal_component) components.push('V')
-      if (spell.has_somatic_component) components.push('S')
-      if (spell.has_material_component) components.push('M')
-      if (spell.materials) components.push(`(${spell.materials})`)
-      return components.join(', ');
-    }},
+    {
+      field: 'components',
+      headerName: 'Components',
+      cellDataType: 'text',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+      valueGetter: (spell: DndSpellModels.Spells.SpellSchema) => {
+        const components = [];
+        if (spell.has_verbal_component) components.push('V');
+        if (spell.has_somatic_component) components.push('S');
+        if (spell.has_material_component) components.push('M');
+        if (spell.materials) components.push(`(${spell.materials})`);
+        return components.join(', ');
+      },
+    },
 
-    { field: 'has_spell_cost', headerName: 'Has Spell Cost', cellDataType: 'boolean', sortable: true, pinned: undefined, hide: false },
-    { field: 'are_materials_consumed', headerName: 'Are Materials Consumed', cellDataType: 'boolean', sortable: true, pinned: undefined, hide: false },
+    {
+      field: 'has_spell_cost',
+      headerName: 'Has Spell Cost',
+      cellDataType: 'boolean',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+    },
+    {
+      field: 'are_materials_consumed',
+      headerName: 'Are Materials Consumed',
+      cellDataType: 'boolean',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+    },
     { field: 'duration', headerName: 'Duration', cellDataType: 'text', sortable: true, pinned: undefined, hide: false },
-    { field: 'is_concentraiton', headerName: 'Is Concentration', cellDataType: 'boolean', sortable: true, pinned: undefined, hide: false },
-    { field: 'description', headerName: 'Description', cellDataType: 'text', sortable: true, pinned: undefined, hide: false },
-    { field: 'has_saving_throw', headerName: 'Has Saving Throw', cellDataType: 'text', sortable: true, pinned: undefined, hide: false },
-    { field: 'difficulty_class_saving_throw_override', headerName: 'DC Override', cellDataType: 'number', sortable: true, pinned: undefined, hide: true },
-    { field: 'damage_type', headerName: 'Damage Type', cellDataType: 'text', sortable: true, pinned: undefined, hide: false },
-    { field: 'at_higher_levels', headerName: 'At Higher Levels', cellDataType: 'text', sortable: true, pinned: undefined, hide: true },
-    { field: 'difficulty_class_saving_throw', headerName: 'DC Save', cellDataType: 'text', sortable: true, pinned: undefined, hide: true },
-    { field: 'difficulty_class_type', headerName: 'DC Type', cellDataType: 'text', sortable: true, pinned: undefined, hide: true },
+    {
+      field: 'is_concentraiton',
+      headerName: 'Is Concentration',
+      cellDataType: 'boolean',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+    },
+    {
+      field: 'description',
+      headerName: 'Description',
+      cellDataType: 'text',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+    },
+    {
+      field: 'has_saving_throw',
+      headerName: 'Has Saving Throw',
+      cellDataType: 'text',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+    },
+    {
+      field: 'difficulty_class_saving_throw_override',
+      headerName: 'DC Override',
+      cellDataType: 'number',
+      sortable: true,
+      pinned: undefined,
+      hide: true,
+    },
+    {
+      field: 'damage_type',
+      headerName: 'Damage Type',
+      cellDataType: 'text',
+      sortable: true,
+      pinned: undefined,
+      hide: false,
+    },
+    {
+      field: 'at_higher_levels',
+      headerName: 'At Higher Levels',
+      cellDataType: 'text',
+      sortable: true,
+      pinned: undefined,
+      hide: true,
+    },
+    {
+      field: 'difficulty_class_saving_throw',
+      headerName: 'DC Save',
+      cellDataType: 'text',
+      sortable: true,
+      pinned: undefined,
+      hide: true,
+    },
+    {
+      field: 'difficulty_class_type',
+      headerName: 'DC Type',
+      cellDataType: 'text',
+      sortable: true,
+      pinned: undefined,
+      hide: true,
+    },
     // stat blocks
     {
       field: 'actions',
@@ -142,5 +288,4 @@ export class PageDndSpellsViewAllComponent {
   onViewGameSessionClicked(event: DndSpellModels.Spells.SpellSchema) {
     this.router.navigate(['event-planning', 'game-session', event.id]);
   }
-
 }

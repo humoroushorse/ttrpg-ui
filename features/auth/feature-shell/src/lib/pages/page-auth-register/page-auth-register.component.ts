@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -26,7 +26,6 @@ import { RegisterUserInput } from 'features/auth/models/src/lib/models/models';
   ],
   templateUrl: './page-auth-register.component.html',
   styleUrl: './page-auth-register.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageAuthRegisterComponent implements OnInit {
   private readonly meta = inject(Meta);

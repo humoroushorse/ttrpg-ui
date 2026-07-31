@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
 import { Meta, Title } from '@angular/platform-browser';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
@@ -9,7 +9,6 @@ import { EventPlanningGameSessionCreateFormComponent } from '@ttrpg-ui/features/
   imports: [EventPlanningGameSessionCreateFormComponent],
   templateUrl: './page-event-planning-game-session-create.component.html',
   styleUrl: './page-event-planning-game-session-create.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageEventPlanningGameSessionCreateComponent implements OnInit {
   private readonly meta = inject(Meta);

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -25,7 +25,6 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
   ],
   templateUrl: './page-auth-login.component.html',
   styleUrl: './page-auth-login.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageAuthLoginComponent implements OnInit {
   private readonly meta = inject(Meta);

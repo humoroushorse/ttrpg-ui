@@ -18,7 +18,8 @@ module.exports = {
   },
 
   create(context) {
-    const sourceCode = context.getSourceCode();
+    // ESLint v9: sourceCode is now accessed via context.sourceCode instead of context.getSourceCode()
+    const sourceCode = context.sourceCode;
 
     // Regex patterns for Tailwind classes
     const tailwindPatterns = [

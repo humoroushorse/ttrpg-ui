@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,7 +21,6 @@ type WorkItem = SprintModels.WorkItem.WorkItem;
   imports: [RouterModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
   templateUrl: './work-item-table-actions.component.html',
   styleUrl: './work-item-table-actions.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkItemTableActionsComponent {
   workItem = input.required<WorkItem>();

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +13,6 @@ import { AppTheme } from '@ttrpg-ui/shared/theme/models';
   imports: [MatButtonModule, MatIconModule, MatMenuModule, MatRadioModule, MatTooltipModule],
   templateUrl: './shared-theme-picker.component.html',
   styleUrl: './shared-theme-picker.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedThemePickerComponent {
   private readonly sharedThemeService = inject(SharedThemeService);

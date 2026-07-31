@@ -1,14 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  inject,
-  OnInit,
-  OnDestroy,
-  PLATFORM_ID,
-  signal,
-} from '@angular/core';
+import { Component, computed, effect, inject, OnInit, OnDestroy, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -50,11 +40,10 @@ type WorkItemStatus = SprintModels.WorkItem.WorkItemStatus;
     MatProgressBarModule,
     MatTabsModule,
     MatSnackBarModule,
-    SprintBoardComponent
-],
+    SprintBoardComponent,
+  ],
   templateUrl: './page-sprint-detail.component.html',
   styleUrls: ['./page-sprint-detail.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageSprintDetailComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);

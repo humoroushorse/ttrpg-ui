@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, OnInit, signal, Type } from '@angular/core';
+import { Component, effect, inject, OnInit, signal, Type } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedAngularMaterialTableComponent } from '@ttrpg-ui/shared/table/ui';
 import { TableModels } from '@ttrpg-ui/shared/table/models';
@@ -36,7 +36,6 @@ import { UserAvatarListComponent } from '@ttrpg-ui/features/user/ui';
   ],
   templateUrl: './page-event-planning-game-session-view-all.component.html',
   styleUrl: './page-event-planning-game-session-view-all.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageEventPlanningGameSessionViewAllComponent implements OnInit {
   private readonly dialog = inject(MatDialog);

@@ -143,8 +143,8 @@ describe('CommentListComponent - Comment Ordering Property Tests', () => {
           work_item_id: fc.uuid(),
           content: fc.string({ minLength: 1, maxLength: 500 }),
           author_id: fc.uuid(),
-          created_at: fc.date().map((d) => d.toISOString()),
-          updated_at: fc.date().map((d) => d.toISOString()),
+          created_at: fc.date({ min: new Date('2000-01-01'), max: new Date('2100-12-31') }).map((d) => d.toISOString()),
+          updated_at: fc.date({ min: new Date('2000-01-01'), max: new Date('2100-12-31') }).map((d) => d.toISOString()),
         }),
         (comment: Comment) => {
           const comments = [comment];

@@ -1,14 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  inject,
-  OnInit,
-  signal,
-  Type,
-  OnDestroy,
-} from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal, Type, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -68,7 +58,6 @@ type FilterModel = SprintModels.Filter.FilterModel;
   ],
   templateUrl: './page-sprints-list.component.html',
   styleUrls: ['./page-sprints-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageSprintsListComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, output, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -34,11 +34,10 @@ type UpdateTimeEntryRequest = SprintModels.TimeTracking.UpdateTimeEntryRequest;
     MatTooltipModule,
     MatDividerModule,
     TimeEntryFormComponent,
-    TimeEntryListComponent
-],
+    TimeEntryListComponent,
+  ],
   templateUrl: './time-tracking.component.html',
   styleUrl: './time-tracking.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimeTrackingComponent {
   private readonly timeTrackingStore = inject(TimeTrackingStore);

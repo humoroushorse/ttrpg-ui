@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, computed } from '@angular/core';
+import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,7 +26,6 @@ export interface VelocityDataPoint {
   imports: [CommonModule, MatCardModule, MatIconModule, MatTooltipModule],
   templateUrl: './sprint-velocity-chart.component.html',
   styleUrl: './sprint-velocity-chart.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SprintVelocityChartComponent {
   /**

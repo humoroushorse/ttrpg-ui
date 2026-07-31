@@ -195,7 +195,7 @@ describe('AuditLogListComponent - Audit Log Property Tests', () => {
             nil: undefined,
           }),
           changes: fc.dictionary(fc.string(), fc.string()),
-          timestamp: fc.date().map((d) => d.toISOString()),
+          timestamp: fc.date({ min: new Date('2000-01-01'), max: new Date('2100-12-31') }).map((d) => d.toISOString()),
         }),
         (log: AuditLog) => {
           const logs = [log];

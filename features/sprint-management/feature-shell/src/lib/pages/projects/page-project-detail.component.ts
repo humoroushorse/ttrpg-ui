@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -29,7 +29,6 @@ type Project = SprintModels.Project.Project;
   ],
   templateUrl: './page-project-detail.component.html',
   styleUrls: ['./page-project-detail.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageProjectDetailComponent implements OnInit {
   private readonly router = inject(Router);

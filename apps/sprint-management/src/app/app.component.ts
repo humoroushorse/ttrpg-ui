@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { SharedThemeService } from '@ttrpg-ui/shared/theme/data-access';
@@ -36,7 +36,6 @@ import { KeyboardShortcutService } from '@ttrpg-ui/shared/keyboard-shortcut/data
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
   protected title = 'sprint-management';

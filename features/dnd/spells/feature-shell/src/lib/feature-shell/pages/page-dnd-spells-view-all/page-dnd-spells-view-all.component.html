@@ -37,7 +37,6 @@
 </div>
 
 <section class="flex flex-col gap-4">
-
   @if (currentView() === 'table') {
     <mat-card>
       <lib-shared-angular-material-table
@@ -56,4 +55,4 @@
   }
 </section>
 
-<div>{{(spellStore.entities()) | json}}</div>
+<div>{{ spellStore.entities() | json }}</div>

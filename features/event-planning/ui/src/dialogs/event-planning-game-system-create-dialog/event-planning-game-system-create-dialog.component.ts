@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, ViewChild } from '@angular/core';
+import { Component, effect, inject, ViewChild } from '@angular/core';
 
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,7 +11,6 @@ import { EventPlanningGameSystemStore } from '@ttrpg-ui/features/event-planning/
   imports: [EventPlanningGameSystemCreateFormComponent, MatDialogModule, MatButtonModule],
   templateUrl: './event-planning-game-system-create-dialog.component.html',
   styleUrl: './event-planning-game-system-create-dialog.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventPlanningGameSystemCreateDialogComponent {
   private readonly eventPlanningGameSystemStore = inject(EventPlanningGameSystemStore);

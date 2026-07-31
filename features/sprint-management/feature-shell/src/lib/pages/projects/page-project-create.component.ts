@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -23,11 +23,10 @@ import { ProjectStore } from '@ttrpg-ui/features/sprint-management/data-access';
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
-    MatSnackBarModule
-],
+    MatSnackBarModule,
+  ],
   templateUrl: './page-project-create.component.html',
   styleUrls: ['./page-project-create.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageProjectCreateComponent implements OnInit {
   private readonly router = inject(Router);

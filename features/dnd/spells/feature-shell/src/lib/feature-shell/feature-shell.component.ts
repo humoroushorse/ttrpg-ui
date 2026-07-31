@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -6,6 +6,5 @@ import { RouterModule } from '@angular/router';
   imports: [RouterModule],
   templateUrl: './feature-shell.component.html',
   styleUrl: './feature-shell.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeatureShellComponent {}

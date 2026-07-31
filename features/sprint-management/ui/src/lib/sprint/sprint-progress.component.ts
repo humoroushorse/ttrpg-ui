@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, computed } from '@angular/core';
+import { Component, input, computed } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -21,7 +21,6 @@ type SprintWithMetrics = SprintModels.Sprint.SprintWithMetrics;
   imports: [MatCardModule, MatProgressBarModule, MatIconModule, MatTooltipModule],
   templateUrl: './sprint-progress.component.html',
   styleUrl: './sprint-progress.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SprintProgressComponent {
   sprint = input.required<SprintWithMetrics>();

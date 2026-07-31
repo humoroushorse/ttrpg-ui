@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,7 +27,6 @@ import { MatInputModule } from '@angular/material/input';
   ],
   templateUrl: './page-user-settings.component.html',
   styleUrl: './page-user-settings.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageUserSettingsComponent implements OnInit {
   private readonly authService = inject(AuthService);

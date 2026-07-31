@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output, computed } from '@angular/core';
+import { Component, input, output, computed } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,17 +23,9 @@ type SprintStatus = SprintModels.Sprint.SprintStatus;
 @Component({
   selector: 'lib-sprint-card',
   standalone: true,
-  imports: [
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTooltipModule,
-    MatChipsModule,
-    MatProgressBarModule
-],
+  imports: [MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule, MatChipsModule, MatProgressBarModule],
   templateUrl: './sprint-card.component.html',
   styleUrl: './sprint-card.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SprintCardComponent {
   sprint = input.required<Sprint | SprintWithMetrics>();

@@ -19,7 +19,8 @@ module.exports = {
   },
 
   create(context) {
-    const sourceCode = context.getSourceCode();
+    // ESLint v9: sourceCode is now accessed via context.sourceCode instead of context.getSourceCode()
+    const sourceCode = context.sourceCode;
 
     // Regex patterns for requirement references
     const requirementPatterns = [/\b(Requirement|Req|REQ)[\s-]?\d+\.\d+\b/i, /\b(Requirement|Req|REQ)[\s-]?\d+\b/i];

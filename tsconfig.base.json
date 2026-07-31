@@ -71,7 +71,11 @@
       "@ttrpg-ui/shared/date/data-access": ["shared/date/data-access/src/index.ts"],
       "@ttrpg-ui/shared/date/util": ["shared/date/util/src/index.ts"],
       "@ttrpg-ui/shared/date/models": ["shared/date/models/src/index.ts"]
-    }
+    },
+    "strict": false,
+    "noUncheckedSideEffectImports": false,
+    "types": ["*"],
+    "esModuleInterop": false
   },
   "exclude": ["node_modules", "tmp"]
 }

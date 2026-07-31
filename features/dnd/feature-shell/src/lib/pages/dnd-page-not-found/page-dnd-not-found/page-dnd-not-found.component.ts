@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 
@@ -7,6 +7,5 @@ import { RouterModule } from '@angular/router';
   imports: [RouterModule],
   templateUrl: './page-dnd-not-found.component.html',
   styleUrl: './page-dnd-not-found.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageDndNotFoundComponent {}

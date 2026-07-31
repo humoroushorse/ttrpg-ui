@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -34,11 +34,10 @@ type AuditLogFilter = SprintModels.AuditLog.AuditLogFilter;
     MatDatepickerModule,
     MatInputModule,
     MatNativeDateModule,
-    ReactiveFormsModule
-],
+    ReactiveFormsModule,
+  ],
   templateUrl: './audit-log-list.component.html',
   styleUrl: './audit-log-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuditLogListComponent {
   logs = input.required<AuditLog[]>();

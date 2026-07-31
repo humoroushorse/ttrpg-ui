@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, ViewChild } from '@angular/core';
+import { Component, effect, inject, ViewChild } from '@angular/core';
 
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { EventPlanningGameSessionCreateFormComponent } from '../../forms/event-planning-game-session-create-form/event-planning-game-session-create-form.component';
@@ -11,7 +11,6 @@ import { DialogRef } from '@angular/cdk/dialog';
   imports: [EventPlanningGameSessionCreateFormComponent, MatDialogModule, MatButtonModule],
   templateUrl: './event-planning-game-session-create-dialog.component.html',
   styleUrl: './event-planning-game-session-create-dialog.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventPlanningGameSessionCreateDialogComponent {
   private readonly eventPlanningGameSessionStore = inject(EventPlanningGameSessionStore);

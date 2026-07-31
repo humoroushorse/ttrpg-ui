@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, inject, computed } from '@angular/core';
+import { Component, input, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,7 +10,6 @@ import { sanitizeHtml } from '@ttrpg-ui/features/sprint-management/util';
   imports: [CommonModule, MatCardModule, MatIconModule],
   templateUrl: './shared-notification.component.html',
   styleUrl: './shared-notification.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedNotificationComponent {
   private readonly sanitizer = inject(DomSanitizer);

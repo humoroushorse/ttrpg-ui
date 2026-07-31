@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { LocationStrategy } from '@angular/common';
 import { AppConfigService } from './app-config.service';
 
@@ -8,7 +8,7 @@ describe('AppConfigService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), { provide: LocationStrategy, useValue: { getBaseHref: () => '/' } }],
+      providers: [provideHttpClient(withXhr()), { provide: LocationStrategy, useValue: { getBaseHref: () => '/' } }],
     });
     service = TestBed.inject(AppConfigService);
   });

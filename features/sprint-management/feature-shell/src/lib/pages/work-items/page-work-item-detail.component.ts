@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -58,11 +58,10 @@ type WorkItemPriority = SprintModels.WorkItem.WorkItemPriority;
     AuditLogListComponent,
     DisplayValuePipe,
     IsEmptyValuePipe,
-    RouterLink
-],
+    RouterLink,
+  ],
   templateUrl: './page-work-item-detail.component.html',
   styleUrls: ['./page-work-item-detail.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageWorkItemDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,7 +22,6 @@ export interface WorkItemDialogData {
   imports: [MatDialogModule, MatButtonModule, MatIconModule, WorkItemFormComponent],
   templateUrl: './work-item-dialog.component.html',
   styleUrl: './work-item-dialog.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkItemDialogComponent {
   private readonly dialogRef = inject(MatDialogRef<WorkItemDialogComponent>);

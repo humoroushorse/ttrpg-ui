@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -50,11 +50,10 @@ import { map } from 'rxjs/operators';
     MatSnackBarModule,
     MatChipsModule,
     MatFormFieldModule,
-    SharedFormsSingleSelectAutocompleteComponent
-],
+    SharedFormsSingleSelectAutocompleteComponent,
+  ],
   templateUrl: './page-work-item-create.component.html',
   styleUrls: ['./page-work-item-create.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageWorkItemCreateComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);

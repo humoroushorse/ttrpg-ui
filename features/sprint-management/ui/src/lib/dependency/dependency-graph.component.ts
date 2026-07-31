@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -36,7 +36,6 @@ export interface DependencyNode {
   imports: [MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule, MatChipsModule],
   templateUrl: './dependency-graph.component.html',
   styleUrl: './dependency-graph.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DependencyGraphComponent {
   dependencies = input.required<Dependency[]>();

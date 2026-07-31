@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, inject } from '@angular/core';
+import { Component, computed, input, output, inject } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,7 +17,6 @@ import { sanitizeMarkdown } from '@ttrpg-ui/features/sprint-management/util';
   imports: [MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule, MatDividerModule],
   templateUrl: './comment-list.component.html',
   styleUrl: './comment-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentListComponent {
   private readonly sanitizer = inject(DomSanitizer);

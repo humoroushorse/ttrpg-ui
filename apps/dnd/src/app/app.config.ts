@@ -14,7 +14,7 @@ import { SHARED_LOCAL_STORAGE_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/loca
 import { SHARED_CORE_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/core/models';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { AUTH_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/features/auth/models';
-import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
 import { AppConfigService } from './service/app-config.service';
 import { LocationStrategy } from '@angular/common';
 import { CoreErrorHandler } from '@ttrpg-ui/shared/core/util';
@@ -49,9 +49,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(appRoutes),
     provideAnimationsAsync(),
 
-    provideHttpClient(),
+    provideHttpClient(withXhr()),
 
     provideHttpClient(
+      withXhr(),
       withInterceptors([AuthInterceptors.authInterceptor]),
       // withFetch()
     ),
@@ -62,12 +63,11 @@ export const appConfig: ApplicationConfig = {
     // },
     {
       provide: DndSpellModels.Service.DND_SPELL_API_SERVICE_CONFIG_TOKEN,
-      useFactory: (appConfigService: AppConfigService) =>
-        ({
-          appConfig: appConfigService.appConfig,
-          initialized: appConfigService.initialized,
-        }),
-        // }) as DndSpellModels.Service.DndSpellApiServiceConfig,
+      useFactory: (appConfigService: AppConfigService) => ({
+        appConfig: appConfigService.appConfig,
+        initialized: appConfigService.initialized,
+      }),
+      // }) as DndSpellModels.Service.DndSpellApiServiceConfig,
       deps: [AppConfigService],
       // useValue: { baseUrl: '/ttrpg-dnd-api' },
     },

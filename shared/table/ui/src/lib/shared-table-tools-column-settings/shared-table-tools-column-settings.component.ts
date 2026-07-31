@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, model } from '@angular/core';
+import { Component, model } from '@angular/core';
 
 import { TableModels } from '@ttrpg-ui/shared/table/models';
 import { CdkDrag, CdkDragDrop, CdkDragPlaceholder, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -22,7 +22,6 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
   ],
   templateUrl: './shared-table-tools-column-settings.component.html',
   styleUrl: './shared-table-tools-column-settings.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedTableToolsColumnSettingsComponent<T> {
   columnDefs = model<TableModels.ColumnDef<T>[]>([]);

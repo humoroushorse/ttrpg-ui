@@ -1,1 +1,1 @@
-export * from './+state/spells.store'
+export * from './+state/spells.store';

@@ -1,14 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  inject,
-  OnInit,
-  signal,
-  Type,
-  OnDestroy,
-} from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal, Type, OnDestroy } from '@angular/core';
 
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -73,11 +63,10 @@ type FilterModel = SprintModels.Filter.FilterModel;
     MatDialogModule,
     MatSnackBarModule,
     ScrollingModule,
-    TagFilterComponent
-],
+    TagFilterComponent,
+  ],
   templateUrl: './page-work-items-list.component.html',
   styleUrls: ['./page-work-items-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageWorkItemsListComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);

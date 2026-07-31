@@ -1,6 +1,5 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
@@ -71,7 +70,6 @@ import { debounceTime } from 'rxjs/operators';
   ],
   templateUrl: './shared-angular-material-table.component.html',
   styleUrl: './shared-angular-material-table.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedAngularMaterialTableComponent<T> implements AfterViewInit, OnDestroy {
   private onDestroy$ = new Subject<void>();
