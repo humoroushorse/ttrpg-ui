@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { SharedTableDynamicHostDirective } from './shared-table-dynamic-host.directive';
 
 @Component({
   template: '<div libSharedTableDynamicHost></div>',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SharedTableDynamicHostDirective],
 })
 class TestComponent {}

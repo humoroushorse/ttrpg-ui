@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatChipsModule } from '@angular/material/chips';
 import { SprintModels } from '@ttrpg-ui/features/sprint-management/models';
@@ -11,6 +11,7 @@ type WorkItemStatus = SprintModels.WorkItem.WorkItemStatus;
   standalone: true,
   imports: [MatChipsModule],
   templateUrl: './work-item-status-badge.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './work-item-status-badge.component.scss',
 })
 export class WorkItemStatusBadgeComponent {

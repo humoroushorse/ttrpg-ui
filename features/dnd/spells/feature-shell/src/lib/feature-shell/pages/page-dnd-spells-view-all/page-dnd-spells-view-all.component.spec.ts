@@ -3,7 +3,7 @@ import { PageDndSpellsViewAllComponent } from './page-dnd-spells-view-all.compon
 import { SHARED_CORE_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/core/models';
 import { SHARED_LOCAL_STORAGE_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/local-storage/models';
 import { DndSpellModels } from '@ttrpg-ui/features/dnd/spells/models';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 
 describe('PageDndSpellsViewAllComponent', () => {
@@ -14,7 +14,7 @@ describe('PageDndSpellsViewAllComponent', () => {
     await TestBed.configureTestingModule({
       imports: [PageDndSpellsViewAllComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideRouter([]),
         {
           provide: SHARED_CORE_SERVICE_CONFIG_TOKEN,

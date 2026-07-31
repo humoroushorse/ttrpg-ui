@@ -1,4 +1,4 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -34,6 +34,7 @@ type CustomFieldType = SprintModels.CustomField.CustomFieldType;
     MatNativeDateModule,
   ],
   templateUrl: './custom-field.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './custom-field.component.scss',
 })
 export class CustomFieldComponent {

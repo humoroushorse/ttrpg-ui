@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, output, signal } from '@angular/core';
+import { Component, inject, input, OnInit, output, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -15,6 +15,7 @@ type WorkItemTemplate = SprintModels.Template.WorkItemTemplate;
   standalone: true,
   imports: [MatFormFieldModule, MatSelectModule, MatIconModule, MatTooltipModule, TemplatePreviewComponent],
   templateUrl: './template-selector.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './template-selector.component.scss',
 })
 export class TemplateSelectorComponent implements OnInit {

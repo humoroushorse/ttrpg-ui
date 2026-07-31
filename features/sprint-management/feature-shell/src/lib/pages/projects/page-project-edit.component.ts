@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,6 +28,7 @@ import { ProjectStore } from '@ttrpg-ui/features/sprint-management/data-access';
     MatProgressSpinnerModule,
   ],
   templateUrl: './page-project-edit.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./page-project-edit.component.scss'],
 })
 export class PageProjectEditComponent implements OnInit {

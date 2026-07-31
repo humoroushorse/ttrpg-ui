@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -36,6 +36,7 @@ type NotificationType = SprintModels.Notification.NotificationType;
     MatListModule,
   ],
   templateUrl: './notification-center.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './notification-center.component.scss',
 })
 export class NotificationCenterComponent {

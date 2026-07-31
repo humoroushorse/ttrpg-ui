@@ -1,4 +1,14 @@
-import { Component, computed, effect, inject, OnInit, signal, Type, OnDestroy } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  OnInit,
+  signal,
+  Type,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -66,6 +76,7 @@ type FilterModel = SprintModels.Filter.FilterModel;
     TagFilterComponent,
   ],
   templateUrl: './page-work-items-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./page-work-items-list.component.scss'],
 })
 export class PageWorkItemsListComponent implements OnInit, OnDestroy {

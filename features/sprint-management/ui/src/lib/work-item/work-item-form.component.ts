@@ -1,4 +1,14 @@
-import { Component, computed, effect, inject, input, OnInit, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  OnInit,
+  output,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -40,6 +50,7 @@ type WorkItemTemplate = SprintModels.Template.WorkItemTemplate;
     TemplateSelectorComponent,
   ],
   templateUrl: './work-item-form.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './work-item-form.component.scss',
 })
 export class WorkItemFormComponent implements OnInit {

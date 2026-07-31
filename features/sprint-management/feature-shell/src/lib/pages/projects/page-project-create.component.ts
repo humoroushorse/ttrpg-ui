@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -26,6 +26,7 @@ import { ProjectStore } from '@ttrpg-ui/features/sprint-management/data-access';
     MatSnackBarModule,
   ],
   templateUrl: './page-project-create.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./page-project-create.component.scss'],
 })
 export class PageProjectCreateComponent implements OnInit {

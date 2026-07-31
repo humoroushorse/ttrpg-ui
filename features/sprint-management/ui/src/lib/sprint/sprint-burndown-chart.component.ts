@@ -1,4 +1,4 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, input, computed, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,6 +25,7 @@ export interface BurndownDataPoint {
   standalone: true,
   imports: [MatCardModule, MatIconModule, MatTooltipModule],
   templateUrl: './sprint-burndown-chart.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './sprint-burndown-chart.component.scss',
 })
 export class SprintBurndownChartComponent {

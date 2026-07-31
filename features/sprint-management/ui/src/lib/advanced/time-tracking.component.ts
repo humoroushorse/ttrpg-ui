@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,6 +37,7 @@ type UpdateTimeEntryRequest = SprintModels.TimeTracking.UpdateTimeEntryRequest;
     TimeEntryListComponent,
   ],
   templateUrl: './time-tracking.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './time-tracking.component.scss',
 })
 export class TimeTrackingComponent {

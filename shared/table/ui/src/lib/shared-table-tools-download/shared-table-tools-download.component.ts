@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,6 +10,7 @@ import { SharedDownloadService } from '@ttrpg-ui/shared/download/data-access';
   selector: 'lib-shared-table-tools-download',
   imports: [MatButtonModule, MatIconModule, MatMenuModule],
   templateUrl: './shared-table-tools-download.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './shared-table-tools-download.component.scss',
 })
 export class SharedTableToolsDownloadComponent<T> {

@@ -1,4 +1,4 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,6 +12,7 @@ type TimeEntry = SprintModels.TimeTracking.TimeEntry;
   standalone: true,
   imports: [MatButtonModule, MatIconModule, MatTooltipModule],
   templateUrl: './time-entry-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './time-entry-list.component.scss',
 })
 export class TimeEntryListComponent {

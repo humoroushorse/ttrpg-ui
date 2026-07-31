@@ -1,4 +1,4 @@
-import { Component, effect, input, output } from '@angular/core';
+import { Component, effect, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,6 +26,7 @@ type UpdateTimeEntryRequest = SprintModels.TimeTracking.UpdateTimeEntryRequest;
     MatNativeDateModule,
   ],
   templateUrl: './time-entry-form.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './time-entry-form.component.scss',
 })
 export class TimeEntryFormComponent {

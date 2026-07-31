@@ -1,4 +1,4 @@
-import { Component, input, output, signal, effect, inject } from '@angular/core';
+import { Component, input, output, signal, effect, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,6 +26,7 @@ import { sanitizeMarkdown } from '@ttrpg-ui/features/sprint-management/util';
     MatTabsModule,
   ],
   templateUrl: './comment-form.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './comment-form.component.scss',
 })
 export class CommentFormComponent {

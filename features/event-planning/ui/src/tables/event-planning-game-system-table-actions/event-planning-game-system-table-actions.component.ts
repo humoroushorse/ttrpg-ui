@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +12,7 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
   selector: 'lib-event-planning-game-system-table-actions',
   imports: [RouterModule, MatButtonModule, MatIconModule, MatMenuModule],
   templateUrl: './event-planning-game-system-table-actions.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './event-planning-game-system-table-actions.component.scss',
 })
 export class EventPlanningGameSystemTableActionsComponent {

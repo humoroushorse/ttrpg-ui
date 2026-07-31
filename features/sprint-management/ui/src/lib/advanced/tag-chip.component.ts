@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [MatChipsModule, MatIconModule],
   templateUrl: './tag-chip.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './tag-chip.component.scss',
 })
 export class TagChipComponent {

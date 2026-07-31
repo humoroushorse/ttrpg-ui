@@ -1,4 +1,4 @@
-import { Component, effect, inject, OnInit, signal, Type } from '@angular/core';
+import { Component, effect, inject, OnInit, signal, Type, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedAngularMaterialTableComponent } from '@ttrpg-ui/shared/table/ui';
 import { TableModels } from '@ttrpg-ui/shared/table/models';
@@ -33,6 +33,7 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
     MatTooltipModule,
   ],
   templateUrl: './page-event-planning-game-system-view-all.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './page-event-planning-game-system-view-all.component.scss',
 })
 export class PageEventPlanningGameSystemViewAllComponent implements OnInit {

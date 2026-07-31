@@ -1,4 +1,14 @@
-import { Component, computed, effect, inject, OnInit, OnDestroy, PLATFORM_ID, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  OnInit,
+  OnDestroy,
+  PLATFORM_ID,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -43,6 +53,7 @@ type WorkItemStatus = SprintModels.WorkItem.WorkItemStatus;
     SprintBoardComponent,
   ],
   templateUrl: './page-sprint-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./page-sprint-detail.component.scss'],
 })
 export class PageSprintDetailComponent implements OnInit, OnDestroy {

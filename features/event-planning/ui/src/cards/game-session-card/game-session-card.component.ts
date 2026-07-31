@@ -1,4 +1,13 @@
-import { Component, computed, ElementRef, inject, input, output, viewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  output,
+  viewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 import { MatCardModule } from '@angular/material/card';
@@ -13,6 +22,7 @@ import { UserAvatarListComponent } from '@ttrpg-ui/features/user/ui';
   selector: 'lib-game-session-card',
   imports: [CommonModule, UserAvatarListComponent, MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule],
   templateUrl: './game-session-card.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './game-session-card.component.scss',
 })
 export class GameSessionCardComponent {

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '@ttrpg-ui/features/auth/data-access';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,6 +26,7 @@ import { MatInputModule } from '@angular/material/input';
     MatTooltipModule,
   ],
   templateUrl: './page-user-settings.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './page-user-settings.component.scss',
 })
 export class PageUserSettingsComponent implements OnInit {

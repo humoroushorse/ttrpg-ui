@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, input, output, ViewChild } from '@angular/core';
+import { Component, computed, ElementRef, input, output, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,6 +19,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
   ],
   templateUrl: './tag-input.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './tag-input.component.scss',
 })
 export class TagInputComponent {

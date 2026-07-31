@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -6,6 +6,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   selector: 'lib-user-avatar',
   imports: [MatTooltipModule],
   templateUrl: './user-avatar.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './user-avatar.component.scss',
 })
 export class UserAvatarComponent {

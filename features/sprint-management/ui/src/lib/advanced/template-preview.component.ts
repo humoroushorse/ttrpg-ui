@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +11,7 @@ type WorkItemTemplate = SprintModels.Template.WorkItemTemplate;
   standalone: true,
   imports: [MatChipsModule, MatIconModule],
   templateUrl: './template-preview.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './template-preview.component.scss',
 })
 export class TemplatePreviewComponent {

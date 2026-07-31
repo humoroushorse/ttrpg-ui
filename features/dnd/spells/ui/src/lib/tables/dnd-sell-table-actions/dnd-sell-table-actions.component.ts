@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,6 +13,7 @@ import { DndSpellModels } from '@ttrpg-ui/features/dnd/spells/models';
   selector: 'lib-dnd-sell-table-actions.component',
   imports: [RouterModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
   templateUrl: './dnd-sell-table-actions.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './dnd-sell-table-actions.component.scss',
 })
 export class DndSpellTableActionsComponent {

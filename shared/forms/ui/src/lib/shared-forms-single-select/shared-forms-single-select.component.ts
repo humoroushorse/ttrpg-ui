@@ -10,6 +10,7 @@ import {
   output,
   signal,
   viewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import {
@@ -50,6 +51,7 @@ import { MatFormFieldControl } from '@angular/material/form-field';
   ],
   templateUrl: './shared-forms-single-select.component.html',
   styleUrl: './shared-forms-single-select.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [{ provide: MatFormFieldControl, useExisting: SharedFormsSingleSelectComponent }],
 })
 export class SharedFormsSingleSelectComponent implements ControlValueAccessor, OnDestroy {

@@ -1,4 +1,4 @@
-import { Component, input, output, effect, signal } from '@angular/core';
+import { Component, input, output, effect, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -38,6 +38,7 @@ import { sprintDateValidator } from '@ttrpg-ui/features/sprint-management/util';
     MatIconModule,
   ],
   templateUrl: './sprint-form.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './sprint-form.component.scss',
 })
 export class SprintFormComponent {

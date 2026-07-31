@@ -1,4 +1,4 @@
-import { Component, computed, input, output, inject } from '@angular/core';
+import { Component, computed, input, output, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,6 +16,7 @@ import { sanitizeMarkdown } from '@ttrpg-ui/features/sprint-management/util';
   standalone: true,
   imports: [MatCardModule, MatButtonModule, MatIconModule, MatTooltipModule, MatDividerModule],
   templateUrl: './comment-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './comment-list.component.scss',
 })
 export class CommentListComponent {

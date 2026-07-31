@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,6 +15,7 @@ const { LinkType } = SprintModels.WorkItemLink;
   standalone: true,
   imports: [MatChipsModule, MatIconModule, MatButtonModule, MatTooltipModule, RouterLink],
   templateUrl: './work-item-link-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './work-item-link-list.component.scss',
 })
 export class WorkItemLinkListComponent {

@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -61,6 +61,7 @@ type WorkItemPriority = SprintModels.WorkItem.WorkItemPriority;
     RouterLink,
   ],
   templateUrl: './page-work-item-detail.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./page-work-item-detail.component.scss'],
 })
 export class PageWorkItemDetailComponent implements OnInit {

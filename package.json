@@ -54,18 +54,18 @@
   "private": true,
   "dependencies": {
     "@angular-devkit/build-angular": "22.0.9",
-    "@angular/animations": "22.0.8",
+    "@angular/animations": "22.1.0",
     "@angular/cdk": "22.0.7",
-    "@angular/common": "22.0.8",
-    "@angular/compiler": "22.0.8",
-    "@angular/core": "22.0.8",
-    "@angular/forms": "22.0.8",
+    "@angular/common": "22.1.0",
+    "@angular/compiler": "22.1.0",
+    "@angular/core": "22.1.0",
+    "@angular/forms": "22.1.0",
     "@angular/material": "22.0.7",
-    "@angular/platform-browser": "22.0.8",
-    "@angular/platform-browser-dynamic": "22.0.8",
-    "@angular/platform-server": "22.0.8",
-    "@angular/router": "22.0.8",
-    "@angular/service-worker": "22.0.8",
+    "@angular/platform-browser": "22.1.0",
+    "@angular/platform-browser-dynamic": "22.1.0",
+    "@angular/platform-server": "22.1.0",
+    "@angular/router": "22.1.0",
+    "@angular/service-worker": "22.1.0",
     "@angular/ssr": "22.0.9",
     "@ngrx/entity": "21.1.0",
     "@ngrx/operators": "21.1.0",
@@ -86,8 +86,8 @@
     "@angular-devkit/schematics": "22.0.9",
     "@angular/build": "22.0.9",
     "@angular/cli": "22.0.9",
-    "@angular/compiler-cli": "22.0.8",
-    "@angular/language-service": "22.0.8",
+    "@angular/compiler-cli": "22.1.0",
+    "@angular/language-service": "22.1.0",
     "@axe-core/playwright": "^4.11.3",
     "@eslint/js": "10.0.1",
     "@nx/angular": "23.1.1",
@@ -148,12 +148,11 @@
   "lint-staged": {
     "{apps,libs}/**/*.{ts,json,md,html}": [
       "npm run affected:lint --uncomitted --parallel --fix=true",
-      "npm run format:write --uncomitted",
-      "git add"
+      "prettier --write"
     ],
     "{apps,libs}/**/*.{css,les,sass,scss,sss}": [
-      "npx stylelint --fix --allow-empty-input \"{apps,libs}/**/*.{css,les,sass,scss,sss}\"",
-      "git add"
+      "npx stylelint --fix --allow-empty-input",
+      "prettier --write"
     ]
   }
 }

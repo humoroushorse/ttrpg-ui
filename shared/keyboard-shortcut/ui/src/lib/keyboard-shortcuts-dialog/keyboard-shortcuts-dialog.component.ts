@@ -1,4 +1,4 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,7 @@ import { KeyboardShortcutService } from '@ttrpg-ui/shared/keyboard-shortcut/data
   standalone: true,
   imports: [MatDialogModule, MatButtonModule, MatIconModule, MatDividerModule],
   templateUrl: './keyboard-shortcuts-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./keyboard-shortcuts-dialog.component.css'],
 })
 export class KeyboardShortcutsDialogComponent {

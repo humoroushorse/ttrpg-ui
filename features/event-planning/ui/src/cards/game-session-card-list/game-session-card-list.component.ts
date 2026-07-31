@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameSessionCardComponent } from '../game-session-card/game-session-card.component';
 import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
@@ -8,6 +8,7 @@ import { SharedNotificationComponent } from '@ttrpg-ui/shared/notification/ui';
   selector: 'lib-game-session-card-list',
   imports: [CommonModule, GameSessionCardComponent, SharedNotificationComponent],
   templateUrl: './game-session-card-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './game-session-card-list.component.scss',
 })
 export class GameSessionCardListComponent {
