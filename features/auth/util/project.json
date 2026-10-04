@@ -8,17 +8,11 @@
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
         "reportsDirectory": "../../../coverage/features/auth/util"
-      }
-    },
-    "test:jest": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "jestConfig": "features/auth/util/jest.config.ts",
-        "tsConfig": "features/auth/util/tsconfig.spec.json"
       }
     },
     "lint": {

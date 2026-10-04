@@ -8,17 +8,11 @@
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
         "reportsDirectory": "../../coverage/shared/page-not-found"
-      }
-    },
-    "test:jest": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "jestConfig": "shared/page-not-found/jest.config.ts",
-        "tsConfig": "shared/page-not-found/tsconfig.spec.json"
       }
     },
     "lint": {

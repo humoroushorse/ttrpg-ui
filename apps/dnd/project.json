@@ -109,18 +109,10 @@
       "executor": "@nx/eslint:lint"
     },
     "test": {
-      "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "executor": "@angular/build:unit-test",
       "options": {
-        "config": "apps/dnd/vite.config.mts"
-      }
-    },
-    "test:jest": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "jestConfig": "apps/dnd/jest.config.ts",
-        "tsConfig": "apps/dnd/tsconfig.spec.json"
+        "tsConfig": "apps/dnd/tsconfig.spec.json",
+        "buildTarget": "dnd:build:development"
       }
     },
     "serve-static": {

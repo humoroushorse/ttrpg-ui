@@ -6,21 +6,6 @@
   "projectType": "library",
   "tags": [],
   "targets": {
-    "test": {
-      "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "config": "shared/forms/util/vite.config.mts"
-      }
-    },
-    "test:jest": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "jestConfig": "shared/forms/util/jest.config.ts",
-        "tsConfig": "shared/forms/util/tsconfig.spec.json"
-      }
-    },
     "lint": {
       "executor": "@nx/eslint:lint"
     }

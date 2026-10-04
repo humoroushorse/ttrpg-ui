@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
@@ -105,11 +105,16 @@ describe('PageSprintsListComponent', () => {
     expect(mockSprintStore.clearFilters).toHaveBeenCalled();
   });
 
-  it('should apply filters when search changes', fakeAsync(() => {
+  it('should apply filters when search changes', async () => {
+    const setFiltersSpy = vi.spyOn(mockSprintStore, 'setFilters');
     component.searchControl.setValue('test');
-    tick(350);
-    expect(mockSprintStore.setFilters).toHaveBeenCalled();
-  }));
+    
+    // Wait for debounce (300ms) + a bit extra
+    await new Promise(resolve => setTimeout(resolve, 400));
+    fixture.detectChanges();
+    
+    expect(setFiltersSpy).toHaveBeenCalled();
+  });
 
   it('should apply filters when status filter changes', () => {
     component.statusFilter.setValue([SprintStatus.Active]);

@@ -8,17 +8,11 @@
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
         "reportsDirectory": "../../../coverage/shared/forms/ui"
-      }
-    },
-    "test:jest": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "jestConfig": "shared/forms/ui/jest.config.ts",
-        "tsConfig": "shared/forms/ui/tsconfig.spec.json"
       }
     },
     "lint": {

@@ -4,22 +4,17 @@
   "sourceRoot": "features/dnd/spells/feature-shell/src/lib/feature-shell/pages/features/dnd/feature-shell/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["dnd", "feature-shell"],
+  "tags": [
+    "dnd",
+    "feature-shell"
+  ],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "config": "features/dnd/feature-shell/vite.config.mts"
-      }
-    },
-    "test:jest": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "jestConfig": "features/dnd/feature-shell/jest.config.ts",
-        "tsConfig": "features/dnd/feature-shell/tsconfig.spec.json"
-      }
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
+      "options": {}
     },
     "lint": {
       "executor": "@nx/eslint:lint"

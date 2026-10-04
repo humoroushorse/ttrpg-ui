@@ -306,6 +306,12 @@ export const WorkItemStore = signalStore(
       const cloned: SprintModels.Api.CreateWorkItemRequest = {
         ...rest,
         title: `${original.title} (Copy)`,
+        project_id: original.project_id || '',
+        assignee_id: original.assignee_id || undefined,
+        sprint_id: original.sprint_id || undefined,
+        parent_id: original.parent_id || undefined,
+        story_points: original.story_points || undefined,
+        estimated_hours: original.estimated_hours ?? undefined,
       };
       return cloned;
     },

@@ -101,18 +101,10 @@
       "executor": "@nx/eslint:lint"
     },
     "test": {
-      "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "executor": "@angular/build:unit-test",
       "options": {
-        "config": "apps/event-planning/vite.config.mts"
-      }
-    },
-    "test:jest": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "jestConfig": "apps/event-planning/jest.config.ts",
-        "tsConfig": "apps/event-planning/tsconfig.spec.json"
+        "tsConfig": "apps/event-planning/tsconfig.spec.json",
+        "buildTarget": "event-planning:build:development"
       }
     },
     "serve-static": {
