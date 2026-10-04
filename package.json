@@ -21,7 +21,7 @@
     "host-dnd:test:e2e": "ng e2e host-dnd",
     "host-dnd:test:e2e:ci": "ng e2e host-dnd --headless",
     "// - ALL": "run against all projects with given target",
-    "all:test": "nx run-many --all --target=test --parallel=5 --silent --runInBand",
+    "all:test": "nx run-many --all --target=test --parallel=5",
     "all:test:report:text-summary": "npx istanbul report --dir coverage --include coverage/**/coverage-final.json text-summary",
     "all:test:report:html": "npx istanbul report --dir coverage --include coverage/**/coverage-final.json html",
     "all:lint": "nx run-many --all --target=lint --parallel --verbose",
