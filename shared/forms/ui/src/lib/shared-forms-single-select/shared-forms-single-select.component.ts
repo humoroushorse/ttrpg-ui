@@ -173,7 +173,7 @@ export class SharedFormsSingleSelectComponent implements ControlValueAccessor, O
 
   onContainerClick(event: MouseEvent) {
     if (this.disabled) return;
-    this.matSelect()?.onContainerClick();
+    this.matSelect()?.onContainerClick(event);
     event.stopPropagation();
   }
 

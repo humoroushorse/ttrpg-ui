@@ -117,7 +117,7 @@ app.use(
 /**
  * Handle all other requests by rendering the Angular application.
  */
-app.use('/**', async (req, res, next) => {
+app.use(async (req, res, next) => {
   try {
     const response = await angularApp.handle(req, {
       extraProviders: [
