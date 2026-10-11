@@ -104,7 +104,8 @@
       "executor": "@angular/build:unit-test",
       "options": {
         "tsConfig": "apps/event-planning/tsconfig.spec.json",
-        "buildTarget": "event-planning:build:development"
+        "buildTarget": "event-planning:build:development",
+        "watch": false
       }
     },
     "serve-static": {

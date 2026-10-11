@@ -145,7 +145,8 @@
       "executor": "@angular/build:unit-test",
       "options": {
         "tsConfig": "apps/sprint-management/tsconfig.spec.json",
-        "buildTarget": "sprint-management:build:development"
+        "buildTarget": "sprint-management:build:development",
+        "watch": false
       }
     },
     "serve-static": {

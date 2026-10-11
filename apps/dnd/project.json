@@ -112,7 +112,8 @@
       "executor": "@angular/build:unit-test",
       "options": {
         "tsConfig": "apps/dnd/tsconfig.spec.json",
-        "buildTarget": "dnd:build:development"
+        "buildTarget": "dnd:build:development",
+        "watch": false
       }
     },
     "serve-static": {
