@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
+
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -13,10 +13,10 @@ const { LinkType } = SprintModels.WorkItemLink;
 @Component({
   selector: 'lib-work-item-link-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule],
   templateUrl: './work-item-link-form.component.html',
-  styleUrl: './work-item-link-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './work-item-link-form.component.scss',
 })
 export class WorkItemLinkFormComponent {
   sourceWorkItemId = input.required<string>();

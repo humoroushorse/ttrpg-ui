@@ -9,7 +9,10 @@ const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 
 const app = express();
-const angularApp = new AngularNodeAppEngine();
+const angularApp = new AngularNodeAppEngine({
+  // TODO: This is a security-sensitive option. Remove if not needed. For more information, see https://angular.dev/best-practices/security#configuring-trusted-proxy-headers
+  trustProxyHeaders: ['x-forwarded-host', 'x-forwarded-proto'],
+});
 
 // Read base href from environment variable (for Kubernetes deployment)
 const BASE_HREF = process.env['BASE_HREF'] || '/';
@@ -114,7 +117,7 @@ app.use(
 /**
  * Handle all other requests by rendering the Angular application.
  */
-app.use('/**', async (req, res, next) => {
+app.use(async (req, res, next) => {
   try {
     const response = await angularApp.handle(req, {
       extraProviders: [

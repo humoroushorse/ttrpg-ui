@@ -26,12 +26,10 @@ describe('PageSprintCreateComponent - Property-Based Tests', () => {
     fc.assert(
       fc.property(
         // Generate a start date
-        fc.date({ min: new Date('2020-01-01'), max: new Date('2030-12-31') }),
+        fc.date({ min: new Date('2020-01-01'), max: new Date('2030-12-31'), noInvalidDate: true }),
         // Generate an end date that is before or equal to start date
         fc.integer({ min: -365, max: 0 }), // Days offset (negative or zero)
         (startDate, daysOffset) => {
-          // Skip invalid dates (fast-check can generate NaN dates)
-          fc.pre(!isNaN(startDate.getTime()));
           // Create form with date range validator
           const fb = new FormBuilder();
           const form = fb.group(
@@ -66,7 +64,7 @@ describe('PageSprintCreateComponent - Property-Based Tests', () => {
     fc.assert(
       fc.property(
         // Generate a start date
-        fc.date({ min: new Date('2020-01-01'), max: new Date('2030-12-31') }),
+        fc.date({ min: new Date('2020-01-01'), max: new Date('2030-12-31'), noInvalidDate: true }),
         // Generate an end date that is after start date
         fc.integer({ min: 1, max: 365 }), // Days offset (positive)
         (startDate, daysOffset) => {
@@ -106,12 +104,18 @@ describe('PageSprintCreateComponent - Property-Based Tests', () => {
         fc.record({
           name: fc.option(fc.string(), { nil: undefined }),
           description: fc.string(),
-          start_date: fc.option(fc.date({ min: new Date('2020-01-01'), max: new Date('2030-12-31') }), {
-            nil: undefined,
-          }),
-          end_date: fc.option(fc.date({ min: new Date('2020-01-01'), max: new Date('2030-12-31') }), {
-            nil: undefined,
-          }),
+          start_date: fc.option(
+            fc.date({ min: new Date('2020-01-01'), max: new Date('2030-12-31'), noInvalidDate: true }),
+            {
+              nil: undefined,
+            },
+          ),
+          end_date: fc.option(
+            fc.date({ min: new Date('2020-01-01'), max: new Date('2030-12-31'), noInvalidDate: true }),
+            {
+              nil: undefined,
+            },
+          ),
           goal: fc.string(),
         }),
         (formData) => {

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -51,6 +51,7 @@ import { SharedThemeService } from '@ttrpg-ui/shared/theme/data-access';
     MatTooltipModule,
   ],
   templateUrl: './user-preferences-dialog.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./user-preferences-dialog.component.scss'],
 })
 export class UserPreferencesDialogComponent {

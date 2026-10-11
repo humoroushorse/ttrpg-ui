@@ -8,18 +8,10 @@
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "config": "shared/models/vite.config.mts"
-      }
-    },
-    "test:jest": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "jestConfig": "shared/models/jest.config.ts",
-        "tsConfig": "shared/models/tsconfig.spec.json"
-      }
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
+      "options": {}
     },
     "lint": {
       "executor": "@nx/eslint:lint"

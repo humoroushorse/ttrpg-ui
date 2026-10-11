@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+import { Component, inject, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,8 +16,8 @@ export interface WorkItemLinkDialogData {
   standalone: true,
   imports: [MatDialogModule, MatButtonModule, MatIconModule, WorkItemLinkFormComponent],
   templateUrl: './work-item-link-dialog.component.html',
-  styleUrl: './work-item-link-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './work-item-link-dialog.component.scss',
 })
 export class WorkItemLinkDialogComponent {
   private readonly dialogRef = inject(MatDialogRef<WorkItemLinkDialogComponent>);

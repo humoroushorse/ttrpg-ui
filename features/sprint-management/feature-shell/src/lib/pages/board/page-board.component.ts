@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
@@ -7,6 +6,7 @@ import {
   OnInit,
   PLATFORM_ID,
   signal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -49,8 +49,8 @@ type WorkItemStatus = SprintModels.WorkItem.WorkItemStatus;
     SprintBoardComponent,
   ],
   templateUrl: './page-board.component.html',
-  styleUrls: ['./page-board.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./page-board.component.scss'],
 })
 export class PageBoardComponent implements OnInit {
   private readonly router = inject(Router);

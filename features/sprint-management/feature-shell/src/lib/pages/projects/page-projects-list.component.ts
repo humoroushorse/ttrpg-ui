@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -30,8 +30,8 @@ import { ProjectStore } from '@ttrpg-ui/features/sprint-management/data-access';
     MatPaginatorModule,
   ],
   templateUrl: './page-projects-list.component.html',
-  styleUrls: ['./page-projects-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./page-projects-list.component.scss'],
 })
 export class PageProjectsListComponent implements OnInit {
   private readonly router = inject(Router);

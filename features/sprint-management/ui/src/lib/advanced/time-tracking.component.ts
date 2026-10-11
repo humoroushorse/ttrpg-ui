@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, output, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, computed, effect, inject, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,7 +27,6 @@ type UpdateTimeEntryRequest = SprintModels.TimeTracking.UpdateTimeEntryRequest;
   selector: 'lib-time-tracking',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -38,8 +37,8 @@ type UpdateTimeEntryRequest = SprintModels.TimeTracking.UpdateTimeEntryRequest;
     TimeEntryListComponent,
   ],
   templateUrl: './time-tracking.component.html',
-  styleUrl: './time-tracking.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './time-tracking.component.scss',
 })
 export class TimeTrackingComponent {
   private readonly timeTrackingStore = inject(TimeTrackingStore);

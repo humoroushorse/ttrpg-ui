@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   ElementRef,
   HostBinding,
@@ -10,6 +9,7 @@ import {
   output,
   signal,
   viewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   AbstractControl,
@@ -56,8 +56,8 @@ import { AsyncPipe } from '@angular/common';
   ],
   templateUrl: './shared-forms-single-select-autocomplete.component.html',
   styleUrl: './shared-forms-single-select-autocomplete.component.scss',
-  providers: [{ provide: MatFormFieldControl, useExisting: SharedFormsSingleSelectAutocompleteComponent }],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [{ provide: MatFormFieldControl, useExisting: SharedFormsSingleSelectAutocompleteComponent }],
 })
 export class SharedFormsSingleSelectAutocompleteComponent implements ControlValueAccessor, OnDestroy {
   /*****************************************************************************

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,8 +25,8 @@ type WorkItemStatus = SprintModels.WorkItem.WorkItemStatus;
     TagChipComponent,
   ],
   templateUrl: './work-item-card.component.html',
-  styleUrl: './work-item-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './work-item-card.component.scss',
 })
 export class WorkItemCardComponent {
   workItem = input.required<WorkItem>();

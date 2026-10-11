@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, effect, inject, OnDestroy, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -37,7 +37,6 @@ function dateRangeValidator(group: FormGroup): { [key: string]: any } | null {
   selector: 'lib-page-sprint-create',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     MatCardModule,
@@ -51,8 +50,8 @@ function dateRangeValidator(group: FormGroup): { [key: string]: any } | null {
     MatSnackBarModule,
   ],
   templateUrl: './page-sprint-create.component.html',
-  styleUrls: ['./page-sprint-create.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./page-sprint-create.component.scss'],
 })
 export class PageSprintCreateComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);

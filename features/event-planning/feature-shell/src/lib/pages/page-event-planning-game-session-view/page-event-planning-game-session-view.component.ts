@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameSessionCardComponent } from '@ttrpg-ui/features/event-planning/ui';
 import { ActivatedRoute } from '@angular/router';
@@ -13,8 +13,8 @@ import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
   selector: 'lib-page-event-planning-game-session-view',
   imports: [CommonModule, GameSessionCardComponent],
   templateUrl: './page-event-planning-game-session-view.component.html',
-  styleUrl: './page-event-planning-game-session-view.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './page-event-planning-game-session-view.component.scss',
 })
 export class PageEventPlanningGameSessionViewComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);

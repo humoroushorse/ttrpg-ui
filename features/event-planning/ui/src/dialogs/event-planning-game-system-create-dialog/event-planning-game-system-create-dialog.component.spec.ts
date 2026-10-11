@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { DialogRef } from '@angular/cdk/dialog';
@@ -17,7 +17,7 @@ describe('EventPlanningGameSystemCreateDialogComponent', () => {
       imports: [EventPlanningGameSystemCreateDialogComponent],
       providers: [
         provideRouter([]),
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         { provide: DialogRef, useValue: {} },
         { provide: MAT_DIALOG_DATA, useValue: {} },

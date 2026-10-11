@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 import { GameSystemCardListComponent } from './game-system-card-list.component';
@@ -12,7 +12,7 @@ describe('GameSystemCardListComponent', () => {
     await TestBed.configureTestingModule({
       imports: [GameSystemCardListComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         {
           provide: EventPlanningModels.Service.EVENT_PLANNING_API_SERVICE_CONFIG_TOKEN,

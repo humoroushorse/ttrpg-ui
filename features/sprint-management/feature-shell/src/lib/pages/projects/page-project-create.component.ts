@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -17,7 +17,6 @@ import { ProjectStore } from '@ttrpg-ui/features/sprint-management/data-access';
   selector: 'lib-page-project-create',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatCardModule,
     MatButtonModule,
@@ -27,8 +26,8 @@ import { ProjectStore } from '@ttrpg-ui/features/sprint-management/data-access';
     MatSnackBarModule,
   ],
   templateUrl: './page-project-create.component.html',
-  styleUrls: ['./page-project-create.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./page-project-create.component.scss'],
 })
 export class PageProjectCreateComponent implements OnInit {
   private readonly router = inject(Router);

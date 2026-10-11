@@ -1,6 +1,5 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
@@ -10,6 +9,7 @@ import {
   output,
   signal,
   ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModels } from '@ttrpg-ui/shared/table/models';
@@ -70,8 +70,8 @@ import { debounceTime } from 'rxjs/operators';
     MatNativeDateModule,
   ],
   templateUrl: './shared-angular-material-table.component.html',
-  styleUrl: './shared-angular-material-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './shared-angular-material-table.component.scss',
 })
 export class SharedAngularMaterialTableComponent<T> implements AfterViewInit, OnDestroy {
   private onDestroy$ = new Subject<void>();

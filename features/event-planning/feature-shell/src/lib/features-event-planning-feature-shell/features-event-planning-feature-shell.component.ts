@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 
@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
   selector: 'lib-features-event-planning-feature-shell',
   imports: [RouterModule],
   templateUrl: './features-event-planning-feature-shell.component.html',
-  styleUrl: './features-event-planning-feature-shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './features-event-planning-feature-shell.component.scss',
 })
 export class FeaturesEventPlanningFeatureShellComponent {}

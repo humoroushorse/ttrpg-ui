@@ -1,7 +1,7 @@
 ################################################################################
 # Stage 1: Build the Angular application
 ################################################################################
-FROM node:18-alpine AS build
+FROM node:26.5-alpine AS build
 
 ARG BUILD_CONFIGURATION=production
 ARG BUILD_BASE_HREF=/
@@ -23,9 +23,12 @@ RUN npx nx run event-planning:build:${BUILD_CONFIGURATION} --base-href=${BUILD_B
 ################################################################################
 # Stage 2: Serve the application with Nginx
 ################################################################################
-FROM nginx:alpine
+FROM nginxinc/nginx-unprivileged:alpine
 
-ENV NGINX_PORT=80
+# User is already set to 'nginx' (UID 101) by the base image
+USER 101
+
+ENV NGINX_PORT=8080
 
 WORKDIR /usr/share/nginx/html
 # remove default nginx static assets

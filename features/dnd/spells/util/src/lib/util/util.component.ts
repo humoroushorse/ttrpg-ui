@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'lib-util',
   imports: [],
   templateUrl: './util.component.html',
-  styleUrl: './util.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './util.component.scss',
 })
 export class UtilComponent {}

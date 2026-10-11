@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
@@ -43,8 +43,8 @@ dayjs.extend(isSameOrAfter);
     MatIconModule,
   ],
   templateUrl: './event-planning-game-session-create-form.component.html',
-  styleUrl: './event-planning-game-session-create-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './event-planning-game-session-create-form.component.scss',
 })
 export class EventPlanningGameSessionCreateFormComponent {
   private readonly eventPlanningGameSystemStore = inject(EventPlanningGameSystemStore);

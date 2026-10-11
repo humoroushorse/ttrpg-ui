@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { EventPlanningModels } from '@ttrpg-ui/features/event-planning/models';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,8 +13,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   selector: 'lib-event-planning-game-session-table-actions',
   imports: [RouterModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
   templateUrl: './event-planning-game-session-table-actions.component.html',
-  styleUrl: './event-planning-game-session-table-actions.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './event-planning-game-session-table-actions.component.scss',
 })
 export class EventPlanningGameSessionTableActionsComponent {
   public readonly authService = inject(AuthService);

@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
@@ -8,8 +7,9 @@ import {
   OnInit,
   output,
   signal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -37,7 +37,6 @@ type WorkItemTemplate = SprintModels.Template.WorkItemTemplate;
   selector: 'lib-work-item-form',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -51,8 +50,8 @@ type WorkItemTemplate = SprintModels.Template.WorkItemTemplate;
     TemplateSelectorComponent,
   ],
   templateUrl: './work-item-form.component.html',
-  styleUrl: './work-item-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './work-item-form.component.scss',
 })
 export class WorkItemFormComponent implements OnInit {
   workItem = input<WorkItem | null>(null);

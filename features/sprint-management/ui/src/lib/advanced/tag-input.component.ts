@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, input, output, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, computed, ElementRef, input, output, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -11,7 +11,6 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'lib-tag-input',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -20,8 +19,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
   ],
   templateUrl: './tag-input.component.html',
-  styleUrl: './tag-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './tag-input.component.scss',
 })
 export class TagInputComponent {
   availableTags = input<string[]>([]);

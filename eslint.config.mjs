@@ -58,6 +58,13 @@ export default [
     rules: {},
   },
   {
+    files: ['**/tailwind.config.js'],
+    rules: {
+      // Tailwind config files can import shared theme config from outside their project
+      '@nx/enforce-module-boundaries': 'off',
+    },
+  },
+  {
     'ignores': ['**/vite.config.*.timestamp*', '**/vitest.config.*.timestamp*'],
   },
 ];

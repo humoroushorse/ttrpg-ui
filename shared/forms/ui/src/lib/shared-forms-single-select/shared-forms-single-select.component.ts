@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -11,6 +10,7 @@ import {
   output,
   signal,
   viewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import {
@@ -51,8 +51,8 @@ import { MatFormFieldControl } from '@angular/material/form-field';
   ],
   templateUrl: './shared-forms-single-select.component.html',
   styleUrl: './shared-forms-single-select.component.scss',
-  providers: [{ provide: MatFormFieldControl, useExisting: SharedFormsSingleSelectComponent }],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [{ provide: MatFormFieldControl, useExisting: SharedFormsSingleSelectComponent }],
 })
 export class SharedFormsSingleSelectComponent implements ControlValueAccessor, OnDestroy {
   /*****************************************************************************
@@ -173,7 +173,7 @@ export class SharedFormsSingleSelectComponent implements ControlValueAccessor, O
 
   onContainerClick(event: MouseEvent) {
     if (this.disabled) return;
-    this.matSelect()?.onContainerClick();
+    this.matSelect()?.onContainerClick(event);
     event.stopPropagation();
   }
 

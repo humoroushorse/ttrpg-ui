@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { AUTH_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/features/auth/models';
@@ -16,11 +16,15 @@ describe('PageUserSettingsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [PageUserSettingsComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         {
           provide: AUTH_SERVICE_CONFIG_TOKEN,
-          useValue: { apiUrl: 'http://test' },
+          useValue: {
+            appConfig: () => ({
+              APP_TTRPG_AUTH__API_BASE_PATH: 'http://test/api',
+            }),
+          },
         },
         {
           provide: SHARED_CORE_SERVICE_CONFIG_TOKEN,

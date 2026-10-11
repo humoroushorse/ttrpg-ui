@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
@@ -8,8 +7,9 @@ import {
   signal,
   Type,
   OnDestroy,
+  ChangeDetectionStrategy,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -55,7 +55,6 @@ type FilterModel = SprintModels.Filter.FilterModel;
   selector: 'lib-page-work-items-list',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     SharedAngularMaterialTableComponent,
     MatCardModule,
@@ -77,8 +76,8 @@ type FilterModel = SprintModels.Filter.FilterModel;
     TagFilterComponent,
   ],
   templateUrl: './page-work-items-list.component.html',
-  styleUrls: ['./page-work-items-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./page-work-items-list.component.scss'],
 })
 export class PageWorkItemsListComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);

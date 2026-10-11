@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,8 +29,8 @@ export interface SharedSidenavRouterItem {
     MatExpansionModule,
   ],
   templateUrl: './shared-sidenav-router-item.component.html',
-  styleUrl: './shared-sidenav-router-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './shared-sidenav-router-item.component.scss',
 })
 export class SharedSidenavRouterItemComponent {
   private readonly router = inject(Router);

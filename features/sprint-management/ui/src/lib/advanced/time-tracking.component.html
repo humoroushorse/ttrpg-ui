@@ -18,13 +18,13 @@
         <div class="time-stat">
           <div class="time-stat-label">Estimated</div>
           <div class="time-stat-value time-stat-value--estimated">
-            {{ formatHours(activeSummary()?.estimated_hours) }}
+            {{ formatHours($safeNavigationMigration(activeSummary()?.estimated_hours)) }}
           </div>
         </div>
         <div class="time-stat">
           <div class="time-stat-label">Logged</div>
           <div class="time-stat-value time-stat-value--logged">
-            {{ formatHours(activeSummary()?.logged_hours) }}
+            {{ formatHours($safeNavigationMigration(activeSummary()?.logged_hours)) }}
           </div>
         </div>
         <div class="time-stat">

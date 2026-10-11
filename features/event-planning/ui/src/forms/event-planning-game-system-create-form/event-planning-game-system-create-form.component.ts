@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -14,8 +14,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   selector: 'lib-event-planning-game-system-create-form',
   imports: [FormsModule, ReactiveFormsModule, MatInputModule, MatButtonModule, MatTooltipModule],
   templateUrl: './event-planning-game-system-create-form.component.html',
-  styleUrl: './event-planning-game-system-create-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './event-planning-game-system-create-form.component.scss',
 })
 export class EventPlanningGameSystemCreateFormComponent {
   private readonly eventPlanningGameSystemStore = inject(EventPlanningGameSystemStore);

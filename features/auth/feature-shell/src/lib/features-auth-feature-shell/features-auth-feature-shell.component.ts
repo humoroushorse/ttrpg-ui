@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
+import { Component, inject, Signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
@@ -7,8 +7,8 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
   selector: 'lib-features-auth-feature-shell',
   imports: [RouterModule],
   templateUrl: './features-auth-feature-shell.component.html',
-  styleUrl: './features-auth-feature-shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './features-auth-feature-shell.component.scss',
 })
 export class FeaturesAuthFeatureShellComponent {
   private readonly coreService = inject(SharedCoreService);

@@ -142,10 +142,11 @@
       "executor": "@nx/eslint:lint"
     },
     "test": {
-      "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "executor": "@angular/build:unit-test",
       "options": {
-        "config": "apps/sprint-management/vite.config.mts"
+        "tsConfig": "apps/sprint-management/tsconfig.spec.json",
+        "buildTarget": "sprint-management:build:development",
+        "watch": false
       }
     },
     "serve-static": {

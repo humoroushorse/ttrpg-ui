@@ -4,22 +4,17 @@
   "sourceRoot": "features/dnd/util/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["dnd", "util"],
+  "tags": [
+    "dnd",
+    "util"
+  ],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "config": "features/dnd/spells/util/vite.config.mts"
-      }
-    },
-    "test:jest": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "jestConfig": "features/dnd/spells/util/jest.config.ts",
-        "tsConfig": "features/dnd/spells/util/tsconfig.spec.json"
-      }
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
+      "options": {}
     },
     "lint": {
       "executor": "@nx/eslint:lint"

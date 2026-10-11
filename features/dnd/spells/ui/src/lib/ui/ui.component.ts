@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'lib-ui',
   imports: [],
   templateUrl: './ui.component.html',
-  styleUrl: './ui.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './ui.component.scss',
 })
 export class UiComponent {}

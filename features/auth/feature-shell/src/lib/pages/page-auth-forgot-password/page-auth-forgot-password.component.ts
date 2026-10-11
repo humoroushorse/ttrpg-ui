@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
@@ -9,8 +9,8 @@ import { AuthService } from '@ttrpg-ui/features/auth/data-access';
   selector: 'lib-page-auth-forgot-password',
   imports: [RouterModule],
   templateUrl: './page-auth-forgot-password.component.html',
-  styleUrl: './page-auth-forgot-password.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './page-auth-forgot-password.component.scss',
 })
 export class PageAuthForgotPasswordComponent implements OnInit {
   private readonly meta = inject(Meta);

@@ -10,6 +10,7 @@ import { RouterOutlet } from '@angular/router';
       <router-outlet />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [
     `
       .sprint-management-shell {
@@ -20,6 +21,5 @@ import { RouterOutlet } from '@angular/router';
       }
     `,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SprintManagementShellComponent {}

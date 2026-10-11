@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { MatCardModule } from '@angular/material/card';
@@ -25,8 +25,8 @@ type WorkItemStatus = SprintModels.WorkItem.WorkItemStatus;
     MatButtonModule,
   ],
   templateUrl: './sprint-board.component.html',
-  styleUrls: ['./sprint-board.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./sprint-board.component.scss'],
 })
 export class SprintBoardComponent {
   workItems = input.required<WorkItem[]>();

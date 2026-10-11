@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
@@ -8,8 +7,9 @@ import {
   OnDestroy,
   PLATFORM_ID,
   signal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { MatCardModule } from '@angular/material/card';
@@ -40,7 +40,6 @@ type WorkItemStatus = SprintModels.WorkItem.WorkItemStatus;
   selector: 'lib-page-sprint-detail',
   standalone: true,
   imports: [
-    CommonModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -54,8 +53,8 @@ type WorkItemStatus = SprintModels.WorkItem.WorkItemStatus;
     SprintBoardComponent,
   ],
   templateUrl: './page-sprint-detail.component.html',
-  styleUrls: ['./page-sprint-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./page-sprint-detail.component.scss'],
 })
 export class PageSprintDetailComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
