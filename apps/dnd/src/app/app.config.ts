@@ -6,7 +6,7 @@ import {
   provideZonelessChangeDetection,
   // provideZoneChangeDetection
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding, withRouterResources } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { AppTheme, SHARED_THEME_SERVICE_CONFIG_TOKEN } from '@ttrpg-ui/shared/theme/models';
@@ -35,7 +35,8 @@ export const appConfig: ApplicationConfig = {
       const appConfigService = inject(AppConfigService);
       const httpClient = inject(HttpClient);
       const locationStrategy = inject(LocationStrategy);
-      appConfigService.initializerFactory(httpClient, locationStrategy);
+      // returned so bootstrap waits for app.config.json
+      return appConfigService.initializerFactory(httpClient, locationStrategy);
     }),
     // {
     //   provide: APP_INITIALIZER,
@@ -46,10 +47,9 @@ export const appConfig: ApplicationConfig = {
     // },
     provideZonelessChangeDetection(),
     // provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(appRoutes),
+    // route `resources` arrive as component inputs
+    provideRouter(appRoutes, withComponentInputBinding(), withRouterResources()),
     provideAnimationsAsync(),
-
-    provideHttpClient(withXhr()),
 
     provideHttpClient(
       withXhr(),

@@ -134,3 +134,75 @@
   font-style: italic;
   opacity: 0.5;
 }
+
+// ── Prose: rich text from the API (spell descriptions, stat blocks) ─────────
+//
+//   <div class="g-prose" [innerHTML]="spell.description"></div>
+//
+// Tailwind's preflight strips margins, list bullets and heading sizes, so HTML
+// we don't author gets its spacing back here, not in each page.
+@mixin prose {
+  @include text-body;
+
+  > :first-child {
+    margin-block-start: 0;
+  }
+  > :last-child {
+    margin-block-end: 0;
+  }
+
+  p,
+  ul,
+  ol {
+    margin-block: 0 var(--g-spacing-sm);
+  }
+  // the API wraps tables in <p>; the browser moves the table out and leaves empty <p>s
+  p:empty {
+    display: none;
+  }
+
+  ul,
+  ol {
+    padding-inline-start: var(--g-spacing-lg);
+  }
+  ul {
+    list-style: disc;
+  }
+  ol {
+    list-style: decimal;
+  }
+  li + li {
+    margin-block-start: var(--g-spacing-xs);
+  }
+
+  strong,
+  b {
+    font-weight: var(--g-font-weight-semibold);
+  }
+  em,
+  i {
+    font-style: italic;
+  }
+
+  table {
+    margin-block: var(--g-spacing-md);
+    border-collapse: collapse;
+  }
+  th,
+  td {
+    padding: var(--g-spacing-xs) var(--g-spacing-sm);
+    text-align: center;
+    border-block-end: 1px solid var(--g-color-outline-variant);
+  }
+  th {
+    @include text-label;
+  }
+  // row labels (Score / Mod / Save)
+  td:first-child {
+    text-align: start;
+  }
+}
+
+.g-prose {
+  @include prose;
+}

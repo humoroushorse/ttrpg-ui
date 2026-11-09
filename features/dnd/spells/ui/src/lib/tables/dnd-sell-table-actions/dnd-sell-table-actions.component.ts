@@ -1,4 +1,4 @@
-import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, inject, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,11 +17,16 @@ import { DndSpellModels } from '@ttrpg-ui/features/dnd/spells/models';
   styleUrl: './dnd-sell-table-actions.component.scss',
 })
 export class DndSpellTableActionsComponent {
-  public readonly authService = inject(AuthService);
+  private readonly authService = inject(AuthService);
 
   private readonly dataStore = inject(SpellsStore);
 
   public readonly data = input<DndSpellModels.Spells.SpellSchema>();
+
+  protected readonly spellRoute = DndSpellModels.Spells.spellRoute;
+
+  // shortcut: catalog writes are open to any signed-in user until the rego/opa rules land
+  protected readonly canDelete = computed(() => !!this.authService.getUserTokenDecoded()());
 
   onDeleteClicked(data: DndSpellModels.Spells.SpellSchema) {
     this.dataStore.delete(data);

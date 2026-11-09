@@ -21,15 +21,15 @@ describe('DndSpellTableActionsComponent', () => {
         provideHttpClientTesting(),
         {
           provide: AUTH_SERVICE_CONFIG_TOKEN,
-          useValue: { appConfig: () => ({ APP_TTRPG_DND_SPELL__API_BASE_PATH: 'http://test' }) },
+          useValue: { appConfig: () => ({ APP_TTRPG_DND__API_BASE_PATH: 'http://test' }) },
         },
         {
           provide: DndSpellModels.Service.DND_SPELL_API_SERVICE_CONFIG_TOKEN,
-          useValue: { appConfig: () => ({ APP_TTRPG_DND_SPELL__API_BASE_PATH: 'http://test' }) },
+          useValue: { appConfig: () => ({ APP_TTRPG_DND__API_BASE_PATH: 'http://test' }) },
         },
         {
           provide: SHARED_CORE_SERVICE_CONFIG_TOKEN,
-          useValue: { appConfig: () => ({ APP_TTRPG_DND_SPELL__API_BASE_PATH: 'http://test' }) },
+          useValue: { appConfig: () => ({ APP_TTRPG_DND__API_BASE_PATH: 'http://test' }) },
         },
         {
           provide: SHARED_LOCAL_STORAGE_SERVICE_CONFIG_TOKEN,

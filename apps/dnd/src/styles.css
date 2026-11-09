@@ -1,6 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 
-/* Tailwind v4 — utilities only (no preflight to avoid Material conflicts) */
+/*
+ * Tailwind v4: all of it (theme, preflight, utilities), nested in the `utilities` layer.
+ * Material and component styles are unlayered, so they win over it. Preflight still resets
+ * plain elements (heading sizes, margins, list bullets, table padding); API rich text gets
+ * those back from `.g-prose` (shared/scss/tokens/typography-classes.scss).
+ */
 @import 'tailwindcss' layer(utilities);
 
 html,

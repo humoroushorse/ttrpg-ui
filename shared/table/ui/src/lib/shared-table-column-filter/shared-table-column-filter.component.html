@@ -1,0 +1,226 @@
+@let name = filterName();
+<div class="flex w-64 flex-col gap-2 p-2" role="group" [attr.aria-label]="'Filter ' + columnDef().headerName">
+  @switch (name) {
+    @case ('agTextColumnFilter') {
+      <ng-container *ngTemplateOutlet="operator" />
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Value</mat-label>
+        <input
+          matInput
+          type="text"
+          [value]="text()"
+          [disabled]="noValue()"
+          [errorStateMatcher]="fromErrorState"
+          (input)="onTextInput($any($event.target).value)"
+        />
+        @if (fromError(); as error) {
+          <mat-error>{{ error }}</mat-error>
+        }
+      </mat-form-field>
+    }
+
+    @case ('agNumberColumnFilter') {
+      <ng-container *ngTemplateOutlet="operator" />
+      <ng-container *ngTemplateOutlet="range; context: { fromLabel: isRange() ? 'From' : 'Value' }" />
+    }
+
+    @case ('agDateColumnFilter') {
+      @if (granularity() === 'datetime') {
+        <p class="g-text-body-sm m-0">Not implemented: date and time filters (filterParams.appGranularity 'datetime').</p>
+      } @else {
+        <ng-container *ngTemplateOutlet="operator" />
+        @if (!noValue()) {
+          @if (granularity() === 'year') {
+            <lib-shared-table-year-input
+              [label]="isRange() ? 'From year' : 'Year'"
+              [year]="from()"
+              [error]="fromError()"
+              [min]="dateLimits().min"
+              [max]="dateLimits().max"
+              (yearChange)="onDatePicked('from', $event)"
+            />
+            @if (isRange()) {
+              <lib-shared-table-year-input
+                label="To year"
+                [year]="to()"
+                [error]="toError()"
+                [min]="dateLimits().min"
+                [max]="dateLimits().max"
+                (yearChange)="onDatePicked('to', $event)"
+              />
+            }
+          } @else {
+            <ng-container *ngTemplateOutlet="datePicker; context: { end: 'from', label: isRange() ? 'From' : 'Date' }" />
+            @if (isRange()) {
+              <ng-container *ngTemplateOutlet="datePicker; context: { end: 'to', label: 'To' }" />
+            }
+          }
+        }
+      }
+    }
+
+    @case ('appBooleanColumnFilter') {
+      <mat-button-toggle-group
+        [value]="type() ?? 'any'"
+        (change)="onBooleanChange($event.value)"
+        [hideSingleSelectionIndicator]="true"
+        aria-label="Filter value"
+      >
+        <!-- the group stretches to the filter's width; flex-1 shares it evenly instead of leaving it after the last -->
+        <mat-button-toggle class="flex-1" value="any">Any</mat-button-toggle>
+        @for (op of operators(); track op.type) {
+          <mat-button-toggle class="flex-1" [value]="op.type">{{ op.label }}</mat-button-toggle>
+        }
+      </mat-button-toggle-group>
+    }
+
+    @case ('appSetColumnFilter') {
+      <ng-container *ngTemplateOutlet="searchBox" />
+      @if (multi()) {
+        <div class="flex flex-row gap-2">
+          <button mat-button type="button" (click)="onSelectAllShown()">Select all</button>
+        </div>
+      }
+      <div class="flex max-h-64 flex-col overflow-auto">
+        @for (option of shownOptions(); track option.value) {
+          <ng-container *ngTemplateOutlet="choice; context: { option }" />
+        } @empty {
+          <p class="g-text-body-sm m-0 p-2">No values</p>
+        }
+      </div>
+    }
+
+    @case ('appApiSetColumnFilter') {
+      @if (!params().appValuesPage) {
+        <p class="g-text-body-sm m-0">Not implemented: this list needs filterParams.appValuesPage.</p>
+      } @else {
+        <ng-container *ngTemplateOutlet="searchBox" />
+        @let api = apiOptions();
+        <div class="flex max-h-64 flex-col overflow-auto" (scroll)="onListScroll($event)">
+          @for (option of api.checked; track option.value) {
+            <ng-container *ngTemplateOutlet="choice; context: { option }" />
+          }
+          @for (option of api.rest; track option.value) {
+            <ng-container *ngTemplateOutlet="choice; context: { option }" />
+          } @empty {
+            @if (!apiPages.isLoading() && !api.checked.length) {
+              <p class="g-text-body-sm m-0 p-2">No matches</p>
+            }
+          }
+          @if (api.more) {
+            <button mat-button type="button" [disabled]="apiPages.isLoading()" (click)="onLoadMore()">Load more</button>
+          }
+        </div>
+        @if (apiPages.isLoading()) {
+          <mat-progress-bar mode="indeterminate" aria-label="Loading options" />
+        }
+        @if (apiPages.status() === 'error') {
+          <p class="g-text-body-sm error-color m-0">Couldn't load the options.</p>
+        }
+      }
+    }
+  }
+
+  @if (active()) {
+    <div class="flex flex-row justify-end">
+      <button mat-button type="button" (click)="onClear()"><mat-icon>filter_alt_off</mat-icon> Clear filter</button>
+    </div>
+  }
+</div>
+
+<ng-template #operator>
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>Operator</mat-label>
+    <mat-select [value]="type()" (selectionChange)="onTypeChange($event.value)">
+      @for (op of operators(); track op.type) {
+        <mat-option [value]="op.type">{{ op.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</ng-template>
+
+<ng-template #range let-fromLabel="fromLabel">
+  @if (!noValue()) {
+    @let attrs = numberAttrs();
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>{{ fromLabel }}</mat-label>
+      <input
+        matInput
+        type="number"
+        [attr.min]="attrs.min"
+        [attr.max]="attrs.max"
+        [attr.step]="attrs.step"
+        [value]="from()"
+        [errorStateMatcher]="fromErrorState"
+        (input)="onRangeInput('from', $any($event.target).value)"
+      />
+      @if (fromError(); as error) {
+        <mat-error>{{ error }}</mat-error>
+      }
+    </mat-form-field>
+    @if (isRange()) {
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>To</mat-label>
+        <input
+          matInput
+          type="number"
+          [attr.min]="attrs.min"
+          [attr.max]="attrs.max"
+          [attr.step]="attrs.step"
+          [value]="to()"
+          [errorStateMatcher]="toErrorState"
+          (input)="onRangeInput('to', $any($event.target).value)"
+        />
+        @if (toError(); as error) {
+          <mat-error>{{ error }}</mat-error>
+        }
+      </mat-form-field>
+    }
+  }
+</ng-template>
+
+<ng-template #datePicker let-end="end" let-label="label">
+  <mat-form-field subscriptSizing="dynamic">
+    <mat-label>{{ label }}</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker"
+      [min]="dateLimits().min"
+      [max]="dateLimits().max"
+      [value]="toLocalDate(end === 'from' ? from() : to())"
+      [errorStateMatcher]="end === 'from' ? fromErrorState : toErrorState"
+      (dateChange)="onDatePicked(end, toDayString($event.value))"
+    />
+    <mat-datepicker-toggle matIconSuffix [for]="picker" />
+    <mat-datepicker #picker />
+    @if (end === 'from' ? fromError() : toError(); as error) {
+      <mat-error>{{ error }}</mat-error>
+    }
+  </mat-form-field>
+</ng-template>
+
+<ng-template #searchBox>
+  @if (showSearch()) {
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>Search</mat-label>
+      <mat-icon matIconPrefix>search</mat-icon>
+      <input matInput type="text" [value]="search()" (input)="search.set($any($event.target).value)" />
+    </mat-form-field>
+  }
+</ng-template>
+
+<ng-template #choice let-option="option">
+  @if (multi()) {
+    <mat-checkbox [checked]="isSelected(option.value)" (change)="onToggle(option.value, $event.checked)">
+      {{ option.label }}
+    </mat-checkbox>
+  } @else {
+    <mat-radio-button
+      [checked]="isSelected(option.value)"
+      (change)="onToggle(option.value, true)"
+      [name]="'filter-' + columnDef().field"
+    >
+      {{ option.label }}
+    </mat-radio-button>
+  }
+</ng-template>

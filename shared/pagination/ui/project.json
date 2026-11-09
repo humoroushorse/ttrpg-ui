@@ -1,0 +1,21 @@
+{
+  "name": "shared-pagination-ui",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/pagination/ui/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:shared", "type:ui"],
+  "targets": {
+    "test": {
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "tsConfig": "shared/pagination/ui/tsconfig.spec.json",
+        "buildTarget": "dnd:build:development",
+        "watch": false
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

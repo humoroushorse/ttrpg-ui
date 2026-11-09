@@ -34,10 +34,9 @@
   <!-- } -->
 
   <mat-sidenav-content>
-    <div>
-      <div class="p-4">
-        <router-outlet></router-outlet>
-      </div>
+    <!-- a flex column at least the content height: pages grow past it, or fill it (the spell table) -->
+    <div class="flex min-h-full flex-col p-4">
+      <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

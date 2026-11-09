@@ -7,6 +7,19 @@
   overflow: auto;
 }
 
+// fillHeight: the table takes the parent's free height
+:host(.shared-table-fill) {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+
+  .table-container {
+    flex: 1 1 0;
+    min-height: 0;
+    max-height: none;
+  }
+}
+
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 4px;

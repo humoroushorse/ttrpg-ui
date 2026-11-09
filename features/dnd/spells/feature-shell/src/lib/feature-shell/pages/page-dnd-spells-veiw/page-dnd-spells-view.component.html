@@ -1,1 +1,73 @@
-<p>page-dnd-spells-view works!</p>
+@let spellResource = spell();
+
+<div class="mx-auto flex w-full max-w-4xl flex-col gap-2">
+  <div>
+    <a mat-button routerLink="/dnd/spells"><mat-icon>arrow_back</mat-icon> Spells</a>
+  </div>
+
+  @if (spellResource.isLoading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Loading spell" />
+  }
+
+  @if (spellResource.status() === 'error') {
+    <mat-card>
+      <mat-card-content>
+        <p class="g-text-body error-color m-0">{{ errorMessage() }}</p>
+      </mat-card-content>
+    </mat-card>
+  } @else if (view(); as v) {
+    <mat-card>
+      <mat-card-content class="flex flex-col gap-4">
+        <header class="flex flex-row flex-wrap items-start justify-between gap-4">
+          <h1 class="g-text-h1 m-0">{{ v.spell.name }}</h1>
+          @if (printings().length > 1) {
+            <mat-form-field subscriptSizing="dynamic">
+              <mat-label>Printing</mat-label>
+              <mat-select
+                [value]="v.spell"
+                [compareWith]="sameSpell"
+                (selectionChange)="onPrintingSelected($event.value)"
+              >
+                @for (printing of printings(); track printing.spell.id) {
+                  <mat-option [value]="printing.spell">{{ printing.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+        </header>
+
+        <div class="flex flex-col gap-2">
+          <p class="g-text-body m-0">Source: {{ v.sourceLine }}</p>
+          <p class="g-text-body m-0"><em>{{ v.levelSchool }}</em></p>
+          <dl class="m-0">
+            @for (stat of v.castingStats; track stat.label) {
+              <div class="g-text-body">
+                <dt class="g-text-body-strong inline">{{ stat.label }}:</dt>
+                <dd class="m-0 inline">{{ stat.value }}</dd>
+              </div>
+            }
+          </dl>
+        </div>
+
+        <mat-divider />
+
+        <div class="g-prose" [innerHTML]="v.bodyHtml"></div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>VTT</mat-panel-title>
+        <mat-panel-description>What the VTT reads from this spell</mat-panel-description>
+      </mat-expansion-panel-header>
+      <dl class="m-0">
+        @for (stat of v.vttStats; track stat.label) {
+          <div class="g-text-body">
+            <dt class="g-text-body-strong inline">{{ stat.label }}:</dt>
+            <dd class="m-0 inline">{{ stat.value }}</dd>
+          </div>
+        }
+      </dl>
+    </mat-expansion-panel>
+  }
+</div>
