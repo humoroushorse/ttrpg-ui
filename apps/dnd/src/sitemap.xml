@@ -21,4 +21,28 @@
     <priority>0.8</priority>
   </url>
   <!-- Add more URLs as needed -->
+  <url>
+    <loc>https://iankirkpatrick.dev/dnd/classes</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://iankirkpatrick.dev/dnd/subclasses</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://iankirkpatrick.dev/dnd/species</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://iankirkpatrick.dev/dnd/backgrounds</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://iankirkpatrick.dev/dnd/feats</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://iankirkpatrick.dev/dnd/items</loc>
+    <priority>0.8</priority>
+  </url>
 </urlset>

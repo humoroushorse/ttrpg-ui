@@ -1,0 +1,2 @@
+export * from './lib/<%= name %>-shell.component';
+export * from './lib/lib.routes';

@@ -1,0 +1,269 @@
+<div class="build-page mx-auto flex w-full max-w-7xl flex-col gap-3">
+  <div class="flex flex-row flex-wrap items-center gap-2">
+    <a mat-button routerLink="/dnd/characters"><mat-icon>arrow_back</mat-icon> Characters</a>
+    <span class="grow"></span>
+    <a mat-stroked-button [routerLink]="['/', 'dnd', 'characters', id()]"><mat-icon>description</mat-icon> Sheet</a>
+  </div>
+
+  @if (build.loading() || build.saving()) {
+    <mat-progress-bar mode="indeterminate" [attr.aria-label]="build.saving() ? 'Saving' : 'Loading'" />
+  }
+
+  @if (errorText(); as error) {
+    <mat-card>
+      <mat-card-content>
+        <div class="flex flex-row items-center gap-2">
+          <p class="g-text-body g-color-error m-0 grow">{{ error }}</p>
+          <button mat-button type="button" (click)="build.clearError()">Dismiss</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  @if (build.character()?.viewer?.can_edit === false) {
+    <mat-card>
+      <mat-card-content>
+        <p class="g-text-body m-0">
+          Only its owner and the people they choose can change {{ build.character()?.name }}. Ask its owner to add you
+          as an editor.
+        </p>
+      </mat-card-content>
+    </mat-card>
+  } @else if (build.character(); as c) {
+    <h1 class="g-text-h1 m-0">Build {{ c.name }}</h1>
+
+    <div class="build-layout">
+      <div class="flex flex-col gap-3">
+        <mat-card>
+          <mat-card-content>
+            <div class="flex flex-col gap-2">
+              <h3 class="g-text-h3 m-0">Class</h3>
+              @if (c.levels.length > 1) {
+                <p class="g-text-body-sm m-0">A new class replaces it on all {{ c.levels.length }} planned levels.</p>
+              }
+              <lib-dnd-build-entry-picker kind="class" label="Class" />
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-content>
+            <div class="flex flex-col gap-2">
+              <h3 class="g-text-h3 m-0">Species</h3>
+              <lib-dnd-build-entry-picker kind="species" label="Species" />
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-content>
+            <div class="flex flex-col gap-2">
+              <h3 class="g-text-h3 m-0">Background</h3>
+              <lib-dnd-build-entry-picker kind="background" label="Background" />
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-content>
+            <div class="flex flex-col gap-2">
+              <h3 class="g-text-h3 m-0">Ability Scores</h3>
+              <lib-dnd-build-scores />
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-content>
+            <div class="flex flex-col gap-2">
+              <h3 class="g-text-h3 m-0">Levels</h3>
+              <lib-dnd-build-levels />
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        @let cs = currentSheet();
+        @if (cs?.spellcasting; as sc) {
+          <mat-card>
+            <mat-card-content>
+              <div class="flex flex-col gap-2">
+                <h3 class="g-text-h3 m-0">Spells</h3>
+                <p class="g-text-body m-0">
+                  {{ sc.source }} at level {{ c.current_level }}: save DC
+                  <lib-dnd-sheet-stat [stat]="sc.save_dc" label="Spell save DC" />, attack
+                  <lib-dnd-sheet-stat [stat]="sc.attack" label="Spell attack" [bonus]="true" />.
+                  @if (sc.cantrips; as l) {
+                    Cantrips {{ l.chosen }} of {{ l.limit }}, picked at each level below.
+                  }
+                </p>
+                @if (sc.has_spellbook) {
+                  <mat-slide-toggle
+                    [checked]="!!sc.spellbook_rule"
+                    [disabled]="c.rules_from === 'campaign' || build.saving()"
+                    (change)="onSpellbookRule($event.checked)"
+                  >
+                    <span class="g-text-body-sm">
+                      Spellbook rule: learn spells into the spellbook at each level and prepare from it
+                      {{ c.rules_from === 'campaign' ? '(set by the campaign)' : '' }}
+                    </span>
+                  </mat-slide-toggle>
+                }
+                @if (sc.change === 'level_up') {
+                  <p class="g-text-body-sm m-0">
+                    {{ sc.source }} learns its spells at each level: {{ sc.prepared?.chosen ?? 0 }} of
+                    {{ sc.prepared?.limit ?? 0 }} picked. They're in the picks below.
+                  </p>
+                } @else {
+                  <p class="g-text-body-sm m-0">
+                    Preparing is optional here: the sheet has the same list. The counts are at the current level.
+                  </p>
+                  @if (cs) {
+                    <lib-dnd-prepared-spells
+                      [character]="c"
+                      [sheet]="cs"
+                      [saving]="build.saving()"
+                      (toggled)="onSpellToggled($event)"
+                    />
+                  }
+                }
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+
+        <mat-card>
+          <mat-card-content>
+            <div class="flex flex-col gap-3">
+              <h3 class="g-text-h3 m-0">Picks</h3>
+              <p class="g-text-body-sm m-0">
+                Everything the class, species, background and their feats ask for, up to level {{ build.buildLevel() }}.
+              </p>
+              @for (group of pointsByLevel(); track group.level) {
+                <h4 class="g-text-h4 m-0">
+                  Level {{ group.level }}
+                  @if (group.level > c.current_level) {
+                    <span class="g-text-caption">planned</span>
+                  }
+                </h4>
+                @for (p of group.points; track p.slot + (p.granted_by_id ?? '')) {
+                  <lib-dnd-build-choice-point [point]="p" />
+                }
+              } @empty {
+                <p class="g-text-body m-0">Pick a class, species and background first.</p>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        @if (build.orphans().length || build.unplanned().length) {
+          <mat-card>
+            <mat-card-content>
+              <div class="flex flex-col gap-2">
+                @if (build.orphans().length) {
+                  <h3 class="g-text-h3 m-0">Picks nothing asks for</h3>
+                  <p class="g-text-body-sm m-0">
+                    Left over from an earlier class, species, background or feat. A pick that granted others can be
+                    removed once those are.
+                  </p>
+                  @for (o of build.orphans(); track o.id) {
+                    <div class="flex flex-row items-center gap-2">
+                      <span class="g-text-body grow">
+                        {{ o | choiceLabel }} <span class="g-text-caption">{{ o.kind }}, {{ o.slot }}</span>
+                      </span>
+                      <button mat-stroked-button type="button" [disabled]="build.saving()" (click)="onRemoveOrphan(o)">
+                        Remove
+                      </button>
+                    </div>
+                  }
+                }
+                @if (build.unplanned().length) {
+                  <h3 class="g-text-h3 m-0">Picks for levels not planned</h3>
+                  <p class="g-text-body-sm m-0">
+                    Made for a level that was removed from the plan. They count again if it's planned again.
+                  </p>
+                  @for (o of build.unplanned(); track o.id) {
+                    <div class="flex flex-row items-center gap-2">
+                      <span class="g-text-body grow">
+                        Level {{ o.level }}: {{ o | choiceLabel }}
+                        <span class="g-text-caption">{{ o.kind }}, {{ o.slot }}</span>
+                      </span>
+                      <button mat-stroked-button type="button" [disabled]="build.saving()" (click)="onRemoveOrphan(o)">
+                        Remove
+                      </button>
+                    </div>
+                  }
+                }
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+
+      <aside class="build-side">
+        <mat-card>
+          <mat-card-content>
+            <div class="flex flex-col gap-2">
+              @if (build.previewLabel(); as label) {
+                <h3 class="g-text-h3 m-0">If you pick {{ label }}</h3>
+                <p class="g-text-body-sm g-color-warning m-0">Not saved yet: Save or Cancel next to the pick.</p>
+                @if (build.previewing()) {
+                  <mat-progress-bar mode="indeterminate" aria-label="Previewing" />
+                } @else if (changes(); as list) {
+                  <lib-dnd-sheet-changes [changes]="list" />
+                }
+              } @else if (build.lastSave(); as saved) {
+                <h3 class="g-text-h3 m-0">Saved {{ saved.label }}</h3>
+                @if (savedChanges(); as list) {
+                  <lib-dnd-sheet-changes [changes]="list" />
+                }
+              } @else {
+                <h3 class="g-text-h3 m-0">Preview</h3>
+                <p class="g-text-body-sm m-0">
+                  Picks that add something save as you pick them, and this shows what they changed. A class, species,
+                  background, subclass, starting equipment, or a change to a pick shows here first and waits for Save.
+                </p>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        @if (build.sheet(); as s) {
+          <mat-card>
+            <mat-card-content>
+              <div class="flex flex-col gap-2">
+                <h3 class="g-text-h3 m-0">{{ className() ?? 'No class' }} {{ s.level }}</h3>
+                @if (s.level !== c.current_level) {
+                  <p class="g-text-body-sm m-0">At the plan's top level; the current level is {{ c.current_level }}.</p>
+                }
+                <div class="build-abilities">
+                  @for (a of abilities; track a.code) {
+                    <div class="flex flex-col items-center">
+                      <span class="g-text-label-sm">{{ a.code | uppercase }}</span>
+                      <span class="g-text-body-strong"
+                        ><lib-dnd-sheet-stat [stat]="s.abilities[a.code].score" [label]="a.name"
+                      /></span>
+                      <span class="g-text-caption">{{ s.abilities[a.code].modifier | signed }}</span>
+                    </div>
+                  }
+                </div>
+                <p class="g-text-body m-0">
+                  AC <lib-dnd-sheet-stat [stat]="s.armor_class" label="Armor Class" /> · HP
+                  <lib-dnd-sheet-stat [stat]="s.hit_points.max" label="Max HP" /> · Speed
+                  {{ s.speed.walk?.value ?? '?' }} ft · {{ s.size || 'size?' }}
+                </p>
+                <p class="g-text-body-sm m-0">{{ openCount() }} picks still open.</p>
+                @if (s.issues.length) {
+                  <ul class="build-issues">
+                    @for (i of s.issues; track $index) {
+                      <li class="g-text-body-sm" [class]="'g-color-' + i.severity">{{ i.message }}</li>
+                    }
+                  </ul>
+                }
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </aside>
+    </div>
+  }
+</div>

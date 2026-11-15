@@ -1,0 +1,14 @@
+.dnd-sheet-stat:focus-visible {
+  outline: 0.125rem solid var(--g-color-primary);
+  outline-offset: 0.125rem;
+}
+
+.dnd-sheet-stat-changed {
+  color: var(--g-color-primary);
+}
+
+.dnd-sheet-breakdown .mdc-tooltip__surface {
+  max-width: 26rem;
+  text-align: left;
+  white-space: pre-line;
+}

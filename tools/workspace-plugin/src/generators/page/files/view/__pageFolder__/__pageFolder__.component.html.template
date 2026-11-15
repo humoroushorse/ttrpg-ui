@@ -1,0 +1,36 @@
+@let resource = <%= singularProp %>();
+
+<div class="mx-auto flex w-full max-w-4xl flex-col gap-2">
+  <div>
+    <a mat-button routerLink="/<%= scope %>/<%= name %>"><mat-icon>arrow_back</mat-icon> <%= PluralTitle %></a>
+  </div>
+
+  @if (resource.isLoading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Loading <%= singularWords %>" />
+  }
+
+  @if (resource.status() === 'error') {
+    <mat-card>
+      <mat-card-content>
+        <p class="g-text-body g-color-error m-0">{{ errorMessage() }}</p>
+      </mat-card-content>
+    </mat-card>
+  } @else if (shown(); as <%= singularProp %>) {
+    <mat-card>
+      <mat-card-content>
+        <div class="flex flex-col gap-4">
+        <header class="flex flex-row flex-wrap items-center gap-2">
+          <h1 class="g-text-h1 m-0 grow">{{ <%= singularProp %>.name }}</h1>
+<% if (hasEdit) { %>          <a mat-stroked-button routerLink="edit"><mat-icon>edit</mat-icon> Edit</a>
+<% } %><% if (hasDelete) { %>          <button mat-stroked-button type="button" [disabled]="store.loading()" (click)="onDeleteClicked(<%= singularProp %>)">
+            <mat-icon>delete</mat-icon> Delete
+          </button>
+<% } %>        </header>
+<% if (catalog) { %>        <p class="g-text-body m-0">Source: {{ <%= singularProp %>.source.name }} ({{ <%= singularProp %>.dnd_version_year }})</p>
+<% } %>        <!-- placeholder: the API's JSON until this page lays the fields out -->
+        <pre class="g-text-body-sm m-0 overflow-auto">{{ <%= singularProp %> | json }}</pre>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

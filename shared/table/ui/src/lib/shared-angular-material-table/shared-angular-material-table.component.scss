@@ -1,19 +1,30 @@
 @use '@angular/material' as mat;
+@use 'shared/scss/tokens/elevation';
 
 .table-container {
+  overflow: auto;
   width: 100%;
   max-width: 100%;
-  max-height: 400px;
-  overflow: auto;
+  max-height: 25rem;
+}
+
+// fillHeight: the table takes the parent's free height
+:host(.shared-table-fill) {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+
+  .table-container {
+    min-height: 0;
+    max-height: none;
+    flex: 1 1 0;
+  }
 }
 
 .cdk-drag-preview {
   box-sizing: border-box;
-  border-radius: 4px;
-  box-shadow:
-    0 5px 5px -3px rgba(0, 0, 0, 0.2),
-    0 8px 10px 1px rgba(0, 0, 0, 0.14),
-    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  border-radius: 0.25rem;
+  @include elevation.raised;
 }
 
 .cdk-drag-placeholder {
@@ -34,9 +45,9 @@
 
 // TODO: look into injecting styles from parent instead
 .mat-mdc-table-sticky-border-elem-right {
-  border-left: 1px solid #e0e0e0;
+  border-left: thin solid var(--g-color-outline-variant);
 }
 
 .mat-mdc-table-sticky-border-elem-left {
-  border-right: 1px solid #e0e0e0;
+  border-right: thin solid var(--g-color-outline-variant);
 }

@@ -1,0 +1,21 @@
+{
+  "name": "shared-store-util",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "shared/store/util/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:shared", "type:util"],
+  "targets": {
+    "test": {
+      "executor": "@angular/build:unit-test",
+      "options": {
+        "tsConfig": "shared/store/util/tsconfig.spec.json",
+        "buildTarget": "dnd:build:development",
+        "watch": false
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

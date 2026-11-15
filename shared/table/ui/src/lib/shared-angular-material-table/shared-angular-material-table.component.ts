@@ -5,6 +5,7 @@ import {
   effect,
   inject,
   input,
+  model,
   OnDestroy,
   output,
   signal,
@@ -13,12 +14,13 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModels } from '@ttrpg-ui/shared/table/models';
+import { SharedModels } from '@ttrpg-ui/shared/models';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { SharedTableDynamicHostDirective } from '@ttrpg-ui/shared/table/util';
 import { MatSort, MatSortable, MatSortModule, SortDirection } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { SharedTableService } from '@ttrpg-ui/shared/table/data-access';
-import { Subject, takeUntil } from 'rxjs';
+import { groupBy, mergeMap, Subject, takeUntil, timer } from 'rxjs';
 import { CdkDragDrop, CdkDrag, CdkDropList, CdkDragPlaceholder, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -33,12 +35,14 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { ColumnDef } from 'shared/table/models/src/lib/models';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { SharedNotificationService } from '@ttrpg-ui/shared/notification/data-access';
+import { SharedDatePipe } from '@ttrpg-ui/shared/date/util';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { debounceTime } from 'rxjs/operators';
+import { debounce, debounceTime } from 'rxjs/operators';
+import { SharedTableColumnFilterComponent } from '../shared-table-column-filter/shared-table-column-filter.component';
+import { FilterChange, matchesFilter } from '../shared-table-column-filter/column-filter';
+
+type ColumnDef<T> = TableModels.ColumnDef<T>;
 
 @Component({
   selector: 'lib-shared-angular-material-table',
@@ -66,12 +70,13 @@ import { debounceTime } from 'rxjs/operators';
     MatCheckboxModule,
     MatProgressBarModule,
     MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
+    SharedDatePipe,
+    SharedTableColumnFilterComponent,
   ],
   templateUrl: './shared-angular-material-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './shared-angular-material-table.component.scss',
+  host: { '[class.shared-table-fill]': 'fillHeight()' },
 })
 export class SharedAngularMaterialTableComponent<T> implements AfterViewInit, OnDestroy {
   private onDestroy$ = new Subject<void>();
@@ -106,7 +111,15 @@ export class SharedAngularMaterialTableComponent<T> implements AfterViewInit, On
 
   data = input<T[]>([]);
 
+  /** `data` is one page fetched by the parent, which also renders the paginator */
+  serverSidePagination = input<boolean>(false);
+
   stickyHeader = input<boolean>(true);
+  /**
+   * Grow into the parent's free height and scroll inside, instead of the 400px cap.
+   * The parent has to be a flex column with a height (or `min-h-0` down the chain).
+   */
+  fillHeight = input<boolean>(false);
 
   dataSource = new MatTableDataSource<T>([]);
 
@@ -118,18 +131,26 @@ export class SharedAngularMaterialTableComponent<T> implements AfterViewInit, On
 
   globalFilter = signal('');
 
-  columnFilters = signal(new Map<string, string>());
+  /**
+   * AG Grid's filter model, keyed by column id. Bind it to a store for server-side tables
+   * (`[filterModel]` + `(filterModelChange)`); left unbound, the table filters its own rows.
+   */
+  filterModel = model<SharedModels.Store.Filters>({});
 
-  private readonly combinedFilter = computed(() => {
-    const global = this.globalFilter();
-    const columns = this.columnFilters();
-    return JSON.stringify({
-      global,
-      columns: Array.from(columns.entries()),
-    });
-  });
+  /** One column's sort (AG Grid's sort model item). Server-side tables send it to the API. */
+  sortModel = model<SharedModels.Store.Sort | null>(null);
 
-  textFilterTypes = signal(new Map<string, string>());
+  protected readonly columnId = TableModels.columnId;
+
+  protected readonly columnFilterName = TableModels.columnFilterName;
+
+  // what the rows are filtered by here: server-side tables only search the page they hold
+  private readonly combinedFilter = computed(() =>
+    JSON.stringify({ global: this.globalFilter(), filters: this.serverSidePagination() ? {} : this.filterModel() }),
+  );
+
+  /** Column filter edits, each column applied after its own delay (typing waits, picks don't) */
+  private readonly filterEdits = new Subject<FilterChange & { colId: string }>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -148,6 +169,14 @@ export class SharedAngularMaterialTableComponent<T> implements AfterViewInit, On
       .subscribe((combined) => {
         this.dataSource.filter = combined;
       });
+
+    this.filterEdits
+      .pipe(
+        groupBy((edit) => edit.colId),
+        mergeMap((edits) => edits.pipe(debounce((edit) => timer(edit.debounceMs)))),
+        takeUntil(this.onDestroy$),
+      )
+      .subscribe(({ colId, model }) => this.setColumnFilter(colId, model));
   }
 
   private sortPinned(a: TableModels.ColumnDef<T>, b: TableModels.ColumnDef<T>) {
@@ -165,126 +194,23 @@ export class SharedAngularMaterialTableComponent<T> implements AfterViewInit, On
   }
 
   ngAfterViewInit() {
-    this.dataSource.filterPredicate = (data: any, filter: string) => {
-      let parsed: { global: string; columns: [string, string][] } = { global: '', columns: [] };
-      try {
-        parsed = JSON.parse(filter);
-      } catch {
-        /* ignore */
-      }
-
-      if (parsed.global) {
-        const rowString = Object.values(data).join(' ').toLowerCase();
-        if (!rowString.includes(parsed.global)) return false;
-      }
-
-      if (Array.isArray(parsed.columns)) {
-        for (const [field, filterValue] of parsed.columns) {
-          const columnDef = this.tableColumnDefs().find((col) => col.field === field);
-          if (!columnDef || !columnDef.filter) continue;
-
-          const rawCellValue = this.getValue(columnDef, data);
-          const cellValue = rawCellValue?.toString().toLowerCase() || '';
-
-          if (columnDef.filter === 'agTextColumnFilter') {
-            const filterType = this.textFilterTypes().get(field) || 'contains';
-            switch (filterType) {
-              case 'contains':
-                if (!cellValue.includes(filterValue)) return false;
-                break;
-              case 'notContains':
-                if (cellValue.includes(filterValue)) return false;
-                break;
-              case 'equals':
-                if (cellValue !== filterValue) return false;
-                break;
-              case 'notEqual':
-                if (cellValue === filterValue) return false;
-                break;
-              case 'startsWith':
-                if (!cellValue.startsWith(filterValue)) return false;
-                break;
-              case 'endsWith':
-                if (!cellValue.endsWith(filterValue)) return false;
-                break;
-              case 'blank':
-                if (cellValue.trim() !== '') return false;
-                break;
-              case 'notBlank':
-                if (cellValue.trim() === '') return false;
-                break;
-            }
-          } else if (columnDef.filter === 'agDateColumnFilter') {
-            const filterType = this.textFilterTypes().get(field) || 'equals';
-            const filterDate = filterValue ? new Date(filterValue) : null;
-            const cellDate = rawCellValue ? new Date(rawCellValue) : null;
-            switch (filterType) {
-              case 'equals':
-                if (!cellDate || !filterDate || cellDate.toDateString() !== filterDate.toDateString()) return false;
-                break;
-              case 'notEqual':
-                if (cellDate && filterDate && cellDate.toDateString() === filterDate.toDateString()) return false;
-                break;
-              case 'before':
-                if (!cellDate || !filterDate || cellDate >= filterDate) return false;
-                break;
-              case 'after':
-                if (!cellDate || !filterDate || cellDate <= filterDate) return false;
-                break;
-              case 'blank':
-                if (cellDate) return false;
-                break;
-              case 'notBlank':
-                if (!cellDate) return false;
-                break;
-            }
-          } else if (columnDef.filter === 'agNumberColumnFilter') {
-            const filterType = this.textFilterTypes().get(field) || 'equals';
-            const filterNumber = filterValue !== '' ? Number(filterValue) : null;
-            const cellNumber =
-              rawCellValue !== undefined && rawCellValue !== null && rawCellValue !== '' ? Number(rawCellValue) : null;
-            switch (filterType) {
-              case 'equals':
-                if (cellNumber !== filterNumber) return false;
-                break;
-              case 'notEqual':
-                if (cellNumber === filterNumber) return false;
-                break;
-              case 'greaterThan':
-                if (cellNumber === null || filterNumber === null || cellNumber <= filterNumber) return false;
-                break;
-              case 'greaterThanOrEqual':
-                if (cellNumber === null || filterNumber === null || cellNumber < filterNumber) return false;
-                break;
-              case 'lessThan':
-                if (cellNumber === null || filterNumber === null || cellNumber >= filterNumber) return false;
-                break;
-              case 'lessThanOrEqual':
-                if (cellNumber === null || filterNumber === null || cellNumber > filterNumber) return false;
-                break;
-              case 'blank':
-                if (cellNumber !== null && cellNumber !== undefined && `${cellNumber}` !== '') return false;
-                break;
-              case 'notBlank':
-                if (cellNumber === null || cellNumber === undefined || `${cellNumber}` === '') return false;
-                break;
-            }
-          } else if (columnDef.filter === 'agSetColumnFilter') {
-            const selectedValues = filterValue ? filterValue.split(',') : [];
-            if (selectedValues.length > 0 && !selectedValues.includes(String(rawCellValue))) {
-              return false;
-            }
-          }
-        }
-      }
-
-      return true;
+    this.dataSource.filterPredicate = (row: T, filter: string) => {
+      const { global, filters } = JSON.parse(filter) as { global: string; filters: SharedModels.Store.Filters };
+      if (global && !Object.values(row as object).join(' ').toLowerCase().includes(global)) return false;
+      return Object.entries(filters).every(([colId, model]) => {
+        const columnDef = this.tableColumnDefs().find((c) => TableModels.columnId(c) === colId);
+        return !columnDef || matchesFilter(this.getValue(columnDef, row), model);
+      });
     };
 
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    // server-side tables get their page sorted by the API, so the rows stay as given
+    if (!this.serverSidePagination()) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
 
-    this.sort.sortChange.pipe(takeUntil(this.onDestroy$)).subscribe(() => {
+    this.sort.sortChange.pipe(takeUntil(this.onDestroy$)).subscribe(({ active, direction }) => {
+      this.sortModel.set(active && direction ? { colId: active, sort: direction } : null);
       if (this.dataSource.paginator) {
         this.dataSource.paginator.firstPage();
       }
@@ -325,18 +251,31 @@ export class SharedAngularMaterialTableComponent<T> implements AfterViewInit, On
     this.columnDefsChange.emit(columnDefs);
   }
 
-  public getUniqueColumnValues(field: string): string[] {
-    const data = this.dataSource.data || [];
-    return Array.from(
-      new Set(
-        data
-          .map((row) => {
-            const v = this.getValue({ field } as any, row);
-            return v != null && v !== '' ? String(v) : null;
-          })
-          .filter((v) => v != null),
-      ),
-    ).sort();
+  /** A column's values in the rows held, for set filters that list none */
+  public getUniqueColumnValues(columnDef: ColumnDef<T>): string[] {
+    const values = (this.dataSource.data || []).map((row) => this.getValue(columnDef, row));
+    return [...new Set(values.filter((v) => v != null && v !== '').map(String))].sort();
+  }
+
+  onFilterChanged(columnDef: ColumnDef<T>, change: FilterChange): void {
+    this.filterEdits.next({ ...change, colId: TableModels.columnId(columnDef) });
+  }
+
+  clearFilter(columnDef: ColumnDef<T>): void {
+    this.setColumnFilter(TableModels.columnId(columnDef), null);
+  }
+
+  protected readonly hasFilters = computed(() => Object.keys(this.filterModel()).length > 0);
+
+  /** Clears every column filter (the table search box is separate) */
+  resetFilters(): void {
+    this.filterModel.set({});
+  }
+
+  private setColumnFilter(colId: string, filter: SharedModels.Store.Filter | null): void {
+    const { [colId]: _removed, ...rest } = this.filterModel();
+    if (!filter && !_removed) return;
+    this.filterModel.set(filter ? { ...rest, [colId]: filter } : rest);
   }
 
   updateTableColumnDefs(columnDefs: TableModels.ColumnDef<T>[]) {
@@ -364,17 +303,9 @@ export class SharedAngularMaterialTableComponent<T> implements AfterViewInit, On
   }
 
   hideColumn(columnDef: TableModels.ColumnDef<T>) {
-    // Remove filter and filter type for the hidden column
-    const filters = new Map(this.columnFilters());
-    const types = new Map(this.textFilterTypes());
-    const hadFilter = filters.has(columnDef.field); // Check if a filter existed
-
-    filters.delete(columnDef.field);
-    types.delete(columnDef.field);
-    this.columnFilters.set(filters);
-    this.textFilterTypes.set(types);
-
-    if (hadFilter) {
+    // a hidden column can't show its filter, so drop it
+    if (this.filterModel()[TableModels.columnId(columnDef)]) {
+      this.clearFilter(columnDef);
       this.sharedNotificationService.openSnackBar(
         `Filter for "${columnDef.headerName ?? columnDef.field}" cleared when column was hidden.`,
       );
@@ -396,37 +327,10 @@ export class SharedAngularMaterialTableComponent<T> implements AfterViewInit, On
     this.globalFilter.set('');
   }
 
-  applyColumnFilter(field: string, value: any, filterType = 'contains') {
-    const filters = new Map(this.columnFilters());
-    const types = new Map(this.textFilterTypes());
-    types.set(field, filterType);
-
-    if (['blank', 'notBlank'].includes(filterType)) {
-      filters.set(field, '');
-    } else if (value === '' || value === null || value === undefined) {
-      filters.delete(field);
-      types.delete(field);
-    } else if (Array.isArray(value)) {
-      filters.set(field, value.join(','));
-    } else if (value instanceof Date) {
-      filters.set(field, value.toISOString().slice(0, 10));
-    } else if (typeof value === 'string') {
-      filters.set(field, value.trim().toLowerCase());
-    } else {
-      filters.set(field, value);
-    }
-
-    this.columnFilters.set(filters);
-    this.textFilterTypes.set(types);
-  }
-
-  applyFilter(event?: Event) {
-    if (!event) {
-      this.dataSource.filter = '';
-      return;
-    }
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  /** What a cell shows: `valueFormatter` over the value, or the value */
+  getDisplayValue(column: ColumnDef<T>, rowData: T) {
+    const value = this.getValue(column, rowData);
+    return column.valueFormatter ? column.valueFormatter({ value, data: rowData }) : value;
   }
 
   getValue(column: ColumnDef<T>, rowData: any, useValueGetter = true) {
@@ -434,42 +338,5 @@ export class SharedAngularMaterialTableComponent<T> implements AfterViewInit, On
       return column.valueGetter(rowData);
     }
     return rowData[column.field];
-  }
-
-  isSetOptionSelected(field: string, option: string): boolean {
-    const selected = this.columnFilters().get(field)?.split(',').filter(Boolean) || [];
-    return selected.includes(option);
-  }
-
-  isAllSetOptionsSelected(field: string): boolean {
-    const all = this.getUniqueColumnValues(field);
-    const selected = this.columnFilters().get(field)?.split(',').filter(Boolean) || [];
-    return all.length > 0 && selected.length === all.length;
-  }
-
-  isSomeSetOptionsSelected(field: string): boolean {
-    const all = this.getUniqueColumnValues(field);
-    const selected = this.columnFilters().get(field)?.split(',').filter(Boolean) || [];
-    return selected.length > 0 && selected.length < all.length;
-  }
-
-  toggleSetOption(field: string, option: string) {
-    const selected = this.columnFilters().get(field)?.split(',').filter(Boolean) || [];
-    const idx = selected.indexOf(option);
-    if (idx > -1) {
-      selected.splice(idx, 1);
-    } else {
-      selected.push(option);
-    }
-    this.applyColumnFilter(field, selected, 'set');
-  }
-
-  toggleSelectAllSetOptions(field: string) {
-    const all = this.getUniqueColumnValues(field);
-    if (this.isAllSetOptionsSelected(field)) {
-      this.applyColumnFilter(field, [], 'set');
-    } else {
-      this.applyColumnFilter(field, all, 'set');
-    }
   }
 }

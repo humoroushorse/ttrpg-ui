@@ -1,0 +1,10 @@
+<!-- not disabled while loading: that would drop keyboard focus from the button just pressed -->
+<mat-paginator
+  [length]="store().pagination().totalItems"
+  [pageIndex]="store().pagination().currentPage - 1"
+  [pageSize]="store().pagination().pageSize"
+  [pageSizeOptions]="pageSizeOptions()"
+  [showFirstLastButtons]="showFirstLastButtons()"
+  (page)="onPage($event)"
+  aria-label="Select page of results"
+/>

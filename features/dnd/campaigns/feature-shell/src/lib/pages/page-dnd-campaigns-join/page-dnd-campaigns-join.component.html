@@ -1,0 +1,37 @@
+<div class="mx-auto flex w-full max-w-xl flex-col gap-2">
+  <div>
+    <a mat-button routerLink="/dnd/campaigns"><mat-icon>arrow_back</mat-icon> Campaigns</a>
+  </div>
+  <mat-card>
+    <mat-card-content>
+      <div class="flex flex-col gap-3">
+        <h1 class="g-text-h1 m-0">Join a Campaign</h1>
+        @if (preview.isLoading()) {
+          <mat-progress-bar mode="indeterminate" aria-label="Checking the invite" />
+        }
+        @if (errorMessage(); as error) {
+          <p class="g-text-body g-color-error m-0">{{ error }}</p>
+        } @else if (preview.hasValue()) {
+          @let p = preview.value();
+          <p class="g-text-body m-0">
+            {{ p.invited_by ?? 'A DM' }} invited you to <span class="g-text-body-strong">{{ p.campaign_name }}</span
+            >.
+          </p>
+          @if (p.member) {
+            <p class="g-text-body-sm m-0">You're already in it.</p>
+            <div>
+              <a mat-flat-button [routerLink]="['/dnd/campaigns', p.campaign_id]">Open the campaign</a>
+            </div>
+          } @else {
+            <p class="g-text-body-sm m-0">
+              You join as a player. The link works until {{ p.expires_at | date: 'medium' }}.
+            </p>
+            <div>
+              <button mat-flat-button type="button" [disabled]="joining()" (click)="onJoin()">Join</button>
+            </div>
+          }
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -24,8 +24,9 @@ const getErrorMessage = (error: HttpErrorResponse): string => {
 export const EventPlanningGameSessionStore = signalStore(
   // 👇 Providing `EventPlanningGameSessionStore` at the root level.
   { providedIn: 'root' },
-  withEntities({ entity: type<StoreSchema>() }),
+  // base state also defines entityMap/ids, so withEntities has to come after it
   withState<StoreState>(SharedModels.Store.getBaseStateDefault<StoreSchema>()),
+  withEntities({ entity: type<StoreSchema>() }),
   withState({
     entitySelectId: EventPlanningModels.GameSession.selectGameSessionId,
     entityIdKey: EventPlanningModels.GameSession.selectGameSessionIdKey,

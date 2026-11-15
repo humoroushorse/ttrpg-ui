@@ -1,0 +1,61 @@
+@if (sheet().spellcasting; as sc) {
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-row flex-wrap items-center gap-3">
+      <span
+        class="g-text-body-strong"
+        [class.g-color-warning]="sc.prepared && sc.prepared.chosen !== sc.prepared.limit"
+      >
+        Prepared {{ sc.prepared?.chosen ?? 0 }} of {{ sc.prepared?.limit ?? 0 }}
+      </span>
+      <mat-button-toggle-group
+        [value]="view()"
+        (change)="view.set($event.value)"
+        [hideSingleSelectionIndicator]="true"
+        aria-label="Show"
+      >
+        <mat-button-toggle value="prepared">Prepared</mat-button-toggle>
+        @if (sc.spellbook_rule) {
+          <mat-button-toggle value="spellbook">Spellbook</mat-button-toggle>
+        }
+        <mat-button-toggle value="all">All available</mat-button-toggle>
+      </mat-button-toggle-group>
+      <mat-form-field subscriptSizing="dynamic" class="prep-filter">
+        <mat-label>Name</mat-label>
+        <input matInput #name [value]="nameFilter()" (input)="nameFilter.set(name.value)" />
+      </mat-form-field>
+    </div>
+    <p class="g-text-body-sm m-0">
+      {{ sc.source }} spells up to the highest slot at level {{ sheet().level }},
+      {{ sc.spellbook_rule ? 'from the spellbook' : "from the class's list" }}, changed after a Long Rest.
+    </p>
+    @if (options.isLoading() && view() !== 'prepared') {
+      <p class="g-text-body-sm m-0">Loading the {{ sc.source }} list…</p>
+    }
+    @for (group of groups(); track group.level) {
+      <h4 class="g-text-h4 m-0">{{ group.level === 0 ? 'Cantrips' : 'Level ' + group.level }}</h4>
+      <div class="prep-grid">
+        @for (r of group.rows; track r.id) {
+          <mat-checkbox
+            [checked]="r.prepared"
+            [disabled]="saving()"
+            (change)="toggled.emit({ spellId: r.id, prepare: $event.checked })"
+          >
+            <span class="g-text-body">{{ r.name }}</span>
+            @if (r.level === 0) {
+              <span class="g-text-caption g-color-warning"> cantrip: pick it at its level instead</span>
+            } @else if (r.learned === false) {
+              <span class="g-text-caption g-color-warning"> not in the spellbook</span>
+            }
+            @if (r.source) {
+              <span class="g-text-caption"> {{ r.source }}</span>
+            }
+          </mat-checkbox>
+        }
+      </div>
+    } @empty {
+      <p class="g-text-body m-0">
+        {{ view() === 'prepared' ? 'Nothing prepared yet: switch to All available to pick.' : 'Nothing matches.' }}
+      </p>
+    }
+  </div>
+}

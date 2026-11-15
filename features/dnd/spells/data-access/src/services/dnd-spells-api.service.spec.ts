@@ -12,7 +12,7 @@ describe('DndSpellApiService', () => {
         provideHttpClient(withXhr()),
         {
           provide: DndSpellModels.Service.DND_SPELL_API_SERVICE_CONFIG_TOKEN,
-          useValue: { appConfig: () => ({ APP_TTRPG_DND_SPELL__API_BASE_PATH: 'http://test' }) },
+          useValue: { appConfig: () => ({ APP_TTRPG_DND__API_BASE_PATH: 'http://test' }) },
         },
       ],
     });

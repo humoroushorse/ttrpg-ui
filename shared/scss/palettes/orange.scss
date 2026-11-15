@@ -4,8 +4,8 @@
 @use 'sass:map';
 
 $colors: (
-  0: #000000,
-  10: #331100,
+  0: #000,
+  10: #310,
   20: #4d1c00,
   25: #5e2400,
   30: #6f2c00,
@@ -19,7 +19,7 @@ $colors: (
   95: #ffede5,
   98: #fff8f5,
   99: #fffbff,
-  100: #ffffff,
+  100: #fff,
 );
 
 @function color($shade) {

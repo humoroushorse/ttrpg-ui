@@ -1,0 +1,2 @@
+export * from './lib/<%= singular %>.factory';
+export * from './lib/providers';

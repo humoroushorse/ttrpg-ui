@@ -9,9 +9,11 @@ import {
   OnDestroy,
   output,
   signal,
+  TemplateRef,
   viewChild,
   ChangeDetectionStrategy,
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 
 import {
   AbstractControl,
@@ -48,6 +50,7 @@ import { MatFormFieldControl } from '@angular/material/form-field';
     MatButtonModule,
     MatTooltipModule,
     MatDividerModule,
+    NgTemplateOutlet,
   ],
   templateUrl: './shared-forms-single-select.component.html',
   styleUrl: './shared-forms-single-select.component.scss',
@@ -286,6 +289,9 @@ export class SharedFormsSingleSelectComponent implements ControlValueAccessor, O
   getIsOptionDisabled(option: any): boolean {
     return coerceBooleanProperty(this.isOptionDisabledFn()(option, ...this.isOptionDisabledFnArgs()));
   }
+
+  /** Renders each option's content, with the option as `$implicit`; default: its view value */
+  optionTemplate = input<TemplateRef<{ $implicit: unknown }> | null>(null);
 
   noneOptionText = input<string | null>(null);
 

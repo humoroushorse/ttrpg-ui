@@ -1,0 +1,37 @@
+<div class="mx-auto flex w-full max-w-xl flex-col gap-2">
+  <div>
+    <a mat-button routerLink="/dnd/characters"><mat-icon>arrow_back</mat-icon> Characters</a>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <form class="flex flex-col gap-4" (submit)="$event.preventDefault(); onSubmit()">
+        <h1 class="g-text-h1 m-0">Create Character</h1>
+        <p class="g-text-body m-0">
+          A name is all it needs to start. The sheet then lists the choices to make: species, background, class and the
+          rest.
+        </p>
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput #nameInput required [value]="name()" (input)="name.set(nameInput.value)" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Campaign</mat-label>
+          <mat-select [value]="campaignId()" (selectionChange)="campaignId.set($event.value)">
+            <mat-option [value]="null">None: it has its own rules</mat-option>
+            @for (c of campaigns.hasValue() ? campaigns.value().entities : []; track c.id) {
+              <mat-option [value]="c.id">{{ c.name }}</mat-option>
+            }
+          </mat-select>
+          <mat-hint>A campaign's rules are limits: the builder can't switch them off.</mat-hint>
+        </mat-form-field>
+        @if (errorMessage(); as error) {
+          <p class="g-text-body g-color-error m-0">{{ error }}</p>
+        }
+        <div class="flex flex-row justify-end">
+          <button mat-flat-button type="submit" [disabled]="!canSubmit()">Create</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

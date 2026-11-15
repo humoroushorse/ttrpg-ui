@@ -82,7 +82,7 @@ export class PageEventPlanningGameSystemViewAllComponent implements OnInit {
       headerName: 'Release Year',
       cellDataType: 'text',
       sortable: true,
-      filter: 'agSetColumnFilter',
+      filter: 'appSetColumnFilter',
       // valueGetter: (params) => new Date(params.release_year, 0)
     },
     { field: 'description', headerName: 'Description', cellDataType: 'text', sortable: true },

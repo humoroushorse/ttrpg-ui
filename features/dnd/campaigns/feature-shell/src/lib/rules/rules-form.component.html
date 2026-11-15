@@ -1,0 +1,126 @@
+@let r = rules();
+<div class="flex flex-col gap-4">
+  <section class="flex flex-col gap-2" aria-labelledby="rules-content">
+    <h3 id="rules-content" class="g-text-h3 m-0">Content</h3>
+    <div class="flex flex-row flex-wrap items-center gap-3">
+      <mat-button-toggle-group
+        [value]="r.edition"
+        (change)="set('edition', $event.value)"
+        [hideSingleSelectionIndicator]="true"
+        aria-label="Base edition"
+      >
+        <mat-button-toggle [value]="2024">2024 rules</mat-button-toggle>
+        <mat-button-toggle [value]="2014">2014 rules</mat-button-toggle>
+      </mat-button-toggle-group>
+      <mat-form-field subscriptSizing="dynamic" class="grow">
+        <mat-label>{{ r.edition === 2024 ? 2014 : 2024 }} content</mat-label>
+        <mat-select [value]="r.other_edition.default" (selectionChange)="onOtherEdition($event.value)">
+          @for (o of otherEdition; track o[0]) {
+            <mat-option [value]="o[0]">{{ o[1] }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <mat-slide-toggle [checked]="r.allow_unearthed_arcana" (change)="set('allow_unearthed_arcana', $event.checked)">
+      <span class="g-text-body">Unearthed Arcana</span>
+    </mat-slide-toggle>
+    <mat-slide-toggle [checked]="r.allow_playtest" (change)="set('allow_playtest', $event.checked)">
+      <span class="g-text-body">Playtest content</span>
+    </mat-slide-toggle>
+    <p class="g-text-caption m-0">
+      Sources: {{ r.sources.allow ? r.sources.allow.join(', ') : 'every source' }}. Picking sources comes later.
+    </p>
+  </section>
+
+  <section class="flex flex-col gap-2" aria-labelledby="rules-scores">
+    <h3 id="rules-scores" class="g-text-h3 m-0">Ability Scores</h3>
+    <div class="flex flex-row flex-wrap gap-3">
+      @for (m of abilityMethods; track m) {
+        <mat-checkbox
+          [checked]="r.ability_score_methods.includes(m)"
+          [disabled]="r.ability_score_methods.length === 1 && r.ability_score_methods.includes(m)"
+          (change)="onAbilityMethod(m, $event.checked)"
+          >{{ m | titleWords }}</mat-checkbox
+        >
+      }
+    </div>
+    <div class="flex flex-row flex-wrap gap-3">
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Default</mat-label>
+        <mat-select [value]="r.ability_score_default" (selectionChange)="set('ability_score_default', $event.value)">
+          @for (m of r.ability_score_methods; track m) {
+            <mat-option [value]="m">{{ m | titleWords }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      @if (r.ability_score_methods.includes('point_buy')) {
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>Point buy budget</mat-label>
+          <input
+            matInput
+            type="number"
+            min="0"
+            max="200"
+            #budget
+            [value]="r.point_buy_budget"
+            (input)="onNumber('point_buy_budget', budget.valueAsNumber, 200)"
+          />
+        </mat-form-field>
+      }
+      @if (r.ability_score_methods.includes('rolled')) {
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>Rolled sets kept</mat-label>
+          <input
+            matInput
+            type="number"
+            min="1"
+            max="100"
+            #kept
+            [value]="r.rolled_sets_kept"
+            (input)="onNumber('rolled_sets_kept', kept.valueAsNumber, 100)"
+          />
+        </mat-form-field>
+      }
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-2" aria-labelledby="rules-hp">
+    <h3 id="rules-hp" class="g-text-h3 m-0">Hit Points</h3>
+    <div class="flex flex-row flex-wrap items-center gap-3">
+      @for (m of hpMethods; track m) {
+        <mat-checkbox
+          [checked]="r.hp_methods.includes(m)"
+          [disabled]="r.hp_methods.length === 1 && r.hp_methods.includes(m)"
+          (change)="onHpMethod(m, $event.checked)"
+          >{{ m | titleWords }}</mat-checkbox
+        >
+      }
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Default</mat-label>
+        <mat-select [value]="r.hp_default" (selectionChange)="set('hp_default', $event.value)">
+          @for (m of r.hp_methods; track m) {
+            <mat-option [value]="m">{{ m | titleWords }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-2" aria-labelledby="rules-optional">
+    <h3 id="rules-optional" class="g-text-h3 m-0">Optional Rules</h3>
+    <p class="g-text-caption m-0">Stored and shown; only the spellbook rule changes the build so far.</p>
+    @for (o of optionalRules; track o.key) {
+      <mat-slide-toggle [checked]="r.optional_rules[o.key]" (change)="setOptional(o.key, $event.checked)">
+        <span class="g-text-body">{{ o.label }}</span>
+      </mat-slide-toggle>
+    }
+    <mat-form-field subscriptSizing="dynamic">
+      <mat-label>Encumbrance</mat-label>
+      <mat-select [value]="r.optional_rules.encumbrance" (selectionChange)="setOptional('encumbrance', $event.value)">
+        @for (e of encumbrance; track e) {
+          <mat-option [value]="e">{{ e | titleWords }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </section>
+</div>

@@ -26,7 +26,6 @@ import { RegisterUserInput } from 'features/auth/models/src/lib/models/models';
   ],
   templateUrl: './page-auth-register.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrl: './page-auth-register.component.scss',
 })
 export class PageAuthRegisterComponent implements OnInit {
   private readonly meta = inject(Meta);

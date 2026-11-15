@@ -4,7 +4,7 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/sprint-management/src",
-  "tags": [],
+  "tags": ["scope:sprint-management", "type:app"],
   "targets": {
     "build": {
       "executor": "@angular/build:application",

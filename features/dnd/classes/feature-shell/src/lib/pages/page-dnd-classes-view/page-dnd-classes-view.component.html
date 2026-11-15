@@ -1,0 +1,32 @@
+@let resource = dndClass();
+
+<div class="mx-auto flex w-full max-w-4xl flex-col gap-2">
+  <div>
+    <a mat-button routerLink="/dnd/classes"><mat-icon>arrow_back</mat-icon> Classes</a>
+  </div>
+
+  @if (resource.isLoading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Loading class" />
+  }
+
+  @if (resource.status() === 'error') {
+    <mat-card>
+      <mat-card-content>
+        <p class="g-text-body g-color-error m-0">{{ errorMessage() }}</p>
+      </mat-card-content>
+    </mat-card>
+  } @else if (shown(); as dndClass) {
+    <mat-card>
+      <mat-card-content>
+        <div class="flex flex-col gap-4">
+          <header class="flex flex-row flex-wrap items-center gap-2">
+            <h1 class="g-text-h1 m-0 grow">{{ dndClass.name }}</h1>
+          </header>
+          <p class="g-text-body m-0">Source: {{ dndClass.source.name }} ({{ dndClass.dnd_version_year }})</p>
+          <!-- placeholder: the API's JSON until this page lays the fields out -->
+          <pre class="g-text-body-sm m-0 overflow-auto">{{ dndClass | json }}</pre>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

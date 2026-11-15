@@ -1,0 +1,11 @@
+// Shadows for raised surfaces, in the theme's shadow color. In component SCSS:
+//   @use 'shared/scss/tokens/elevation';
+//   .cdk-drag-preview { @include elevation.raised; }
+
+// Material's elevation 8: something lifted off the page (a row being dragged)
+@mixin raised {
+  box-shadow:
+    0 0.3125rem 0.3125rem -0.1875rem color-mix(in srgb, var(--g-color-shadow) 20%, transparent),
+    0 0.5rem 0.625rem 0.0625rem color-mix(in srgb, var(--g-color-shadow) 14%, transparent),
+    0 0.1875rem 0.875rem 0.125rem color-mix(in srgb, var(--g-color-shadow) 12%, transparent);
+}

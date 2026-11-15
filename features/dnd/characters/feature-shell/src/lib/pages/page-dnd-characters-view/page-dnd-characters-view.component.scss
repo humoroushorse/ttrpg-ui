@@ -1,0 +1,67 @@
+// layout only; type and color come from the shared g-text-* and g-color-* classes
+
+.sheet-abilities {
+  display: grid;
+  gap: var(--g-spacing-sm);
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+}
+
+.sheet-stats {
+  display: grid;
+  gap: var(--g-spacing-md);
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+}
+
+.sheet-stat-box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-spacing-xs);
+}
+
+.sheet-columns {
+  display: grid;
+  align-items: start;
+  gap: var(--g-spacing-sm);
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+}
+
+.sheet-list {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  gap: var(--g-spacing-xs);
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--g-spacing-sm);
+  }
+}
+
+.sheet-legend {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0;
+  gap: var(--g-spacing-xs) var(--g-spacing-md);
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: var(--g-spacing-xs);
+  }
+}
+
+// a choice point that still needs picks (the teal themes have no warning tokens, hence the fallbacks)
+.sheet-open td {
+  background: var(--g-color-warning-container, var(--g-color-error-container));
+  color: var(--g-color-on-warning-container, var(--g-color-on-error-container));
+}
+
+.sheet-severity {
+  min-width: 4.5rem;
+  flex: none;
+}

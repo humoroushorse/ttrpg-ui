@@ -1,0 +1,146 @@
+@let p = point();
+
+<div class="flex flex-col gap-2">
+  <div class="flex flex-row flex-wrap items-baseline gap-2">
+    <span class="g-text-body-strong">{{ p.source }}</span>
+    <span class="g-text-body">{{ p.text ?? p.kinds.join(' or ') }}</span>
+    @if (p.open) {
+      <span class="g-text-caption">{{ p.chosen }}</span>
+    } @else {
+      <span class="g-text-caption" [class.g-color-warning]="!full()" data-point-count
+        >{{ p.chosen }} of {{ p.count }}</span
+      >
+    }
+  </div>
+
+  @if (p.options?.length) {
+    <ul class="m-0 flex list-none flex-col gap-1 p-0">
+      @for (o of p.options; track o.label) {
+        <li class="g-text-body">
+          <span class="g-text-body-strong">{{ o.label }}:</span> {{ o.text }}
+        </li>
+      }
+    </ul>
+  }
+
+  @if (picks().length) {
+    <mat-chip-set [attr.aria-label]="p.source + ' picks'">
+      @for (c of picks(); track c.id) {
+        <mat-chip [disabled]="build.saving()" (removed)="onRemove(c)">
+          {{ pickLabel(c) }}
+          <button matChipRemove [attr.aria-label]="'Remove ' + pickLabel(c)">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+      }
+    </mat-chip-set>
+  }
+
+  @if (canPick()) {
+    <div class="flex flex-row flex-wrap items-center gap-2">
+      @if (p.kinds.length > 1) {
+        <mat-button-toggle-group
+          [value]="kind()"
+          (change)="onKind($event.value)"
+          [hideSingleSelectionIndicator]="true"
+          aria-label="Answer with"
+        >
+          @for (k of p.kinds; track k) {
+            <mat-button-toggle [value]="k">{{ k === 'asi' ? 'Ability increase' : (k | codeLabel) }}</mat-button-toggle>
+          }
+        </mat-button-toggle-group>
+      }
+
+      @if (isAsi()) {
+        @if (asiSplits().length > 1) {
+          <mat-button-toggle-group
+            [value]="asiSplit()"
+            (change)="onAsiSplit($event.value)"
+            [hideSingleSelectionIndicator]="true"
+            aria-label="Split"
+          >
+            @for (s of asiSplits(); track $index) {
+              <mat-button-toggle [value]="s">{{ splitLabel(s) }}</mat-button-toggle>
+            }
+          </mat-button-toggle-group>
+        }
+        @for (part of asiSplit(); track $index) {
+          <mat-form-field subscriptSizing="dynamic" class="point-select-sm">
+            <mat-label>+{{ part }}</mat-label>
+            <mat-select [value]="asiPicks()[$index]" (selectionChange)="onAsiAbility($index, $event.value)">
+              @for (a of asiChoices($index); track a) {
+                <mat-option [value]="a">{{ a | codeLabel }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+      } @else if (isCatalog()) {
+        @if (search(); as searchFn) {
+          <mat-form-field subscriptSizing="dynamic" class="grow">
+            <mat-label>{{ replacing() ? 'Change to' : 'Pick' }} a {{ kind() }}</mat-label>
+            <lib-shared-forms-single-select-autocomplete
+              [ngModel]="catalogValue()"
+              (ngModelChange)="onCatalogPicked($event)"
+              [searchFn]="searchFn"
+              viewValueAccessorFn="name"
+              [isOptionDisabledFn]="catalogDisabled"
+              [optionTemplate]="catalogOption"
+              [debounceTime]="250"
+              [placeholder]="'Search by name'"
+              [dataTestId]="p.slot"
+            />
+          </mat-form-field>
+        }
+      } @else if (valueOptions(); as values) {
+        <mat-form-field subscriptSizing="dynamic" class="grow">
+          <mat-label>{{ replacing() ? 'Change to' : 'Pick' }}</mat-label>
+          <lib-shared-forms-single-select
+            [ngModel]="selectValue()"
+            (selectionChange)="onValuePicked($event.value)"
+            [options]="values"
+            [viewValueAccessorFn]="valueLabel"
+            [optionTemplate]="valueOption"
+            multiInstanceTerm="options"
+            [dataTestId]="p.slot"
+          />
+        </mat-form-field>
+      } @else {
+        <mat-form-field subscriptSizing="dynamic" class="grow">
+          <mat-label>{{ p.text ?? 'Type the ' + kind() }}</mat-label>
+          <input matInput #text [value]="freeText()" (input)="freeText.set(text.value)" (keydown.enter)="onTextAdd()" />
+        </mat-form-field>
+        @if (freeText().trim(); as typed) {
+          <button mat-flat-button type="button" [disabled]="build.saving()" (click)="onTextAdd()">
+            {{ replacing() ? 'Change to' : 'Add' }} {{ typed }}
+          </button>
+        }
+      }
+
+      @if (pending(); as pick) {
+        <button mat-flat-button type="button" [disabled]="build.saving()" (click)="onSave()">
+          {{ replacing() ? 'Change to' : 'Add' }} {{ pick.label }}
+        </button>
+        <button mat-button type="button" (click)="cancel()">Cancel</button>
+      }
+    </div>
+  }
+</div>
+
+<ng-template #catalogOption let-o>
+  {{ o.name }}
+  <span class="g-text-caption">
+    {{ o.source_slug }}{{ o.level !== undefined ? ', level ' + o.level : '' }}{{ o.category ? ', ' + o.category : '' }}
+  </span>
+  @if (!o.allowed) {
+    <span class="g-text-caption"> — {{ o.reasons?.join('; ') }}</span>
+  } @else if (o.chosen && !replacing()) {
+    <span class="g-text-caption"> — already picked</span>
+  }
+</ng-template>
+
+<ng-template #valueOption let-v>
+  {{ valueLabel(v) }}
+  @if (alreadyHas(v)) {
+    <span class="g-text-caption"> — already proficient</span>
+  }
+</ng-template>

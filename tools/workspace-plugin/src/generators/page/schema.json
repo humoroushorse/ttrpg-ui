@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "TtrpgPage",
+  "title": "Page",
+  "description": "A routed page in a feature's feature-shell library (features/<scope>/<name>/feature-shell), with its route added to lib.routes.ts and the page title and meta description set with pageMeta.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The feature the page belongs to, plural: classes, characters.",
+      "$default": { "$source": "argv", "index": 0 },
+      "x-prompt": "Which feature (classes, characters)?",
+      "x-priority": "important"
+    },
+    "scope": {
+      "type": "string",
+      "description": "The feature's area: dnd, sprint-management.",
+      "x-prompt": "Which area (dnd, sprint-management)?",
+      "x-priority": "important"
+    },
+    "type": {
+      "type": "string",
+      "description": "The kind of page. view-all, view, create and edit need the feature's API pieces (models and data-access generated with api).",
+      "enum": ["view-all", "view", "create", "edit", "blank"],
+      "x-prompt": {
+        "message": "Which page?",
+        "type": "list",
+        "items": [
+          { "value": "view-all", "label": "view-all: the list, a server-paged table (path '')" },
+          {
+            "value": "view",
+            "label": "view: one entity from route resources (path ':id', or ':source/:slug' for a catalog entity)"
+          },
+          {
+            "value": "create",
+            "label": "create: a JSON body form, login required (path 'create'); needs a store with writes"
+          },
+          {
+            "value": "edit",
+            "label": "edit: a JSON body form from route resources, login required (path ':id/edit'); needs a store with writes"
+          },
+          { "value": "blank", "label": "blank: a titled empty page (path '<page>')" }
+        ]
+      },
+      "x-priority": "important"
+    },
+    "page": {
+      "type": "string",
+      "description": "A blank page's name: builder, sheet. Required for --type blank."
+    },
+    "path": {
+      "type": "string",
+      "description": "The route path under the feature, instead of the type's default."
+    },
+    "catalog": {
+      "type": "boolean",
+      "default": false,
+      "description": "The feature is a dnd catalog entity (generated with --catalog): view and edit live at :source/:slug, and view-all gets the source and edition columns."
+    },
+    "singular": {
+      "type": "string",
+      "description": "The entity's singular when the plural's ending doesn't give it (species, people)."
+    },
+    "skipFormat": {
+      "type": "boolean",
+      "default": false,
+      "x-priority": "internal"
+    }
+  },
+  "required": ["name", "scope", "type"]
+}

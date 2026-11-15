@@ -1,0 +1,155 @@
+@if (build.character(); as c) {
+  <div class="flex flex-col gap-3">
+    <mat-button-toggle-group
+      [value]="method()"
+      (change)="onMethod($event.value)"
+      aria-label="Ability score method"
+      [hideSingleSelectionIndicator]="true"
+    >
+      @for (m of methods(); track m) {
+        <mat-button-toggle [value]="m">{{ m | titleWords }}</mat-button-toggle>
+      }
+    </mat-button-toggle-group>
+
+    @if (method() === 'rolled') {
+      <div class="flex flex-row flex-wrap items-center gap-3">
+        <p class="g-text-body-sm m-0 grow">
+          Rolled {{ c.ability_roll_count }} {{ c.ability_roll_count === 1 ? 'time' : 'times' }}; the last
+          {{ keptSets() }} sets are kept. Each set is six totals of 4d6, dropping the lowest die. Use one set.
+        </p>
+        <button mat-stroked-button type="button" [disabled]="build.saving()" (click)="onRoll()">Roll a new set</button>
+      </div>
+      @if (rolls().length) {
+        <mat-radio-group
+          class="flex flex-col gap-1"
+          [value]="rolledSet()"
+          (change)="onRolledSet($event.value)"
+          aria-label="The set to use"
+        >
+          @for (roll of rolls(); track roll.at; let i = $index) {
+            <mat-radio-button [value]="i">
+              <span class="flex flex-row flex-wrap items-baseline gap-3">
+                <span class="g-text-body-strong">Set {{ i + 1 }}</span>
+                @for (total of roll.totals; track $index) {
+                  <span class="g-text-body g-hover-hint" [matTooltip]="diceText(roll, $index)">{{ total }}</span>
+                }
+                @if ($last) {
+                  <span class="g-text-caption">newest</span>
+                }
+              </span>
+            </mat-radio-button>
+          }
+        </mat-radio-group>
+      }
+    }
+
+    <div class="flex flex-col gap-3" cdkDropListGroup>
+      @if (pool(); as values) {
+        @if (values.length) {
+          <p class="g-text-body-sm m-0">
+            Drag each value onto an ability, or pick it in the ability's box; taking a placed value swaps the two.
+            Filled values aren't placed yet.
+            @if (activeRoll()) {
+              Hover a total for its dice.
+            }
+          </p>
+          <div class="flex flex-row flex-wrap items-center gap-2">
+            <mat-chip-set
+              class="g-drop-list"
+              cdkDropList
+              cdkDropListOrientation="horizontal"
+              [cdkDropListData]="'pool'"
+              [cdkDropListSortingDisabled]="true"
+              [cdkDropListHasAnchor]="true"
+              (cdkDropListDropped)="onDropOnRow($event)"
+              aria-label="Values to place"
+            >
+              @for (v of values; track $index) {
+                @let owner = owners().get($index);
+                <!-- filled until placed; a placed one says where it went -->
+                <mat-chip
+                  class="g-draggable"
+                  cdkDrag
+                  cdkDragPreviewClass="g-drag-preview"
+                  [highlighted]="!owner"
+                  [cdkDragData]="$index"
+                  [matTooltip]="diceText(activeRoll(), $index)"
+                  [aria-label]="v + (owner ? ', on ' + (owner | uppercase) : ', not placed')"
+                >
+                  {{ v }}
+                  @if (owner) {
+                    <span class="g-text-caption">{{ owner | uppercase }}</span>
+                  }
+                </mat-chip>
+              }
+            </mat-chip-set>
+            <button mat-button type="button" [disabled]="!owners().size" (click)="onClearPlacements()">
+              Clear all
+            </button>
+          </div>
+        }
+      }
+
+      <div class="scores-grid">
+        @for (a of abilities; track a.code) {
+          <div class="flex flex-col gap-1">
+            @if (pool(); as values) {
+              <div
+                class="g-drop-slot"
+                cdkDropList
+                [cdkDropListData]="a.code"
+                (cdkDropListDropped)="onDropOnAbility($event)"
+              >
+                <mat-form-field subscriptSizing="dynamic" class="w-full">
+                  <mat-label>{{ a.name }}</mat-label>
+                  <mat-select [value]="placement()[a.code]" (selectionChange)="place(a.code, $event.value)">
+                    <mat-option [value]="null">None</mat-option>
+                    @for (v of values; track $index) {
+                      @let owner = owners().get($index);
+                      <mat-option [value]="$index">
+                        {{ v }}
+                        @if (owner && owner !== a.code) {
+                          <span class="g-text-caption"> on {{ owner | uppercase }}, swaps</span>
+                        }
+                      </mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            } @else {
+              <mat-form-field subscriptSizing="dynamic">
+                <mat-label>{{ a.name }}</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  #score
+                  [min]="range()[0]"
+                  [max]="range()[1]"
+                  [value]="typedScores()[a.code]"
+                  (input)="onTyped(a.code, score.valueAsNumber)"
+                />
+              </mat-form-field>
+            }
+            @if (build.sheet(); as s) {
+              <span class="g-text-caption">
+                Final <lib-dnd-sheet-stat [stat]="s.abilities[a.code].score" [label]="a.name" />
+              </span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <p class="g-text-body-sm m-0" [class.g-color-warning]="!!problem()">{{ problem() ?? status() }}</p>
+
+    <div class="flex flex-row justify-end gap-2">
+      <button mat-button type="button" [disabled]="!changed()" (click)="onReset()">Reset</button>
+      <button mat-stroked-button type="button" [disabled]="!changed() || !!problem()" (click)="onPreview()">
+        Preview
+      </button>
+      <button mat-flat-button type="button" [disabled]="!changed() || !!problem() || build.saving()" (click)="onSave()">
+        Save scores
+      </button>
+    </div>
+  </div>
+}

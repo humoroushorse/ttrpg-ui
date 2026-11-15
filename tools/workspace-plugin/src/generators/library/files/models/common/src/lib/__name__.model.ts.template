@@ -1,0 +1,62 @@
+<% if (api) { %>import { EntityId, SelectEntityId } from '@ngrx/signals/entities';
+
+<% } %><% if (catalog) { %>/** The source an entry is printed in, as entries carry it */
+export interface SourceRef {
+  id: string;
+  /** phb_2024; the first part of the entry's URL */
+  slug: string;
+  name: string;
+  /** PHB */
+  name_short: string;
+}
+
+/** <%= A %> <%= singular %> as the API returns it (go_dnd `api/openapi/dnd.yaml`, `<%= Singular %>`). Add the <%= singular %>'s own fields below the shared ones. */
+export interface <%= Singular %>Schema {
+  id: string;
+  source_id: string;
+  source: SourceRef;
+  /** unique within its source; the second part of the entry's URL */
+  slug: string;
+  name: string;
+  /** "2024" */
+  dnd_version: string;
+  dnd_version_year: number;
+  is_unearthed_arcana: boolean;
+  is_homebrew: boolean;
+  /** e.g. third_party */
+  marks: string[];
+  /** HTML */
+  description: string;
+  created_at: string;
+  created_by: string | null;
+  updated_at: string;
+  updated_by: string | null;
+}
+<% } else { %>/** <%= A %> <%= singular %> as the API returns it. Fill in the fields from the API's OpenAPI schema. */
+export interface <%= Singular %>Schema {
+  id: string;
+  name: string;
+}
+<% } %><% if (api) { %>
+/** The list store's entity id */
+export const select<%= Singular %>Id: SelectEntityId<<%= Singular %>Schema> = (<%= singularProp %>) => <%= singularProp %>.id;
+
+export const select<%= Singular %>IdKey: EntityId = 'id' as keyof <%= Singular %>Schema;
+<% } %><% if (catalog) { %>
+/** The <%= singular %> page's URL: /<%= scope %>/<%= name %>/:source/:slug (phb_2024/...) */
+export const <%= routeFn %> = (<%= singularProp %>: Pick<<%= Singular %>Schema, 'slug' | 'source'>): string[] => [
+  '/',
+  '<%= scope %>',
+  '<%= name %>',
+  <%= singularProp %>.source.slug,
+  <%= singularProp %>.slug,
+];
+<% } else if (location === 'features') { %>
+/** The <%= singular %> page's URL: /<%= scope %>/<%= name %>/:id */
+export const <%= routeFn %> = (<%= singularProp %>: Pick<<%= Singular %>Schema, 'id'>): string[] => [
+  '/',
+  '<%= scope %>',
+  '<%= name %>',
+  <%= singularProp %>.id,
+];
+<% } %>

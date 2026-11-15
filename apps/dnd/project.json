@@ -4,7 +4,7 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/dnd/src",
-  "tags": [],
+  "tags": ["scope:dnd", "type:app"],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
@@ -16,6 +16,9 @@
         "polyfills": [],
         "tsConfig": "apps/dnd/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
+        "stylePreprocessorOptions": {
+          "includePaths": ["."]
+        },
         "assets": [
           "apps/dnd/src/robots.txt",
           "apps/dnd/src/sitemap.xml",

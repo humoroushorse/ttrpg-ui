@@ -1,0 +1,3 @@
+// Presentational components for <%= name %>: inputs in, outputs out, no API calls (the feature-shell
+// loads the data). Export each one here.
+export {};

@@ -4,13 +4,11 @@
   "sourceRoot": "shared/table/util/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:shared", "type:util"],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": [
-        "{options.reportsDirectory}"
-      ],
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "../../../coverage/shared/table/util"
       }

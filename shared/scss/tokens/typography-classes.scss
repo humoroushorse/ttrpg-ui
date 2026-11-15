@@ -1,8 +1,10 @@
 // Reusable typography utility classes and mixins
-//
-// IN TEMPLATES: Apply classes directly
-//   <h2 class="g-text-title">...</h2>
-//
+
+// IN TEMPLATES: Apply classes directly. A heading takes its own level's class (<h2 class="g-text-h2">);
+// for another look, pick the heading level that matches it (levels may be skipped).
+//   <h2 class="g-text-h2">...</h2>
+//   <p class="g-text-title">...</p>
+
 // IN COMPONENT SCSS: Use mixins
 //   @use 'shared/scss/tokens/typography-classes' as typo;
 //   .my-title { @include typo.text-title; }
@@ -92,39 +94,51 @@
 .g-text-h1 {
   @include text-h1;
 }
+
 .g-text-h2 {
   @include text-h2;
 }
+
 .g-text-h3 {
   @include text-h3;
 }
+
 .g-text-h4 {
   @include text-h4;
 }
+
 .g-text-title {
   @include text-title;
 }
+
 .g-text-title-lg {
   @include text-title-lg;
 }
+
 .g-text-body {
   @include text-body;
 }
+
 .g-text-body-sm {
   @include text-body-sm;
 }
+
 .g-text-body-strong {
   @include text-body-strong;
 }
+
 .g-text-label {
   @include text-label;
 }
+
 .g-text-label-sm {
   @include text-label-sm;
 }
+
 .g-text-caption {
   @include text-caption;
 }
+
 .g-text-chip {
   @include text-chip;
 }
@@ -133,4 +147,85 @@
 .empty-value {
   font-style: italic;
   opacity: 0.5;
+}
+
+// ── Prose: rich text from the API (spell descriptions, stat blocks) ─────────
+
+//   <div class="g-prose" [innerHTML]="spell.description"></div>
+
+// Tailwind's preflight strips margins, list bullets and heading sizes, so HTML
+// we don't author gets its spacing back here, not in each page.
+@mixin prose {
+  @include text-body;
+
+  > :first-child {
+    margin-block-start: 0;
+  }
+
+  > :last-child {
+    margin-block-end: 0;
+  }
+
+  p,
+  ul,
+  ol {
+    margin-block: 0 var(--g-spacing-sm);
+  }
+
+  // the API wraps tables in <p>; the browser moves the table out and leaves empty <p>s
+  p:empty {
+    display: none;
+  }
+
+  ul,
+  ol {
+    padding-inline-start: var(--g-spacing-lg);
+  }
+
+  ul {
+    list-style: disc;
+  }
+
+  ol {
+    list-style: decimal;
+  }
+
+  li + li {
+    margin-block-start: var(--g-spacing-xs);
+  }
+
+  strong,
+  b {
+    font-weight: var(--g-font-weight-semibold);
+  }
+
+  em,
+  i {
+    font-style: italic;
+  }
+
+  table {
+    border-collapse: collapse;
+    margin-block: var(--g-spacing-md);
+  }
+
+  th,
+  td {
+    padding: var(--g-spacing-xs) var(--g-spacing-sm);
+    border-block-end: thin solid var(--g-color-outline-variant);
+    text-align: center;
+  }
+
+  th {
+    @include text-label;
+  }
+
+  // row labels (Score / Mod / Save)
+  td:first-child {
+    text-align: start;
+  }
+}
+
+.g-prose {
+  @include prose;
 }

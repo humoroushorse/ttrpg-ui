@@ -136,15 +136,5 @@
     "vite": "^8.3.2",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "4.1.11"
-  },
-  "lint-staged": {
-    "{apps,libs}/**/*.{ts,json,md,html}": [
-      "npm run affected:lint --uncomitted --parallel --fix=true",
-      "prettier --write"
-    ],
-    "{apps,libs}/**/*.{css,les,sass,scss,sss}": [
-      "npx stylelint --fix --allow-empty-input",
-      "prettier --write"
-    ]
   }
 }

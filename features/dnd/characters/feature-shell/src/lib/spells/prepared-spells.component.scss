@@ -1,0 +1,9 @@
+.prep-grid {
+  display: grid;
+  gap: 0 var(--g-spacing-sm);
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+}
+
+.prep-filter {
+  width: 12rem;
+}

@@ -4,7 +4,7 @@
   "sourceRoot": "shared/date/data-access/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["shared", "data-access"],
+  "tags": ["scope:shared", "type:data-access"],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",

@@ -4,16 +4,11 @@
   "sourceRoot": "features/dnd/ui/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [
-    "dnd",
-    "ui"
-  ],
+  "tags": ["scope:dnd", "type:ui"],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": [
-        "{options.reportsDirectory}"
-      ],
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "../../../../coverage/features/dnd/spells/ui"
       }

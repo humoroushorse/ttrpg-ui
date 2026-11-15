@@ -1,0 +1,149 @@
+@let c = character();
+<div class="flex flex-col gap-3">
+  @if (owner()) {
+    <div class="flex flex-col gap-2">
+      <h4 class="g-text-h4 m-0">Who Can Edit</h4>
+      <p class="g-text-caption m-0">
+        Editors change the build, items, boons and details. Only you delete it, choose its editors, move it between
+        campaigns or hand it over.
+      </p>
+      @if (editorList().length) {
+        <table class="g-table g-text-body">
+          <thead>
+            <tr>
+              <th>Editor</th>
+              <th>Added</th>
+              <th><span class="sr-only">Remove</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (e of editorList(); track e.user_id) {
+              @let member = memberOf(e.user_id);
+              <tr>
+                <td>
+                  <div class="flex flex-row flex-wrap items-center gap-2">
+                    {{ e.username ?? 'Unknown user' }}
+                    @if (member) {
+                      <mat-chip-set [attr.aria-label]="(e.username ?? 'Editor') + ' campaign role'">
+                        <mat-chip [highlighted]="member.role === 'dm'">{{ roleLabel(member) }}</mat-chip>
+                      </mat-chip-set>
+                    }
+                  </div>
+                </td>
+                <td>{{ e.added_at | date: 'mediumDate' }}</td>
+                <td>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [disabled]="saving()"
+                    [attr.aria-label]="'Stop ' + (e.username ?? 'this editor') + ' editing'"
+                    (click)="onRemoveEditor(e)"
+                  >
+                    <mat-icon>person_remove</mat-icon>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      } @else if (editors.hasValue()) {
+        <p class="g-text-body-sm m-0">Only you can edit it.</p>
+      }
+      <div class="flex flex-row flex-wrap items-center gap-2">
+        <mat-form-field subscriptSizing="dynamic" class="grow">
+          <mat-label>Add an editor by username</mat-label>
+          <input
+            matInput
+            #editorInput
+            [value]="editorName()"
+            [matAutocomplete]="editorAuto"
+            [disabled]="saving()"
+            (input)="editorName.set(editorInput.value)"
+          />
+          <mat-autocomplete #editorAuto="matAutocomplete" (optionSelected)="editorName.set($event.option.value)">
+            @for (m of editorSuggestions(); track m.user_id) {
+              <mat-option [value]="m.username">
+                <div class="flex flex-row items-center gap-2">
+                  {{ m.username }}
+                  <mat-chip-set [attr.aria-label]="m.username + ' campaign role'">
+                    <mat-chip [highlighted]="m.role === 'dm'">{{ roleLabel(m) }}</mat-chip>
+                  </mat-chip-set>
+                </div>
+              </mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+        <button mat-flat-button type="button" [disabled]="saving() || !editorName().trim()" (click)="onAddEditor()">
+          Add
+        </button>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <h4 class="g-text-h4 m-0">Hand Over</h4>
+      @if (pending(); as t) {
+        <div class="flex flex-row flex-wrap items-center gap-2">
+          <p class="g-text-body m-0 grow">
+            Offered to {{ t.to_username ?? 'someone' }} until {{ t.expires_at | date: 'medium' }}.
+          </p>
+          <button mat-stroked-button type="button" [disabled]="saving()" (click)="onCancelOffer()">
+            Cancel the offer
+          </button>
+        </div>
+      } @else if (transfer.hasValue()) {
+        <p class="g-text-caption m-0">
+          They become its owner when they accept, and its editors are cleared.
+          @if (c.campaign_id) {
+            It stays in its campaign with its DM gifts, so only a member of the campaign can take it.
+          }
+        </p>
+        <div class="flex flex-row flex-wrap items-center gap-2">
+          <mat-form-field subscriptSizing="dynamic" class="grow">
+            <mat-label>Offer to (username)</mat-label>
+            <input
+              matInput
+              #transferInput
+              [value]="transferName()"
+              [matAutocomplete]="transferAuto"
+              [disabled]="saving()"
+              (input)="transferName.set(transferInput.value)"
+            />
+            <mat-autocomplete #transferAuto="matAutocomplete" (optionSelected)="transferName.set($event.option.value)">
+              @for (m of transferSuggestions(); track m.user_id) {
+                <mat-option [value]="m.username">
+                  <div class="flex flex-row items-center gap-2">
+                    {{ m.username }}
+                    <mat-chip-set [attr.aria-label]="m.username + ' campaign role'">
+                      <mat-chip [highlighted]="m.role === 'dm'">{{ roleLabel(m) }}</mat-chip>
+                    </mat-chip-set>
+                  </div>
+                </mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field subscriptSizing="dynamic" class="w-36">
+            <mat-label>Open for</mat-label>
+            <mat-select [value]="expiresIn()" (selectionChange)="expiresIn.set($event.value)">
+              @for (l of lifetimes; track l.value) {
+                <mat-option [value]="l.value">{{ l.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <button mat-flat-button type="button" [disabled]="saving() || !transferName().trim()" (click)="onOffer()">
+            Offer
+          </button>
+        </div>
+      }
+    </div>
+  } @else if (c.viewer?.editor) {
+    <div class="flex flex-row flex-wrap items-center gap-2">
+      <p class="g-text-body m-0 grow">Its owner lets you edit this character.</p>
+      <button mat-stroked-button type="button" [disabled]="saving() || !editors.hasValue()" (click)="onStopEditing()">
+        Stop editing
+      </button>
+    </div>
+  }
+  @if (error(); as e) {
+    <p class="g-text-body-sm g-color-error m-0">{{ e }}</p>
+  }
+</div>

@@ -1,0 +1,9 @@
+import { Injectable, signal } from '@angular/core';
+
+/** <%= Plural %> state. Expose signals; keep the writes here */
+@Injectable({ providedIn: 'root' })
+export class <%= plainServiceClass %> {
+  private readonly state = signal<unknown>(null);
+
+  readonly value = this.state.asReadonly();
+}

@@ -1,0 +1,13 @@
+{
+  "name": "dnd-feats-models",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "features/dnd/feats/models/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:dnd", "type:models"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

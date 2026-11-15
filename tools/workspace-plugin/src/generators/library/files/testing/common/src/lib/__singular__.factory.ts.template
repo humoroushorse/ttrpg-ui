@@ -1,0 +1,28 @@
+import { <%= modelsNamespace %> } from '<%= modelsImport %>';
+
+type <%= Singular %> = <%= modelsNamespace %>.<%= Plural %>.<%= Singular %>Schema;
+
+let sequence = 0;
+
+/** <%= A %> <%= singular %> for tests: the defaults, with overrides on top. Add defaults as the schema grows. */
+export const make<%= Singular %> = (overrides: Partial<<%= Singular %>> = {}): <%= Singular %> => {
+  sequence += 1;
+  return {
+    id: `<%= singular %>-${sequence}`,
+    name: `Test <%= Singular %> ${sequence}`,
+<% if (catalog) { %>    source_id: 'source-1',
+    source: { id: 'source-1', slug: 'phb_2024', name: "Player's Handbook", name_short: 'PHB' },
+    slug: `test-<%= singular %>-${sequence}`,
+    dnd_version: '2024',
+    dnd_version_year: 2024,
+    is_unearthed_arcana: false,
+    is_homebrew: false,
+    marks: [],
+    description: '',
+    created_at: '2026-01-01T00:00:00Z',
+    created_by: null,
+    updated_at: '2026-01-01T00:00:00Z',
+    updated_by: null,
+<% } %>    ...overrides,
+  };
+};

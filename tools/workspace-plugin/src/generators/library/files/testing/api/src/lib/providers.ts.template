@@ -1,0 +1,8 @@
+import { Provider, signal } from '@angular/core';
+import { <%= modelsNamespace %> } from '<%= modelsImport %>';
+
+/** The API config token for TestBed: requests go to `basePath` */
+export const provide<%= Singular %>ApiConfigTesting = (basePath = '/api'): Provider => ({
+  provide: <%= modelsNamespace %>.Service.<%= tokenName %>,
+  useValue: { appConfig: signal({ <%= apiBasePathKey %>: basePath }), initialized: true },
+});

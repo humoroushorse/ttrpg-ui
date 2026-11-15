@@ -1,0 +1,48 @@
+@use './elevation';
+
+// Drag and drop (Angular CDK), one look everywhere. Put the classes on the CDK elements:
+//   <div cdkDropList class="g-drop-list">   items drag out of it or sort inside it
+//   <div cdkDropList class="g-drop-slot">   takes a dropped item (an ability takes a score)
+//   <x cdkDrag class="g-draggable" cdkDragPreviewClass="g-drag-preview">
+// While an item is dragged, every list or slot that can take it gets a dashed outline, and the one
+// under the pointer a solid one.
+
+// items moving aside, and a dropped item settling
+$motion: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+
+.g-draggable {
+  cursor: grab;
+}
+
+// the copy that follows the pointer (outside the component, so a global class)
+.g-drag-preview {
+  box-sizing: border-box;
+  cursor: grabbing;
+  @include elevation.raised;
+}
+
+.g-drop-list,
+.g-drop-slot {
+  &.cdk-drop-list-receiving {
+    outline: thin dashed var(--g-color-primary);
+  }
+
+  &.cdk-drop-list-dragging {
+    outline: medium solid var(--g-color-primary);
+  }
+}
+
+// the dragged item's place in its list
+.g-drop-list .cdk-drag-placeholder {
+  opacity: 0.4;
+}
+
+.g-drop-list.cdk-drop-list-dragging .cdk-drag:not(.cdk-drag-placeholder),
+.g-drop-list .cdk-drag-animating {
+  transition: $motion;
+}
+
+// a slot's outline shows where the item goes; a place-holder in it would push its content aside
+.g-drop-slot .cdk-drag-placeholder {
+  display: none;
+}

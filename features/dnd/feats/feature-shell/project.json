@@ -1,0 +1,13 @@
+{
+  "name": "dnd-feats-feature-shell",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "features/dnd/feats/feature-shell/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:dnd", "type:feature-shell"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

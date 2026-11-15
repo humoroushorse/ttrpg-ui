@@ -1,0 +1,64 @@
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { pageMeta } from '@ttrpg-ui/shared/core/util';
+import { <%= modelsNamespace %> } from '<%= modelsImport %>';
+import { <%= storeName %> } from '<%= dataAccessImport %>';
+
+type <%= Singular %> = <%= modelsNamespace %>.<%= Plural %>.<%= Singular %>Schema;
+
+/** What the form starts with; the API's create schema says which fields it needs */
+const STARTING_BODY: Partial<<%= Singular %>> = { name: '' };
+
+/** The textarea's JSON as a request body, or why it isn't one */
+const parseBody = (text: string): { body: Partial<<%= Singular %>> } | { error: string } => {
+  try {
+    const body: unknown = JSON.parse(text);
+    return body && typeof body === 'object' && !Array.isArray(body)
+      ? { body: body as Partial<<%= Singular %>> }
+      : { error: 'The body must be a JSON object.' };
+  } catch (error) {
+    return { error: `Not valid JSON: ${(error as Error).message}` };
+  }
+};
+
+@Component({
+  selector: '<%= pageSelector %>',
+  imports: [RouterLink, MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule],
+  templateUrl: './<%= pageFolder %>.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class <%= pageClass %> {
+  private readonly router = inject(Router);
+
+  protected readonly store = inject(<%= storeName %>);
+
+  /** placeholder: a JSON body until this page gets a real form */
+  protected readonly json = signal(JSON.stringify(STARTING_BODY, null, 2));
+
+  private readonly parseError = signal<string | null>(null);
+
+  private readonly submitted = signal(false);
+
+  /** The JSON's problem, or the API's once the user has submitted */
+  protected readonly errorMessage = computed(() => this.parseError() ?? (this.submitted() ? this.store.error() : null));
+
+  constructor() {
+    pageMeta(() => ({ title: ['Create <%= SingularTitle %>', '<%= PluralTitle %>'], description: 'Create <%= a %> <%= singularWords %>.' }));
+  }
+
+  onSubmit(): void {
+    const parsed = parseBody(this.json());
+    this.parseError.set('error' in parsed ? parsed.error : null);
+    if ('error' in parsed) return;
+    this.submitted.set(true);
+    this.store.create({
+      body: parsed.body,
+      onCreated: (<%= singularProp %>) => this.router.navigate(<%= modelsNamespace %>.<%= Plural %>.<%= routeFn %>(<%= singularProp %>)),
+    });
+  }
+}

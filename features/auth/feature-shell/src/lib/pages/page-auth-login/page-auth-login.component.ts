@@ -25,7 +25,6 @@ import { SharedCoreService } from '@ttrpg-ui/shared/core/data-access';
   ],
   templateUrl: './page-auth-login.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrl: './page-auth-login.component.scss',
 })
 export class PageAuthLoginComponent implements OnInit {
   private readonly meta = inject(Meta);

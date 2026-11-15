@@ -53,4 +53,6 @@ vitest.config.*.timestamp*
 .claude/worktrees
 .nx/polygraph
 .nx/self-healing
-tools
+# Nx's AI agent migrations scratch folder (tools/workspace-plugin is source)
+tools/ai-migrations
+.agents

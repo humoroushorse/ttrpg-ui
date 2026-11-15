@@ -1,11 +1,19 @@
 import { inject } from '@angular/core';
-import { withState, signalStore, type, patchState, withMethods, withHooks } from '@ngrx/signals';
-import { setAllEntities, withEntities, addEntity, removeEntity } from '@ngrx/signals/entities';
+import { withState, signalStore, type, patchState, withMethods, withFeature } from '@ngrx/signals';
+import { withEntities, removeEntity } from '@ngrx/signals/entities';
 import { SharedModels } from '@ttrpg-ui/shared/models';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { SharedNotificationService } from '@ttrpg-ui/shared/notification/data-access';
-import { switchMap } from 'rxjs/operators';
+import { SharedTableService } from '@ttrpg-ui/shared/table/data-access';
+import {
+  getErrorMessage,
+  withFilters,
+  withPagination,
+  withServerList,
+  withSort,
+} from '@ttrpg-ui/shared/store/util';
+import { concatMap } from 'rxjs/operators';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { DndSpellModels } from '@ttrpg-ui/features/dnd/spells/models';
@@ -14,18 +22,11 @@ import { DndSpellApiService } from '../services/dnd-spells-api.service';
 type StoreSchema = DndSpellModels.Spells.SpellSchema;
 export type StoreState = SharedModels.Store.BaseState<StoreSchema>;
 
-const getErrorMessage = (error: HttpErrorResponse): string => {
-  let errorMessage = error.error ? error.error : error.message;
-  if (typeof errorMessage !== 'string') {
-    errorMessage = errorMessage.detail ? errorMessage.detail : JSON.stringify(errorMessage);
-  }
-  return errorMessage;
-};
-
 export const SpellsStore = signalStore(
   { providedIn: 'root' },
-  withEntities({ entity: type<StoreSchema>() }),
+  // base state also defines entityMap/ids, so withEntities has to come after it
   withState<StoreState>(SharedModels.Store.getBaseStateDefault<StoreSchema>()),
+  withEntities({ entity: type<StoreSchema>() }),
   withState({
     entitySelectId: DndSpellModels.Spells.selectSpellId,
     entityIdKey: DndSpellModels.Spells.selectSpellIdKey,
@@ -33,98 +34,63 @@ export const SpellsStore = signalStore(
     entityNamePlural: 'spells',
   }),
   SharedModels.Store.withComputedBase<StoreSchema>(),
+  withPagination({ pageSize: () => inject(SharedTableService).selectedPageSize() }),
+  withSort(),
+  withFilters(),
+  withFeature((_store, api = inject(DndSpellApiService), notifications = inject(SharedNotificationService)) =>
+    withServerList<StoreSchema>({
+      load: (query) => api.getList(query),
+      errorSummary: 'Error fetching spells',
+      onError: (summary) => notifications.openSnackBar(summary, 'close'),
+    }),
+  ),
   withMethods(
     (
       store,
-      storeService = inject(DndSpellApiService),
-      sharedNotificationService = inject(SharedNotificationService),
-      route = inject(ActivatedRoute),
+      api = inject(DndSpellApiService),
+      notifications = inject(SharedNotificationService),
       router = inject(Router),
-    ) => ({
-      getList: rxMethod<DndSpellModels.Spells.GetListInput | undefined>(
-        switchMap((options) => {
-          patchState(store, SharedModels.Store.setLoading(true), SharedModels.Store.setError(null, null));
-          return storeService.getList(options).pipe(
-            tapResponse({
-              next: (next) => {
-                patchState(store, setAllEntities<StoreSchema>(next || [], { selectId: store.entitySelectId() }));
-                patchState(store, SharedModels.Store.setLoaded(true), SharedModels.Store.setLoading(false));
-              },
-              error: (error: HttpErrorResponse) => {
-                patchState(
-                  store,
-                  SharedModels.Store.setError(getErrorMessage(error), `Error fetching ${store.entityNamePlural()}`),
-                  SharedModels.Store.setLoaded(true),
-                  SharedModels.Store.setLoading(false),
-                );
-                sharedNotificationService.openSnackBar(`Error fetching ${store.entityNamePlural()}`, 'close');
-              },
-            }),
-          );
-        }),
-      ),
-      post: rxMethod<{ newEntity: DndSpellModels.Spells.SpellPostInput; routeOnCreate: boolean }>(
-        switchMap((input) => {
-          patchState(store, SharedModels.Store.setLoading(true), SharedModels.Store.setError(null, null));
-          return storeService.post(input.newEntity).pipe(
-            tapResponse({
-              next: (next) => {
-                if (next) {
-                  patchState(store, addEntity<StoreSchema>(next));
-                  sharedNotificationService.openSnackBar(
-                    `Created ${store.entityNameSingle()} '${next?.name}'`,
-                    'close',
-                  );
-                  if (input.routeOnCreate) {
-                    router.navigate(['dnd', 'spells', store.entitySelectId()(next)], { relativeTo: route });
-                  }
-                }
-                patchState(store, SharedModels.Store.setLoading(false));
-              },
-              error: (error: HttpErrorResponse) => {
-                patchState(
-                  store,
-                  SharedModels.Store.setError(getErrorMessage(error), `Error creating ${store.entityNameSingle()}`),
-                  SharedModels.Store.setLoading(false),
-                );
-                sharedNotificationService.openSnackBar(`Error creating ${store.entityNameSingle()}`, 'close');
-              },
-            }),
-          );
-        }),
-      ),
-      delete: rxMethod<StoreSchema>(
-        switchMap((entity) => {
-          patchState(store, SharedModels.Store.setLoading(true), SharedModels.Store.setError(null, null));
-          return storeService.delete(entity).pipe(
-            tapResponse({
-              next: (next) => {
-                if (next) {
-                  patchState(store, removeEntity(entity.id));
-                  sharedNotificationService.openSnackBar(`Deleted spell '${entity.name}'`, 'close');
-                }
-                patchState(store, SharedModels.Store.setLoading(false));
-              },
-              error: (error: HttpErrorResponse) => {
-                patchState(
-                  store,
-                  SharedModels.Store.setError(getErrorMessage(error), `Error deleting ${store.entityNamePlural()}`),
-                  SharedModels.Store.setLoading(false),
-                );
-                sharedNotificationService.openSnackBar(`Error deleting ${store.entityNamePlural()}`, 'close');
-              },
-            }),
-          );
-        }),
-      ),
-    }),
+    ) => {
+      const failed = (summary: string) => (error: HttpErrorResponse) => {
+        patchState(store, SharedModels.Store.setError(getErrorMessage(error), summary), SharedModels.Store.setLoading(false));
+        notifications.openSnackBar(summary, 'close');
+      };
+      return {
+        // concatMap: a later write must not cancel an earlier one
+        create: rxMethod<{ body: DndSpellModels.Spells.SpellWrite; routeOnCreate: boolean }>(
+          concatMap(({ body, routeOnCreate }) => {
+            patchState(store, SharedModels.Store.setLoading(true), SharedModels.Store.setError(null, null));
+            return api.create(body).pipe(
+              tapResponse({
+                next: (spell) => {
+                  patchState(store, SharedModels.Store.setLoading(false));
+                  notifications.openSnackBar(`Created ${store.entityNameSingle()} '${spell.name}'`, 'close');
+                  // the new spell may land on any page, so refetch instead of adding it here
+                  store.reload();
+                  if (routeOnCreate) router.navigate(DndSpellModels.Spells.spellRoute(spell));
+                },
+                error: failed(`Error creating ${store.entityNameSingle()}`),
+              }),
+            );
+          }),
+        ),
+        delete: rxMethod<StoreSchema>(
+          concatMap((spell) => {
+            patchState(store, SharedModels.Store.setLoading(true), SharedModels.Store.setError(null, null));
+            return api.delete(spell.id).pipe(
+              tapResponse({
+                next: () => {
+                  patchState(store, removeEntity(spell.id), SharedModels.Store.setLoading(false));
+                  notifications.openSnackBar(`Deleted ${store.entityNameSingle()} '${spell.name}'`, 'close');
+                  // pulls the next spell up into this page and fixes the total
+                  store.reload();
+                },
+                error: failed(`Error deleting ${store.entityNameSingle()}`),
+              }),
+            );
+          }),
+        ),
+      };
+    },
   ),
-  withHooks({
-    onInit(store) {
-      store.getList(undefined);
-    },
-    onDestroy(_store) {
-      /* empty */
-    },
-  }),
 );

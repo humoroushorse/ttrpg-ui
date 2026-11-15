@@ -46,6 +46,26 @@ export class IsEmptyValuePipe implements PipeTransform {
   }
 }
 
+/** An API code as a label: half_up -> Half Up, wondrous-item -> Wondrous Item, very rare -> Very Rare */
+export function titleWords(value: string): string {
+  return value
+    .split(/[\s_-]+/)
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+/**
+ * An API code as a label in a template: {{ 'point_buy' | titleWords }} -> Point Buy. Angular's
+ * titlecase pipe doesn't split on _ or -.
+ */
+@Pipe({ name: 'titleWords' })
+export class TitleWordsPipe implements PipeTransform {
+  transform(value: string | null | undefined): string {
+    return value ? titleWords(value) : '';
+  }
+}
+
 /** @deprecated use IsEmptyValuePipe instead */
 export function isEmpty(value: string | number | null | undefined | unknown[]): boolean {
   return displayValue(value).isEmpty;

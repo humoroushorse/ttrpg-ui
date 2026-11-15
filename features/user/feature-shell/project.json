@@ -4,13 +4,11 @@
   "sourceRoot": "features/user/feature-shell/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:user", "type:feature-shell"],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": [
-        "{options.reportsDirectory}"
-      ],
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "../../../coverage/features/user/feature-shell"
       }

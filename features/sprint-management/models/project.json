@@ -4,7 +4,7 @@
   "sourceRoot": "features/sprint-management/models/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:sprint-management", "type:models"],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint"

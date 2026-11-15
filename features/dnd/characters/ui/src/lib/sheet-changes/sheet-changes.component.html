@@ -1,0 +1,16 @@
+@if (changes().length) {
+  <ul class="sheet-changes">
+    @for (c of changes(); track $index) {
+      <li class="g-text-body-sm">
+        <span class="g-text-body-strong">{{ c.label }}</span>
+        @if (c.note) {
+          {{ c.note }}
+        } @else {
+          {{ c.from }} → <span class="g-color-primary">{{ c.to }}</span>
+        }
+      </li>
+    }
+  </ul>
+} @else {
+  <p class="g-text-body-sm m-0">{{ empty() }}</p>
+}

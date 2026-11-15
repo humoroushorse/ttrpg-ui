@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "TtrpgFeature",
+  "title": "Feature",
+  "description": "Everything for one entity or area at once: its libraries (models first), its pages, and the app wiring (route, API config provider, nav entries, sitemap). Use this to start a new entity; use the library or page generators to add one piece later.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The entity or area, plural: classes, characters, items.",
+      "$default": { "$source": "argv", "index": 0 },
+      "x-prompt": "What is the feature (classes, characters, items)?",
+      "x-priority": "important"
+    },
+    "scope": {
+      "type": "string",
+      "description": "The area it belongs to: dnd, auth, sprint-management. Required for features, ignored for shared.",
+      "x-priority": "important"
+    },
+    "location": {
+      "type": "string",
+      "description": "features (belongs to one area, under a scope) or shared (used by every area).",
+      "enum": ["features", "shared"],
+      "default": "features"
+    },
+    "types": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["models", "data-access", "ui", "util", "testing", "feature-shell"] },
+      "description": "The libraries to make. Defaults to all six for features, and all but feature-shell for shared."
+    },
+    "pages": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["view-all", "view", "create", "edit"] },
+      "description": "The pages to make in the feature-shell. Defaults to all four when there's a feature-shell and the API pieces (view-all and view with --readOnly); pass an empty value for none."
+    },
+    "readOnly": {
+      "type": "boolean",
+      "default": false,
+      "description": "Reads only: the API service gets list and get, the store has no writes, and the pages are view-all and view."
+    },
+    "catalog": {
+      "type": "boolean",
+      "default": false,
+      "description": "A dnd catalog entity (classes, species, feats, items...): the shared catalog fields and source, /:source/:slug URLs, get by slugs, list ?fields=, and source and edition columns."
+    },
+    "requiresLogin": {
+      "type": "boolean",
+      "default": false,
+      "description": "Private data: every page needs a login (the auth guard on the feature's shell route), and the nav entries show only when logged in."
+    },
+    "singular": {
+      "type": "string",
+      "description": "The entity's singular when the plural's ending doesn't give it (species, people). Derived otherwise: classes -> class."
+    },
+    "api": {
+      "type": "boolean",
+      "description": "Generate the API pieces (config token, API service, list store, route resources, test providers). Defaults to true for features, false for shared."
+    },
+    "apiPath": {
+      "type": "string",
+      "description": "The entity's path under the API base: /classes. Defaults to /<name>."
+    },
+    "apiBasePathKey": {
+      "type": "string",
+      "description": "The app config key holding the API base path. Defaults to APP_TTRPG_<SCOPE>__API_BASE_PATH."
+    },
+    "app": {
+      "type": "string",
+      "description": "The app to wire the feature into. Defaults to the app named like the scope (dnd), when there is one."
+    },
+    "skipApp": {
+      "type": "boolean",
+      "default": false,
+      "description": "Don't touch the app: no route, provider, nav entries or sitemap entry."
+    },
+    "navGroup": {
+      "type": "string",
+      "description": "The sidenav group (its viewValue) the nav entries go in. Defaults to the app's first group."
+    },
+    "skipFormat": {
+      "type": "boolean",
+      "default": false,
+      "x-priority": "internal"
+    }
+  },
+  "required": ["name"]
+}
