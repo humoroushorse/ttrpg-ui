@@ -1,0 +1,150 @@
+@let c = character();
+@let edit = canEdit();
+<div class="flex flex-col gap-2">
+  <div class="flex flex-row flex-wrap items-center gap-2">
+    @if (editingCoins()) {
+      @for (coin of allCoins; track coin) {
+        <mat-form-field subscriptSizing="dynamic" class="inventory-quantity">
+          <mat-label>{{ coin | uppercase }}</mat-label>
+          <input
+            matInput
+            type="number"
+            min="0"
+            #amount
+            [value]="coinDraft()[coin]"
+            (input)="onCoin(coin, amount.valueAsNumber)"
+          />
+        </mat-form-field>
+      }
+      <button mat-flat-button type="button" [disabled]="saving() || !coinsValid()" (click)="onSaveCoins()">
+        Save coins
+      </button>
+      <button mat-button type="button" (click)="editingCoins.set(false)">Cancel</button>
+    } @else {
+      <p class="g-text-body m-0 grow">
+        Coins:
+        @for (x of coins(); track x.coin) {
+          {{ x.amount }} {{ x.coin | uppercase }}{{ $last ? '' : ', ' }}
+        } @empty {
+          none
+        }
+      </p>
+      @if (edit) {
+        <button mat-stroked-button type="button" [disabled]="saving()" (click)="onEditCoins()">
+          <mat-icon>edit</mat-icon> Edit coins
+        </button>
+      }
+    }
+  </div>
+
+  @if (c.items.length) {
+    <table class="g-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Quantity</th>
+          <th>Equipped</th>
+          <th><span class="sr-only">Remove</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of c.items; track item.id) {
+          <tr>
+            <td class="g-text-body">
+              {{ name(item) }}
+              @if (fromStartingEquipment(item)) {
+                <span class="g-text-caption">starting equipment</span>
+              }
+              @if (item.given_by) {
+                <span class="g-text-caption">from the DM</span>
+              }
+            </td>
+            <td>
+              @if (edit) {
+                <mat-form-field subscriptSizing="dynamic" class="inventory-quantity">
+                  <mat-label>Quantity</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    min="0"
+                    #qty
+                    [value]="item.quantity"
+                    [disabled]="saving()"
+                    (change)="onQuantity(item, qty.valueAsNumber)"
+                  />
+                </mat-form-field>
+              } @else {
+                <span class="g-text-body">{{ item.quantity }}</span>
+              }
+            </td>
+            <td>
+              <mat-checkbox
+                [checked]="item.equipped"
+                [disabled]="saving() || !edit"
+                [attr.aria-label]="'Equip ' + name(item)"
+                (change)="onEquipped(item, $event.checked)"
+              />
+            </td>
+            <td>
+              @if (edit) {
+                <button
+                  mat-icon-button
+                  type="button"
+                  [disabled]="saving()"
+                  [attr.aria-label]="'Remove ' + name(item)"
+                  (click)="onRemove(item)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              } @else if (canTakeBack(item)) {
+                <button mat-button type="button" [disabled]="saving()" (click)="onRemove(item)">Take back</button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <p class="g-text-body-sm m-0">
+      No items yet.
+      @if (edit) {
+        Starting equipment is a level 1 pick in the builder.
+      }
+    </p>
+  }
+
+  @if (edit) {
+    <div class="flex flex-row flex-wrap items-center gap-2">
+      <mat-form-field subscriptSizing="dynamic" class="grow">
+        <mat-label>Add an item</mat-label>
+        <input
+          matInput
+          #term
+          [value]="search()"
+          [matAutocomplete]="auto"
+          [disabled]="saving()"
+          (input)="search.set(term.value)"
+        />
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onAddCatalog($event.option.value)">
+          @for (m of matches.value() ?? []; track m.id) {
+            <mat-option [value]="m">
+              {{ optionLabel(m) }}
+              @if (m.subcategory || m.category) {
+                <span class="g-text-caption"> {{ m.subcategory || m.category }}</span>
+              }
+            </mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+      <button mat-stroked-button type="button" [disabled]="saving() || !search().trim()" (click)="onAddCustom()">
+        Add as a custom item
+      </button>
+    </div>
+  } @else if (c.viewer?.can_give) {
+    <p class="g-text-caption m-0">Give items and coins from the campaign's page.</p>
+  }
+
+  @if (error(); as e) {
+    <p class="g-text-body-sm g-color-error m-0">{{ e }}</p>
+  }
+</div>

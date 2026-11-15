@@ -1,0 +1,32 @@
+@use './typography-classes' as typo;
+
+// A data table: full width, a rule under each row, label type for headers.
+//   <table class="g-table">...</table>
+// Cells align to the middle; add g-table-top for rows of several lines.
+@mixin table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: var(--g-spacing-xs) var(--g-spacing-sm);
+    border-block-end: thin solid var(--g-color-outline-variant);
+    text-align: start;
+  }
+
+  th {
+    @include typo.text-label;
+  }
+}
+
+.g-table {
+  @include table;
+}
+
+// cells align to the top, for rows of several lines
+.g-table-top {
+  th,
+  td {
+    vertical-align: top;
+  }
+}

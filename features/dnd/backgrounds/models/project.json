@@ -1,0 +1,13 @@
+{
+  "name": "dnd-backgrounds-models",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "features/dnd/backgrounds/models/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:dnd", "type:models"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

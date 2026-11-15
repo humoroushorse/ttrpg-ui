@@ -1,0 +1,32 @@
+@let resource = subclass();
+
+<div class="mx-auto flex w-full max-w-4xl flex-col gap-2">
+  <div>
+    <a mat-button routerLink="/dnd/subclasses"><mat-icon>arrow_back</mat-icon> Subclasses</a>
+  </div>
+
+  @if (resource.isLoading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Loading subclass" />
+  }
+
+  @if (resource.status() === 'error') {
+    <mat-card>
+      <mat-card-content>
+        <p class="g-text-body g-color-error m-0">{{ errorMessage() }}</p>
+      </mat-card-content>
+    </mat-card>
+  } @else if (shown(); as subclass) {
+    <mat-card>
+      <mat-card-content>
+        <div class="flex flex-col gap-4">
+          <header class="flex flex-row flex-wrap items-center gap-2">
+            <h1 class="g-text-h1 m-0 grow">{{ subclass.name }}</h1>
+          </header>
+          <p class="g-text-body m-0">Source: {{ subclass.source.name }} ({{ subclass.dnd_version_year }})</p>
+          <!-- placeholder: the API's JSON until this page lays the fields out -->
+          <pre class="g-text-body-sm m-0 overflow-auto">{{ subclass | json }}</pre>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

@@ -4,7 +4,7 @@
   "sourceRoot": "features/sprint-management/ui/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:sprint-management", "type:ui"],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",

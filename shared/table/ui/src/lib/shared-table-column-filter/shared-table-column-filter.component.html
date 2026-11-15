@@ -26,7 +26,9 @@
 
     @case ('agDateColumnFilter') {
       @if (granularity() === 'datetime') {
-        <p class="g-text-body-sm m-0">Not implemented: date and time filters (filterParams.appGranularity 'datetime').</p>
+        <p class="g-text-body-sm m-0">
+          Not implemented: date and time filters (filterParams.appGranularity 'datetime').
+        </p>
       } @else {
         <ng-container *ngTemplateOutlet="operator" />
         @if (!noValue()) {
@@ -50,7 +52,9 @@
               />
             }
           } @else {
-            <ng-container *ngTemplateOutlet="datePicker; context: { end: 'from', label: isRange() ? 'From' : 'Date' }" />
+            <ng-container
+              *ngTemplateOutlet="datePicker; context: { end: 'from', label: isRange() ? 'From' : 'Date' }"
+            />
             @if (isRange()) {
               <ng-container *ngTemplateOutlet="datePicker; context: { end: 'to', label: 'To' }" />
             }
@@ -115,7 +119,7 @@
           <mat-progress-bar mode="indeterminate" aria-label="Loading options" />
         }
         @if (apiPages.status() === 'error') {
-          <p class="g-text-body-sm error-color m-0">Couldn't load the options.</p>
+          <p class="g-text-body-sm g-color-error m-0">Couldn't load the options.</p>
         }
       }
     }

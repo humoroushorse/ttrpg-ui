@@ -1,5 +1,5 @@
 import nx from '@nx/eslint-plugin';
-import baseConfig from '../../eslint.config.mjs';
+import baseConfig, { legacySprintManagement } from '../../eslint.config.mjs';
 
 export default [
   ...baseConfig,
@@ -31,4 +31,5 @@ export default [
     // Override or add rules here
     rules: {},
   },
+  legacySprintManagement,
 ];

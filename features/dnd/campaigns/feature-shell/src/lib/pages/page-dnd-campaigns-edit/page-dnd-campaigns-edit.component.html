@@ -1,0 +1,99 @@
+@let resource = campaign();
+<div class="mx-auto flex w-full max-w-4xl flex-col gap-2">
+  <div>
+    @if (loaded(); as campaign) {
+      <a mat-button [routerLink]="viewRoute(campaign)"><mat-icon>arrow_back</mat-icon> {{ campaign.name }}</a>
+    } @else {
+      <a mat-button routerLink="/dnd/campaigns"><mat-icon>arrow_back</mat-icon> Campaigns</a>
+    }
+  </div>
+  @if (resource.isLoading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Loading campaign" />
+  }
+  @if (loadError(); as error) {
+    <mat-card>
+      <mat-card-content>
+        <p class="g-text-body g-color-error m-0">{{ error }}</p>
+      </mat-card-content>
+    </mat-card>
+  } @else if (loaded(); as campaign) {
+    <mat-card>
+      <mat-card-content>
+        <div class="flex flex-col gap-4">
+          <h1 class="g-text-h1 m-0">Edit {{ campaign.name }}</h1>
+          <mat-form-field subscriptSizing="dynamic">
+            <mat-label>Name</mat-label>
+            <input matInput required #nameInput [value]="name()" (input)="name.set(nameInput.value)" />
+          </mat-form-field>
+          <mat-form-field subscriptSizing="dynamic">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              cdkAutosizeMinRows="2"
+              #descriptionInput
+              [value]="description()"
+              (input)="description.set(descriptionInput.value)"
+            ></textarea>
+          </mat-form-field>
+
+          <h2 class="g-text-h2 m-0">Access</h2>
+          <div class="flex flex-row flex-wrap gap-3">
+            <mat-form-field subscriptSizing="dynamic" class="grow">
+              <mat-label>Who can invite players</mat-label>
+              <mat-select [value]="invite()" (selectionChange)="invite.set($event.value)">
+                <mat-option value="dms">The DMs</mat-option>
+                <mat-option value="members">Every member</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field subscriptSizing="dynamic" class="grow">
+              <mat-label>What players see of the party</mat-label>
+              <mat-select [value]="partySheets()" (selectionChange)="partySheets.set($event.value)">
+                <mat-option value="summary">The list: name, class, species, level</mat-option>
+                <mat-option value="full">Each character's sheet, read-only</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <p class="g-text-caption m-0">
+            DMs always see every sheet, read-only. Only DMs approve exceptions and give gifts.
+          </p>
+
+          <h2 class="g-text-h2 m-0">Rules</h2>
+          @if (rules(); as r) {
+            <lib-dnd-campaign-rules-form [rules]="r" (rulesChange)="rules.set($event)" />
+          }
+
+          @if (flagged(); as list) {
+            @if (list.length) {
+              <div class="flex flex-col gap-1">
+                <p class="g-text-body-strong g-color-warning m-0">
+                  These rules flag {{ list.length }} {{ list.length === 1 ? 'character' : 'characters' }}. Their picks
+                  stay; each becomes a warning to approve or fix.
+                </p>
+                <ul class="m-0">
+                  @for (c of list; track c.id) {
+                    <li class="g-text-body">{{ c.name }}: {{ unapproved(c).join('; ') }}</li>
+                  }
+                </ul>
+              </div>
+            }
+          }
+          @if (errorMessage(); as error) {
+            <p class="g-text-body g-color-error m-0">{{ error }}</p>
+          }
+          <div class="flex flex-row justify-end gap-2">
+            <a mat-button [routerLink]="viewRoute(campaign)">Cancel</a>
+            <button
+              mat-flat-button
+              type="button"
+              [disabled]="store.loading() || checking() || !name().trim()"
+              (click)="onSubmit(campaign)"
+            >
+              {{ flagged()?.length ? 'Save anyway' : 'Save' }}
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

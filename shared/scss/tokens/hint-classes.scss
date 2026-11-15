@@ -1,0 +1,6 @@
+// Text that shows more on hover or focus (a tooltip): a dotted rule under it and the help cursor.
+//   <span class="g-hover-hint" matTooltip="6 + 5 + 4, dropped 1">15</span>
+.g-hover-hint {
+  border-bottom: thin dotted var(--g-color-outline);
+  cursor: help;
+}

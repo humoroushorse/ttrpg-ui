@@ -1,0 +1,144 @@
+@let c = character();
+<div class="flex flex-col gap-3">
+  @if (c.modifiers.length) {
+    <table class="g-table">
+      <thead>
+        <tr>
+          <th>Boon or bane</th>
+          <th>Effect</th>
+          <th>From level</th>
+          <th>Active</th>
+          <th><span class="sr-only">Remove</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (m of c.modifiers; track m.id) {
+          <tr [class.modifiers-off]="!m.active">
+            <td class="g-text-body">
+              {{ m.label }}
+              @if (m.added_as === 'dm') {
+                <span class="g-text-caption">from the DM</span>
+              }
+              @if (outOfCampaign(m)) {
+                <div class="g-text-caption g-color-warning">Counts only in the campaign that gave it</div>
+              }
+              @if (m.note) {
+                <div class="g-text-caption">{{ m.note }}</div>
+              }
+            </td>
+            <td class="g-text-body">{{ describe(m) }}</td>
+            <td class="g-text-body">{{ m.from_level ?? 'any' }}</td>
+            <td>
+              <mat-slide-toggle
+                [checked]="m.active"
+                [disabled]="saving() || !mayChange(m)"
+                [attr.aria-label]="(m.active ? 'Switch off ' : 'Switch on ') + m.label"
+                (change)="onActive(m, $event.checked)"
+              />
+            </td>
+            <td>
+              @if (mayChange(m)) {
+                <button
+                  mat-icon-button
+                  type="button"
+                  [disabled]="saving()"
+                  [attr.aria-label]="'Remove ' + m.label"
+                  (click)="onRemove(m)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else if (canEdit()) {
+    <p class="g-text-body-sm m-0">None yet. Add a DM's blessing, a curse, or a spell's effect like Mage Armor.</p>
+  } @else {
+    <p class="g-text-body-sm m-0">None yet.</p>
+  }
+
+  @if (canEdit()) {
+    <div class="flex flex-row flex-wrap items-center gap-2">
+      <mat-form-field subscriptSizing="dynamic" class="grow">
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          #labelInput
+          [value]="label()"
+          placeholder="DM's blessing"
+          (input)="label.set(labelInput.value)"
+        />
+      </mat-form-field>
+      <mat-form-field subscriptSizing="dynamic" class="modifiers-effect">
+        <mat-label>Effect</mat-label>
+        <mat-select [value]="op()" (selectionChange)="onOp($event.value)">
+          @for (e of effects; track e.op) {
+            <mat-option [value]="e.op">{{ e.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      @switch (kind()) {
+        @case ('damage') {
+          <mat-form-field subscriptSizing="dynamic" class="modifiers-effect">
+            <mat-label>Damage type</mat-label>
+            <mat-select [value]="damage()" (selectionChange)="damage.set($event.value)">
+              @for (d of damageTypes; track d) {
+                <mat-option [value]="d">{{ d | codeLabel }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+        @case ('ac_base') {
+          <mat-form-field subscriptSizing="dynamic" class="modifiers-number">
+            <mat-label>Base</mat-label>
+            <input matInput type="number" #base [value]="amount()" (input)="amount.set(base.valueAsNumber)" />
+          </mat-form-field>
+          <mat-checkbox [checked]="addDex()" (change)="addDex.set($event.checked)">+ Dex modifier</mat-checkbox>
+        }
+        @default {
+          <mat-form-field subscriptSizing="dynamic" class="grow">
+            <mat-label>{{ kind() === 'roll' ? 'On which roll' : 'What it changes' }}</mat-label>
+            <lib-shared-forms-single-select
+              [ngModel]="target()"
+              (selectionChange)="target.set($event.value)"
+              [options]="targets()"
+              valueAccessorFn="target"
+              viewValueAccessorFn="label"
+              multiInstanceTerm="targets"
+              dataTestId="modifier-target"
+            />
+          </mat-form-field>
+          @if (kind() === 'number') {
+            <mat-form-field subscriptSizing="dynamic" class="modifiers-number">
+              <mat-label>Amount</mat-label>
+              <input matInput type="number" #value [value]="amount()" (input)="amount.set(value.valueAsNumber)" />
+            </mat-form-field>
+          }
+        }
+      }
+
+      <mat-form-field subscriptSizing="dynamic" class="modifiers-number">
+        <mat-label>From level</mat-label>
+        <input
+          matInput
+          type="number"
+          min="1"
+          max="20"
+          #level
+          [value]="fromLevel() ?? ''"
+          (input)="onFromLevel(level.valueAsNumber)"
+        />
+      </mat-form-field>
+      <button mat-flat-button type="button" [disabled]="!canAdd()" (click)="onAdd()">Add</button>
+    </div>
+  } @else if (character().viewer?.can_give) {
+    <p class="g-text-caption m-0">Give boons and banes from the campaign's page.</p>
+  }
+
+  @if (error(); as e) {
+    <p class="g-text-body-sm g-color-error m-0">{{ e }}</p>
+  }
+</div>

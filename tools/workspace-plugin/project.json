@@ -1,0 +1,25 @@
+{
+  "name": "workspace-plugin",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "tools/workspace-plugin/src",
+  "projectType": "library",
+  "tags": ["scope:tooling", "type:tooling"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc -p tools/workspace-plugin/tsconfig.lib.json --noEmit"
+      }
+    },
+    "check-tags": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "node tools/workspace-plugin/scripts/check-tags.mjs"
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "generators": {
+    "feature": {
+      "factory": "./src/generators/feature/generator",
+      "schema": "./src/generators/feature/schema.json",
+      "description": "Start a new entity or area: its libraries (models, data-access, ui, util, testing, feature-shell), pages, and the app's route, API config provider, nav entries and sitemap entry."
+    },
+    "library": {
+      "factory": "./src/generators/library/generator",
+      "schema": "./src/generators/library/schema.json",
+      "description": "A library of one type (models, data-access, ui, util, testing, feature-shell) in this workspace's layout, with its tags and starter files."
+    },
+    "page": {
+      "factory": "./src/generators/page/generator",
+      "schema": "./src/generators/page/schema.json",
+      "description": "A page (view-all, view, create, edit, blank) in a feature's feature-shell, with its route and pageMeta title/description."
+    }
+  }
+}

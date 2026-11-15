@@ -10,12 +10,79 @@
     "order/properties-alphabetical-order": null,
     "selector-class-pattern": "([.]*[a-z][a-z0-9]*)(-_[a-z0-9]+)*",
     "block-no-empty": null,
-    "unit-allowed-list": ["em", "rem", "%", "fr"],
-    "alpha-value-notation": ["percentage", {"exceptProperties": ["opacity"]}],
+    "unit-allowed-list": ["em", "rem", "%", "fr", "ms", "s"],
+    "alpha-value-notation": [
+      "percentage",
+      {
+        "exceptProperties": ["opacity"]
+      }
+    ],
     "no-empty-source": null,
     "max-nesting-depth": 3,
     "declaration-block-no-redundant-longhand-properties": [
-      true, { "ignoreShorthands": ["grid-template"] }
+      true,
+      {
+        "ignoreShorthands": ["grid-template"]
+      }
+    ],
+    "property-disallowed-list": [
+      [
+        "font",
+        "font-family",
+        "font-size",
+        "font-style",
+        "font-variant",
+        "font-weight",
+        "letter-spacing",
+        "line-height",
+        "text-transform"
+      ],
+      {
+        "message": "Type comes from the shared g-text-* classes (shared/scss/tokens/typography-classes.scss) and letter case from pipes (uppercase, titlecase, titleWords): \"%s\""
+      }
+    ],
+    "color-no-hex": [
+      true,
+      {
+        "message": "Colors come from the theme tokens or the shared g-color-* classes: \"%s\""
+      }
+    ],
+    "color-named": [
+      "never",
+      {
+        "message": "Colors come from the theme tokens or the shared g-color-* classes: \"%s\""
+      }
+    ],
+    "media-feature-name-disallowed-list": [
+      ["/width$/", "/height$/", "orientation", "aspect-ratio"],
+      {
+        "message": "Use a container query (@container) so a component reacts to its own space, not the window's: \"%s\""
+      }
+    ],
+    "declaration-property-value-disallowed-list": [
+      {
+        "border": ["none"],
+        "border-top": ["none"],
+        "border-right": ["none"],
+        "border-bottom": ["none"],
+        "border-left": ["none"],
+        "/.*/": ["/\\b(rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\\((?!\\s*from\\s+var\\(--)/"]
+      },
+      {
+        "message": "A color function starts from a theme token, so it follows the theme: hsl(from var(--g-color-primary) ...). (Borders: 0, not none.) \"%s\""
+      }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["shared/scss/**/*.scss", "apps/*/src/styles.{css,scss}"],
+      "rules": {
+        "property-disallowed-list": null,
+        "color-no-hex": null,
+        "color-named": null,
+        "media-feature-name-disallowed-list": null,
+        "declaration-property-value-disallowed-list": null
+      }
+    }
+  ]
 }

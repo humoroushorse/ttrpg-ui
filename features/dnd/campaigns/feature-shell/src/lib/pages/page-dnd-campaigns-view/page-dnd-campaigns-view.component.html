@@ -1,0 +1,236 @@
+@let resource = campaign();
+<div class="mx-auto flex w-full max-w-4xl flex-col gap-3">
+  <div>
+    <a mat-button routerLink="/dnd/campaigns"><mat-icon>arrow_back</mat-icon> Campaigns</a>
+  </div>
+  @if (resource.isLoading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Loading campaign" />
+  }
+  @if (resource.status() === 'error') {
+    <mat-card>
+      <mat-card-content>
+        <p class="g-text-body g-color-error m-0">{{ errorMessage() }}</p>
+      </mat-card-content>
+    </mat-card>
+  } @else if (shown(); as c) {
+    <mat-card>
+      <mat-card-content>
+        <div class="flex flex-col gap-2">
+          <header class="flex flex-row flex-wrap items-center gap-2">
+            <h1 class="g-text-h1 m-0 grow">{{ c.name }}</h1>
+            <mat-chip-set aria-label="Your role">
+              <mat-chip [highlighted]="isDM()">You're {{ isDM() ? 'a DM' : 'a player' }}</mat-chip>
+            </mat-chip-set>
+            @if (isDM()) {
+              <a mat-stroked-button routerLink="edit"><mat-icon>edit</mat-icon> Edit</a>
+            }
+            @if (isOwner()) {
+              <button mat-stroked-button type="button" [disabled]="store.loading()" (click)="onDeleteClicked(c)">
+                <mat-icon>delete</mat-icon> Delete
+              </button>
+            }
+          </header>
+          @if (c.description) {
+            <p class="g-text-body m-0 whitespace-pre-line">{{ c.description }}</p>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-content>
+        <div class="flex flex-col gap-2">
+          <h2 class="g-text-h2 m-0">Rules</h2>
+          <dl class="m-0 flex flex-col gap-2">
+            @for (r of rules(); track r.label) {
+              <div>
+                <dt class="g-text-label">{{ r.label }}</dt>
+                <dd class="g-text-body m-0">{{ r.text }}</dd>
+              </div>
+            }
+          </dl>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-content>
+        <div class="flex flex-col gap-3">
+          <h2 class="g-text-h2 m-0">Members</h2>
+          @if (people.hasValue()) {
+            <lib-dnd-campaign-members
+              [campaign]="c"
+              [members]="people.value().entities"
+              (changed)="refresh()"
+              (left)="onLeft()"
+            />
+          }
+          @if (canInvite()) {
+            <h3 class="g-text-h3 m-0">Invite Players</h3>
+            <lib-dnd-campaign-invites [campaign]="c" />
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-content>
+        <div class="flex flex-col gap-3">
+          <h2 class="g-text-h2 m-0">Characters</h2>
+          @if (party.isLoading()) {
+            <mat-progress-bar mode="indeterminate" aria-label="Loading the characters" />
+          }
+          @let list = party.hasValue() ? party.value().entities : [];
+          @if (list.length) {
+            <table class="g-table g-table-top g-text-body">
+              <thead>
+                <tr>
+                  <th>Character</th>
+                  <th>Class and species</th>
+                  <th>Breaks the rules</th>
+                  <th><span class="sr-only">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (m of list; track m.id) {
+                  @let mine = m.owner_id === myId();
+                  <tr>
+                    <td>
+                      @if (isDM() || mine || c.settings.access.party_sheets === 'full') {
+                        <a [routerLink]="characterRoute(m)">{{ m.name }}</a>
+                      } @else {
+                        {{ m.name }}
+                      }
+                      <div class="g-text-caption">{{ mine ? 'yours' : (m.owner_username ?? '') }}</div>
+                    </td>
+                    <td>
+                      {{ m.class_name || 'No class' }} {{ m.current_level }}
+                      @if (m.species_name) {
+                        <div class="g-text-caption">{{ m.species_name }}</div>
+                      }
+                    </td>
+                    <td>
+                      @if (!isDM() && !mine) {
+                        <span class="g-text-caption">Only DMs see this</span>
+                      } @else {
+                        <ul class="m-0 flex list-none flex-col gap-1 p-0">
+                          @for (issue of m.issues; track issue.id) {
+                            <li class="flex flex-row flex-wrap items-center gap-2">
+                              <span class="grow" [class.g-color-warning]="!issue.approved">
+                                {{ issue.name }} <span class="g-text-caption">({{ issue.category }})</span>:
+                                {{ issue.reason }}
+                                @if (issue.approved) {
+                                  <span class="g-text-caption">approved{{ issue.note ? ': ' + issue.note : '' }}</span>
+                                }
+                              </span>
+                              @if (isDM()) {
+                                @if (issue.approved) {
+                                  <button
+                                    mat-button
+                                    type="button"
+                                    [disabled]="saving()"
+                                    (click)="onRevoke(c, m, issue)"
+                                  >
+                                    Take back
+                                  </button>
+                                } @else {
+                                  <button
+                                    mat-stroked-button
+                                    type="button"
+                                    [disabled]="saving()"
+                                    (click)="onApprove(c, m, issue)"
+                                  >
+                                    Approve
+                                  </button>
+                                }
+                              }
+                            </li>
+                          } @empty {
+                            <li>Nothing</li>
+                          }
+                        </ul>
+                      }
+                    </td>
+                    <td>
+                      <div class="flex flex-row justify-end gap-1">
+                        @if (isDM()) {
+                          <button
+                            mat-stroked-button
+                            type="button"
+                            (click)="giving.set(giving() === m.id ? null : m.id)"
+                          >
+                            <mat-icon>redeem</mat-icon> Give
+                          </button>
+                        }
+                        @if (isDM() || mine) {
+                          <button
+                            mat-icon-button
+                            type="button"
+                            [disabled]="saving()"
+                            [attr.aria-label]="'Take ' + m.name + ' out of the campaign'"
+                            (click)="onRemove(c, m)"
+                          >
+                            <mat-icon>person_remove</mat-icon>
+                          </button>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                  @if (giving() === m.id) {
+                    <tr>
+                      <td colspan="4">
+                        <lib-dnd-campaign-gift
+                          [campaignId]="c.id"
+                          [character]="m"
+                          (given)="onGiven(m)"
+                          (closed)="giving.set(null)"
+                        />
+                      </td>
+                    </tr>
+                  }
+                }
+              </tbody>
+            </table>
+          } @else if (party.hasValue()) {
+            <p class="g-text-body-sm m-0">No characters yet.</p>
+          }
+
+          <div class="flex flex-row flex-wrap items-center gap-2">
+            <mat-form-field subscriptSizing="dynamic" class="grow">
+              <mat-label>Add one of your characters</mat-label>
+              <lib-shared-forms-single-select
+                [ngModel]="picked()"
+                (selectionChange)="picked.set($event.value)"
+                [options]="freeCharacters()"
+                valueAccessorFn="id"
+                viewValueAccessorFn="name"
+                multiInstanceTerm="characters"
+                dataTestId="campaign-add-character"
+              />
+            </mat-form-field>
+            <button mat-flat-button type="button" [disabled]="saving() || !picked()" (click)="onAdd(c)">Add</button>
+            <a mat-stroked-button routerLink="/dnd/characters/create" [queryParams]="{ campaign: c.id }">
+              <mat-icon>add</mat-icon> New character for this campaign
+            </a>
+          </div>
+          <p class="g-text-caption m-0">
+            Only characters in no campaign are listed. One that breaks these rules can't join until it's fixed.
+          </p>
+          @if (notice(); as n) {
+            <p class="g-text-body-sm m-0">{{ n }}</p>
+          }
+          @if (error(); as e) {
+            <p class="g-text-body-sm g-color-error m-0">{{ e }}</p>
+          }
+          @if (refused().length) {
+            <ul class="m-0">
+              @for (issue of refused(); track issue.id) {
+                <li class="g-text-body-sm">{{ issue.name }} ({{ issue.category }}): {{ issue.reason }}</li>
+              }
+            </ul>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

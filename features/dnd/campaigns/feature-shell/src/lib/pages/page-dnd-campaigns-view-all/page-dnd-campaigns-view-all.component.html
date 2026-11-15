@@ -1,0 +1,63 @@
+<header class="flex flex-row items-center gap-2">
+  <h1 class="g-text-h1 m-0 grow">Campaigns</h1>
+  <a mat-flat-button routerLink="create"><mat-icon>add</mat-icon> Create Campaign</a>
+</header>
+
+@let list = invites.hasValue() ? invites.value().entities : [];
+@if (list.length) {
+  <mat-card>
+    <mat-card-content>
+      <div class="flex flex-col gap-2">
+        <h2 class="g-text-h2 m-0">Your Invites</h2>
+        <table class="g-table g-text-body">
+          <thead>
+            <tr>
+              <th>Campaign</th>
+              <th>From</th>
+              <th>Expires</th>
+              <th><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (i of list; track i.id) {
+              <tr>
+                <td>{{ i.campaign_name }}</td>
+                <td>{{ i.invited_by ?? 'Unknown user' }}</td>
+                <td>{{ i.expires_at | date: 'medium' }}</td>
+                <td>
+                  <div class="flex flex-row flex-wrap justify-end gap-1">
+                    <button mat-button type="button" [disabled]="answering()" (click)="onDecline(i)">Decline</button>
+                    <button mat-flat-button type="button" [disabled]="answering()" (click)="onAccept(i)">Join</button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        @if (inviteError(); as e) {
+          <p class="g-text-body-sm g-color-error m-0">{{ e }}</p>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+}
+
+<mat-card class="min-h-0 flex-1">
+  <lib-shared-angular-material-table
+    class="min-h-0 flex-1"
+    [fillHeight]="true"
+    [tableHeader]="'Campaigns'"
+    [columnDefs]="columnDefs"
+    [data]="store.entities()"
+    [loading]="store.loading()"
+    [serverSidePagination]="true"
+    [filterModel]="store.filters()"
+    (filterModelChange)="store.setFilters($event)"
+    [sortModel]="store.sort()"
+    (sortModelChange)="store.setSort($event)"
+    (columnDefsChange)="onColumnDefsChange($event)"
+    (resetColumnDefsClicked)="onResetColumnDefsClicked()"
+    (rowDoubleClicked)="onRowDoubleClicked($event)"
+  />
+  <lib-shared-paginator [store]="store" />
+</mat-card>

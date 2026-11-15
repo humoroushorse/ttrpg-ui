@@ -1,0 +1,53 @@
+<div class="mx-auto flex w-full max-w-4xl flex-col gap-2">
+  <div>
+    <a mat-button routerLink="/dnd/campaigns"><mat-icon>arrow_back</mat-icon> Campaigns</a>
+  </div>
+  <mat-card>
+    <mat-card-content>
+      <div class="flex flex-col gap-4">
+        <h1 class="g-text-h1 m-0">Create Campaign</h1>
+        <p class="g-text-body-sm m-0">
+          You're its DM. Its characters are built with its rules, and can't switch them off.
+        </p>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>Name</mat-label>
+          <input matInput required #nameInput [value]="name()" (input)="name.set(nameInput.value)" />
+        </mat-form-field>
+        <mat-form-field subscriptSizing="dynamic">
+          <mat-label>Description</mat-label>
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            cdkAutosizeMinRows="2"
+            #descriptionInput
+            [value]="description()"
+            (input)="description.set(descriptionInput.value)"
+          ></textarea>
+        </mat-form-field>
+
+        <h2 class="g-text-h2 m-0">Rules</h2>
+        @if (rules(); as r) {
+          <lib-dnd-campaign-rules-form [rules]="r" (rulesChange)="rules.set($event)" />
+        } @else if (defaults.error()) {
+          <p class="g-text-body g-color-error m-0">Couldn't load the default rules.</p>
+        } @else {
+          <mat-progress-bar mode="indeterminate" aria-label="Loading the default rules" />
+        }
+
+        @if (errorMessage(); as error) {
+          <p class="g-text-body g-color-error m-0">{{ error }}</p>
+        }
+        <div class="flex flex-row justify-end">
+          <button
+            mat-flat-button
+            type="button"
+            [disabled]="store.loading() || !name().trim() || !rules()"
+            (click)="onSubmit()"
+          >
+            Create
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

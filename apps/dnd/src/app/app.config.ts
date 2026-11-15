@@ -21,6 +21,14 @@ import { CoreErrorHandler } from '@ttrpg-ui/shared/core/util';
 import { NativeDateAdapter, MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS, DateAdapter } from '@angular/material/core';
 import { AuthInterceptors } from '@ttrpg-ui/features/auth/util';
 import { DndSpellModels } from '@ttrpg-ui/features/dnd/spells/models';
+import { DndClassModels } from '@ttrpg-ui/features/dnd/classes/models';
+import { DndSubclassModels } from '@ttrpg-ui/features/dnd/subclasses/models';
+import { DndSpeciesModels } from '@ttrpg-ui/features/dnd/species/models';
+import { DndBackgroundModels } from '@ttrpg-ui/features/dnd/backgrounds/models';
+import { DndFeatModels } from '@ttrpg-ui/features/dnd/feats/models';
+import { DndItemModels } from '@ttrpg-ui/features/dnd/items/models';
+import { DndCharacterModels } from '@ttrpg-ui/features/dnd/characters/models';
+import { DndCampaignModels } from '@ttrpg-ui/features/dnd/campaigns/models';
 
 const themes: AppTheme[] = [
   { viewValue: 'dark', path: 'default-theme-dark.css', isDark: true },
@@ -70,6 +78,70 @@ export const appConfig: ApplicationConfig = {
       // }) as DndSpellModels.Service.DndSpellApiServiceConfig,
       deps: [AppConfigService],
       // useValue: { baseUrl: '/ttrpg-dnd-api' },
+    },
+    {
+      provide: DndClassModels.Service.DND_CLASS_API_SERVICE_CONFIG_TOKEN,
+      useFactory: (appConfigService: AppConfigService) => ({
+        appConfig: appConfigService.appConfig,
+        initialized: appConfigService.initialized,
+      }),
+      deps: [AppConfigService],
+    },
+    {
+      provide: DndSubclassModels.Service.DND_SUBCLASS_API_SERVICE_CONFIG_TOKEN,
+      useFactory: (appConfigService: AppConfigService) => ({
+        appConfig: appConfigService.appConfig,
+        initialized: appConfigService.initialized,
+      }),
+      deps: [AppConfigService],
+    },
+    {
+      provide: DndSpeciesModels.Service.DND_SPECIES_API_SERVICE_CONFIG_TOKEN,
+      useFactory: (appConfigService: AppConfigService) => ({
+        appConfig: appConfigService.appConfig,
+        initialized: appConfigService.initialized,
+      }),
+      deps: [AppConfigService],
+    },
+    {
+      provide: DndBackgroundModels.Service.DND_BACKGROUND_API_SERVICE_CONFIG_TOKEN,
+      useFactory: (appConfigService: AppConfigService) => ({
+        appConfig: appConfigService.appConfig,
+        initialized: appConfigService.initialized,
+      }),
+      deps: [AppConfigService],
+    },
+    {
+      provide: DndFeatModels.Service.DND_FEAT_API_SERVICE_CONFIG_TOKEN,
+      useFactory: (appConfigService: AppConfigService) => ({
+        appConfig: appConfigService.appConfig,
+        initialized: appConfigService.initialized,
+      }),
+      deps: [AppConfigService],
+    },
+    {
+      provide: DndItemModels.Service.DND_ITEM_API_SERVICE_CONFIG_TOKEN,
+      useFactory: (appConfigService: AppConfigService) => ({
+        appConfig: appConfigService.appConfig,
+        initialized: appConfigService.initialized,
+      }),
+      deps: [AppConfigService],
+    },
+    {
+      provide: DndCharacterModels.Service.DND_CHARACTER_API_SERVICE_CONFIG_TOKEN,
+      useFactory: (appConfigService: AppConfigService) => ({
+        appConfig: appConfigService.appConfig,
+        initialized: appConfigService.initialized,
+      }),
+      deps: [AppConfigService],
+    },
+    {
+      provide: DndCampaignModels.Service.DND_CAMPAIGN_API_SERVICE_CONFIG_TOKEN,
+      useFactory: (appConfigService: AppConfigService) => ({
+        appConfig: appConfigService.appConfig,
+        initialized: appConfigService.initialized,
+      }),
+      deps: [AppConfigService],
     },
     {
       provide: AUTH_SERVICE_CONFIG_TOKEN,

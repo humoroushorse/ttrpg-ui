@@ -12,7 +12,7 @@
   @if (spellResource.status() === 'error') {
     <mat-card>
       <mat-card-content>
-        <p class="g-text-body error-color m-0">{{ errorMessage() }}</p>
+        <p class="g-text-body g-color-error m-0">{{ errorMessage() }}</p>
       </mat-card-content>
     </mat-card>
   } @else if (view(); as v) {
@@ -38,7 +38,9 @@
 
         <div class="flex flex-col gap-2">
           <p class="g-text-body m-0">Source: {{ v.sourceLine }}</p>
-          <p class="g-text-body m-0"><em>{{ v.levelSchool }}</em></p>
+          <p class="g-text-body m-0">
+            <em>{{ v.levelSchool }}</em>
+          </p>
           <dl class="m-0">
             @for (stat of v.castingStats; track stat.label) {
               <div class="g-text-body">

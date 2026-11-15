@@ -4,13 +4,11 @@
   "sourceRoot": "features/auth/data-access/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:auth", "type:data-access"],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": [
-        "{options.reportsDirectory}"
-      ],
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "../../../coverage/features/auth/data-access"
       }

@@ -17,25 +17,7 @@ const YEAR = /^\d{4}$/;
   providers: [{ provide: MAT_DATE_FORMATS, useValue: YEAR_DATE_FORMATS }],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
-  template: `
-    <mat-form-field class="w-full" subscriptSizing="dynamic">
-      <mat-label>{{ label() }}</mat-label>
-      <input
-        matInput
-        [matDatepicker]="picker"
-        [min]="min()"
-        [max]="max()"
-        [value]="date()"
-        [errorStateMatcher]="errorState"
-        (dateChange)="onDateChange($event.value)"
-      />
-      <mat-datepicker-toggle matIconSuffix [for]="picker" />
-      <mat-datepicker #picker startView="multi-year" (yearSelected)="onYearSelected($event, picker)" />
-      @if (error(); as error) {
-        <mat-error>{{ error }}</mat-error>
-      }
-    </mat-form-field>
-  `,
+  templateUrl: './shared-table-year-input.component.html',
 })
 export class SharedTableYearInputComponent {
   readonly label = input.required<string>();

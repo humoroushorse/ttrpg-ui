@@ -1,0 +1,5 @@
+.scores-grid {
+  display: grid;
+  gap: var(--g-spacing-sm);
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+}

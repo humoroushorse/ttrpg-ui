@@ -27,7 +27,11 @@
         "{workspaceRoot}/.eslintignore",
         "{workspaceRoot}/eslint.config.mjs",
         "{workspaceRoot}/tools/eslint-rules/**/*"
-      ]
+      ],
+      "dependsOn": ["stylelint"]
+    },
+    "lint": {
+      "dependsOn": ["stylelint"]
     }
   },
   "plugins": [
@@ -58,7 +62,8 @@
       "options": {
         "testTargetName": "test"
       }
-    }
+    },
+    "./tools/workspace-plugin/src/plugins/stylelint.mts"
   ],
   "generators": {
     "@nx/angular:application": {

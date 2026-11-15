@@ -4,7 +4,7 @@
   "sourceRoot": "features/sprint-management/testing/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:sprint-management", "type:testing"],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint"

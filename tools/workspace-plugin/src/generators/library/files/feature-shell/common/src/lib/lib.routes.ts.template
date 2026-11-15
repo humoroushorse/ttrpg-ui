@@ -1,0 +1,16 @@
+import { Route } from '@angular/router';
+<% if (requiresLogin) { %>import { AuthGuards } from '@ttrpg-ui/features/auth/util';
+<% } %>import { <%= shellClass %> } from './<%= name %>-shell.component';
+
+/**
+ * The <%= name %> routes, lazy-loaded by the app under /<%= scope %>/<%= name %>. Pages go in `children`.
+ * An unknown path falls through to the app's not-found route.<% if (requiresLogin) { %> Every page needs a login.<% } %>
+ */
+export const <%= routesConst %>: Route[] = [
+  {
+    path: '',
+    component: <%= shellClass %>,
+<% if (requiresLogin) { %>    canActivate: [AuthGuards.authGuard],
+<% } %>    children: [],
+  },
+];

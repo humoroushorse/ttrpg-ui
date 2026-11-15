@@ -1,0 +1,3 @@
+export * from './lib/services/<%= name %>-api.service';
+export * from './lib/+state/<%= name %>.store';
+export * from './lib/resources/<%= singular %>-route.resources';

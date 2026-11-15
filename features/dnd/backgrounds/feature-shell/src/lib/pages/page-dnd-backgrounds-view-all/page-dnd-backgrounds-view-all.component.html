@@ -1,0 +1,23 @@
+<header class="flex flex-row items-center gap-2">
+  <h1 class="g-text-h1 m-0 grow">D&D Backgrounds</h1>
+</header>
+
+<mat-card class="min-h-0 flex-1">
+  <lib-shared-angular-material-table
+    class="min-h-0 flex-1"
+    [fillHeight]="true"
+    [tableHeader]="'Backgrounds'"
+    [columnDefs]="columnDefs"
+    [data]="store.entities()"
+    [loading]="store.loading()"
+    [serverSidePagination]="true"
+    [filterModel]="store.filters()"
+    (filterModelChange)="store.setFilters($event)"
+    [sortModel]="store.sort()"
+    (sortModelChange)="store.setSort($event)"
+    (columnDefsChange)="onColumnDefsChange($event)"
+    (resetColumnDefsClicked)="onResetColumnDefsClicked()"
+    (rowDoubleClicked)="onRowDoubleClicked($event)"
+  />
+  <lib-shared-paginator [store]="store" />
+</mat-card>

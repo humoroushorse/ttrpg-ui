@@ -17,6 +17,12 @@
   --g-color-on-secondary: #{map.get(mat.$cyan-palette, 20)};
   --g-color-on-secondary-container: #{map.get(mat.$cyan-palette, 90)};
 
+  // Tertiary color tokens: the theme's tertiary palette (mat.$cyan-palette), M3's complementary accent
+  --g-color-tertiary: #{map.get(mat.$cyan-palette, 80)};
+  --g-color-tertiary-container: #{map.get(mat.$cyan-palette, 30)};
+  --g-color-on-tertiary: #{map.get(mat.$cyan-palette, 20)};
+  --g-color-on-tertiary-container: #{map.get(mat.$cyan-palette, 90)};
+
   // Error color tokens
   --g-color-error: #ffb4ab;
   --g-color-error-container: #93000a;
@@ -52,6 +58,6 @@
   --g-color-outline-variant: #1a2d4a;
 
   // Shadow & Scrim
-  --g-color-shadow: #000000;
-  --g-color-scrim: #000000;
+  --g-color-shadow: #000;
+  --g-color-scrim: #000;
 }

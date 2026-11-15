@@ -1,0 +1,14 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { pageMeta } from '@ttrpg-ui/shared/core/util';
+
+@Component({
+  selector: '<%= pageSelector %>',
+  imports: [],
+  templateUrl: './<%= pageFolder %>.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class <%= pageClass %> {
+  constructor() {
+    pageMeta(() => ({ title: ['<%= PageTitle %>', '<%= PluralTitle %>'], description: '<%= PageTitle %>.' }));
+  }
+}

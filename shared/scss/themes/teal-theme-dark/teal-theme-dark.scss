@@ -5,7 +5,7 @@
 @use './tokens';
 @use '../../tokens/tokens' as global-tokens;
 
-@include mat.core();
+@include mat.core;
 
 // Use Material's built-in cyan palette for pastel teal theme
 $dark-theme: mat.define-theme(

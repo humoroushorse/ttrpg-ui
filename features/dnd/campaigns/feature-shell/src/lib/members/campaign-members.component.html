@@ -1,0 +1,61 @@
+@let dm = campaign().role === 'dm';
+<div class="flex flex-col gap-2">
+  <table class="g-table g-text-body">
+    <thead>
+      <tr>
+        <th>Member</th>
+        <th>Role</th>
+        <th><span class="sr-only">Actions</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (m of members(); track m.user_id) {
+        <tr>
+          <td>
+            {{ m.username ?? 'Unknown user' }}
+            @if (m.me) {
+              <span class="g-text-caption">you</span>
+            }
+          </td>
+          <td>
+            <mat-chip-set [attr.aria-label]="(m.username ?? 'Member') + ' role'">
+              @if (m.owner) {
+                <mat-chip highlighted>Owner</mat-chip>
+              }
+              <mat-chip [highlighted]="m.role === 'dm'">{{ m.role === 'dm' ? 'DM' : 'Player' }}</mat-chip>
+            </mat-chip-set>
+          </td>
+          <td>
+            <div class="flex flex-row flex-wrap justify-end gap-1">
+              @if (dm && !m.owner) {
+                @if (m.role === 'player') {
+                  <button mat-button type="button" [disabled]="saving()" (click)="onRole(m, 'dm')">Make DM</button>
+                } @else {
+                  <button mat-button type="button" [disabled]="saving()" (click)="onRole(m, 'player')">
+                    Make player
+                  </button>
+                }
+              }
+              @if (m.me && !m.owner) {
+                <button mat-stroked-button type="button" [disabled]="saving()" (click)="onRemove(m)">Leave</button>
+              } @else if (dm && !m.owner) {
+                <button
+                  mat-icon-button
+                  type="button"
+                  [disabled]="saving()"
+                  [attr.aria-label]="'Remove ' + (m.username ?? 'member')"
+                  (click)="onRemove(m)"
+                >
+                  <mat-icon>person_remove</mat-icon>
+                </button>
+              }
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  @if (error(); as e) {
+    <p class="g-text-body-sm g-color-error m-0">{{ e }}</p>
+  }
+</div>

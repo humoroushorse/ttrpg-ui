@@ -1,0 +1,23 @@
+<div class="mx-auto flex w-full max-w-4xl flex-col gap-2">
+  <div>
+    <a mat-button routerLink="/<%= scope %>/<%= name %>"><mat-icon>arrow_back</mat-icon> <%= PluralTitle %></a>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <div class="flex flex-col gap-4">
+      <h1 class="g-text-h1 m-0">Create <%= SingularTitle %></h1>
+      <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Request body (JSON)</mat-label>
+        <textarea matInput rows="16" #body [value]="json()" (input)="json.set(body.value)"></textarea>
+      </mat-form-field>
+      @if (errorMessage(); as error) {
+        <p class="g-text-body g-color-error m-0">{{ error }}</p>
+      }
+      <div class="flex flex-row justify-end">
+        <button mat-flat-button type="button" [disabled]="store.loading()" (click)="onSubmit()">Create</button>
+      </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

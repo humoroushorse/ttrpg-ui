@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "TtrpgLibrary",
+  "title": "Library",
+  "description": "A library of one type in this workspace's layout: features/<scope>/<name>/<type> or shared/<name>/<type>, named <scope>-<name>-<type>, tagged scope:<scope> and type:<type>, with starter files for its type.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "What the library is about, plural for an entity: classes, characters, table.",
+      "$default": { "$source": "argv", "index": 0 },
+      "x-prompt": "What is the library about (classes, characters, table)?",
+      "x-priority": "important"
+    },
+    "type": {
+      "type": "string",
+      "description": "The kind of library. It decides the starter files and what the library may import.",
+      "enum": ["models", "data-access", "ui", "util", "testing", "feature-shell"],
+      "x-prompt": {
+        "message": "Which kind of library?",
+        "type": "list",
+        "items": [
+          { "value": "models", "label": "models: types, constants and injection tokens" },
+          { "value": "data-access", "label": "data-access: API service, store, route resources" },
+          { "value": "ui", "label": "ui: presentational components (inputs in, outputs out)" },
+          { "value": "util", "label": "util: pure functions, pipes, directives" },
+          { "value": "testing", "label": "testing: factories and test providers" },
+          { "value": "feature-shell", "label": "feature-shell: routes and pages" }
+        ]
+      },
+      "x-priority": "important"
+    },
+    "location": {
+      "type": "string",
+      "description": "features (belongs to one area, under a scope) or shared (used by every area).",
+      "enum": ["features", "shared"],
+      "default": "features"
+    },
+    "scope": {
+      "type": "string",
+      "description": "The area a features library belongs to: dnd, auth, sprint-management. Ignored for shared.",
+      "x-priority": "important"
+    },
+    "singular": {
+      "type": "string",
+      "description": "The entity's singular when the plural's ending doesn't give it (species, people). Derived otherwise: classes -> class."
+    },
+    "api": {
+      "type": "boolean",
+      "description": "Generate the API pieces: the config token (models), API service, list store and route resources (data-access), test providers (testing). Defaults to true for features, false for shared."
+    },
+    "apiPath": {
+      "type": "string",
+      "description": "The entity's path under the API base: /classes. Defaults to /<name>."
+    },
+    "apiBasePathKey": {
+      "type": "string",
+      "description": "The app config key holding the API base path. Defaults to APP_TTRPG_<SCOPE>__API_BASE_PATH (APP_TTRPG_DND__API_BASE_PATH)."
+    },
+    "readOnly": {
+      "type": "boolean",
+      "default": false,
+      "description": "Reads only: the API service gets list and get, the store has no create, update or delete."
+    },
+    "catalog": {
+      "type": "boolean",
+      "default": false,
+      "description": "A dnd catalog entity (classes, species, feats, items...): the shared catalog fields and source, /:source/:slug URLs, get by slugs, and ?fields= on the list so it skips the big JSON columns."
+    },
+    "requiresLogin": {
+      "type": "boolean",
+      "default": false,
+      "description": "feature-shell: every page needs a login (the auth guard on the shell route)."
+    },
+    "skipFormat": {
+      "type": "boolean",
+      "default": false,
+      "x-priority": "internal"
+    }
+  },
+  "required": ["name", "type"]
+}

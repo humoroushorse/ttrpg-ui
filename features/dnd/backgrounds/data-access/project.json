@@ -1,0 +1,13 @@
+{
+  "name": "dnd-backgrounds-data-access",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "features/dnd/backgrounds/data-access/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:dnd", "type:data-access"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

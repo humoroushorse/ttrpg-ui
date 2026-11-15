@@ -4,7 +4,7 @@
   "sourceRoot": "features/event-planning/models/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:event-planning", "type:models"],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint"

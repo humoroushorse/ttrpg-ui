@@ -1,5 +1,5 @@
 import nx from '@nx/eslint-plugin';
-import baseConfig from '../../../eslint.config.mjs';
+import baseConfig, { legacyBoundaries } from '../../../eslint.config.mjs';
 
 export default [
   ...baseConfig,
@@ -31,4 +31,6 @@ export default [
     // Override or add rules here
     rules: {},
   },
+  // TODO: breaks the import rules in the root eslint.config.mjs; remove once fixed (see TODO.md)
+  legacyBoundaries,
 ];

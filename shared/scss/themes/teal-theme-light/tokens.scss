@@ -17,10 +17,16 @@
   --g-color-on-secondary: #{map.get(mat.$azure-palette, 100)};
   --g-color-on-secondary-container: #{map.get(mat.$azure-palette, 10)};
 
+  // Tertiary color tokens: the theme's tertiary palette (mat.$azure-palette), M3's complementary accent
+  --g-color-tertiary: #{map.get(mat.$azure-palette, 40)};
+  --g-color-tertiary-container: #{map.get(mat.$azure-palette, 90)};
+  --g-color-on-tertiary: #{map.get(mat.$azure-palette, 100)};
+  --g-color-on-tertiary-container: #{map.get(mat.$azure-palette, 10)};
+
   // Error color tokens
   --g-color-error: #ba1a1a;
   --g-color-error-container: #ffdad6;
-  --g-color-on-error: #ffffff;
+  --g-color-on-error: #fff;
   --g-color-on-error-container: #410002;
 
   // Surface color tokens (neutral grays)
@@ -40,6 +46,6 @@
   --g-color-outline-variant: #c6c6c6;
 
   // Shadow & Scrim
-  --g-color-shadow: #000000;
-  --g-color-scrim: #000000;
+  --g-color-shadow: #000;
+  --g-color-scrim: #000;
 }

@@ -1,0 +1,155 @@
+@if (build.character(); as c) {
+  <div class="flex flex-col gap-3">
+    @if (!c.levels.length) {
+      <p class="g-text-body m-0">Pick a class first: that plans level 1.</p>
+    } @else {
+      <div class="flex flex-row flex-wrap items-center gap-3">
+        <mat-form-field subscriptSizing="dynamic" class="levels-current">
+          <mat-label>Current level</mat-label>
+          <mat-select
+            [value]="c.current_level"
+            [disabled]="build.saving()"
+            (selectionChange)="onCurrentLevel($event.value)"
+          >
+            @for (n of currentLevelOptions(); track n) {
+              <mat-option [value]="n">{{ n }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <p class="g-text-body-sm m-0 grow">
+          The sheet shows the current level. Levels past it are a plan: their picks are made now and count once the
+          character gets there.
+        </p>
+      </div>
+
+      @if (c.current_level > build.topLevel()) {
+        <p class="g-text-body-sm g-color-warning m-0">
+          The current level is {{ c.current_level }} but only {{ build.topLevel() }} are planned.
+        </p>
+      }
+
+      <table class="g-table">
+        <thead>
+          <tr>
+            <th>Level</th>
+            <th>Hit points</th>
+            <th>Gains</th>
+            <th><span class="sr-only">Remove</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (l of c.levels; track l.id) {
+            <tr>
+              <td class="g-text-body">
+                {{ l.level }}
+                @if (l.level > c.current_level) {
+                  <span class="g-text-caption">planned</span>
+                }
+              </td>
+              <td>
+                @if (l.level === 1) {
+                  <span class="g-text-body">{{ hpValue(1) ?? '?' }}</span>
+                  <span class="g-text-caption"> (d{{ die() }} maximum)</span>
+                } @else {
+                  <div class="flex flex-row flex-wrap items-center gap-2">
+                    <mat-form-field subscriptSizing="dynamic" class="levels-method">
+                      <mat-label>Level {{ l.level }} HP</mat-label>
+                      <mat-select
+                        [value]="method(l)"
+                        [disabled]="build.saving()"
+                        (selectionChange)="onMethod(l, $event.value)"
+                      >
+                        @for (m of methodsFor(l); track m) {
+                          <mat-option [value]="m">{{ m | titlecase }}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    @switch (method(l)) {
+                      @case ('manual') {
+                        <mat-form-field subscriptSizing="dynamic" class="levels-value">
+                          <mat-label>d{{ die() }}</mat-label>
+                          <input
+                            matInput
+                            type="number"
+                            #value
+                            min="1"
+                            [max]="die()"
+                            [value]="manualValue(l)"
+                            (input)="onManualValue(l, value.valueAsNumber)"
+                          />
+                        </mat-form-field>
+                        @if (manualChanged(l)) {
+                          <button
+                            mat-flat-button
+                            type="button"
+                            [disabled]="build.saving() || !validManual(l)"
+                            (click)="onSaveManual(l)"
+                          >
+                            Save
+                          </button>
+                          <button mat-button type="button" (click)="onCancelManual(l)">Cancel</button>
+                        }
+                      }
+                      @case ('rolled') {
+                        <span class="g-text-body">{{ hpValue(l.level) ?? '?' }}</span>
+                        <button mat-stroked-button type="button" [disabled]="build.saving()" (click)="onRoll(l)">
+                          Reroll
+                        </button>
+                        <span class="g-text-caption">{{ rollsText(l) }}</span>
+                      }
+                      @default {
+                        <span class="g-text-body">{{ hpValue(l.level) ?? '?' }}</span>
+                      }
+                    }
+                  </div>
+                }
+              </td>
+              <td class="g-text-body-sm">
+                {{ gains(l.level) }}
+                @if (openAt(l.level); as open) {
+                  <span class="g-text-caption">· {{ open }} {{ open === 1 ? 'pick' : 'picks' }} open</span>
+                }
+              </td>
+              <td>
+                @if (l.level === build.topLevel() && l.level > 1) {
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [disabled]="build.saving()"
+                    [attr.aria-label]="'Remove level ' + l.level"
+                    (click)="onRemoveTop(l)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (build.sheet(); as s) {
+        <p class="g-text-body m-0">
+          Max HP <lib-dnd-sheet-stat [stat]="s.hit_points.max" label="Max HP" /> at level {{ s.level }}, with the Con
+          modifier and bonuses. Hit dice {{ s.hit_points.hit_dice }}.
+        </p>
+      }
+
+      @if (nextLevel(); as n) {
+        <div class="flex flex-row flex-wrap items-center gap-2">
+          @if (planning()) {
+            <span class="g-text-body grow">Level {{ n }}: the preview shows what it adds.</span>
+            <button mat-flat-button type="button" [disabled]="build.saving()" (click)="onSavePlan(n)">
+              Save level {{ n }}
+            </button>
+            <button mat-button type="button" (click)="build.clearPreview()">Cancel</button>
+          } @else {
+            <button mat-stroked-button type="button" [disabled]="build.saving()" (click)="onPlan(n)">
+              <mat-icon>add</mat-icon> Plan level {{ n }}
+            </button>
+          }
+        </div>
+      }
+    }
+  </div>
+}

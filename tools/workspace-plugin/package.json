@@ -1,0 +1,7 @@
+{
+  "name": "@ttrpg-ui/workspace-plugin",
+  "version": "0.0.0",
+  "private": true,
+  "type": "commonjs",
+  "generators": "./generators.json"
+}

@@ -1,0 +1,477 @@
+@let characterResource = character();
+@let sheetResource = sheet();
+
+<div class="mx-auto flex w-full max-w-6xl flex-col gap-3">
+  <div>
+    <a mat-button routerLink="/dnd/characters"><mat-icon>arrow_back</mat-icon> Characters</a>
+  </div>
+
+  @if (characterResource.isLoading() || sheetResource.isLoading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Loading the character sheet" />
+  }
+
+  @if (errorMessage(); as error) {
+    <mat-card>
+      <mat-card-content>
+        <p class="g-text-body g-color-error m-0">{{ error }}</p>
+      </mat-card-content>
+    </mat-card>
+  } @else if (shownCharacter(); as c) {
+    @let v = view();
+    <mat-card>
+      <mat-card-content>
+        <div class="flex flex-row flex-wrap items-center gap-3">
+          <div class="flex grow flex-col">
+            <h1 class="g-text-h1 m-0">{{ c.name }}</h1>
+            @if (v) {
+              <p class="g-text-body m-0">{{ v.summary }}</p>
+            }
+            @if (!canEdit()) {
+              <p class="g-text-caption m-0">
+                @if (c.viewer?.can_give) {
+                  Read only. As its campaign's DM, give it items, coins, boons and banes from the campaign's page.
+                } @else {
+                  Read only: its campaign shares the party's sheets.
+                }
+              </p>
+            }
+          </div>
+          @if (levels().length > 1) {
+            <mat-form-field subscriptSizing="dynamic" class="w-40">
+              <mat-label>View at level</mat-label>
+              <mat-select [value]="shownSheet()?.level" (selectionChange)="onLevelSelected($event.value)">
+                @for (level of levels(); track level) {
+                  <mat-option [value]="level">
+                    {{ level }}{{ level === c.current_level ? ' (current)' : '' }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+          @if (campaignOf.hasValue()) {
+            <a mat-stroked-button [routerLink]="campaignRoute(campaignOf.value())">
+              <mat-icon>groups</mat-icon> {{ campaignOf.value().name }}
+            </a>
+          }
+          @if (canEdit()) {
+            <a mat-flat-button routerLink="build"><mat-icon>edit</mat-icon> Build</a>
+          }
+          @if (c.viewer?.can_manage ?? true) {
+            <button mat-stroked-button type="button" [disabled]="store.loading()" (click)="onDeleteClicked(c)">
+              <mat-icon>delete</mat-icon> Delete
+            </button>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    @if (v && shownSheet(); as s) {
+      @if (shownSheet()!.level !== c.current_level) {
+        <p class="g-text-body-sm m-0">Previewing level {{ s.level }}. The character is level {{ c.current_level }}.</p>
+      }
+
+      <section class="sheet-abilities" aria-label="Ability scores">
+        @for (a of v.abilities; track a.code) {
+          <mat-card class="sheet-ability">
+            <mat-card-content>
+              <div class="flex flex-col items-center gap-1">
+                <span class="g-text-label">{{ a.name }}</span>
+                <span class="g-text-title-lg"><lib-dnd-sheet-stat [stat]="a.score" [label]="a.name" /></span>
+                <span class="g-text-body-strong">{{ a.modifierText }}</span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </section>
+
+      <mat-card>
+        <mat-card-content>
+          <div class="sheet-stats">
+            <div class="sheet-stat-box">
+              <span class="g-text-label">Armor Class</span>
+              <span class="g-text-title"><lib-dnd-sheet-stat [stat]="s.armor_class" label="Armor Class" /></span>
+            </div>
+            <div class="sheet-stat-box">
+              <span class="g-text-label">Hit Points</span>
+              <span class="g-text-title"><lib-dnd-sheet-stat [stat]="s.hit_points.max" label="Max HP" /></span>
+              <span class="g-text-caption">Hit dice {{ s.hit_points.hit_dice }}</span>
+            </div>
+            <div class="sheet-stat-box">
+              <span class="g-text-label">Initiative</span>
+              <span class="g-text-title"
+                ><lib-dnd-sheet-stat [stat]="s.initiative" label="Initiative" [bonus]="true"
+              /></span>
+            </div>
+            <div class="sheet-stat-box">
+              <span class="g-text-label">Proficiency</span>
+              <span class="g-text-title">
+                <lib-dnd-sheet-stat [stat]="s.proficiency_bonus" label="Proficiency bonus" [bonus]="true" />
+              </span>
+            </div>
+            @for (speed of v.speeds; track speed.label) {
+              <div class="sheet-stat-box">
+                <span class="g-text-label">{{ speed.label }}</span>
+                <span class="g-text-title"><lib-dnd-sheet-stat [stat]="speed.stat" [label]="speed.label" /> ft</span>
+              </div>
+            }
+            <div class="sheet-stat-box">
+              <span class="g-text-label">Size</span>
+              <span class="g-text-title">{{ s.size || '?' }}</span>
+            </div>
+            @for (sense of v.senses; track sense.label) {
+              <div class="sheet-stat-box">
+                <span class="g-text-label">{{ sense.label }}</span>
+                <span class="g-text-title"><lib-dnd-sheet-stat [stat]="sense.stat" [label]="sense.label" /> ft</span>
+              </div>
+            }
+            @for (p of v.passive; track p.label) {
+              <div class="sheet-stat-box">
+                <span class="g-text-label">{{ p.label }}</span>
+                <span class="g-text-title"><lib-dnd-sheet-stat [stat]="p.stat" [label]="p.label" /></span>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <div class="sheet-columns">
+        <mat-card>
+          <mat-card-content>
+            <div class="flex flex-col gap-2">
+              <h3 class="g-text-h3 m-0">Saving Throws</h3>
+              <ul class="sheet-list">
+                @for (save of v.saves; track save.code) {
+                  <li class="g-text-body">
+                    <lib-dnd-proficiency-mark [level]="save.stat.proficient ? 'proficient' : 'none'" />
+                    <span class="grow">{{ save.name }}</span>
+                    <lib-dnd-sheet-stat [stat]="save.stat" [label]="save.name + ' save'" [bonus]="true" />
+                  </li>
+                }
+              </ul>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-content>
+            <div class="flex flex-col gap-2">
+              <h3 class="g-text-h3 m-0">Skills</h3>
+              <ul class="sheet-legend g-text-caption" aria-label="Proficiency marks">
+                @for (l of proficiencyLegend; track l.level) {
+                  <li><lib-dnd-proficiency-mark [level]="l.level" /> {{ l.label }}</li>
+                }
+              </ul>
+              <ul class="sheet-list">
+                @for (skill of v.skills; track skill.code) {
+                  <li class="g-text-body">
+                    <lib-dnd-proficiency-mark [level]="skill.stat.proficiency" />
+                    <span class="grow">
+                      {{ skill.name }} <span class="g-text-caption">{{ skill.stat.ability | uppercase }}</span>
+                    </span>
+                    <lib-dnd-sheet-stat [stat]="skill.stat" [label]="skill.name" [bonus]="true" />
+                  </li>
+                }
+              </ul>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      @if (s.attacks.length) {
+        <mat-card>
+          <mat-card-content>
+            <div class="flex flex-col gap-2">
+              <h3 class="g-text-h3 m-0">Attacks</h3>
+              <table class="g-table g-table-top g-text-body">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Bonus</th>
+                    <th>Damage</th>
+                    <th>Properties</th>
+                    <th>Mastery</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (attack of s.attacks; track $index) {
+                    <tr>
+                      <td>
+                        {{ attack.name }} <span class="g-text-caption">{{ attack.kind }}, {{ attack.ability }}</span>
+                      </td>
+                      <td>
+                        <lib-dnd-sheet-stat [stat]="attack.bonus" [label]="attack.name + ' attack'" [bonus]="true" />
+                      </td>
+                      <td>
+                        {{ attack.damage }}
+                        @if (attack.versatile) {
+                          <span class="g-text-caption">({{ attack.versatile }} two-handed)</span>
+                        }
+                      </td>
+                      <td>{{ attack.properties.join(', ') }}{{ attack.range ? ' · ' + attack.range : '' }}</td>
+                      <td>{{ attack.mastery }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+
+      <mat-card>
+        <mat-card-content>
+          <div class="flex flex-col gap-2">
+            <h3 class="g-text-h3 m-0">Inventory</h3>
+            <lib-dnd-inventory [character]="c" (changed)="reloadAfterSpell()" />
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-content>
+          <div class="flex flex-col gap-2">
+            <h3 class="g-text-h3 m-0">Boons and Banes</h3>
+            <lib-dnd-modifiers [character]="c" (changed)="reloadAfterSpell()" />
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      @if (s.spellcasting || s.spells.length || v.prepared.length) {
+        <mat-card>
+          <mat-card-content>
+            <div class="flex flex-col gap-2">
+              <h3 class="g-text-h3 m-0">Spellcasting</h3>
+              @if (s.spellcasting; as sc) {
+                <div class="sheet-stats">
+                  <div class="sheet-stat-box">
+                    <span class="g-text-label">{{ sc.source }} ({{ sc.ability }})</span>
+                  </div>
+                  <div class="sheet-stat-box">
+                    <span class="g-text-label">Save DC</span>
+                    <span class="g-text-title"><lib-dnd-sheet-stat [stat]="sc.save_dc" label="Spell save DC" /></span>
+                  </div>
+                  <div class="sheet-stat-box">
+                    <span class="g-text-label">Attack</span>
+                    <span class="g-text-title"
+                      ><lib-dnd-sheet-stat [stat]="sc.attack" label="Spell attack" [bonus]="true"
+                    /></span>
+                  </div>
+                  @if (sc.cantrips; as l) {
+                    <div class="sheet-stat-box">
+                      <span class="g-text-label">Cantrips</span>
+                      <span class="g-text-title" [class.g-color-warning]="l.chosen !== l.limit"
+                        >{{ l.chosen }} / {{ l.limit }}</span
+                      >
+                    </div>
+                  }
+                  @if (sc.prepared; as l) {
+                    <div class="sheet-stat-box">
+                      <span class="g-text-label">{{ sc.change === 'level_up' ? 'Learned' : 'Prepared' }}</span>
+                      <span class="g-text-title" [class.g-color-warning]="l.chosen !== l.limit"
+                        >{{ l.chosen }} / {{ l.limit }}</span
+                      >
+                    </div>
+                  }
+                </div>
+                <div class="flex flex-row flex-wrap items-center gap-2">
+                  <span class="g-text-body">Slots:</span>
+                  <mat-chip-set aria-label="Spell slots">
+                    @for (n of sc.slots; track $index) {
+                      @if (n) {
+                        <mat-chip>L{{ $index + 1 }} × {{ n }}</mat-chip>
+                      }
+                    }
+                    @if (sc.pact_slots) {
+                      <mat-chip>Pact: {{ sc.pact_slots }} × L{{ sc.pact_slot_level }}</mat-chip>
+                    }
+                  </mat-chip-set>
+                </div>
+              }
+              @for (g of v.classSpells; track g.label) {
+                <div class="flex flex-row flex-wrap items-center gap-2">
+                  <span class="g-text-body">{{ g.label }}:</span>
+                  <mat-chip-set [attr.aria-label]="g.label">
+                    @for (name of g.names; track $index) {
+                      <mat-chip>{{ name }}</mat-chip>
+                    }
+                  </mat-chip-set>
+                </div>
+              }
+              @if (s.spellcasting?.change === 'long_rest' && s.level === c.current_level) {
+                @if (spellError(); as error) {
+                  <p class="g-text-body-sm g-color-error m-0">{{ error }}</p>
+                }
+                <lib-dnd-prepared-spells
+                  [character]="c"
+                  [sheet]="s"
+                  [saving]="savingSpell() || !canEdit()"
+                  (toggled)="onSpellToggled(c, $event)"
+                />
+              } @else if (v.prepared.length) {
+                <div class="flex flex-row flex-wrap items-center gap-2">
+                  <span class="g-text-body">Prepared:</span>
+                  <mat-chip-set aria-label="Prepared spells">
+                    @for (p of v.prepared; track p.spell_id) {
+                      <mat-chip>{{ p.spell_name }} (L{{ p.spell_level }})</mat-chip>
+                    }
+                  </mat-chip-set>
+                </div>
+              }
+              @if (s.spells.length) {
+                <p class="g-text-body m-0">From feats and traits:</p>
+                <ul class="sheet-list">
+                  @for (spell of s.spells; track $index) {
+                    <li class="g-text-body">
+                      <span class="grow">
+                        {{ spell | spellName }} <span class="g-text-caption">{{ spell.source }}</span>
+                      </span>
+                      @if (spell.save_dc) {
+                        <span class="g-text-caption">DC {{ spell.save_dc }}</span>
+                      }
+                      @if (spell.uses) {
+                        <span class="g-text-caption">{{ spell.uses }}</span>
+                      }
+                    </li>
+                  }
+                </ul>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+
+      <div class="sheet-columns">
+        <mat-card>
+          <mat-card-content>
+            <div class="flex flex-col gap-2">
+              <h3 class="g-text-h3 m-0">Features</h3>
+              @for (group of v.features; track group.level) {
+                <p class="g-text-body m-0">
+                  <span class="g-text-body-strong">Level {{ group.level }}:</span>
+                  @for (f of group.features; track $index) {
+                    {{ f.name }} <span class="g-text-caption">({{ f.source }})</span>{{ $last ? '' : ', ' }}
+                  }
+                </p>
+              } @empty {
+                <p class="g-text-body m-0">None yet.</p>
+              }
+              @if (v.classTable.length) {
+                <mat-chip-set aria-label="Class table">
+                  @for (col of v.classTable; track col.column) {
+                    <mat-chip>{{ col.column }}: {{ col.value }}</mat-chip>
+                  }
+                </mat-chip-set>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-content>
+            <div class="flex flex-col gap-2">
+              <h3 class="g-text-h3 m-0">Proficiencies</h3>
+              @for (p of v.proficiencies; track p.kind) {
+                <p class="g-text-body m-0">
+                  <span class="g-text-body-strong">{{ p.kind }}:</span> {{ p.list }}
+                </p>
+              } @empty {
+                <p class="g-text-body m-0">None yet.</p>
+              }
+              @for (r of s.resistances; track $index) {
+                <p class="g-text-body m-0">
+                  <span class="g-text-body-strong">{{ r.type }}:</span> {{ r.against }}
+                  <span class="g-text-caption">({{ r.source }})</span>
+                </p>
+              }
+              @for (cond of s.conditional; track $index) {
+                <p class="g-text-body m-0">
+                  <span class="g-text-body-strong">{{ cond.mod }}:</span> {{ cond.text ?? cond.on.join(', ') }}
+                  <span class="g-text-caption">({{ cond.source }})</span>
+                </p>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <mat-card>
+        <mat-card-content>
+          <div class="flex flex-col gap-2">
+            <h3 class="g-text-h3 m-0">Details</h3>
+            <lib-dnd-character-details [character]="c" (changed)="reloadAfterSpell()" />
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      @if (c.viewer?.can_manage || c.viewer?.editor) {
+        <mat-card>
+          <mat-card-content>
+            <div class="flex flex-col gap-2">
+              <h3 class="g-text-h3 m-0">Sharing</h3>
+              <lib-dnd-character-sharing [character]="c" (left)="onStoppedEditing()" />
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+
+      <mat-card>
+        <mat-card-content>
+          <div class="flex flex-col gap-2">
+            <h3 class="g-text-h3 m-0">Choices</h3>
+            <p class="g-text-body-sm m-0">Every pick the build asks for, and what answers it.</p>
+            <table class="g-table g-table-top g-text-body">
+              <thead>
+                <tr>
+                  <th>Level</th>
+                  <th>From</th>
+                  <th>Pick</th>
+                  <th>Chosen</th>
+                  <th>Options</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (p of v.choicePoints; track p.slot + (p.granted_by_id ?? '')) {
+                  <tr [class.sheet-open]="p.open">
+                    <td>{{ p.level }}</td>
+                    <td>{{ p.source }}</td>
+                    <td>
+                      {{ p.kinds.join(' or ') }} <span class="g-text-caption">{{ p.chosen }} of {{ p.count }}</span>
+                      <div class="g-text-caption">{{ p.slot }}</div>
+                    </td>
+                    <td>{{ p.picks.join(', ') || '—' }}</td>
+                    <td>{{ p.options }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      @if (v.issues.length) {
+        <mat-card>
+          <mat-card-content>
+            <div class="flex flex-col gap-2">
+              <h3 class="g-text-h3 m-0">Issues</h3>
+              <ul class="sheet-list">
+                @for (issue of v.issues; track $index) {
+                  <li class="g-text-body">
+                    <span class="sheet-severity" [class]="'g-color-' + issue.severity">{{
+                      issue.severity | titlecase
+                    }}</span>
+                    <span class="grow">{{ issue.message }}</span>
+                    <span class="g-text-caption">{{ issue.code }}</span>
+                  </li>
+                }
+              </ul>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+
+      @if (s.not_computed.length) {
+        <p class="g-text-caption m-0">Not computed yet: {{ s.not_computed.join('; ') }}</p>
+      }
+    }
+  }
+</div>

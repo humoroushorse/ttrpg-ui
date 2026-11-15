@@ -5,7 +5,7 @@
 @use './tokens';
 @use '../../tokens/tokens' as global-tokens;
 
-@include mat.core();
+@include mat.core;
 
 $dark-theme: mat.define-theme(
   (

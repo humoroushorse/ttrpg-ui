@@ -4,7 +4,7 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/event-planning/src",
-  "tags": [],
+  "tags": ["scope:event-planning", "type:app"],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
@@ -16,6 +16,9 @@
         "polyfills": [],
         "tsConfig": "apps/event-planning/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
+        "stylePreprocessorOptions": {
+          "includePaths": ["."]
+        },
         "assets": [
           "apps/event-planning/src/robots.txt",
           "apps/event-planning/src/sitemap.xml",

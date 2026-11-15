@@ -1,5 +1,6 @@
 {
   "name": "dnd-e2e",
+  "tags": ["scope:dnd", "type:e2e"],
   "$schema": "../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "dnd-e2e/src",

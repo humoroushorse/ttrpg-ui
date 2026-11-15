@@ -1,0 +1,13 @@
+{
+  "name": "dnd-subclasses-data-access",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "features/dnd/subclasses/data-access/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:dnd", "type:data-access"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

@@ -4,7 +4,7 @@
   "sourceRoot": "features/sprint-management/feature-shell/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:sprint-management", "type:feature-shell"],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",

@@ -4,16 +4,11 @@
   "sourceRoot": "features/dnd/util/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [
-    "dnd",
-    "util"
-  ],
+  "tags": ["scope:dnd", "type:util"],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": [
-        "{options.reportsDirectory}"
-      ],
+      "outputs": ["{options.reportsDirectory}"],
       "options": {}
     },
     "lint": {

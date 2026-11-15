@@ -46,7 +46,7 @@ describe('SharedFormsSingleSelectAutocompleteComponent', () => {
     component.searchControl.setValue('test');
 
     setTimeout(() => {
-      expect(searchSpy).toHaveBeenCalledWith('test');
+      expect(searchSpy).toHaveBeenCalledWith('test', 0);
       done();
     }, 400);
   });
@@ -60,11 +60,10 @@ describe('SharedFormsSingleSelectAutocompleteComponent', () => {
     component.searchControl.setValue('Option 1');
 
     setTimeout(() => {
-      component.filteredOptions$.subscribe((options) => {
-        expect(options.length).toBe(1);
-        expect(options[0].name).toBe('Option 1');
-        done();
-      });
+      const options = component.results() as typeof mockOptions;
+      expect(options.length).toBe(1);
+      expect(options[0].name).toBe('Option 1');
+      done();
     }, 400);
   });
 
@@ -105,7 +104,7 @@ describe('SharedFormsSingleSelectAutocompleteComponent', () => {
     component.searchControl.setValue('abc');
 
     setTimeout(() => {
-      expect(searchSpy).toHaveBeenCalledWith('abc');
+      expect(searchSpy).toHaveBeenCalledWith('abc', 0);
       done();
     }, 400);
   });
@@ -183,10 +182,8 @@ describe('SharedFormsSingleSelectAutocompleteComponent', () => {
     component.searchControl.setValue('test');
 
     setTimeout(() => {
-      component.filteredOptions$.subscribe((options) => {
-        expect(options).toEqual([]);
-        done();
-      });
+      expect(component.results()).toEqual([]);
+      done();
     }, 400);
   });
 

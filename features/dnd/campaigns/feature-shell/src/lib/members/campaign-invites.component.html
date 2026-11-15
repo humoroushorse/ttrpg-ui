@@ -1,0 +1,90 @@
+<div class="flex flex-col gap-3">
+  <div class="flex flex-row flex-wrap items-center gap-3">
+    <mat-button-toggle-group
+      [value]="lifetime()"
+      (change)="lifetime.set($event.value)"
+      [hideSingleSelectionIndicator]="true"
+      aria-label="Open for"
+    >
+      @for (l of lifetimes; track l.value) {
+        <mat-button-toggle [value]="l.value">{{ l.label }}</mat-button-toggle>
+      }
+    </mat-button-toggle-group>
+    <mat-form-field subscriptSizing="dynamic" class="invites-uses">
+      <mat-label>Uses (optional)</mat-label>
+      <input matInput type="number" min="1" #uses [value]="maxUses() ?? ''" (input)="onMaxUses(uses.valueAsNumber)" />
+    </mat-form-field>
+    <button mat-flat-button type="button" [disabled]="saving()" (click)="onCreateLink()">
+      <mat-icon>link</mat-icon> Make an invite link
+    </button>
+  </div>
+
+  @if (link(); as l) {
+    <div class="flex flex-row flex-wrap items-center gap-2">
+      <mat-form-field subscriptSizing="dynamic" class="grow">
+        <mat-label>Invite link</mat-label>
+        <input matInput readonly [value]="l" />
+      </mat-form-field>
+      <button mat-stroked-button type="button" (click)="onCopy(l)">
+        <mat-icon>content_copy</mat-icon> {{ copied() ? 'Copied' : 'Copy' }}
+      </button>
+    </div>
+    <p class="g-text-caption m-0">
+      Shown only now. Anyone signed in with it can join as a player until it expires or runs out of uses.
+    </p>
+  }
+
+  <div class="flex flex-row flex-wrap items-center gap-2">
+    <mat-form-field subscriptSizing="dynamic" class="grow">
+      <mat-label>Or invite by username</mat-label>
+      <input matInput #name [value]="username()" (input)="username.set(name.value)" (keydown.enter)="onInviteUser()" />
+    </mat-form-field>
+    <button mat-stroked-button type="button" [disabled]="saving() || !username().trim()" (click)="onInviteUser()">
+      Invite
+    </button>
+  </div>
+  <p class="g-text-caption m-0">They need to have signed in once. The invite waits for them to accept or decline.</p>
+
+  @if (notice(); as n) {
+    <p class="g-text-body-sm m-0">{{ n }}</p>
+  }
+  @if (error(); as e) {
+    <p class="g-text-body-sm g-color-error m-0">{{ e }}</p>
+  }
+
+  @if (isDM() && invites.hasValue() && invites.value().entities.length) {
+    <table class="g-table g-text-body">
+      <thead>
+        <tr>
+          <th>Open invite</th>
+          <th>Expires</th>
+          <th>Uses</th>
+          <th>By</th>
+          <th><span class="sr-only">Revoke</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (i of invites.value().entities; track i.id) {
+          <tr>
+            <td>{{ i.kind === 'link' ? 'Link' : i.username }}</td>
+            <td>{{ i.expires_at | date: 'short' }}</td>
+            <td>{{ i.uses }}{{ i.max_uses ? ' of ' + i.max_uses : '' }}</td>
+            <td>{{ i.invited_by ?? '' }}</td>
+            <td>
+              <button
+                mat-icon-button
+                type="button"
+                matTooltip="Revoke"
+                aria-label="Revoke"
+                [disabled]="saving()"
+                (click)="onRevoke(i.id)"
+              >
+                <mat-icon>block</mat-icon>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

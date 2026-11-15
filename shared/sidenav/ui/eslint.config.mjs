@@ -1,5 +1,5 @@
 import nx from '@nx/eslint-plugin';
-import baseConfig from '../../../eslint.config.mjs';
+import baseConfig, { legacyBoundaries } from '../../../eslint.config.mjs';
 
 
 export default [
@@ -38,4 +38,6 @@ export default [
       '@angular-eslint/prefer-standalone': 'off',
     },
   },
+  // TODO: breaks the import rules in the root eslint.config.mjs; remove once fixed (see TODO.md)
+  legacyBoundaries,
 ];

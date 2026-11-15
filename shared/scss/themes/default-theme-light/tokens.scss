@@ -7,6 +7,9 @@
 @use '../../palettes/blue' as blue-palette;
 @use '../../palettes/orange' as orange-palette;
 
+@use '@angular/material' as mat;
+@use 'sass:map';
+
 :root {
   // Primary color tokens
   --g-color-primary: #{purple-palette.color(40)};
@@ -19,6 +22,12 @@
   --g-color-secondary-container: #{neutral-palette.color(90)};
   --g-color-on-secondary: #{neutral-palette.color(100)};
   --g-color-on-secondary-container: #{neutral-palette.color(10)};
+
+  // Tertiary color tokens: the theme's tertiary palette (mat.$violet-palette), M3's complementary accent
+  --g-color-tertiary: #{map.get(mat.$violet-palette, 40)};
+  --g-color-tertiary-container: #{map.get(mat.$violet-palette, 90)};
+  --g-color-on-tertiary: #{map.get(mat.$violet-palette, 100)};
+  --g-color-on-tertiary-container: #{map.get(mat.$violet-palette, 10)};
 
   // Error color tokens
   --g-color-error: #{red-palette.color(40)};

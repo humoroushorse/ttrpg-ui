@@ -1,0 +1,30 @@
+// Text colors for a state, from the theme's tokens. Compose them in templates:
+//   <p class="g-text-body-sm g-color-warning">...</p>
+// The teal themes have no warning or info tokens yet, hence the fallbacks.
+
+.g-color-primary {
+  color: var(--g-color-primary);
+}
+
+.g-color-error {
+  color: var(--g-color-error);
+}
+
+.g-color-warning {
+  color: var(--g-color-warning, var(--g-color-error));
+}
+
+.g-color-info {
+  color: var(--g-color-info, var(--g-color-primary));
+}
+
+// The theme's primary into its tertiary (M3's complementary accent), for a call to action:
+//   <button mat-flat-button class="g-gradient-primary">Login</button>
+// Material's .mdc-button resets the background shorthand in a sheet that loads after this one; the
+// second selector outranks it without !important. The label goes through Material's own token.
+.g-gradient-primary,
+.mdc-button.g-gradient-primary {
+  --mat-button-filled-label-text-color: var(--g-color-on-primary);
+
+  background-image: linear-gradient(to right, var(--g-color-primary), var(--g-color-tertiary));
+}

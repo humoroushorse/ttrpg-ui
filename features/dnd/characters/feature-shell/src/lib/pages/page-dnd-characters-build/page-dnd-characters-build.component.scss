@@ -1,0 +1,42 @@
+// layout only; type and color come from the shared g-text-* and g-color-* classes
+
+// the page's own width, not the window's, so a sidebar opening narrows it the same way
+.build-page {
+  container-type: inline-size;
+}
+
+.build-layout {
+  display: grid;
+  align-items: start;
+  gap: var(--g-spacing-md);
+  grid-template-columns: minmax(0, 1fr) 22rem;
+}
+
+@container (width <= 64rem) {
+  .build-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+// stays in view while the picks scroll
+.build-side {
+  position: sticky;
+  top: var(--g-spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--g-spacing-md);
+}
+
+.build-abilities {
+  display: grid;
+  gap: var(--g-spacing-xs);
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.build-issues {
+  display: flex;
+  flex-direction: column;
+  padding-left: var(--g-spacing-lg);
+  margin: 0;
+  gap: var(--g-spacing-xs);
+}

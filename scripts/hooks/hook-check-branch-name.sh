@@ -4,7 +4,7 @@ CURRENT_BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD)"
 
 TICKET="(DND)-[0-9]+"
 TYPE="(bugfix|docs|e2e|feature|hotfix|refactor|testing)"
-PROJECT="(core|auth|event-planning)"
+PROJECT="(core|auth|event-planning|dnd)"
 COMMENT="[a-zAA-Z._-]+"
 
 VALID_BRANCH_REGEX="${TICKET}\/${TYPE}\/${PROJECT}\/${COMMENT}"
